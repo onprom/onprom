@@ -1,0 +1,3 @@
+New, Save, Save As, Delete, Print, Open, Undo, Redo, Image, Select, Delete, PNG, Export, Zoom, Close, Grid, Layout
+IOS 9 icons from https://icons8.com/web-app/new-icons/ios7 (using 32x32 size)
+License file: https://icons8.com/license/
