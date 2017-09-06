@@ -26,8 +26,9 @@
 
 package org.processmining.plugins.kaos;
 
+import java.io.IOException;
+
 import org.deckfour.xes.model.XLog;
-import org.openrdf.query.MalformedQueryException;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.plugin.annotations.Plugin;
@@ -36,12 +37,15 @@ import org.processmining.framework.plugin.annotations.PluginQuality;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
+
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.logextractor.XESLogExtractor;
-import it.unibz.inf.kaos.logextractor.exception.InvalidAnnotationException;
-import it.unibz.inf.kaos.logextractor.exception.InvalidDataSourcesNumberException;
+import it.unibz.inf.kaos.logextractor.XESLogExtractorWithEBDAMapping;
+import it.unibz.inf.kaos.obdamapper.OBDAMapper;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
+import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
 import it.unibz.inf.kaos.logextractor.exception.XESLogExtractionFailureException;
-import it.unibz.inf.kaos.logextractor.model.EBDAModel;
+import it.unibz.inf.kaos.logextractor.model.impl.EBDAMapping;
 import it.unibz.inf.ontop.model.OBDAException;
 import it.unibz.inf.ontop.model.OBDAModel;
 
@@ -83,15 +87,18 @@ public class LogExtractorPlugin {
 
         context.getProgress().setIndeterminate(true);
 		XLog xlog = null;
-		XESLogExtractor logExtractor = new XESLogExtractor();
+		XESLogExtractorWithEBDAMapping logExtractor = new XESLogExtractorWithEBDAMapping();
 		
 		try {
 			xlog = logExtractor.extractXESLog(ontology, obdaModel, annotationQueries);
 			
 		} catch (InvalidDataSourcesNumberException | InvalidAnnotationException | OWLException | 
-				XESLogExtractionFailureException | OBDAException | MalformedQueryException e) {
+				XESLogExtractionFailureException | OBDAException e) {
 			e.printStackTrace();
             context.log("Couldn't extract log from database: " + e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		//logExtractor.printExecutionNote();
@@ -116,7 +123,7 @@ public class LogExtractorPlugin {
 	        name = "OnProM Log Extractor (Out: Log & EBDA Model)", 
 	        parameterLabels = {"Domain Ontology", "OBDA Mapping", "Annotation"}, 
 	        returnLabels = { "XES Event Log", "EBDA Model" }, 
-	        returnTypes = { XLog.class, EBDAModel.class }, 
+	        returnTypes = { XLog.class, EBDAMapping.class }, 
 	        userAccessible = true, 
 	    	help = "OnProM Log Extractor - Extract XES event logs from relational databases based on OnProm Methodology (see http://onprom.inf.unibz.it)",
 	        quality = PluginQuality.VeryGood, 
@@ -133,24 +140,27 @@ public class LogExtractorPlugin {
     		OWLOntology ontology, OBDAModel obdaModel, AnnotationQueries annotationQueries) {
 
         context.getProgress().setIndeterminate(true);
-		XESLogExtractor logExtractor = new XESLogExtractor();
+        XESLogExtractorWithEBDAMapping logExtractor = new XESLogExtractorWithEBDAMapping();
 		XLog xlog = null;
-		EBDAModel ebdaModel = null;
+		EBDAMapping ebdaMapping = null;
 		
 		try {
-			ebdaModel = logExtractor.createEBDAModelImpl3(ontology, obdaModel, annotationQueries);
-			xlog = logExtractor.extractXESLog(ebdaModel);
+			ebdaMapping = logExtractor.createEBDAMapping(ontology, obdaModel, annotationQueries);
+			xlog = logExtractor.extractXESLog(ebdaMapping);
 			
 		} catch (InvalidDataSourcesNumberException | InvalidAnnotationException | OWLException | 
-				XESLogExtractionFailureException | OBDAException | MalformedQueryException e) {
+				XESLogExtractionFailureException | OBDAException e) {
 			e.printStackTrace();
             context.log("Couldn't extract log from database: " + e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
     	
 		logExtractor.printExecutionNote();
         context.getFutureResult(0).setLabel("XES log extracted from DB");
 
-    	return new Object[]{xlog, ebdaModel}; 
+    	return new Object[]{xlog, ebdaMapping}; 
     }
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,14 +193,14 @@ public class LogExtractorPlugin {
             website = "http://onprom.inf.unibz.it"
     )
     @PluginVariant(requiredParameterLabels = {0})
-    public XLog extractXESLog3(final UIPluginContext context, EBDAModel ebdaModel) {
+    public XLog extractXESLog3(final UIPluginContext context, EBDAMapping ebdaMapping) {
 
         context.getProgress().setIndeterminate(true);
-		XESLogExtractor logExtractor = new XESLogExtractor();
+        XESLogExtractorWithEBDAMapping logExtractor = new XESLogExtractorWithEBDAMapping();
 		XLog xlog = null;
 		
 		try {
-			xlog = logExtractor.extractXESLog(ebdaModel);
+			xlog = logExtractor.extractXESLog(ebdaMapping);
 			
 		} catch (XESLogExtractionFailureException | OBDAException e) {
 			e.printStackTrace();
@@ -205,6 +215,68 @@ public class LogExtractorPlugin {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// END OF LOG EXTRACTOR PLUG IN VARIANT - Takes EBDAModel as the input
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// LOG EXTRACTOR PLUG IN that takes into account the event ontology variant
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Plugin(
+	        name = "OnProM Log Extractor (with EO Variant)", 
+	        parameterLabels = {	"Domain Ontology", 
+	        					"OBDA Mapping", 
+	        					"Annotation To Event Ontology Variant", 
+	        					"Event Ontology Variant", 
+	        					"Annotation To XES Ontology"}, 
+	        returnLabels = { "XES Event Log" }, 
+	        returnTypes = { XLog.class }, 
+	        userAccessible = true, 
+	    	help = "OnProM Log Extractor - Extract XES event logs from relational databases based on OnProm Methodology (see http://onprom.inf.unibz.it)",
+	        quality = PluginQuality.VeryGood, 
+	        categories = {PluginCategory.Analytics}
+	)
+    @UITopiaVariant(
+            affiliation = "Free University of Bozen-Bolzano and University of Innsbruck",
+            author = "OnProm team",
+            email = "onprom@inf.unibz.it",
+            website = "http://onprom.inf.unibz.it"
+    )
+    @PluginVariant(requiredParameterLabels = {0,1,2,3,4})
+    public XLog extractXESLog5(final UIPluginContext context, 
+    		OWLOntology domainOnto, OBDAModel obdaModel, AnnotationQueries firstAnnoQueries,
+    		OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries) {
+
+        context.getProgress().setIndeterminate(true);
+        
+		XLog xlog = null;
+		XESLogExtractorWithEBDAMapping logExtractor = new XESLogExtractorWithEBDAMapping();
+		
+		try {
+			xlog = logExtractor.extractXESLog(
+						domainOnto, obdaModel, firstAnnoQueries, eventOntoVariant, secondAnnoQueries);
+			
+		} catch (InvalidDataSourcesNumberException | InvalidAnnotationException | OWLException | 
+				XESLogExtractionFailureException | OBDAException e) {
+			e.printStackTrace();
+            context.log("Couldn't extract log from database: " + e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//logExtractor.printExecutionNote();
+        context.getFutureResult(0).setLabel("XES log extracted from DB");
+    	return xlog; 
+    }
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// END OF LOG EXTRACTOR PLUG IN that takes into account the event ontology variant
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -29,9 +29,9 @@ public interface XESOntology {
 	public String getTraceConcept();
 	public String getEventConcept();
 	public String getAttributeConcept();
-	public String getTContainsERole();
-	public String getTContainsARole();
-	public String getEContainsARole();
+	public String getTraceContainsEventRole();
+	public String getTraceContainsAttributeRole();
+	public String getEventContainsAttributeRole();
 	public String getAttTypeAtt();
 	public String getAttKeyAtt();
 	public String getAttValAtt();

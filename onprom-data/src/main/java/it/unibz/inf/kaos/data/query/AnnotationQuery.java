@@ -28,56 +28,45 @@ package it.unibz.inf.kaos.data.query;
 
 import java.util.List;
 
+import org.semanticweb.owlapi.model.IRI;
+
 /**
  * Super class for annotation queries
  * <p>
- * Created by T. E. Kalayci on 14/12/16.
- * <p>
- * Modified by Ario Santoso (santoso.ario@gmail.com/santoso@inf.unibz.it) on 18/12/16 with the following modification:
- * - change the query of the class
+ * Created by T. E. Kalayci on 22-Jun-2017
+ * 
+ * <br />
+ * Modified by Ario Santoso (santoso.ario@gmail.com/santoso@inf.unibz.it) on July 17 for the implementation of visitor design pattern.
+ * 
  */
-public class AnnotationQuery {
-
+public abstract class AnnotationQuery {
   private List<AnnotationQuery> attributeQueries;
   private String query;
+  private String targetURI;
+  
+  public AnnotationQuery(){}
 
-  //answer variables
-  private String firstAnsVariable;
-  private String secondAnsVariable;
-
-  AnnotationQuery() {
-    //
+  public AnnotationQuery(String query, IRI targetURI, List<AnnotationQuery> attributeQueries) {
+    this.query = query;
+    this.targetURI = targetURI.toString();
+    this.attributeQueries = attributeQueries;
   }
 
-  AnnotationQuery(String _name) {
-    this.query = _name;
+  public AnnotationQuery(String query, IRI targetURI) {
+    this.query = query;
+    this.targetURI = targetURI.toString();
   }
 
-  public AnnotationQuery(String _name, String _firstAnsVariable, String _secondAnsVariable) {
-    this.query = _name;
-    this.firstAnsVariable = _firstAnsVariable;
-    this.secondAnsVariable = _secondAnsVariable;
+  public AnnotationQuery(String query) {
+    this.query = query;
   }
 
-  public AnnotationQuery(String _name, String _firstAnsVariable, String _secondAnsVariable, List<AnnotationQuery> queries) {
-    this(_name, _firstAnsVariable, _secondAnsVariable);
-    this.attributeQueries = queries;
+  public IRI getTargetURI() {
+    return IRI.create(targetURI);
   }
 
-  String getFirstAnsVariable() {
-    return firstAnsVariable;
-  }
-
-  void setFirstAnsVariable(String firstAnsVariable) {
-    this.firstAnsVariable = firstAnsVariable;
-  }
-
-  String getSecondAnsVariable() {
-    return secondAnsVariable;
-  }
-
-  void setSecondAnsVariable(String secondAnsVariable) {
-    this.secondAnsVariable = secondAnsVariable;
+  public void setTargetURI(IRI targetURI) {
+    this.targetURI = targetURI.toString();
   }
 
   public String getQuery() {
@@ -88,10 +77,6 @@ public class AnnotationQuery {
     this.query = query;
   }
 
-  public String toString() {
-    return getClass().getSimpleName() + " (" + getFirstAnsVariable() + ", " + getSecondAnsVariable() + ")";
-  }
-
   public List<AnnotationQuery> getAttributeQueries() {
     return attributeQueries;
   }
@@ -99,4 +84,7 @@ public class AnnotationQuery {
   public void setAttributeQueries(List<AnnotationQuery> queries) {
     attributeQueries = queries;
   }
+
+  public abstract void accept(AnnotationQueryVisitor visitor);
 }
+

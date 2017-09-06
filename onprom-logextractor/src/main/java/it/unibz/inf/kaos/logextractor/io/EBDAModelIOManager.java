@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package it.unibz.inf.kaos.logextractor.io;
 
 import java.io.File;
@@ -31,28 +30,40 @@ import it.unibz.inf.ontop.io.ModelIOManager;
  */
 public class EBDAModelIOManager {
 
-	private EBDAModelNaiveImpl ebdaModel;
 	private ModelIOManager ioMan;
+	private EBDAModel ebdaModel;
 	
-	public EBDAModelIOManager(EBDAModel eobdaModel){
-		ioMan = new ModelIOManager(eobdaModel);
+	public EBDAModelIOManager(EBDAModel ebdaModel) throws InvalidEBDAModelException{
+		
+		if(!ebdaModel.isValidEBDAModel())
+			throw new InvalidEBDAModelException();
+		
+		this.ebdaModel = ebdaModel;
+		
+		ioMan = new ModelIOManager(ebdaModel);
 	}
 
 	public void load(File ebdaFile) throws IOException, InvalidMappingException, InvalidEBDAModelException {		
-		ioMan.load(ebdaFile);
 
+		ioMan.load(ebdaFile);
+		
 		//Validate the Event OBDA Model
-			if(!this.validateEBDAModel(this.ebdaModel)) 
-				throw new InvalidEBDAModelException();
-		//END OF Validating the Event OBDA Model
+		if(!this.ebdaModel.isValidEBDAModel())
+			throw new InvalidEBDAModelException();
+		
 	}
 	
-	public void save(File eobdaFile) throws IOException {
-		ioMan.save(eobdaFile);
+	public void save(File ebdaFile) throws IOException, InvalidEBDAModelException {
+
+		/*
+		  Unnecessary
+		 
+		//Validate the Event OBDA Model
+		if(!this.ebdaModel.isValidEBDAModel())
+			throw new InvalidEBDAModelException();
+		 */
+		
+		ioMan.save(ebdaFile);
 	}
 	
-	private boolean validateEBDAModel(EBDAModelNaiveImpl eobdaModel){
-		//TODO Still need to be implemented
-		return true;
-	}
 }

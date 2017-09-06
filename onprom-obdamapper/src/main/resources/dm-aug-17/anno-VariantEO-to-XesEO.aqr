@@ -1,0 +1,40 @@
+{
+  "@class" : "it.unibz.inf.kaos.data.query.AnnotationQueries",
+  "queries" : [ "java.util.LinkedHashSet", [ {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://onprom.inf.unibz.it/> SELECT DISTINCT ?Trace ?Attribute WHERE {?Trace :t-a ?Attribute} ",
+    "targetURI" : "http://onprom.inf.unibz.it/t-has-a",
+    "firstComponent" : [ "Trace" ],
+    "secondComponent" : [ "Attribute" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://onprom.inf.unibz.it/> SELECT DISTINCT ?Event ?Attribute WHERE {?Event :e-a ?Attribute} ",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event" ],
+    "secondComponent" : [ "Attribute" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://onprom.inf.unibz.it/> SELECT DISTINCT ?Trace ?Event WHERE {?Trace :t-e ?Event} ",
+    "targetURI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Trace" ],
+    "secondComponent" : [ "Event" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://onprom.inf.unibz.it/> SELECT DISTINCT ?Attribute ?Type WHERE {?Attribute :at ?Type} ",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Attribute" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://onprom.inf.unibz.it/> SELECT DISTINCT ?Attribute ?Key WHERE {?Attribute :ak ?Key} ",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Attribute" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://onprom.inf.unibz.it/> SELECT DISTINCT ?Attribute ?Value WHERE {?Attribute :av ?Value} ",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Attribute" ],
+    "secondComponent" : [ "Value" ]
+  } ] ]
+}

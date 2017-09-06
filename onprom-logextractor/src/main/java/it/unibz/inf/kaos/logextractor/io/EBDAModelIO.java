@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package it.unibz.inf.kaos.logextractor.io;
 
 import java.io.File;
@@ -43,8 +42,9 @@ public class EBDAModelIO {
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
 	 * @param ebdaModel - the EBDAModel to be written
 	 * @param filePath - the path of the file where we want to write the EBDA Model
+	 * @throws InvalidEBDAModelException 
 	 */
-	public static void writeEBDAModelToFile(EBDAModel ebdaModel, String filePath){
+	public static void writeEBDAModelToFile(EBDAModel ebdaModel, String filePath) throws InvalidEBDAModelException{
 		
 		EBDAModelIOManager io = new EBDAModelIOManager(ebdaModel);
 
@@ -61,16 +61,19 @@ public class EBDAModelIO {
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
 	 * @param filePath - the file containing EBDA Model information
 	 * @return EBDAModel
+	 * @throws InvalidEBDAModelException 
 	 */
-	public static EBDAModel readEBDAModelFromFile(String filePath){
+	public static EBDAModel readEBDAModelFromFile(String filePath) throws InvalidMappingException, InvalidEBDAModelException{
 		
-		EBDAModel ebdaModel = LEObjectFactory.getInstance().createEBDAModelNaiveImpl();
+		EBDAModel ebdaModel = LEObjectFactory.getInstance().createEBDAModelImpl3();
 		EBDAModelIOManager io = new EBDAModelIOManager(ebdaModel);
 
 		try {
 			io.load(new File(filePath));
-		} catch (IOException | InvalidMappingException | InvalidEBDAModelException e) {
+			
+		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
 		}		
 		
 		return ebdaModel;		

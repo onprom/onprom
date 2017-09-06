@@ -87,10 +87,21 @@ public class XAttributeOnProm {
 		return key;
 	}
 	public void setKey(String key) {
+		
+		//---------------------------------------------------
+		//BEGIN: arsa - changes on 2017.07.20
+		
+		/*
 		if(LEConstants.xesconstants.containsKey(key))
 			this.key = LEConstants.xesconstants.get(key);
 		else
 			this.key = key;
+		*/
+		
+		this.key = key.intern();
+		
+		//END: arsa - changes on 2017.07.20
+		//---------------------------------------------------
 	}
 	public String getType() {
 		return type;

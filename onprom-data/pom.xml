@@ -50,4 +50,14 @@
             </plugin>
         </plugins>
     </build>
+    
+    
+    <dependencies>
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>owlapi-apibinding</artifactId>
+            <version>${owlapi.version}</version>
+        </dependency>
+	</dependencies>
+    
 </project>

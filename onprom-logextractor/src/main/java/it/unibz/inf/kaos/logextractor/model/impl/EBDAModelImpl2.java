@@ -27,14 +27,14 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.data.query.EventAnnotationQuery;
-import it.unibz.inf.kaos.data.query.EventLifecycleAnnotationQuery;
-import it.unibz.inf.kaos.data.query.EventResourceAnnotationQuery;
-import it.unibz.inf.kaos.data.query.EventTimestampAnnotationQuery;
-import it.unibz.inf.kaos.data.query.EventTraceAnnotationQuery;
-import it.unibz.inf.kaos.data.query.ResourceAnnotationQuery;
-import it.unibz.inf.kaos.data.query.CaseAnnotationQuery;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
+import it.unibz.inf.kaos.data.query.old.V2.CaseAnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.old.V2.EventAnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.old.V2.EventLifecycleAnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.old.V2.EventResourceAnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.old.V2.EventTimestampAnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.old.V2.EventTraceAnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.old.V2.ResourceAnnotationQueryV2;
 import it.unibz.inf.kaos.logextractor.XESLogExtractor;
 
 //import it.unibz.inf.kaos.data.query2.AnnotationQueries;
@@ -48,11 +48,11 @@ import it.unibz.inf.kaos.logextractor.XESLogExtractor;
 
 import it.unibz.inf.kaos.logextractor.constants.XESEOConstants;
 import it.unibz.inf.kaos.logextractor.constants.LEConstants;
-import it.unibz.inf.kaos.logextractor.exception.InvalidAnnotationException;
-import it.unibz.inf.kaos.logextractor.exception.InvalidDataSourcesNumberException;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
 import it.unibz.inf.kaos.logextractor.model.EBDAModel;
-import it.unibz.inf.kaos.logextractor.ontopext.SQLWithVarMap;
-import it.unibz.inf.kaos.logextractor.reasoner.QuestOWLReasonerExt;
+import it.unibz.inf.kaos.obdamapper.reasoner.QuestOWLReasonerExt;
+import it.unibz.inf.kaos.obdamapper.ontopext.SQLWithVarMap;
 import it.unibz.inf.ontop.model.Function;
 import it.unibz.inf.ontop.model.OBDADataFactory;
 import it.unibz.inf.ontop.model.OBDADataSource;
@@ -199,7 +199,7 @@ public class EBDAModelImpl2 extends EBDAModelAbstractImpl  implements EBDAModel{
 		logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "An EBDA Model is initialized"));
 	}
 	
-	public void addMapping(OWLOntology ontology, OBDAModel obdaModel, AnnotationQueries annoQ) 
+	public void addMapping(OWLOntology ontology, OBDAModel obdaModel, AnnotationQueriesV2 annoQ) 
 			throws InvalidAnnotationException, InvalidDataSourcesNumberException{
 		
     	//Create an instance of Extended Quest OWL Reasoner.
@@ -209,8 +209,8 @@ public class EBDAModelImpl2 extends EBDAModelAbstractImpl  implements EBDAModel{
 
 		try{
 			//Process the trace annotation
-//			TraceAnnotationQuery taq = annoQ.getTrace();
-			CaseAnnotationQuery taq = annoQ.getQuery(CaseAnnotationQuery.class);
+			//TraceAnnotationQuery taq = annoQ.getTrace();
+			CaseAnnotationQueryV2 taq = annoQ.getQuery(CaseAnnotationQueryV2.class);
 			
 			if(taq == null) 
 				throw new InvalidAnnotationException("No Trace Annotation");
@@ -219,8 +219,9 @@ public class EBDAModelImpl2 extends EBDAModelAbstractImpl  implements EBDAModel{
 			//END OF processing the trace annotation
 			
 			//Process the event annotation
-//			Set<EventAnnotationQuery> eaq =  annoQ.getEvents();
-			Set<EventAnnotationQuery> eaq =  annoQ.getQueries(EventAnnotationQuery.class);
+			//Set<EventAnnotationQuery> eaq =  annoQ.getEvents();
+			Set<EventAnnotationQueryV2> eaq =  annoQ.getQueries(EventAnnotationQueryV2.class);
+			
 			if(eaq == null)
 				throw new InvalidAnnotationException("No Event Annotation");
 			
@@ -248,7 +249,7 @@ public class EBDAModelImpl2 extends EBDAModelAbstractImpl  implements EBDAModel{
 	//Methods for adding some mapping based on annotation query
 	/////////////////////////////////////////////////////////
 	
-	private void addMapping(CaseAnnotationQuery taq, QuestOWLReasonerExt reasoner) 
+	private void addMapping(CaseAnnotationQueryV2 taq, QuestOWLReasonerExt reasoner) 
 			throws OWLException, OBDAException, MalformedQueryException{
 
 		//TODO: make a check if reformulateSPARQL2 ada masalah, lanjut ke query berikutnya, jangan mati
@@ -269,20 +270,20 @@ public class EBDAModelImpl2 extends EBDAModelAbstractImpl  implements EBDAModel{
 		}
 	}
 
-	private void addMapping(Set<EventAnnotationQuery> eaqSet, QuestOWLReasonerExt reasoner) 
+	private void addMapping(Set<EventAnnotationQueryV2> eaqSet, QuestOWLReasonerExt reasoner) 
 			throws OWLException, OBDAException, MalformedQueryException{
 		
-		Iterator<EventAnnotationQuery> it = eaqSet.iterator();
+		Iterator<EventAnnotationQueryV2> it = eaqSet.iterator();
 		
 		int eventUID = 1;
 		
 		while(it.hasNext()){
-			EventAnnotationQuery eaq = it.next();
+			EventAnnotationQueryV2 eaq = it.next();
 			
-			EventTraceAnnotationQuery etaq = eaq.getEventTrace();
-			EventTimestampAnnotationQuery etsaq = eaq.getEventTimestamp();
-			EventResourceAnnotationQuery eraq = eaq.getEventResource();
-			EventLifecycleAnnotationQuery elaq = eaq.getEventLifecycle();
+			EventTraceAnnotationQueryV2 etaq = eaq.getEventTrace();
+			EventTimestampAnnotationQueryV2 etsaq = eaq.getEventTimestamp();
+			EventResourceAnnotationQueryV2 eraq = eaq.getEventResource();
+			EventLifecycleAnnotationQueryV2 elaq = eaq.getEventLifecycle();
 			
 			this.addMapping(eventUID, eaq, reasoner);
 
@@ -295,7 +296,7 @@ public class EBDAModelImpl2 extends EBDAModelAbstractImpl  implements EBDAModel{
 		}
 	}
 	
-	private void addMapping(int eventUID, EventAnnotationQuery eaq, QuestOWLReasonerExt reasoner) 
+	private void addMapping(int eventUID, EventAnnotationQueryV2 eaq, QuestOWLReasonerExt reasoner) 
 			throws OWLException, OBDAException, MalformedQueryException{
 		
 		List<SQLWithVarMap> unfoldedQuery = reasoner.reformulateSPARQL2(eaq.getQuery());
@@ -316,7 +317,7 @@ public class EBDAModelImpl2 extends EBDAModelAbstractImpl  implements EBDAModel{
 		}
 	}
 
-	private void addMapping(int eventUID, EventTraceAnnotationQuery etaq, QuestOWLReasonerExt reasoner) 
+	private void addMapping(int eventUID, EventTraceAnnotationQueryV2 etaq, QuestOWLReasonerExt reasoner) 
 			throws OWLException, OBDAException, MalformedQueryException{
 
 		List<SQLWithVarMap> unfoldedQuery = reasoner.reformulateSPARQL2(etaq.getQuery());
@@ -338,7 +339,7 @@ public class EBDAModelImpl2 extends EBDAModelAbstractImpl  implements EBDAModel{
 		}
 	}
 	
-	private void addMapping(int eventUID, EventTimestampAnnotationQuery etaq, QuestOWLReasonerExt reasoner) 
+	private void addMapping(int eventUID, EventTimestampAnnotationQueryV2 etaq, QuestOWLReasonerExt reasoner) 
 			throws OWLException, OBDAException, MalformedQueryException{
 		
 		List<SQLWithVarMap> unfoldedQuery = reasoner.reformulateSPARQL2(etaq.getQuery());
@@ -357,7 +358,7 @@ public class EBDAModelImpl2 extends EBDAModelAbstractImpl  implements EBDAModel{
 		}
 	}
 
-	private void addMapping(int eventUID, EventResourceAnnotationQuery eraq, QuestOWLReasonerExt reasoner) 
+	private void addMapping(int eventUID, EventResourceAnnotationQueryV2 eraq, QuestOWLReasonerExt reasoner) 
 			throws OWLException, OBDAException, MalformedQueryException{
 		
 		List<SQLWithVarMap> unfoldedQuery = reasoner.reformulateSPARQL2(eraq.getQuery());
@@ -378,7 +379,7 @@ public class EBDAModelImpl2 extends EBDAModelAbstractImpl  implements EBDAModel{
 
 	}
 	
-	private void addMapping(int eventUID, EventLifecycleAnnotationQuery elaq, QuestOWLReasonerExt reasoner) 
+	private void addMapping(int eventUID, EventLifecycleAnnotationQueryV2 elaq, QuestOWLReasonerExt reasoner) 
 			throws OWLException, OBDAException, MalformedQueryException{
 		
 		List<SQLWithVarMap> unfoldedQuery = reasoner.reformulateSPARQL2(elaq.getQuery());

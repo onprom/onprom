@@ -45,8 +45,8 @@ import it.unibz.inf.kaos.logextractor.model.EBDAModelWithOptimizedXAttributesEnc
 import it.unibz.inf.kaos.logextractor.model.impl.XEventOnProm;
 import it.unibz.inf.kaos.logextractor.model.impl.XFactoryOnProm;
 import it.unibz.inf.kaos.logextractor.model.impl.XLogOnProm;
-import it.unibz.inf.kaos.logextractor.util.ExecutionMsgEvent;
-import it.unibz.inf.kaos.logextractor.util.ExecutionMsgListener;
+import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgEvent;
+import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgListener;
 import it.unibz.inf.ontop.model.OBDAModel;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestConstants;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestPreferences;
@@ -68,6 +68,7 @@ import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration.Builder;
  */
 public class EBDAReasonerImplWithParallelProcessing extends EBDAReasonerAbstract{
 
+//	private static final Logger logger = (Logger) LoggerFactory.getLogger(EBDAReasonerImplWithParallelProcessing.class);
 	private static final Logger logger = (Logger) LoggerFactory.getLogger("EBDAReasoner");
 
 	private OWLOntology eventOnto;

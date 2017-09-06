@@ -1,0 +1,340 @@
+{
+  "@class" : "it.unibz.inf.kaos.data.query.AnnotationQueries",
+  "queries" : [ "java.util.LinkedHashSet", [ {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT ?Trace (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (?title AS ?Value)WHERE {?Trace a :Paper . ?Trace :title ?title} ",
+    "targetURI" : "http://onprom.inf.unibz.it/t-has-a",
+    "firstComponent" : [ "Trace" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT ?Trace (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (?title AS ?Value)WHERE {?Trace a :Paper . ?Trace :title ?title} ",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT ?Trace (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (?title AS ?Value)WHERE {?Trace a :Paper . ?Trace :title ?title} ",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT ?Trace (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (?title AS ?Value)WHERE {?Trace a :Paper . ?Trace :title ?title} ",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Submission\" AS ?Value)WHERE {?Submission  a :Submission .  ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "EventID", "Event" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Submission\" AS ?Value)WHERE {?Submission  a :Submission .  ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Submission\" AS ?Value)WHERE {?Submission  a :Submission .  ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Submission\" AS ?Value)WHERE {?Submission  a :Submission .  ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (?Paper AS ?Trace) WHERE  { ?Submission  a :Submission . ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Trace" ],
+    "secondComponent" : [ "EventID", "Event" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value)WHERE {?Submission a :Submission . ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . ?Submission :uploadTime  ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "EventID", "Event" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value)WHERE {?Submission a :Submission . ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . ?Submission :uploadTime  ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value)WHERE {?Submission a :Submission . ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . ?Submission :uploadTime  ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value)WHERE {?Submission a :Submission . ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . ?Submission :uploadTime  ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value) WHERE {?Submission  a :Submission .  ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "EventID", "Event" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value) WHERE {?Submission  a :Submission .  ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value) WHERE {?Submission  a :Submission .  ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Submission AS ?Event) (\"Submission\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value) WHERE {?Submission  a :Submission .  ?Submission :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Creation\" AS ?Value)WHERE {?Creation  a :Creation .  ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "EventID", "Event" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Creation\" AS ?Value)WHERE {?Creation  a :Creation .  ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Creation\" AS ?Value)WHERE {?Creation  a :Creation .  ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Creation\" AS ?Value)WHERE {?Creation  a :Creation .  ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (?Paper AS ?Trace) WHERE  { ?Creation  a :Creation . ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Trace" ],
+    "secondComponent" : [ "EventID", "Event" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value)WHERE {?Creation a :Creation . ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . ?Creation :uploadTime  ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "EventID", "Event" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value)WHERE {?Creation a :Creation . ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . ?Creation :uploadTime  ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value)WHERE {?Creation a :Creation . ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . ?Creation :uploadTime  ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value)WHERE {?Creation a :Creation . ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . ?Creation :uploadTime  ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value) WHERE {?Creation  a :Creation .  ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "EventID", "Event" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value) WHERE {?Creation  a :Creation .  ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value) WHERE {?Creation  a :Creation .  ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Creation AS ?Event) (\"Creation\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value) WHERE {?Creation  a :Creation .  ?Creation :Submission_2_Paper  ?Paper . ?Paper a :Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Review\" AS ?Value) WHERE {?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "EventID", "Event" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Review\" AS ?Value) WHERE {?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Review\" AS ?Value) WHERE {?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Review\" AS ?Value) WHERE {?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (?Paper AS ?Trace) WHERE  { ?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Trace" ],
+    "secondComponent" : [ "EventID", "Event" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value) WHERE {?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . ?Review :subTime ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "EventID", "Event" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value) WHERE {?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . ?Review :subTime ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value) WHERE {?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . ?Review :subTime ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value) WHERE {?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . ?Review :subTime ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value) WHERE {?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "EventID", "Event" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value) WHERE {?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value) WHERE {?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Review AS ?Event) (\"Review\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value) WHERE {?Assignment :leadsTo ?Review . ?Assignment :Assignment_2_Paper ?Paper . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Decision\" AS ?Value) WHERE {?Decision  a :DecidedPaper .  }",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "EventID", "Event" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Decision\" AS ?Value) WHERE {?Decision  a :DecidedPaper .  }",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Decision\" AS ?Value) WHERE {?Decision  a :DecidedPaper .  }",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (\"literal\" AS ?Type) (\"concept:name\" AS ?Key) (\"Decision\" AS ?Value) WHERE {?Decision  a :DecidedPaper .  }",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (?Paper AS ?Trace) WHERE  { ?Decision  a :DecidedPaper . BIND(?Decision AS ?Paper)}",
+    "targetURI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Trace" ],
+    "secondComponent" : [ "EventID", "Event" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value) WHERE {?Decision  a :DecidedPaper . ?Decision :decTime ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "EventID", "Event" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value) WHERE {?Decision  a :DecidedPaper . ?Decision :decTime ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value) WHERE {?Decision  a :DecidedPaper . ?Decision :decTime ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (\"timestamp\" AS ?Type) (\"time:timestamp\" AS ?Key) (?t AS ?Value) WHERE {?Decision  a :DecidedPaper . ?Decision :decTime ?t . }",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value)  WHERE {?Decision  a :DecidedPaper .  }",
+    "targetURI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "EventID", "Event" ],
+    "secondComponent" : [ "Type", "Key", "Value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value)  WHERE {?Decision  a :DecidedPaper .  }",
+    "targetURI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value)  WHERE {?Decision  a :DecidedPaper .  }",
+    "targetURI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "PREFIX : <http://www.example.com/> SELECT DISTINCT (?Decision AS ?Event) (\"Decision\" AS ?EventID) (\"literal\" AS ?Type) (\"lifecycle:transition\" AS ?Key) (\"Complete\" AS ?Value)  WHERE {?Decision  a :DecidedPaper .  }",
+    "targetURI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Type", "Key", "Value" ],
+    "secondComponent" : [ "Value" ]
+  } ] ]
+}

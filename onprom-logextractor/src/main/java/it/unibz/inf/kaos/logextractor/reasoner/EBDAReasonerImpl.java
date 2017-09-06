@@ -39,13 +39,15 @@ import it.unibz.inf.kaos.logextractor.constants.LEConstants;
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
 import it.unibz.inf.kaos.logextractor.model.EBDAModel;
 import it.unibz.inf.kaos.logextractor.model.XAtt;
+import it.unibz.inf.kaos.logextractor.model.impl.EBDAMapping;
 import it.unibz.inf.kaos.logextractor.model.impl.XAttributeOnProm;
 import it.unibz.inf.kaos.logextractor.model.impl.XEventOnProm;
 import it.unibz.inf.kaos.logextractor.model.impl.XEventOnPromEfficient;
 import it.unibz.inf.kaos.logextractor.model.impl.XFactoryOnProm;
 import it.unibz.inf.kaos.logextractor.util.EfficientHashMap;
-import it.unibz.inf.kaos.logextractor.util.ExecutionMsgEvent;
 import it.unibz.inf.kaos.logextractor.util.Print;
+import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgEvent;
+import it.unibz.inf.ontop.model.OBDAModel;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestConstants;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestPreferences;
 import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWL;
@@ -64,6 +66,9 @@ import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration.Builder;
  */
 public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 
+//	private static final Logger logger = Logger.getLogger(LEConstants.LOGGER_NAME);
+//	private static final Logger logger = (Logger) LoggerFactory.getLogger(LEConstants.LOGGER_NAME);
+//	private static final Logger logger = (Logger) LoggerFactory.getLogger(EBDAReasonerImpl.class);
 	private static final Logger logger = (Logger) LoggerFactory.getLogger("EBDAReasoner");
 
 	private QuestOWL questReasoner;
@@ -71,7 +76,35 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	private boolean verbose = false;
 	private boolean allowToDisposeQuestReasoner = true;
 
+	/**
+	 * Initializes EBDA Reasoner based on the given EBDA Model.
+	 * 
+	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
+	 * @param ebdaModel
+	 */
 	public EBDAReasonerImpl(EBDAModel ebdaModel){
+		
+		init(ebdaModel);
+	}
+
+	/**
+	 * Initializes EBDA Reasoner based on the given EBDA Mapping.
+	 * 
+	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
+	 * @param ebdaModel
+	 */
+	public EBDAReasonerImpl(EBDAMapping ebdaMapping){
+		
+		init(ebdaMapping);
+	}
+
+	/**
+	 * Initializes EBDA Reasoner based on the given OBDA Model.
+	 * 
+	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
+	 * @param ebdaModel
+	 */
+	private void init(OBDAModel ebdaModel){
 		
 		this.xfact = XFactoryOnProm.getInstance();
 		super.setExecutionLogListener(null);
@@ -153,8 +186,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	// END OF Some utility methods
 	//////////////////////////////////////////////////////////////////////
 
-
-	
 	//////////////////////////////////////////////////////////////////////
 	// XAttributes retriever methods
 	//////////////////////////////////////////////////////////////////////
@@ -4088,5 +4119,5 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	//////////////////////////////////////////////////////////////////////
 	// END OF XTraces retriever methods
 	//////////////////////////////////////////////////////////////////////
-		
+	
 }

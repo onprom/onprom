@@ -16,14 +16,23 @@
 
 package it.unibz.inf.kaos.logextractor.model.impl;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
 import it.unibz.inf.kaos.logextractor.constants.XESEOConstants;
-import it.unibz.inf.kaos.logextractor.exception.InvalidAnnotationException;
-import it.unibz.inf.kaos.logextractor.exception.InvalidDataSourcesNumberException;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
 import it.unibz.inf.kaos.logextractor.model.EBDAModel;
 import it.unibz.inf.ontop.model.Function;
 import it.unibz.inf.ontop.model.OBDADataFactory;
@@ -54,7 +63,8 @@ public abstract class EBDAModelAbstractImpl extends OBDAModelImpl implements EBD
 //		this.turtleParser = new TurtleOBDASyntaxParser(this.getPrefixManager());
 
 		//add Event Ontology Prefix
-		this.addEventOntologyPrefix();
+		this.getPrefixManager().addPrefix(
+				XESEOConstants.eventOntoPrefixAbbr, XESEOConstants.eventOntoPrefix);
 	}
 	
 	//Note that at the moment here we only support a single data source
@@ -62,19 +72,16 @@ public abstract class EBDAModelAbstractImpl extends OBDAModelImpl implements EBD
 		
 		return this.getSources().get(0);
 	}
-	
-	protected void addEventOntologyPrefix(){
-		this.getPrefixManager().addPrefix(
-				XESEOConstants.eventOntoPrefixAbbr, XESEOConstants.eventOntoPrefix);
-	}
-	
+		
 	protected void addMapping(String sourceQuery, String targetQuery){
 		
-//		System.out.println("DEBUGA: --------------------------------------------------------------------");
-//		System.out.println("DEBUGA: ADD MAPPING");
-//		System.out.println("DEBUGA: sourceQuery: "+sourceQuery);
-//		System.out.println("DEBUGA: targetQuery: "+targetQuery);
-//		System.out.println("DEBUGA: --------------------------------------------------------------------");
+		/*
+		System.out.println("DEBUGA: --------------------------------------------------------------------");
+		System.out.println("DEBUGA: ADD MAPPING");
+		System.out.println("DEBUGA: sourceQuery: \n\n"+sourceQuery);
+		System.out.println("\nDEBUGA: targetQuery: \n\n"+targetQuery);
+		System.out.println("\nDEBUGA: --------------------------------------------------------------------\n");
+		*/
 		
 		OBDADataFactory fact = this.getDataFactory();
 		
@@ -121,7 +128,38 @@ public abstract class EBDAModelAbstractImpl extends OBDAModelImpl implements EBD
 		return config;
 	}
 
-	public abstract void addMapping(OWLOntology ontology, OBDAModel obdaModel, AnnotationQueries annoQ) throws InvalidAnnotationException, InvalidDataSourcesNumberException;
+	public abstract void addMapping(OWLOntology ontology, OBDAModel obdaModel, AnnotationQueriesV2 annoQ) throws InvalidAnnotationException, InvalidDataSourcesNumberException;
 
-
+	//validate whether the EBDAModel really contains the mappings to XES Event Ontology
+	@Override
+	public boolean isValidEBDAModel(){
+		
+		OWLOntologyManager eventOntoMan = OWLManager.createOWLOntologyManager();
+		URL eventOntoURL = this.getClass().getResource(XESEOConstants.eventOntoPath);
+		OWLOntology eventOnto = null;
+		
+		try {
+			eventOnto = eventOntoMan.loadOntologyFromOntologyDocument(eventOntoURL.openStream());
+		} catch (OWLOntologyCreationException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		for(ArrayList<OBDAMappingAxiom> mapList: getMappings().values()){
+			for(OBDAMappingAxiom map : mapList){
+				for(Function f : map.getTargetQuery()){
+					
+					String targetPred = f.getFunctionSymbol().toString();
+					
+					if(!eventOnto.containsEntityInSignature(IRI.create(targetPred))){
+						
+						//System.out.println("Invalid Ontology Vocabulary: "+IRI.create(targetPred));
+						
+						return false;
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
 }

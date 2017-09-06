@@ -34,7 +34,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
+
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
 import it.unibz.inf.kaos.logextractor.XESLogExtractor;
 import it.unibz.inf.ontop.model.OBDAModel;
 import it.unibz.inf.ontop.owlrefplatform.owlapi.MappingLoader;
@@ -60,7 +61,7 @@ public class LogExtractorUsageExample3 {
 	private static String outputXESFilePath = outputPath + obdaFile+".xes";
 
 	//------- Annotation Queries----------
-	private static AnnotationQueries annotation = importAnnotationQueries(inputPath + "arsatest.aqr"); 
+	private static AnnotationQueriesV2 annotation = importAnnotationQueries(inputPath + "arsatest.aqr"); 
 
 	
 	public static void main(String[] ar){
@@ -150,27 +151,22 @@ public class LogExtractorUsageExample3 {
 	//////////////////////////////////////////////////////////////////////////////	
 	
 	//read annotation queries files
-	private static AnnotationQueries importAnnotationQueries(String annotationFile){
+	private static AnnotationQueriesV2 importAnnotationQueries(String annotationFile){
 		
-        //initialize JSON-Object mapper
 		ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
-        //use all fields
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-        //only include not null & non empty fields
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        //store type of classess also
         mapper.enableDefaultTypingAsProperty(ObjectMapper.DefaultTyping.NON_FINAL, "@class");
-        //ignore unknown properties
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(DeserializationFeature.FAIL_ON_UNRESOLVED_OBJECT_IDS, false);
         mapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
 
-		AnnotationQueries q = null;
+		AnnotationQueriesV2 q = null;
 		
 		try {
 
-			q = mapper.readValue(new FileInputStream(new File(annotationFile)), AnnotationQueries.class); //read JSON from URL
+			q = mapper.readValue(new FileInputStream(new File(annotationFile)), AnnotationQueriesV2.class); //read JSON from URL
 			
 		} catch (IOException e1) {
 			e1.printStackTrace();

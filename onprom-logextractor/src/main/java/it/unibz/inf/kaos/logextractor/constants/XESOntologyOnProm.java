@@ -85,17 +85,17 @@ public class XESOntologyOnProm implements XESOntology{
 	}
 	
 	@Override 
-	public String getTContainsERole() {
+	public String getTraceContainsEventRole() {
 		return T_CONTAINS_E_ROLE;
 	}
 
 	@Override 
-	public String getTContainsARole() {
+	public String getTraceContainsAttributeRole() {
 		return T_CONTAINS_A_ROLE;
 	}
 
 	@Override 
-	public String getEContainsARole() {
+	public String getEventContainsAttributeRole() {
 		return E_CONTAINS_A_ROLE;
 	}
 

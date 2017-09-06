@@ -137,6 +137,9 @@ public class LEConstants {
 		public static final String XES_ATT_KEY_LIFECYCLE_TRANSITION = "lifecycle:transition";
 		public static final String XES_ATT_KEY_ORG_RESOURCE = "org:resource";
 
+		/* 
+		BEGIN: arsa: removed on 2017.07.20 - reason: useless
+		
 		public static HashMap<String, String> xesconstants = new HashMap<String,String>();
 		
 		static{
@@ -145,28 +148,35 @@ public class LEConstants {
 			xesconstants.put("lifecycle:transition", LEConstants.XES_ATT_KEY_LIFECYCLE_TRANSITION);
 			xesconstants.put("org:resource", LEConstants.XES_ATT_KEY_ORG_RESOURCE);
 		}
-
 		
+		END OF arsa: removed on 2017.07.20 - reason: useless
+		*/
+		
+		//private static final String COLON_SPECIAL_REP = "c0l0N";
 		private static final String COLON_SPECIAL_REP = "c#-/0#-=/l=#o=N#";
-//		private static final String COLON_SPECIAL_REP = "c0l0N";
 
 		public static final String XES_ATT_KEY_CONCEPT_NAME_SPECIAL_REP = "concept"+COLON_SPECIAL_REP+"name";
 		public static final String XES_ATT_KEY_TIME_TIMESTAMP_SPECIAL_REP = "time"+COLON_SPECIAL_REP+"timestamp";
 		public static final String XES_ATT_KEY_LIFECYCLE_TRANSITION_SPECIAL_REP = "lifecycle"+COLON_SPECIAL_REP+"transition";
-		public static final String XES_ATT_KEY_ORG_RESOURCE_SPECIAL_REP = "org:resource";
+		public static final String XES_ATT_KEY_ORG_RESOURCE_SPECIAL_REP = "org"+COLON_SPECIAL_REP+"resource";
 		
 	//END OF Some XES Standard related constants
 
 	//Some URI related constants
-//		public static final String SPECIAL_URI_DELIMETER = "#";
-//		public static final String SPECIAL_URI_DELIMETER = "#@$&+$#+@";
+		//public static final String SPECIAL_URI_DELIMETER = "#";
+		//public static final String SPECIAL_URI_DELIMETER = "#@$&+$#+@";
 		public static final String SPECIAL_URI_DELIMETER = "#D#3#-/#--/l#1#m#-/#--/e#=-/-=/T#3#r=#";
 		
 		public static final String SPECIAL_DELIMETER = "\u00B6\u00AE\u00C6";
 	//END OF Some URI related constants		
 	
 	//SPECIAL STRING MAPPER
-		//it might be needed to deal with unsupported URI characters
+
+		/*
+		 * it is needed to deal with unsupported characters in URI (e.g., ':'). In the beginning
+		 * this is needed for the implementation of log extractor in which the information about
+		 * the XES attributes (i.e., keys, types, values) are encoded in their URI.
+		 */
 		
 		/*
 		private static HashMap<String, String> specialStringMap = new HashMap<String,String>();
@@ -180,13 +190,13 @@ public class LEConstants {
 		*/
 
 		private static ImmutableMap<String, String> specialStringMap = 
-				new ImmutableMap.Builder<String, String>()
-		           .put(LEConstants.XES_ATT_KEY_CONCEPT_NAME_SPECIAL_REP, LEConstants.XES_ATT_KEY_CONCEPT_NAME)
-		           .put(LEConstants.XES_ATT_KEY_LIFECYCLE_TRANSITION_SPECIAL_REP, LEConstants.XES_ATT_KEY_LIFECYCLE_TRANSITION)
-		           .put(LEConstants.XES_ATT_KEY_ORG_RESOURCE_SPECIAL_REP, LEConstants.XES_ATT_KEY_ORG_RESOURCE)
-		           .put(LEConstants.XES_ATT_KEY_TIME_TIMESTAMP_SPECIAL_REP, LEConstants.XES_ATT_KEY_TIME_TIMESTAMP)
-		           .build();
-
+			new ImmutableMap.Builder<String, String>()
+	           .put(LEConstants.XES_ATT_KEY_CONCEPT_NAME_SPECIAL_REP, LEConstants.XES_ATT_KEY_CONCEPT_NAME)
+	           .put(LEConstants.XES_ATT_KEY_LIFECYCLE_TRANSITION_SPECIAL_REP, LEConstants.XES_ATT_KEY_LIFECYCLE_TRANSITION)
+	           .put(LEConstants.XES_ATT_KEY_ORG_RESOURCE_SPECIAL_REP, LEConstants.XES_ATT_KEY_ORG_RESOURCE)
+	           .put(LEConstants.XES_ATT_KEY_TIME_TIMESTAMP_SPECIAL_REP, LEConstants.XES_ATT_KEY_TIME_TIMESTAMP)
+	           .build();
+	
 		public static String mapSpecialString(String str){
 			return specialStringMap.get(str);
 		}

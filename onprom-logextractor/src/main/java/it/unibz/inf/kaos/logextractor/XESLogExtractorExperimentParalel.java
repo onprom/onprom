@@ -31,7 +31,7 @@ import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.LoggerFactory;
 
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
 import it.unibz.inf.kaos.logextractor.constants.LEConstants;
 
 //import it.unibz.inf.kaos.data.query2.AnnotationQueries;
@@ -43,8 +43,10 @@ import it.unibz.inf.kaos.logextractor.constants.LEConstants;
 //import it.unibz.inf.kaos.data.query2.ResourceAnnotationQuery;
 //import it.unibz.inf.kaos.data.query2.TraceAnnotationQuery;
 
-import it.unibz.inf.kaos.logextractor.exception.InvalidAnnotationException;
-import it.unibz.inf.kaos.logextractor.exception.InvalidDataSourcesNumberException;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
+import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgEvent;
+import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgListener;
 import it.unibz.inf.kaos.logextractor.exception.XESLogExtractionFailureException;
 import it.unibz.inf.kaos.logextractor.model.EBDAModelWithOptimizedXAttributesEncoding;
 import it.unibz.inf.kaos.logextractor.model.impl.LEObjectFactory;
@@ -52,8 +54,6 @@ import it.unibz.inf.kaos.logextractor.model.impl.XEventOnProm;
 import it.unibz.inf.kaos.logextractor.model.impl.XFactoryOnProm;
 import it.unibz.inf.kaos.logextractor.model.impl.XLogOnProm;
 import it.unibz.inf.kaos.logextractor.reasoner.EBDAReasonerImplExperiment;
-import it.unibz.inf.kaos.logextractor.util.ExecutionMsgEvent;
-import it.unibz.inf.kaos.logextractor.util.ExecutionMsgListener;
 import it.unibz.inf.ontop.model.OBDADataSource;
 import it.unibz.inf.ontop.model.OBDAException;
 import it.unibz.inf.ontop.model.OBDAModel;
@@ -160,7 +160,7 @@ public class XESLogExtractorExperimentParalel implements ExecutionMsgListener{
 	 * @throws InvalidAnnotationException 
 	 * @throws XESLogExtractionFailureException 
 	 */
-	public EBDAModelWithOptimizedXAttributesEncoding createEBDAModelWithOptimizedXAttributesEncoding(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+	public EBDAModelWithOptimizedXAttributesEncoding createEBDAModelWithOptimizedXAttributesEncoding(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 			throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 
 		List<OBDADataSource> odsList = obdaModel.getSources();
@@ -212,7 +212,7 @@ public class XESLogExtractorExperimentParalel implements ExecutionMsgListener{
 	 * @throws InvalidAnnotationException 
 	 * @throws XESLogExtractionFailureException 
 	 */
-	public XLog extractXESLog16(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+	public XLog extractXESLog16(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 			throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 
 	//========================================================================================================================

@@ -34,15 +34,10 @@ import org.deckfour.xes.model.impl.XAttributeMapLazyImpl;
 import org.deckfour.xes.model.impl.XTraceImpl;
 
 import it.unibz.inf.kaos.logextractor.constants.LEConstants;
-import it.unibz.inf.kaos.logextractor.exception.InvalidDataSourcesNumberException;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeException;
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
 import it.unibz.inf.kaos.logextractor.model.XAtt;
-
-//import it.unibz.inf.kaos.logextractor.reasoner.impl.EBDAReasonerImplForVirtual;
-//import it.unibz.inf.kaos.virtualxes.naiveimpl.ImmutableVirtualXEvent;
-//import it.unibz.inf.kaos.virtualxes.naiveimpl.ImmutableVirtualXLog;
-//import it.unibz.inf.kaos.virtualxes.naiveimpl.ImmutableVirtualXTrace;
 
 /**
  * 
@@ -382,5 +377,5 @@ public class XFactoryOnProm extends XFactoryNaiveImpl{ //XFactoryBufferedImpl{
 	public XAttLiteral createXAttLiteral(String uri){
 		return new XAttLiteral(uri);
 	}
-	
+		
 }

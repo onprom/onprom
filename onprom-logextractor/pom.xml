@@ -131,6 +131,13 @@
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
         </dependency>
+        
+		<dependency>
+            <artifactId>onprom-obdamapper</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        
 		<!-- =============================================================== -->
 		<!-- END OF Related to OnProm -->
         <!-- =============================================================== -->

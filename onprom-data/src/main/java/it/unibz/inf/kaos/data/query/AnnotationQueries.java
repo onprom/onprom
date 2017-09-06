@@ -27,6 +27,7 @@
 package it.unibz.inf.kaos.data.query;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -60,6 +61,10 @@ public class AnnotationQueries {
 
   public void addQuery(AnnotationQuery query) {
     queries.add(query);
+  }
+
+  public void addQuery(List<AnnotationQuery> _queries) {
+    queries.addAll(_queries);
   }
 
   public String toString() {

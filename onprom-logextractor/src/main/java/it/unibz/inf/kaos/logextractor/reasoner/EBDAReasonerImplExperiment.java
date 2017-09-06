@@ -23,8 +23,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map.Entry;
 
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.model.XAttribute;
@@ -43,26 +41,20 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableMap;
 
 import ch.qos.logback.classic.Logger;
-import gnu.trove.set.hash.TIntHashSet;
 import it.unibz.inf.kaos.logextractor.XESLogExtractorExperimentParalel.EventExtractor16;
 import it.unibz.inf.kaos.logextractor.XESLogExtractorExperimentParalel.TraceExtractor16;
 import it.unibz.inf.kaos.logextractor.constants.XESEOConstants;
 import it.unibz.inf.kaos.logextractor.constants.LEConstants;
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeException;
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
-//import it.unibz.inf.kaos.logextractor.local.util.SimpleHashMap;
 import it.unibz.inf.kaos.logextractor.model.EBDAModel;
 import it.unibz.inf.kaos.logextractor.model.XAtt;
-import it.unibz.inf.kaos.logextractor.model.impl.XAttributeOnProm;
-import it.unibz.inf.kaos.logextractor.model.impl.XAttributeOnProm2;
 import it.unibz.inf.kaos.logextractor.model.impl.XEventOnProm;
 import it.unibz.inf.kaos.logextractor.model.impl.XEventOnPromEfficient;
 import it.unibz.inf.kaos.logextractor.model.impl.XFactoryOnProm;
 import it.unibz.inf.kaos.logextractor.util.EfficientHashMap;
-import it.unibz.inf.kaos.logextractor.util.ExecutionMsgEvent;
-import it.unibz.inf.kaos.logextractor.util.ExecutionMsgListener;
 import it.unibz.inf.kaos.logextractor.util.Print;
-import it.unibz.inf.ontop.model.OBDAModel;
+import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgEvent;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestConstants;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestPreferences;
 import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWL;
@@ -89,6 +81,9 @@ import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration.Builder;
  */
 public class EBDAReasonerImplExperiment  extends EBDAReasonerAbstract{
 
+//	private static final Logger logger = Logger.getLogger(LEConstants.LOGGER_NAME);
+//	private static final Logger logger = (Logger) LoggerFactory.getLogger(LEConstants.LOGGER_NAME);
+//	private static final Logger logger = (Logger) LoggerFactory.getLogger(EBDAReasonerImplExperiment.class);
 	private static final Logger logger = (Logger) LoggerFactory.getLogger("EBDAReasoner");
 
 	private QuestOWL questReasoner;
@@ -180,7 +175,7 @@ public class EBDAReasonerImplExperiment  extends EBDAReasonerAbstract{
 	//////////////////////////////////////////////////////////////////////
 	// Attributes retriever methods
 	//////////////////////////////////////////////////////////////////////
-	
+
 	//Masalah, karena datanya gak bener2 URI, jadi ini gak guna
 	public ImmutableMap<URI,XAtt> getXAttributesWithSplitQuery2() throws OWLException{
 		
@@ -716,7 +711,7 @@ public class EBDAReasonerImplExperiment  extends EBDAReasonerAbstract{
 	//////////////////////////////////////////////////////////////////////
 	// Events retriever methods
 	//////////////////////////////////////////////////////////////////////
-	
+
 	//Masalah, karena datanya gak bener2 URI, jadi ini gak guna
 	public ImmutableMap<URI,XEventOnProm> getXEventsOnPromUsingAtomicQuery2(ImmutableMap<URI,XAtt> xattmap) throws OWLException{
 		

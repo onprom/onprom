@@ -17,7 +17,18 @@
 package it.unibz.inf.kaos.logextractor.model.impl;
 
 
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+
+import java.io.IOException;
+
+import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.logextractor.model.EBDAModelWithOptimizedXAttributesEncoding;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
+import it.unibz.inf.ontop.model.OBDADataSource;
+import it.unibz.inf.ontop.model.OBDAModel;
+
 
 /**
  * 
@@ -54,4 +65,26 @@ public class LEObjectFactory {
 	public EBDAModelWithOptimizedXAttributesEncoding createEBDAModelWithOptimizedXAttributesEncoding(){
 		return new EBDAModelWithOptimizedXAttributesEncodingImpl();
 	}
+
+	public EBDAMapping createEBDAMapping(OWLOntology sourceOntology, OBDAModel sourceObdaModel, AnnotationQueries annoQ) 
+			throws OWLOntologyCreationException, IOException, InvalidAnnotationException, InvalidDataSourcesNumberException{
+
+		/*
+		URL eventOntology = this.getClass().getResource(XESEOConstants.eventOntoPath);
+		
+		OWLOntology targetOntology = 
+			OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(eventOntology.openStream());
+		
+		EBDAMapping ebdaMapping = new EBDAMapping(sourceOntology, sourceObdaModel, annoQ);
+		ebdaMapping.setTargetOntology(targetOntology);
+		*/
+		
+		return new EBDAMapping(sourceOntology, sourceObdaModel, annoQ);
+	}
+	
+	public EBDAMapping createEBDAMapping(OBDADataSource obdaDataSource, OWLOntology targetOntology) throws OWLOntologyCreationException, IOException, InvalidAnnotationException{
+		
+		return new EBDAMapping(obdaDataSource, targetOntology);
+	}
+
 }

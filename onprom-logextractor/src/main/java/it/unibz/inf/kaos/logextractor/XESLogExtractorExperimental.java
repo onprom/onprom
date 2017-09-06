@@ -38,12 +38,14 @@ import com.google.common.collect.ImmutableMap;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
 import it.unibz.inf.kaos.logextractor.constants.LEConstants;
 
-import it.unibz.inf.kaos.logextractor.exception.InvalidAnnotationException;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
-import it.unibz.inf.kaos.logextractor.exception.InvalidDataSourcesNumberException;
+import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
+import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgEvent;
+import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgListener;
 import it.unibz.inf.kaos.logextractor.exception.XESLogExtractionFailureException;
 import it.unibz.inf.kaos.logextractor.model.EBDAModel;
 import it.unibz.inf.kaos.logextractor.model.EBDAModelWithOptimizedXAttributesEncoding;
@@ -63,8 +65,6 @@ import it.unibz.inf.kaos.logextractor.reasoner.EBDAReasonerImplExperiment;
 import it.unibz.inf.kaos.logextractor.reasoner.EBDAReasonerImplWithParallelProcessing;
 import it.unibz.inf.kaos.logextractor.reasoner.EBDAReasonerImplWithXAttributesOptimization;
 import it.unibz.inf.kaos.logextractor.util.EfficientHashMap;
-import it.unibz.inf.kaos.logextractor.util.ExecutionMsgEvent;
-import it.unibz.inf.kaos.logextractor.util.ExecutionMsgListener;
 import it.unibz.inf.ontop.model.OBDADataSource;
 import it.unibz.inf.ontop.model.OBDAException;
 import it.unibz.inf.ontop.model.OBDAModel;
@@ -136,228 +136,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		//END OF logger related initialization
 	}
 	
-	
-	///////////////////////////////////////////////////////////////////////////////////
-	// LOG EXTRACTION STUFF
-	///////////////////////////////////////////////////////////////////////////////////
-
-		/**
-		 * Generates XES log based on the given inputs, namely: 
-		 * Domain Ontology, OBDA Model, and annotation information
-		 * 
-		 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
-		 * @param domainOntology
-		 * @param obdaModel
-		 * @param annotation
-		 * @return event log - XLog
-		 * @throws InvalidDataSourcesNumberException 
-		 * @throws OWLException 
-		 * @throws InvalidAnnotationException 
-		 * @throws XESLogExtractionFailureException 
-		 */
-		public XLog extractXESLogRecommendedImpl(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
-				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
-	
-			return extractXESLogSimpleImpl(domainOntology, obdaModel, annotation);	
-		}
 		
-		/**
-		 * 
-		 * Generates XES log based on the given particular OBDA model that connects a 
-		 * Database to the Event Ontology (i.e., EBDA).
-		 * 
-		 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
-		 * @param ebdaModel - an Event OBDA model (i.e., a particular OBDA model) that 
-		 * 						connects a Database to the Event Ontology
-		 * @return event log - XLog
-		 */
-		public XLog extractXESLogRecommendedImpl(EBDAModel ebdaModel) throws XESLogExtractionFailureException{
-			
-			return extractXESLogSimplImpl(ebdaModel);
-		}
-	
-		/**
-		 * Generates XES log based on the given inputs, namely: 
-		 * Domain Ontology, OBDA Model, and annotation information
-		 * 
-		 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
-		 * @param domainOntology
-		 * @param obdaModel
-		 * @param annotation
-		 * @return event log - XLog
-		 * @throws InvalidDataSourcesNumberException 
-		 * @throws OWLException 
-		 * @throws InvalidAnnotationException 
-		 * @throws XESLogExtractionFailureException 
-		 */
-		public XLog extractXESLogSimpleImpl(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
-				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
-	
-			EBDAModel ebdaModel = createEBDAModelNaiveImpl(domainOntology, obdaModel, annotation);
-			XLog xlog = extractXESLogSimplImpl(ebdaModel);
-			return xlog;	
-		}
-		
-		/**
-		 * 
-		 * Generates XES log based on the given particular OBDA model that connects a 
-		 * Database to the Event Ontology (i.e., EBDA).
-		 * 
-		 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
-		 * @param ebdaModel - an Event OBDA model (i.e., a particular OBDA model) that 
-		 * 						connects a Database to the Event Ontology
-		 * @return event log - XLog
-		 */
-		public XLog extractXESLogSimplImpl(EBDAModel ebdaModel) throws XESLogExtractionFailureException{
-			
-			logger.info(String.format(
-					LEConstants.LOG_INFO_TEMPLATE, "Start extracting XES Log from the EBDA Model"));
-			
-			EBDAReasonerImpl ebdaR = new EBDAReasonerImpl(ebdaModel);
-			ebdaR.setExecutionLogListener(this);
-			
-			try {
-	
-				//extract all attributes
-				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Retrieving XES attributes information"));
-				HashMap<String,XAttribute> xatts = ebdaR.getXAttributesSimpleImpl();
-	
-				//extract all events and associate each event with their attributes
-				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Retrieving XES events information"));
-				HashMap<String, XEvent> xevents = ebdaR.getXEventsSimpleImpl(xatts);
-	
-				//extract all traces and associate each trace with their events
-				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Retrieving XES traces information"));
-				HashMap<String, XTrace> xtraces = ebdaR.getXTracesSimpleImpl(xevents, xatts);
-				
-				//add the traces into the log
-				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Constructing XES log"));
-	
-				//Create XLogOnProm 
-				XLogOnProm xlog = XFactoryOnProm.getInstance().createXLogOnProm();
-	
-				//Add traces to the log
-				xlog.addAll(xtraces.values());
-	
-				//Add default Trace/Event Global Attribute information and also classifier
-				xlog = addDefaultGlobalAttributesAndClassifiers(xlog);
-				
-				logger.info(String.format(
-						LEConstants.LOG_INFO_TEMPLATE, "Finish extracting XES Log from the EBDA Model"));
-	
-				//return the log
-				return xlog;
-	
-			} catch (OWLException e) {
-				e.printStackTrace();
-				throw new XESLogExtractionFailureException();
-			}
-		}
-		
-		/**
-		 * Generates XES log based on the given inputs, namely: 
-		 * Domain Ontology, OBDA Model, and annotation information
-		 * 
-		 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
-		 * @param domainOntology
-		 * @param obdaModel
-		 * @param annotation
-		 * @return event log - XLog
-		 * @throws InvalidDataSourcesNumberException 
-		 * @throws OWLException 
-		 * @throws InvalidAnnotationException 
-		 * @throws XESLogExtractionFailureException 
-		 * @deprecated this one is only maintained for backward compatibility with the other OnProm plug in, at some point it should be removed
-		 */
-		@Deprecated
-		public static XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
-				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
-		
-			List<OBDADataSource> odsList = obdaModel.getSources();
-			if(odsList.size() > 1)
-				throw new InvalidDataSourcesNumberException(odsList.size());
-	
-			//Construct EBDA Model
-			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Start constucting an EBDA Model"));
-			LEObjectFactory leFact = LEObjectFactory.getInstance();
-			EBDAModelNaiveImpl ebdaModel = leFact.createEBDAModelNaiveImpl();
-			
-			//add data source information to the EBDA Model
-			ebdaModel.addSource(odsList.get(0));
-			
-			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Construct the mappings for the EBDA Model"));
-			//add new mapping based on the annotation information
-			ebdaModel.addMapping(domainOntology, obdaModel, annotation);
-			
-			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Finish constucting an EBDA Model"));
-
-			return extractXESLog(ebdaModel);
-		}	
-		
-		/**
-		 * 
-		 * Generates XES log based on the given particular OBDA model that connects a 
-		 * Database to the Event Ontology (i.e., EBDA).
-		 * 
-		 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
-		 * @param ebdaModel - an Event OBDA model (i.e., a particular OBDA model) that 
-		 * 						connects a Database to the Event Ontology
-		 * @return event log - XLog
-		 * @deprecated this one is only maintained for backward compatibility with the other OnProm plug in, at some point it should be removed
-		 */
-		public static XLog extractXESLog(EBDAModel ebdaModel) throws XESLogExtractionFailureException{
-			
-			logger.info(String.format(
-					LEConstants.LOG_INFO_TEMPLATE, "Start extracting XES Log from the EBDA Model"));
-			
-			EBDAReasonerImpl ebdaR = new EBDAReasonerImpl(ebdaModel);
-			
-			try {
-	
-				//extract all attributes
-				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Retrieving XES attributes information"));
-				HashMap<String,XAttribute> xatts = ebdaR.getXAttributesSimpleImpl();
-	
-				//extract all events and associate each event with their attributes
-				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Retrieving XES events information"));
-				HashMap<String, XEvent> xevents = ebdaR.getXEventsSimpleImpl(xatts);
-	
-				//extract all traces and associate each trace with their events
-				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Retrieving XES traces information"));
-				HashMap<String, XTrace> xtraces = ebdaR.getXTracesSimpleImpl(xevents, xatts);
-				
-				//add the traces into the log
-				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Constructing XES log"));
-	
-				//Create XLogOnProm 
-				XLogOnProm xlog = XFactoryOnProm.getInstance().createXLogOnProm();
-	
-				//Add traces to the log
-				xlog.addAll(xtraces.values());
-	
-				XESLogExtractorExperimental xle = new XESLogExtractorExperimental();
-				
-				//Add default Trace/Event Global Attribute information and also classifier
-				xlog = xle.addDefaultGlobalAttributesAndClassifiers(xlog);
-				
-				logger.info(String.format(
-						LEConstants.LOG_INFO_TEMPLATE, "Finish extracting XES Log from the EBDA Model"));
-	
-				//return the log
-				return xlog;
-	
-			} catch (OWLException e) {
-				e.printStackTrace();
-				throw new XESLogExtractionFailureException();
-			}
-		}
-	
-	///////////////////////////////////////////////////////////////////////////////////
-	// END OF LOG EXTRACTION STUFF
-	///////////////////////////////////////////////////////////////////////////////////
-
-	
-	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	//EBDA MODEL CREATOR
 	/////////////////////////////////////////////////////////////////////////////////////////////	
@@ -376,7 +155,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public EBDAModelNaiveImpl createEBDAModelNaiveImpl(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public EBDAModelNaiveImpl createEBDAModelNaiveImpl(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 			List<OBDADataSource> odsList = obdaModel.getSources();
@@ -600,7 +379,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public EBDAModelImpl2 createEBDAModelImpl2(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public EBDAModelImpl2 createEBDAModelImpl2(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 			List<OBDADataSource> odsList = obdaModel.getSources();
@@ -638,7 +417,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public EBDAModelImpl3 createEBDAModelImpl3(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public EBDAModelImpl3 createEBDAModelImpl3(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 			List<OBDADataSource> odsList = obdaModel.getSources();
@@ -676,7 +455,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public EBDAModelWithOptimizedXAttributesEncoding createEBDAModelWithOptimizedXAttributesEncoding(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public EBDAModelWithOptimizedXAttributesEncoding createEBDAModelWithOptimizedXAttributesEncoding(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 			List<OBDADataSource> odsList = obdaModel.getSources();
@@ -724,7 +503,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public XLog getXESLog5(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public XLog getXESLog5(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 		//========================================================================================================================
@@ -831,7 +610,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public XLog getXESLog6(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public XLog getXESLog6(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 		//========================================================================================================================
@@ -938,7 +717,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public XLog getXESLogRW(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public XLog getXESLogRW(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 		//========================================================================================================================
@@ -1045,7 +824,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public XLog getXESLog10(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public XLog getXESLog10(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 		//========================================================================================================================
@@ -1144,7 +923,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public XLog getXESLog12(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public XLog getXESLog12(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 		//========================================================================================================================
@@ -1253,7 +1032,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public XLog getXESLog15(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public XLog getXESLog15(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 		//========================================================================================================================
@@ -1365,7 +1144,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public XLog getXESLog17(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public XLog getXESLog17(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 		//========================================================================================================================
@@ -1442,7 +1221,6 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 	//##################################################################################################################
 	//##################################################################################################################
 		
-
 		//-------------------------------------------------------------------------------------------
 		// Log Extractor with only simple atomic queries
 		//	- It splits the query for retrieving XAttributes information
@@ -1464,7 +1242,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public XLog extractOnPromXESLogUsingOnlyAtomicQueriesAndEBDAModelImpl3Efficiently3(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public XLog extractOnPromXESLogUsingOnlyAtomicQueriesAndEBDAModelImpl3Efficiently3(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Start XES Log extractor"));
@@ -1590,7 +1368,7 @@ public class XESLogExtractorExperimental implements ExecutionMsgListener{
 		 * @throws InvalidAnnotationException 
 		 * @throws XESLogExtractionFailureException 
 		 */
-		public XLog extractOnPromXESLogUsingOnlyAtomicQueriesAndEBDAModelImpl3Efficiently5(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) 
+		public XLog extractOnPromXESLogUsingOnlyAtomicQueriesAndEBDAModelImpl3Efficiently5(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueriesV2 annotation) 
 				throws InvalidDataSourcesNumberException, InvalidAnnotationException, OWLException, XESLogExtractionFailureException, OBDAException, MalformedQueryException{
 	
 			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Start XES Log extractor"));
