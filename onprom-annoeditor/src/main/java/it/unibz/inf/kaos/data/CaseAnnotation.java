@@ -25,7 +25,7 @@
  */
 package it.unibz.inf.kaos.data;
 
-import it.unibz.inf.kaos.data.query.CaseAnnotationQuery;
+import it.unibz.inf.kaos.data.query.old.V2.CaseAnnotationQueryV2;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
 import it.unibz.inf.kaos.ui.form.CaseForm;
 import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
@@ -54,8 +54,8 @@ public class CaseAnnotation extends AbstractAnnotation {
   }
 
   @Override
-  public CaseAnnotationQuery getQuery() {
-    return new CaseAnnotationQuery(SimpleQueryExporter.getStringAttributeQuery(getCaseName(), getRelatedClass(), null), getRelatedClass().getCleanName(), "n", SimpleQueryExporter.getAttributeQueries(getAttributes()));
+  public CaseAnnotationQueryV2 getQuery() {
+    return new CaseAnnotationQueryV2(SimpleQueryExporter.getStringAttributeQuery(getCaseName(), getRelatedClass(), null), getRelatedClass().getCleanName(), "n", SimpleQueryExporter.getAttributeQueries(getAttributes()));
   }
 
   @Override

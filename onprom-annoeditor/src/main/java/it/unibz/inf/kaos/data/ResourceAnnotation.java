@@ -25,7 +25,7 @@
  */
 package it.unibz.inf.kaos.data;
 
-import it.unibz.inf.kaos.data.query.ResourceAnnotationQuery;
+import it.unibz.inf.kaos.data.query.old.V2.ResourceAnnotationQueryV2;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
 import it.unibz.inf.kaos.ui.form.ResourceForm;
 import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
@@ -54,9 +54,9 @@ public class ResourceAnnotation extends AbstractAnnotation {
   }
 
   @Override
-  public ResourceAnnotationQuery getQuery() {
+  public ResourceAnnotationQueryV2 getQuery() {
     if (getResource() != null) {
-      return new ResourceAnnotationQuery(SimpleQueryExporter.getStringAttributeQuery(getResource(), getRelatedClass(), null), getRelatedClass().getCleanName(), "n", SimpleQueryExporter.getAttributeQueries(getAttributes()));
+      return new ResourceAnnotationQueryV2(SimpleQueryExporter.getStringAttributeQuery(getResource(), getRelatedClass(), null), getRelatedClass().getCleanName(), "n", SimpleQueryExporter.getAttributeQueries(getAttributes()));
     }
     return null;
   }

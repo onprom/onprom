@@ -26,7 +26,7 @@
 
 package it.unibz.inf.kaos.interfaces;
 
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.apache.jena.query.QueryFactory;
 import org.slf4j.Logger;
@@ -55,7 +55,7 @@ public interface AnnotationExporter {
     return queryStr;
   }
 
-  AnnotationQueries getQueries(Set<Annotation> annotations);
+  AnnotationQueriesV2 getQueries(Set<Annotation> annotations);
 
   //LinkedList<AnnotationQuery> getAttributeQueries(LinkedList<AnnotationAttribute> attributes);
 

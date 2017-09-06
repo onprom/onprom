@@ -32,8 +32,8 @@ import it.unibz.inf.kaos.data.Inheritance;
 import it.unibz.inf.kaos.data.Relationship;
 import it.unibz.inf.kaos.data.StringAttribute;
 import it.unibz.inf.kaos.data.UMLClass;
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.data.query.AnnotationQuery;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueryV2;
 import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.AnnotationExporter;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
@@ -62,9 +62,9 @@ public class SimpleQueryExporter implements AnnotationExporter {
 
   // TODO what about having spaces or some other characters that is not supported in query?
 
-  public static LinkedList<AnnotationQuery> getAttributeQueries(LinkedList<AnnotationAttribute> attributes) {
+  public static LinkedList<AnnotationQueryV2> getAttributeQueries(LinkedList<AnnotationAttribute> attributes) {
     if (attributes != null && attributes.size() > 0) {
-      LinkedList<AnnotationQuery> queries = new LinkedList<>();
+      LinkedList<AnnotationQueryV2> queries = new LinkedList<>();
       attributes.forEach(attribute -> queries.add(getAttributeQuery(attribute)));
       return queries;
     }
@@ -152,7 +152,7 @@ public class SimpleQueryExporter implements AnnotationExporter {
     }
   }
 
-  private static AnnotationQuery getAttributeQuery(AnnotationAttribute attribute) {
+  private static AnnotationQueryV2 getAttributeQuery(AnnotationAttribute attribute) {
     //TODO IS-A relationships?
     try {
       SelectBuilder builder = new SelectBuilder();
@@ -177,11 +177,11 @@ public class SimpleQueryExporter implements AnnotationExporter {
         //add filter clause to the query
         builder.addFilter(value.getFilterClause().replaceAll("%1", "?v"));
       }
-      return new AnnotationQuery(builder.toString(), "n", "v");
+      return new AnnotationQueryV2(builder.toString(), "n", "v");
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
       InformationDialog.display(e.toString());
-      return new AnnotationQuery("ERROR: QUERY IS NOT GENERATED (" + e.getMessage() + ")", "n", "v");
+      return new AnnotationQueryV2("ERROR: QUERY IS NOT GENERATED (" + e.getMessage() + ")", "n", "v");
     }
   }
 
@@ -204,8 +204,8 @@ public class SimpleQueryExporter implements AnnotationExporter {
    */
 
   @Override
-  public AnnotationQueries getQueries(Set<Annotation> annotations) {
-    AnnotationQueries queries = new AnnotationQueries();
+  public AnnotationQueriesV2 getQueries(Set<Annotation> annotations) {
+    AnnotationQueriesV2 queries = new AnnotationQueriesV2();
     for (Annotation annotation : annotations) {
       queries.addQuery(annotation.getQuery());
     }

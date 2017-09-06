@@ -26,7 +26,7 @@
 
 package it.unibz.inf.kaos.interfaces;
 
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
 
 /**
  * Editor listener interface
@@ -34,5 +34,5 @@ import it.unibz.inf.kaos.data.query.AnnotationQueries;
  * @author T. E. Kalayci on 25/10/16.
  */
 public interface AnnotationEditorListener extends UMLEditorListener {
-  void store(String name, AnnotationQueries annotationQueries);
+  void store(String name, AnnotationQueriesV2 annotationQueries);
 }

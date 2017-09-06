@@ -25,11 +25,11 @@
  */
 package it.unibz.inf.kaos.data;
 
-import it.unibz.inf.kaos.data.query.EventAnnotationQuery;
-import it.unibz.inf.kaos.data.query.EventLifecycleAnnotationQuery;
-import it.unibz.inf.kaos.data.query.EventResourceAnnotationQuery;
-import it.unibz.inf.kaos.data.query.EventTimestampAnnotationQuery;
-import it.unibz.inf.kaos.data.query.EventTraceAnnotationQuery;
+import it.unibz.inf.kaos.data.query.old.V2.EventAnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.old.V2.EventLifecycleAnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.old.V2.EventResourceAnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.old.V2.EventTimestampAnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.old.V2.EventTraceAnnotationQueryV2;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
 import it.unibz.inf.kaos.ui.form.EventForm;
@@ -78,7 +78,7 @@ public class EventAnnotation extends AbstractAnnotation {
   }
 
   @Override
-  public EventAnnotationQuery getQuery() {
+  public EventAnnotationQueryV2 getQuery() {
     //name
     Var eventVar = Var.alloc(getRelatedClass().getCleanName());
     String eventIRI = "<" + getRelatedClass().getLongName() + ">";
@@ -87,11 +87,11 @@ public class EventAnnotation extends AbstractAnnotation {
     if (inheritanceWithCase) {
       caseVar = eventVar;
     }
-    EventAnnotationQuery query;
+    EventAnnotationQueryV2 query;
     if (!inheritanceWithCase) {
-      query = new EventAnnotationQuery(SimpleQueryExporter.getStringAttributeQuery(getEventName(), getRelatedClass(), getCasePath()), eventVar.getVarName(), "n");
+      query = new EventAnnotationQueryV2(SimpleQueryExporter.getStringAttributeQuery(getEventName(), getRelatedClass(), getCasePath()), eventVar.getVarName(), "n");
     } else {
-      query = new EventAnnotationQuery(SimpleQueryExporter.getStringAttributeQuery(getEventName(), getRelatedClass(), null), eventVar.getVarName(), "n");
+      query = new EventAnnotationQueryV2(SimpleQueryExporter.getStringAttributeQuery(getEventName(), getRelatedClass(), null), eventVar.getVarName(), "n");
     }
     //EVENT with case
     SelectBuilder builder = new SelectBuilder();
@@ -103,7 +103,7 @@ public class EventAnnotation extends AbstractAnnotation {
     } else {
       builder.addWhere(eventVar, "a", eventIRI);
     }
-    query.setEventTrace(new EventTraceAnnotationQuery(builder.toString(), eventVar.getVarName(), caseVar.getVarName()));
+    query.setEventTrace(new EventTraceAnnotationQueryV2(builder.toString(), eventVar.getVarName(), caseVar.getVarName()));
     //timestamp
     try {
       builder = new SelectBuilder();
@@ -125,7 +125,7 @@ public class EventAnnotation extends AbstractAnnotation {
       } else {
         builder.addWhere(eventVar, "a", eventIRI);
       }
-      query.setEventTimestamp(new EventTimestampAnnotationQuery(builder.toString(), eventVar.getVarName(), timestampVar.getVarName()));
+      query.setEventTimestamp(new EventTimestampAnnotationQueryV2(builder.toString(), eventVar.getVarName(), timestampVar.getVarName()));
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
       InformationDialog.display(e.toString());
@@ -144,7 +144,7 @@ public class EventAnnotation extends AbstractAnnotation {
       } else {
         builder.addWhere(eventVar, "a", eventIRI);
       }
-      query.setEventLifecycle(new EventLifecycleAnnotationQuery(builder.toString(), eventVar.getVarName(), lifecycleVar.getVarName()));
+      query.setEventLifecycle(new EventLifecycleAnnotationQueryV2(builder.toString(), eventVar.getVarName(), lifecycleVar.getVarName()));
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
       InformationDialog.display(e.toString());
@@ -165,7 +165,7 @@ public class EventAnnotation extends AbstractAnnotation {
         } else {
           builder.addWhere(eventVar, "a", eventIRI);
         }
-        query.setEventResource(new EventResourceAnnotationQuery(builder.toString(), eventVar.getVarName(), resourceVar.getVarName()));
+        query.setEventResource(new EventResourceAnnotationQueryV2(builder.toString(), eventVar.getVarName(), resourceVar.getVarName()));
       }
     } catch (Exception e) {
       logger.error(e.getMessage(), e);

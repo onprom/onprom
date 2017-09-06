@@ -28,7 +28,7 @@ package org.processmining.plugins.kaos;
 
 import it.unibz.inf.kaos.annotation.AnnotationEditor;
 import it.unibz.inf.kaos.data.FileType;
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import org.processmining.contexts.uitopia.UIPluginContext;
@@ -44,7 +44,7 @@ import java.util.Set;
   name = "onprom Annotation Editor",
   parameterLabels = {"Ontology", "Annotation"},
   returnLabels = {"Annotations"},
-  returnTypes = {AnnotationQueries.class}
+  returnTypes = {AnnotationQueriesV2.class}
 )
 public class AnnotationEditorPlugin implements AnnotationEditorListener {
 
@@ -83,12 +83,12 @@ public class AnnotationEditorPlugin implements AnnotationEditorListener {
   }
 
   @Override
-  public void store(String name, AnnotationQueries annotations) {
+  public void store(String name, AnnotationQueriesV2 annotations) {
     if (annotations != null) {
       if (name != null) {
-        context.getProvidedObjectManager().createProvidedObject(name, annotations, AnnotationQueries.class, context);
+        context.getProvidedObjectManager().createProvidedObject(name, annotations, AnnotationQueriesV2.class, context);
       } else {
-        context.getProvidedObjectManager().createProvidedObject("Annotation Queries", annotations, AnnotationQueries.class, context);
+        context.getProvidedObjectManager().createProvidedObject("Annotation Queries", annotations, AnnotationQueriesV2.class, context);
       }
     } else {
       context.log("annotations are null", Logger.MessageLevel.ERROR);

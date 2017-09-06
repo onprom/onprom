@@ -27,7 +27,8 @@
 package it.unibz.inf.kaos.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import it.unibz.inf.kaos.data.query.AnnotationQuery;
+
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueryV2;
 import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.AnnotationForm;
 import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
@@ -138,7 +139,7 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
   }
 
   @Override
-  public abstract <T extends AnnotationQuery> T getQuery();
+  public abstract <T extends AnnotationQueryV2> T getQuery();
 
   public abstract AnnotationForm getForm(AnnotationDiagramPanel panel);
 

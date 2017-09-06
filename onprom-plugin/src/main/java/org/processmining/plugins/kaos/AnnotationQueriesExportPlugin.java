@@ -26,7 +26,7 @@
 
 package org.processmining.plugins.kaos;
 
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
 import org.processmining.contexts.uitopia.annotations.UIExportPlugin;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
@@ -46,7 +46,7 @@ public class AnnotationQueriesExportPlugin {
     website = "http://onprom.inf.unibz.it"
   )
   @PluginVariant(requiredParameterLabels = {0, 1})
-  public void export(PluginContext context, AnnotationQueries queries, File file) {
+  public void export(PluginContext context, AnnotationQueriesV2 queries, File file) {
     try {
       IOUtility.exportJSON(file, queries);
       context.log("Exported JSON content to the file: " + file.getName());

@@ -28,7 +28,7 @@ package it.unibz.inf.kaos.annotation;
 import it.unibz.inf.kaos.data.AbstractAnnotation;
 import it.unibz.inf.kaos.data.AnnotationProperties;
 import it.unibz.inf.kaos.data.FileType;
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
 import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
@@ -73,7 +73,7 @@ public class AnnotationEditor extends UMLEditor {
       if (asFile) {
         loadedFile = IOUtility.exportJSON(FileType.ANNOTATION, diagramPanel.getAllShapes(true));
       } else {
-        AnnotationQueries annotationsQueries = new SimpleQueryExporter().getQueries(diagramPanel.getItems(Annotation.class));
+        AnnotationQueriesV2 annotationsQueries = new SimpleQueryExporter().getQueries(diagramPanel.getItems(Annotation.class));
         if (annotationsQueries.getQueryCount() > 0) {
           new QueryEditor(annotationsQueries);
           if (listener != null) {

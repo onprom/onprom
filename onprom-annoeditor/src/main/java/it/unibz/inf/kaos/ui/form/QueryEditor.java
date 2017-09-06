@@ -26,9 +26,9 @@
 
 package it.unibz.inf.kaos.ui.form;
 
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.data.query.AnnotationQuery;
-import it.unibz.inf.kaos.data.query.EventAnnotationQuery;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.old.V2.EventAnnotationQueryV2;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorButtons;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
@@ -43,16 +43,16 @@ import java.util.List;
  */
 public class QueryEditor extends JDialog {
 
-  public QueryEditor(AnnotationQueries _queries) {
+  public QueryEditor(AnnotationQueriesV2 _queries) {
     setModal(true);
     setLayout(null);
     //list to display all queries
-    DefaultListModel<AnnotationQuery> mdlQueries = new DefaultListModel<>();
+    DefaultListModel<AnnotationQueryV2> mdlQueries = new DefaultListModel<>();
     //add all the queries to allow editing
     _queries.getAllQueries().forEach(q -> {
       if (q != null) {
         mdlQueries.addElement(q);
-        List<AnnotationQuery> attributeQueries = q.getAttributeQueries();
+        List<AnnotationQueryV2> attributeQueries = q.getAttributeQueries();
         if (attributeQueries != null && attributeQueries.size() > 0) {
           attributeQueries.forEach(aq -> {
             if (aq != null) {
@@ -60,8 +60,8 @@ public class QueryEditor extends JDialog {
             }
           });
         }
-        if (q instanceof EventAnnotationQuery) {
-          EventAnnotationQuery eaq = (EventAnnotationQuery) q;
+        if (q instanceof EventAnnotationQueryV2) {
+          EventAnnotationQueryV2 eaq = (EventAnnotationQueryV2) q;
           mdlQueries.addElement(eaq.getEventTrace());
           mdlQueries.addElement(eaq.getEventTimestamp());
           mdlQueries.addElement(eaq.getEventLifecycle());
@@ -69,7 +69,7 @@ public class QueryEditor extends JDialog {
         }
       }
     });
-    JList<AnnotationQuery> lstQueries = new JList<>(mdlQueries);
+    JList<AnnotationQueryV2> lstQueries = new JList<>(mdlQueries);
     lstQueries.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
     lstQueries.setLayoutOrientation(JList.VERTICAL);
     JScrollPane listScroller = new JScrollPane(lstQueries);
@@ -98,7 +98,7 @@ public class QueryEditor extends JDialog {
 
     //display selected query
     lstQueries.addListSelectionListener(e -> {
-      AnnotationQuery _selected = lstQueries.getSelectedValue();
+      AnnotationQueryV2 _selected = lstQueries.getSelectedValue();
       if (_selected != null) {
         edtQuery.setText(_selected.getQuery());
       }

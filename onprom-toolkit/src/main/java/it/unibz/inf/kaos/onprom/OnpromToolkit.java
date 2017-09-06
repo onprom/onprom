@@ -28,7 +28,7 @@ package it.unibz.inf.kaos.onprom;
 
 import it.unibz.inf.kaos.annotation.AnnotationEditor;
 import it.unibz.inf.kaos.data.FileType;
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.logextractor.XESLogExtractor;
@@ -338,7 +338,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
             }
             break;
           case QUERIES:
-            addObject(selectedFile.getName(), FileType.QUERIES, IOUtility.readJSON(selectedFile, AnnotationQueries.class));
+            addObject(selectedFile.getName(), FileType.QUERIES, IOUtility.readJSON(selectedFile, AnnotationQueriesV2.class));
             break;
           case ANNOTATION:
             addObject(selectedFile.getName(), FileType.ANNOTATION, IOUtility.importJSON(selectedFile));
@@ -437,15 +437,15 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     if (paths != null) {
       OWLOntology ontology = null;
       OBDAModel model = null;
-      AnnotationQueries queries = null;
+      AnnotationQueriesV2 queries = null;
       for (TreePath path : paths) {
         Object object = ((TreeNode) path.getLastPathComponent()).getUserObject();
         if (object instanceof OWLOntology)
           ontology = (OWLOntology) object;
         if (object instanceof OBDAModel)
           model = (OBDAModel) object;
-        if (object instanceof AnnotationQueries)
-          queries = (AnnotationQueries) object;
+        if (object instanceof AnnotationQueriesV2)
+          queries = (AnnotationQueriesV2) object;
       }
       if (ontology != null && model != null && queries != null) {
         try {
@@ -513,7 +513,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
   }
 
   @Override
-  public void store(String identifier, AnnotationQueries annotationQueries) {
+  public void store(String identifier, AnnotationQueriesV2 annotationQueries) {
     addObject(identifier, FileType.QUERIES, annotationQueries);
   }
 
