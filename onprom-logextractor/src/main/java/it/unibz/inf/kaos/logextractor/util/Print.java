@@ -28,8 +28,8 @@ import org.deckfour.xes.model.XTrace;
 import it.unibz.inf.kaos.logextractor.constants.LEConstants;
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
 import it.unibz.inf.kaos.logextractor.model.XAtt;
-import it.unibz.inf.kaos.logextractor.model.impl.XAttributeOnProm;
-import it.unibz.inf.kaos.logextractor.model.impl.XEventOnPromEfficient;
+import it.unibz.inf.kaos.logextractor.model.XAttributeOnProm;
+import it.unibz.inf.kaos.logextractor.model.XEventOnPromEfficient;
 
 /**
  * 

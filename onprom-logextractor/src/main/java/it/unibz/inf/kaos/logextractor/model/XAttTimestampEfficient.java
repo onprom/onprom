@@ -14,56 +14,60 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.logextractor.model.impl;
+package it.unibz.inf.kaos.logextractor.model;
 
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 import org.deckfour.xes.extension.XExtension;
-import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
-import it.unibz.inf.kaos.logextractor.model.XAtt;
+import org.deckfour.xes.model.impl.XAttributeTimestampImpl;
 
 /**
  * 
  * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
  *
  */
-public class XAttLiteral extends XAttributeLiteralImpl implements XAtt {
+public class XAttTimestampEfficient extends XAttributeTimestampImpl implements XAtt {
 
-	private String uri;
 	private String key;
 	private XExtension extension;
 	private boolean hasValue;
 	private boolean hasKey;
 
-	private static final long serialVersionUID = -237574273147293391L;
+	private static final long serialVersionUID = -5156275276563730290L;
 
-	XAttLiteral(String uri) {
-		super(null, "");
-		this.uri = uri.intern();
+	XAttTimestampEfficient() {
+		super(null, 1l);
 		this.extension = null;
 		this.hasKey = false;
 		this.hasValue = false;
 	}
-	
-	@Override
-	public void setVal(String val) throws IllegalArgumentException{
-
-		this.hasValue = true;
-		super.setValue(val.intern());
-	}
 
 	@Override
-	public void setValue(String val) throws IllegalArgumentException{
+	public void setVal(String val) throws IllegalArgumentException {
 
+		try{
+			super.setValueMillis(Timestamp.valueOf(val).getTime());
+			
+			this.hasValue = true;
+			
+		}catch(IllegalArgumentException iae){
+			throw iae;
+		}
+
+	}
+
+	@Override
+	public void setValue(Date val) throws IllegalArgumentException {
+		super.setValue(val);
 		this.hasValue = true;
-		super.setValue(val.intern());
 	}
 
-	public String getUri() {
-		return uri;
-	}
-	
-	public void setUri(String uri) {
-		this.uri = uri;
+	@Override
+	public void setValueMillis(long val) throws IllegalArgumentException {
+		super.setValueMillis(val);
+		this.hasValue = true;
 	}
 	
 	@Override
@@ -79,19 +83,17 @@ public class XAttLiteral extends XAttributeLiteralImpl implements XAtt {
 
 	@Override
 	public boolean hasCompleteInfo() {
-		
-		return (this.uri != null && this.hasKey && this.hasValue);
+
+		return (this.hasKey && this.hasValue);
 	}
 
-	@Override
 	public int hashCode() {
-		//return Objects.hash(getKey(), getValue());
-		return this.uri.hashCode();
+		return Objects.hash(getKey(), getValue());
 	}
 
 	@Override
 	public String toString() {
-		return super.getValue();
+		return super.toString();
 	}
 
 	/////////////////////////////////////////////////////////
@@ -118,5 +120,17 @@ public class XAttLiteral extends XAttributeLiteralImpl implements XAtt {
 	/////////////////////////////////////////////////////////
 	// END OF RELATED TO EXTENSION
 	/////////////////////////////////////////////////////////
+	
+
+	@Override
+	public void setUri(String key) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getUri() {
+		throw new UnsupportedOperationException();
+	}
+
 
 }

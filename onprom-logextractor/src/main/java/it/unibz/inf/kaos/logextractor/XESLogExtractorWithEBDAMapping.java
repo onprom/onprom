@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
 import it.unibz.inf.kaos.logextractor.constants.LEConstants;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
@@ -48,24 +47,17 @@ import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
 import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgEvent;
 import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgListener;
 import it.unibz.inf.kaos.logextractor.exception.XESLogExtractionFailureException;
+import it.unibz.inf.kaos.logextractor.model.EBDAMapping;
 import it.unibz.inf.kaos.logextractor.model.EBDAModel;
-import it.unibz.inf.kaos.logextractor.model.EBDAModelWithOptimizedXAttributesEncoding;
+import it.unibz.inf.kaos.logextractor.model.LEObjectFactory;
 import it.unibz.inf.kaos.logextractor.model.XAtt;
-import it.unibz.inf.kaos.logextractor.model.impl.EBDAMapping;
-import it.unibz.inf.kaos.logextractor.model.impl.EBDAModelImpl2;
-import it.unibz.inf.kaos.logextractor.model.impl.EBDAModelImpl3;
-import it.unibz.inf.kaos.logextractor.model.impl.EBDAModelNaiveImpl;
-import it.unibz.inf.kaos.logextractor.model.impl.LEObjectFactory;
-import it.unibz.inf.kaos.logextractor.model.impl.XAttributeOnProm;
-import it.unibz.inf.kaos.logextractor.model.impl.XEventOnProm;
-import it.unibz.inf.kaos.logextractor.model.impl.XEventOnPromEfficient;
-import it.unibz.inf.kaos.logextractor.model.impl.XEventTimeStampClassifier;
-import it.unibz.inf.kaos.logextractor.model.impl.XFactoryOnProm;
-import it.unibz.inf.kaos.logextractor.model.impl.XLogOnProm;
+import it.unibz.inf.kaos.logextractor.model.XAttributeOnProm;
+import it.unibz.inf.kaos.logextractor.model.XEventOnProm;
+import it.unibz.inf.kaos.logextractor.model.XEventOnPromEfficient;
+import it.unibz.inf.kaos.logextractor.model.XEventTimeStampClassifier;
+import it.unibz.inf.kaos.logextractor.model.XFactoryOnProm;
+import it.unibz.inf.kaos.logextractor.model.XLogOnProm;
 import it.unibz.inf.kaos.logextractor.reasoner.EBDAReasonerImpl;
-import it.unibz.inf.kaos.logextractor.reasoner.EBDAReasonerImplExperiment;
-import it.unibz.inf.kaos.logextractor.reasoner.EBDAReasonerImplWithParallelProcessing;
-import it.unibz.inf.kaos.logextractor.reasoner.EBDAReasonerImplWithXAttributesOptimization;
 import it.unibz.inf.kaos.logextractor.util.EfficientHashMap;
 import it.unibz.inf.ontop.model.OBDADataSource;
 import it.unibz.inf.ontop.model.OBDAException;
@@ -539,7 +531,6 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 		public void setVerboseMode(Level level){
 			logger.setLevel(level);
 			((Logger) LoggerFactory.getLogger(EBDAReasonerImpl.class)).setLevel(level);;
-			((Logger) LoggerFactory.getLogger(EBDAReasonerImplExperiment.class)).setLevel(level);;
 		}
 	
 		public void printExecutionNote(){

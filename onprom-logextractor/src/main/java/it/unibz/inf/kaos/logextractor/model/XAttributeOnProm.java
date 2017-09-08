@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.logextractor.model.impl;
+package it.unibz.inf.kaos.logextractor.model;
 
 
 import org.deckfour.xes.extension.XExtension;

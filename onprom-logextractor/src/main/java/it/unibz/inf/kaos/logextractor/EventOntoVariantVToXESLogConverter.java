@@ -18,8 +18,8 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
-import it.unibz.inf.kaos.logextractor.model.impl.XFactoryOnProm;
-import it.unibz.inf.kaos.logextractor.model.impl.XLogOnProm;
+import it.unibz.inf.kaos.logextractor.model.XFactoryOnProm;
+import it.unibz.inf.kaos.logextractor.model.XLogOnProm;
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
 
 public class EventOntoVariantVToXESLogConverter {

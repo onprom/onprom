@@ -45,7 +45,7 @@ import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
 import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
 import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
 import it.unibz.inf.kaos.logextractor.exception.XESLogExtractionFailureException;
-import it.unibz.inf.kaos.logextractor.model.impl.EBDAMapping;
+import it.unibz.inf.kaos.logextractor.model.EBDAMapping;
 import it.unibz.inf.ontop.model.OBDAException;
 import it.unibz.inf.ontop.model.OBDAModel;
 

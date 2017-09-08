@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.logextractor.model.impl;
+package it.unibz.inf.kaos.logextractor.model;
 
 
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -23,7 +23,6 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import java.io.IOException;
 
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.logextractor.model.EBDAModelWithOptimizedXAttributesEncoding;
 import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
 import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
 import it.unibz.inf.ontop.model.OBDADataSource;
@@ -48,22 +47,6 @@ public class LEObjectFactory {
 			objectFactoryInstance = new LEObjectFactory();
 
 		return objectFactoryInstance;
-	}
-
-	public EBDAModelNaiveImpl createEBDAModelNaiveImpl(){
-		return new EBDAModelNaiveImpl();
-	}
-
-	public EBDAModelImpl2 createEBDAModelImpl2(){
-		return new EBDAModelImpl2();
-	}
-
-	public EBDAModelImpl3 createEBDAModelImpl3(){
-		return new EBDAModelImpl3();
-	}
-
-	public EBDAModelWithOptimizedXAttributesEncoding createEBDAModelWithOptimizedXAttributesEncoding(){
-		return new EBDAModelWithOptimizedXAttributesEncodingImpl();
 	}
 
 	public EBDAMapping createEBDAMapping(OWLOntology sourceOntology, OBDAModel sourceObdaModel, AnnotationQueries annoQ) 

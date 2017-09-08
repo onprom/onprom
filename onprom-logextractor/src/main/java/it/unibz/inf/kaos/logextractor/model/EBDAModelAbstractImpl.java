@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.logextractor.model.impl;
+package it.unibz.inf.kaos.logextractor.model;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,11 +29,10 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
-import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
+import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.logextractor.constants.XESEOConstants;
 import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
 import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
-import it.unibz.inf.kaos.logextractor.model.EBDAModel;
 import it.unibz.inf.ontop.model.Function;
 import it.unibz.inf.ontop.model.OBDADataFactory;
 import it.unibz.inf.ontop.model.OBDADataSource;
@@ -128,7 +127,7 @@ public abstract class EBDAModelAbstractImpl extends OBDAModelImpl implements EBD
 		return config;
 	}
 
-	public abstract void addMapping(OWLOntology ontology, OBDAModel obdaModel, AnnotationQueriesV2 annoQ) throws InvalidAnnotationException, InvalidDataSourcesNumberException;
+	public abstract void addMapping(OWLOntology ontology, OBDAModel obdaModel, AnnotationQueries annoQ) throws InvalidAnnotationException, InvalidDataSourcesNumberException;
 
 	//validate whether the EBDAModel really contains the mappings to XES Event Ontology
 	@Override

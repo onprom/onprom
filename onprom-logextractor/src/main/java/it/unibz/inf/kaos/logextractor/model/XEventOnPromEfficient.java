@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.logextractor.model.impl;
+package it.unibz.inf.kaos.logextractor.model;
 
-import java.util.Date;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 import org.deckfour.xes.model.impl.XAttributeTimestampImpl;
@@ -28,47 +27,21 @@ import it.unibz.inf.kaos.logextractor.constants.LEConstants;
  * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
  *
  */
-public class XEventOnProm extends XEventImpl{
+public class XEventOnPromEfficient extends XEventImpl{
 
-	private String URI;
-	private Date timeStamp;
 	private boolean hasName;
+	private boolean hasTimestamp;
 	private boolean hasLifeCycle;
 		
-	XEventOnProm(String URI){
+	XEventOnPromEfficient(){
 		super();
-		init(URI);
-	}
-
-	private void init(String URI){
-		this.URI = URI;
-		this.timeStamp = null;
 		this.hasLifeCycle = false;
 		this.hasName = false;
-	}
-	
-	public String getURI(){
-		return this.URI;
-	}
-	
-	public Date getTimeStamp() {
-		return timeStamp;
-	}
-	
-	public boolean hasTimeStamp() {
-		return (this.timeStamp != null);
-	}
-
-	public boolean hasName() {
-		return this.hasName;
-	}
-	
-	public boolean hasLifeCycle() {
-		return this.hasLifeCycle;
+		this.hasTimestamp = false;
 	}
 	
 	public boolean hasAllMandatoryAttributes(){
-		return (hasTimeStamp() && hasName() && hasLifeCycle());
+		return (hasTimestamp && hasName && hasLifeCycle);
 	}
 
 	public void addXAttribute(XAttribute xatt){
@@ -85,7 +58,7 @@ public class XEventOnProm extends XEventImpl{
 			case LEConstants.XES_ATT_KEY_TIME_TIMESTAMP:	
 				
 				if(xatt instanceof XAttributeTimestampImpl)
-					this.timeStamp = ((XAttributeTimestampImpl) xatt).getValue();
+					this.hasTimestamp = true;
 					
 			break;
 			
@@ -96,10 +69,6 @@ public class XEventOnProm extends XEventImpl{
 
 		}	
 		
-		this.getAttributes().put(key, xatt);
-	}
-
-	public String toString(){
-		return this.URI;
+		this.getAttributes().put(key.intern(), xatt);
 	}
 }

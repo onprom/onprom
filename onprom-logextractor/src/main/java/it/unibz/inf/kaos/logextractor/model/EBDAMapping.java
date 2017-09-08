@@ -1,4 +1,4 @@
-package it.unibz.inf.kaos.logextractor.model.impl;
+package it.unibz.inf.kaos.logextractor.model;
 
 import java.io.IOException;
 

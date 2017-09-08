@@ -13,15 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package it.unibz.inf.kaos.logextractor.model;
 
-import java.util.HashMap;
+import org.deckfour.xes.classification.XEventAttributeClassifier;
 
 /**
  * 
  * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
  *
  */
-public interface EBDAModelWithOptimizedXAttributesEncoding extends EBDAModel {
+public class XEventTimeStampClassifier extends XEventAttributeClassifier{
 
+	private static final long serialVersionUID = -1518800360878486617L;
+
+	public XEventTimeStampClassifier() {
+		super("Time timestamp", new String[]{"time:timestamp"});
+	}
 }

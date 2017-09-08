@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.logextractor.model.impl;
+package it.unibz.inf.kaos.logextractor.model;
 
 import java.sql.Timestamp;
 import java.util.Hashtable;
@@ -37,7 +37,6 @@ import it.unibz.inf.kaos.logextractor.constants.LEConstants;
 import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeException;
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
-import it.unibz.inf.kaos.logextractor.model.XAtt;
 
 /**
  * 

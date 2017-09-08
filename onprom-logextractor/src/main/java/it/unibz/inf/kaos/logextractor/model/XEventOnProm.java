@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.logextractor.model.impl;
+package it.unibz.inf.kaos.logextractor.model;
 
+import java.util.Date;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 import org.deckfour.xes.model.impl.XAttributeTimestampImpl;
@@ -27,21 +28,47 @@ import it.unibz.inf.kaos.logextractor.constants.LEConstants;
  * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
  *
  */
-public class XEventOnPromEfficient extends XEventImpl{
+public class XEventOnProm extends XEventImpl{
 
+	private String URI;
+	private Date timeStamp;
 	private boolean hasName;
-	private boolean hasTimestamp;
 	private boolean hasLifeCycle;
 		
-	XEventOnPromEfficient(){
+	XEventOnProm(String URI){
 		super();
+		init(URI);
+	}
+
+	private void init(String URI){
+		this.URI = URI;
+		this.timeStamp = null;
 		this.hasLifeCycle = false;
 		this.hasName = false;
-		this.hasTimestamp = false;
+	}
+	
+	public String getURI(){
+		return this.URI;
+	}
+	
+	public Date getTimeStamp() {
+		return timeStamp;
+	}
+	
+	public boolean hasTimeStamp() {
+		return (this.timeStamp != null);
+	}
+
+	public boolean hasName() {
+		return this.hasName;
+	}
+	
+	public boolean hasLifeCycle() {
+		return this.hasLifeCycle;
 	}
 	
 	public boolean hasAllMandatoryAttributes(){
-		return (hasTimestamp && hasName && hasLifeCycle);
+		return (hasTimeStamp() && hasName() && hasLifeCycle());
 	}
 
 	public void addXAttribute(XAttribute xatt){
@@ -58,7 +85,7 @@ public class XEventOnPromEfficient extends XEventImpl{
 			case LEConstants.XES_ATT_KEY_TIME_TIMESTAMP:	
 				
 				if(xatt instanceof XAttributeTimestampImpl)
-					this.hasTimestamp = true;
+					this.timeStamp = ((XAttributeTimestampImpl) xatt).getValue();
 					
 			break;
 			
@@ -69,6 +96,10 @@ public class XEventOnPromEfficient extends XEventImpl{
 
 		}	
 		
-		this.getAttributes().put(key.intern(), xatt);
+		this.getAttributes().put(key, xatt);
+	}
+
+	public String toString(){
+		return this.URI;
 	}
 }
