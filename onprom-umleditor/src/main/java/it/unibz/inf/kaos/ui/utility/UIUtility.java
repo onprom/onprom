@@ -38,14 +38,11 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -86,6 +83,10 @@ public class UIUtility {
         gridBagConstraints.insets = new Insets(2, 2, 2, 2);
         gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
         return gridBagConstraints;
+    }
+
+    public static String getCurrentDateTime() {
+        return LocalDateTime.now().toString();
     }
 
     public static void executeInBackground(Callable method, JProgressBar progressBar) {

@@ -33,8 +33,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import it.unibz.inf.kaos.data.EditorObjects;
 import it.unibz.inf.kaos.data.FileType;
-import it.unibz.inf.kaos.data.LoadedObjects;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.owl.OWLImporter;
 import it.unibz.inf.kaos.ui.filter.FileTypeFilter;
@@ -49,6 +49,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Set;
 
@@ -130,7 +131,24 @@ public class IOUtility {
         return null;
     }
 
-    public static LoadedObjects open(File selectedFile, FileType... allowedFileType) {
+    public static EditorObjects open(InputStream fileStream, FileType fileType) {
+        switch (fileType) {
+            case ONTOLOGY:
+                OWLOntology ontology = OWLImporter.loadOntologyFromStream(fileStream);
+                if (ontology != null) {
+                    return new EditorObjects(null, ontology, OWLImporter.getShapes(ontology));
+                }
+                break;
+            case ANNOTATION:
+            case UML:
+            case QUERIES:
+            case JSON:
+                return new EditorObjects(null, null, IOUtility.importJSON(fileStream));
+        }
+        return null;
+    }
+
+    public static EditorObjects open(File selectedFile, FileType... allowedFileType) {
         if (selectedFile == null) {
             selectedFile = IOUtility.selectFileToOpen(allowedFileType);
         }
@@ -138,14 +156,14 @@ public class IOUtility {
             case ONTOLOGY:
                 OWLOntology ontology = OWLImporter.loadOntologyFromFile(selectedFile);
                 if (ontology != null) {
-                    return new LoadedObjects(selectedFile, ontology, OWLImporter.getShapes(ontology));
+                    return new EditorObjects(selectedFile, ontology, OWLImporter.getShapes(ontology));
                 }
                 break;
             case ANNOTATION:
             case UML:
             case QUERIES:
             case JSON:
-                return new LoadedObjects(selectedFile, null, IOUtility.importJSON(selectedFile));
+                return new EditorObjects(selectedFile, null, IOUtility.importJSON(selectedFile));
         }
         return null;
     }
@@ -153,6 +171,15 @@ public class IOUtility {
     public static Set<DiagramShape> importJSON(File file) {
         try {
             return mapper.readValue(file, getType());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    private static Set<DiagramShape> importJSON(InputStream stream) {
+        try {
+            return mapper.readValue(stream, getType());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

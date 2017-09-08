@@ -38,12 +38,12 @@ import java.util.Set;
  * @author T. E. Kalayci
  * 29-Nov-16
  */
-public class LoadedObjects {
+public class EditorObjects {
     private final File file;
     private final OWLOntology ontology;
     private final Set<DiagramShape> shapes;
 
-    public LoadedObjects(File _file, OWLOntology _ontology, Set<DiagramShape> _shapes) {
+    public EditorObjects(File _file, OWLOntology _ontology, Set<DiagramShape> _shapes) {
         this.file = _file;
         this.ontology = _ontology;
         this.shapes = _shapes;

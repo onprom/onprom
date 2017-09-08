@@ -26,8 +26,8 @@
 
 package it.unibz.inf.kaos.uml;
 
+import it.unibz.inf.kaos.data.EditorObjects;
 import it.unibz.inf.kaos.data.FileType;
-import it.unibz.inf.kaos.data.LoadedObjects;
 import it.unibz.inf.kaos.data.UMLActionType;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.interfaces.UMLEditorListener;
@@ -150,12 +150,12 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
   @Override
   public void open(File file) {
     UIUtility.executeInBackground(() -> {
-      LoadedObjects loadedObjects = IOUtility.open(file, supportedFormats);
-      if (loadedObjects != null) {
+      EditorObjects editorObjects = IOUtility.open(file, supportedFormats);
+      if (editorObjects != null) {
         identifier = null;
-        loadedFile = loadedObjects.getFile();
-        ontology = loadedObjects.getOntology();
-        diagramPanel.load(loadedObjects.getShapes());
+        loadedFile = editorObjects.getFile();
+        ontology = editorObjects.getOntology();
+        diagramPanel.load(editorObjects.getShapes());
       }
       loadEditor(null);
       return null;

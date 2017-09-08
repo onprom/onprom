@@ -30,17 +30,14 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
 import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.formats.TurtleDocumentFormat;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAnnotation;
-import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.profiles.OWL2QLProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 
 /**
  * Utility class to use with OWL ontologies
@@ -141,6 +138,19 @@ public class OWLUtility {
         } else {
             manager.saveOntology(ontology, new RDFXMLDocumentFormat(), new FileOutputStream(file));
         }
+    }
+
+    public static OWLOntology loadOntologyFromStream(InputStream stream) {
+        if (stream == null)
+            return null;
+        try {
+            OWLOntology ontology = manager.loadOntologyFromOntologyDocument(stream);
+            manager.removeOntology(ontology);
+            return ontology;
+        } catch (Exception e) {
+            logger.error("An error is occured during loading: " + e.getMessage(), e);
+        }
+        return null;
     }
 
     public static OWLOntology loadOntologyFromFile(File file) {

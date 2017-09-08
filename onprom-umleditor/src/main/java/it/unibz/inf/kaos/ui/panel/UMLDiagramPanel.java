@@ -38,11 +38,7 @@ import it.unibz.inf.kaos.ui.form.InformationDialog;
 import it.unibz.inf.kaos.ui.form.ObjectList;
 import it.unibz.inf.kaos.ui.form.RelationForm;
 import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
-import it.unibz.inf.kaos.ui.utility.DrawingConstants;
-import it.unibz.inf.kaos.ui.utility.IOUtility;
-import it.unibz.inf.kaos.ui.utility.UIUtility;
-import it.unibz.inf.kaos.ui.utility.UMLEditorMessages;
-import it.unibz.inf.kaos.ui.utility.ZoomUtility;
+import it.unibz.inf.kaos.ui.utility.*;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -58,22 +54,15 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -148,7 +137,7 @@ public class UMLDiagramPanel extends JPanel implements MouseListener, MouseMotio
       .collect(Collectors.toSet());
   }
 
-  <T extends DiagramShape> long getItemCount(Class<T> type) {
+  public <T extends DiagramShape> long getItemCount(Class<T> type) {
     return shapes.stream()
       .filter(type::isInstance)
       .count();

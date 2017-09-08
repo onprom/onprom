@@ -28,6 +28,7 @@ package org.processmining.plugins.kaos;
 
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
+import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.processmining.contexts.uitopia.annotations.UIImportPlugin;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.abstractplugins.AbstractImportPlugin;
@@ -36,25 +37,28 @@ import org.processmining.framework.plugin.annotations.Plugin;
 
 import java.io.InputStream;
 
+/**
+ * @author T. E. Kalayci
+ */
 @Plugin(name = "Annotation Queries", parameterLabels = {"Filename"}, returnLabels = {"Imported Annotation Queries"}, returnTypes = {AnnotationQueries.class})
 @UIImportPlugin(description = "Annotation Queries File", extensions = {"aqr", "json"})
 public class AnnotationQueriesImportPlugin extends AbstractImportPlugin {
-  @UITopiaVariant(
-    author = "onprom team",
-    affiliation = "Free University of Bozen-Bolzano",
-    email = "onprom@inf.unibz.it",
-    website = "http://onprom.inf.unibz.it"
-  )
-  @Override
-  protected AnnotationQueries importFromStream(final PluginContext context, final InputStream input, final String filename,
-                                               final long fileSizeInBytes) {
-    try {
-      context.getFutureResult(0).setLabel("Annotation queries imported from " + filename);
-      return IOUtility.readJSON(input, AnnotationQueries.class);
-    } catch (Exception e) {
-      e.printStackTrace();
-      context.log("Couldn't import queries from: " + filename);
+    @UITopiaVariant(
+            author = "onprom team",
+            affiliation = "Free University of Bozen-Bolzano",
+            email = "onprom@inf.unibz.it",
+            website = "http://onprom.inf.unibz.it"
+    )
+    @Override
+    protected AnnotationQueries importFromStream(final PluginContext context, final InputStream input, final String filename,
+                                                 final long fileSizeInBytes) {
+        try {
+            context.getFutureResult(0).setLabel("Queries (" + filename + ") " + UIUtility.getCurrentDateTime());
+            return IOUtility.readJSON(input, AnnotationQueries.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            context.log("Couldn't import queries from: " + filename);
+        }
+        return null;
     }
-    return null;
-  }
 }

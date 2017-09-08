@@ -26,7 +26,7 @@
 
 package org.processmining.plugins.kaos;
 
-import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
+import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
 import org.processmining.contexts.uitopia.annotations.UIExportPlugin;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
@@ -36,22 +36,25 @@ import org.processmining.framework.plugin.annotations.PluginVariant;
 
 import java.io.File;
 
+/**
+ * @author T. E. Kalayci
+ */
 @Plugin(name = "Export Queries to JSON", parameterLabels = {"Queries", "File"}, returnLabels = {}, returnTypes = {})
 @UIExportPlugin(description = "Annotation Queries", extension = "aqr")
 public class AnnotationQueriesExportPlugin {
-  @UITopiaVariant(
-    affiliation = "Free University of Bozen-Bolzano",
-    author = "onprom team",
-    email = "onprom@inf.unibz.it",
-    website = "http://onprom.inf.unibz.it"
-  )
-  @PluginVariant(requiredParameterLabels = {0, 1})
-  public void export(PluginContext context, AnnotationQueriesV2 queries, File file) {
-    try {
-      IOUtility.exportJSON(file, queries);
-      context.log("Exported JSON content to the file: " + file.getName());
-    } catch (Exception e) {
-      context.log("Couldn't export JSON content to the file: " + file.getName());
+    @UITopiaVariant(
+            affiliation = "Free University of Bozen-Bolzano",
+            author = "onprom team",
+            email = "onprom@inf.unibz.it",
+            website = "http://onprom.inf.unibz.it"
+    )
+    @PluginVariant(requiredParameterLabels = {0, 1})
+    public void export(PluginContext context, AnnotationQueries queries, File file) {
+        try {
+            IOUtility.exportJSON(file, queries);
+            context.log("Exported queries content to the file: " + file.getName());
+        } catch (Exception e) {
+            context.log("Couldn't export queries content to the file: " + file.getName());
+        }
     }
-  }
 }
