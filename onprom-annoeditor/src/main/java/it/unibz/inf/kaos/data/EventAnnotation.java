@@ -25,21 +25,18 @@
  */
 package it.unibz.inf.kaos.data;
 
-import it.unibz.inf.kaos.data.query.old.V2.EventAnnotationQueryV2;
-import it.unibz.inf.kaos.data.query.old.V2.EventLifecycleAnnotationQueryV2;
-import it.unibz.inf.kaos.data.query.old.V2.EventResourceAnnotationQueryV2;
-import it.unibz.inf.kaos.data.query.old.V2.EventTimestampAnnotationQueryV2;
-import it.unibz.inf.kaos.data.query.old.V2.EventTraceAnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.AnnotationQuery;
+import it.unibz.inf.kaos.data.query.BinaryAnnotationQuery;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
 import it.unibz.inf.kaos.ui.form.EventForm;
-import it.unibz.inf.kaos.ui.form.InformationDialog;
 import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
 import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.apache.jena.sparql.core.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.LinkedList;
 import java.util.Set;
 
 /**
@@ -47,12 +44,11 @@ import java.util.Set;
  * <p>
  * @author T. E. Kalayci on 09/11/16.
  */
-@AnnotationProperties(type = "Event", color = "#F2C78F", action = AnnotationActionType.EVENT)
+@AnnotationProperties(label = "Event", color = "#F2C78F", mnemonic = 'e', tooltip = "Create <u>E</u>ven", title = "<u>E</u>vent")
 public class EventAnnotation extends AbstractAnnotation {
   private static final Logger logger = LoggerFactory.getLogger(EventAnnotation.class.getName());
   private StringAttribute name;
   private NavigationalAttribute timestamp;
-  private NavigationalAttribute resource;
   private TransactionalLifecycle lifecycle;
   private CaseAnnotation caseAnnotation;
   private Set<DiagramShape> casePath;
@@ -67,57 +63,57 @@ public class EventAnnotation extends AbstractAnnotation {
   }
 
   public String toString() {
-    StringBuilder builder = new StringBuilder(name.toString());
-    if (caseAnnotation != null)
-      builder.append(caseAnnotation.toString());
-    if (resource != null)
-      builder.append(resource.toString());
-    if (timestamp != null)
-      builder.append(timestamp.toString());
-    return builder.toString();
+      return String.format("%s %s %s", name.toString(), caseAnnotation == null ? "" : caseAnnotation.toString(), timestamp.toString());
   }
 
   @Override
-  public EventAnnotationQueryV2 getQuery() {
-    //name
-    Var eventVar = Var.alloc(getRelatedClass().getCleanName());
-    String eventIRI = "<" + getRelatedClass().getLongName() + ">";
-    Var caseVar = Var.alloc(getCase().getRelatedClass().getCleanName());
-    boolean inheritanceWithCase = getRelatedClass().isRelationExist(getCase().getRelatedClass(), Inheritance.class);
-    if (inheritanceWithCase) {
-      caseVar = eventVar;
-    }
-    EventAnnotationQueryV2 query;
-    if (!inheritanceWithCase) {
-      query = new EventAnnotationQueryV2(SimpleQueryExporter.getStringAttributeQuery(getEventName(), getRelatedClass(), getCasePath()), eventVar.getVarName(), "n");
-    } else {
-      query = new EventAnnotationQueryV2(SimpleQueryExporter.getStringAttributeQuery(getEventName(), getRelatedClass(), null), eventVar.getVarName(), "n");
-    }
-    //EVENT with case
-    SelectBuilder builder = new SelectBuilder();
-    //builder.setDistinct(true);
-    builder.addVar(eventVar).addVar(caseVar);
-    //add case path
-    if (!inheritanceWithCase) {
-      SimpleQueryExporter.addJoin(builder, getCasePath());
-    } else {
-      builder.addWhere(eventVar, "a", eventIRI);
-    }
-    query.setEventTrace(new EventTraceAnnotationQueryV2(builder.toString(), eventVar.getVarName(), caseVar.getVarName()));
-    //timestamp
-    try {
+  public LinkedList<AnnotationQuery> getQuery() {
+      LinkedList<AnnotationQuery> queries = new LinkedList<>();
+      try {
+          //concept name attribute
+          String eventClassName = relatedClass.getCleanName();
+          Var eventVar = Var.alloc(eventClassName);
+          String eventIRI = "<" + getRelatedClass().getLongName() + ">";
+          String caseClassName = getCase().getRelatedClass().getCleanName();
+          Var caseVar = Var.alloc(caseClassName);
+          boolean inheritanceWithCase = relatedClass.isRelationExist(getCase().getRelatedClass(), Inheritance.class);
+          if (inheritanceWithCase) {
+              caseVar = eventVar;
+          }
+          SelectBuilder builder;
+          if (!inheritanceWithCase) {
+              builder = SimpleQueryExporter.getStringAttributeQueryBuilder(getEventName(), relatedClass, getCasePath());
+          } else {
+              builder = SimpleQueryExporter.getStringAttributeQueryBuilder(getEventName(), relatedClass, null);
+          }
+          builder.addVar("\"" + getLabel() + "\"", XESConstants.labelVar);
+
+          //trace-contains-event query
+          SelectBuilder caseBuilder = builder.clone();
+          caseBuilder.addVar(caseVar);
+          queries.add(new BinaryAnnotationQuery(caseBuilder.toString(), XESConstants.traceEventURI, new String[]{caseClassName}, new String[]{XESConstants.label, eventClassName}));
+
+          //other event queries
+          builder.addVar(XESConstants.literalExpr, XESConstants.attTypeVar);
+          builder.addVar(XESConstants.nameExpr, XESConstants.attKeyVar);
+          String query = builder.toString();
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.eventAttributeURI,
+                  new String[]{eventClassName, XESConstants.label}, XESConstants.attArray)
+          );
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, XESConstants.attArray, XESConstants.attTypeArr));
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, XESConstants.attArray, XESConstants.attKeyArr));
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, XESConstants.attArray, XESConstants.attValueArr));
+
+          //timestamp attribute
       builder = new SelectBuilder();
-      //builder.setDistinct(true);
-      //add variables
-      final Var timestampVar = Var.alloc("t");
-      builder.addVar(eventVar).addVar(timestampVar);
+          builder.addVar(eventVar).addVar(XESConstants.attValue);
       //add timestamp path
       SimpleQueryExporter.addJoin(builder, getTimestamp().getPath());
-      //add timestamp clause
-      if (getTimestamp().getUmlClass().isRelationExist(getRelatedClass(), Inheritance.class)) {
-        builder.addWhere("?" + getRelatedClass().getCleanName(), "<" + getTimestamp().getAttribute().getLongName() + ">", timestampVar);
+          //add timestamp property
+          if (getTimestamp().getUmlClass().isRelationExist(relatedClass, Inheritance.class)) {
+              builder.addWhere("?" + eventClassName, "<" + getTimestamp().getAttribute().getLongName() + ">", XESConstants.attValueVar);
       } else {
-        builder.addWhere("?" + getTimestamp().getUmlClass().getCleanName(), "<" + getTimestamp().getAttribute().getLongName() + ">", timestampVar);
+              builder.addWhere("?" + getTimestamp().getUmlClass().getCleanName(), "<" + getTimestamp().getAttribute().getLongName() + ">", XESConstants.attValueVar);
       }
       //add case path
       if (!inheritanceWithCase) {
@@ -125,54 +121,40 @@ public class EventAnnotation extends AbstractAnnotation {
       } else {
         builder.addWhere(eventVar, "a", eventIRI);
       }
-      query.setEventTimestamp(new EventTimestampAnnotationQueryV2(builder.toString(), eventVar.getVarName(), timestampVar.getVarName()));
-    } catch (Exception e) {
-      logger.error(e.getMessage(), e);
-      InformationDialog.display(e.toString());
-    }
+          builder.addVar("\"" + getLabel() + "\"", XESConstants.labelVar);
+          builder.addVar(XESConstants.timestampTypeExpr, XESConstants.attType);
+          builder.addVar(XESConstants.timestampExpr, XESConstants.attKey);
+          query = builder.toString();
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.eventAttributeURI,
+                  new String[]{eventClassName, XESConstants.label}, XESConstants.attArray)
+          );
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, XESConstants.attArray, XESConstants.attTypeArr));
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, XESConstants.attArray, XESConstants.attKeyArr));
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, XESConstants.attArray, XESConstants.attValueArr));
 
-    //lifecycle
-    try {
+          //lifecycle attribute
       builder = new SelectBuilder();
-      //builder.setDistinct(true);
-      final Var lifecycleVar = Var.alloc("l");
-      //add variables
-      builder.addVar(eventVar).addVar("\"" + getLifecycle().toString() + "\"", lifecycleVar);
+          builder.addVar(eventVar).addVar("\"" + getLifecycle().toString() + "\"", XESConstants.attValueVar);
       //add case path
       if (!inheritanceWithCase) {
         SimpleQueryExporter.addJoin(builder, getCasePath());
       } else {
         builder.addWhere(eventVar, "a", eventIRI);
       }
-      query.setEventLifecycle(new EventLifecycleAnnotationQueryV2(builder.toString(), eventVar.getVarName(), lifecycleVar.getVarName()));
+          builder.addVar("\"" + getLabel() + "\"", XESConstants.label);
+          builder.addVar(XESConstants.literalExpr, XESConstants.attType);
+          builder.addVar(XESConstants.lifecycleExpr, XESConstants.attKey);
+          query = builder.toString();
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.eventAttributeURI,
+                  new String[]{eventClassName, XESConstants.label}, XESConstants.attArray)
+          );
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, XESConstants.attArray, XESConstants.attTypeArr));
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, XESConstants.attArray, XESConstants.attKeyArr));
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, XESConstants.attArray, XESConstants.attValueArr));
     } catch (Exception e) {
-      logger.error(e.getMessage(), e);
-      InformationDialog.display(e.toString());
+          e.printStackTrace();
     }
-    //RESOURCE query
-    try {
-      if (getResource() != null) {
-        Var resourceVar = Var.alloc(getResource().getUmlClass().getCleanName());
-        builder = new SelectBuilder();
-        //builder.setDistinct(true);
-        //add variables
-        builder.addVar(eventVar).addVar(resourceVar);
-        //add RESOURCE
-        SimpleQueryExporter.addJoin(builder, getResource().getPath());
-        //add case path
-        if (!inheritanceWithCase) {
-          SimpleQueryExporter.addJoin(builder, getCasePath());
-        } else {
-          builder.addWhere(eventVar, "a", eventIRI);
-        }
-        query.setEventResource(new EventResourceAnnotationQueryV2(builder.toString(), eventVar.getVarName(), resourceVar.getVarName()));
-      }
-    } catch (Exception e) {
-      logger.error(e.getMessage(), e);
-      InformationDialog.display(e.toString());
-    }
-    query.setAttributeQueries(SimpleQueryExporter.getAttributeQueries(getAttributes()));
-    return query;
+      return queries;
   }
 
   @Override
@@ -192,10 +174,6 @@ public class EventAnnotation extends AbstractAnnotation {
     return caseAnnotation;
   }
 
-  public void setCase(CaseAnnotation trace) {
-    this.caseAnnotation = trace;
-  }
-
   public Set<DiagramShape> getCasePath() {
     return casePath;
   }
@@ -212,14 +190,6 @@ public class EventAnnotation extends AbstractAnnotation {
     this.timestamp = timestamp;
   }
 
-  public NavigationalAttribute getResource() {
-    return resource;
-  }
-
-  public void setResource(NavigationalAttribute resource) {
-    this.resource = resource;
-  }
-
   public TransactionalLifecycle getLifecycle() {
     if (lifecycle == null || lifecycle.toString().isEmpty())
       return TransactionalLifecycle.COMPLETE;
@@ -230,9 +200,13 @@ public class EventAnnotation extends AbstractAnnotation {
     this.lifecycle = lifecycle;
   }
 
-  public void removeResource(ResourceAnnotation annotation) {
+    //public NavigationalAttribute getResource() {return resource;}
+
+    //public void setResource(NavigationalAttribute resource) { this.resource = resource;}
+
+  /*public void removeResource(ResourceAnnotation annotation) {
     if (resource.getAnnotation().equals(annotation)) {
       resource = null;
     }
-  }
+  }*/
 }

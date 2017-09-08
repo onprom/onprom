@@ -31,6 +31,7 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 
 import javax.swing.*;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Table for displaying and editing annotation attributes in annotation form
@@ -45,11 +46,11 @@ public class AnnotationAttributeTable extends JTable {
     setModel(model);
   }
 
-  public LinkedList<AnnotationAttribute> getAttributes() {
+    public List<AnnotationAttribute> getAttributes() {
     return model.getAttributes();
   }
 
-  public void setAttributes(LinkedList<AnnotationAttribute> attributes) {
+    public void setAttributes(List<AnnotationAttribute> attributes) {
     model.setAttributes(attributes);
   }
 

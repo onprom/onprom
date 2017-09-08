@@ -28,11 +28,7 @@ package it.unibz.inf.kaos.ui.panel;
 
 import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.factory.AnnotationFactory;
-import it.unibz.inf.kaos.interfaces.Annotation;
-import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
-import it.unibz.inf.kaos.interfaces.AnnotationForm;
-import it.unibz.inf.kaos.interfaces.DiagramShape;
-import it.unibz.inf.kaos.interfaces.NavigationListener;
+import it.unibz.inf.kaos.interfaces.*;
 import it.unibz.inf.kaos.ui.edit.AddDeleteAnnotationEdit;
 import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorMessages;
@@ -61,10 +57,6 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
   public AnnotationDiagramPanel(DiagramEditor editor) {
     super(editor);
     isUpdateAllowed = false;
-  }
-
-  private long getAnnotationCount() {
-    return getItemCount(Annotation.class);
   }
 
   private void highlight(DiagramShape node) {
@@ -131,7 +123,8 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
         if (_selected instanceof UMLClass) {
           Annotation annotation = AnnotationFactory.createAnnotation(currentAction, (UMLClass) _selected, getFirstItem(CaseAnnotation.class));
           if (annotation != null) {
-            annotation.setCoordinates(ZoomUtility.get(e.getX()), ZoomUtility.get(e.getY()));
+              annotation.setStartX(ZoomUtility.get(e.getX()));
+              annotation.setStartY(ZoomUtility.get(e.getY()));
             addAnnotation(annotation);
             undoManager.addEdit(new AddDeleteAnnotationEdit(this, annotation, true));
             loadForm(annotation.getForm(this));
@@ -158,20 +151,13 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     if (_selected != null && _selected instanceof Annotation) {
       if (UIUtility.confirm(AnnotationEditorMessages.DELETE_CONFIRMATION)) {
         Annotation annotation = (Annotation) _selected;
-        if (annotation instanceof CaseAnnotation) {
-          if ((getAnnotationCount() < 1) || UIUtility.confirm(AnnotationEditorMessages.CASE_DELETE_CONFIRMATION)) {
-            removeAnnotation(annotation);
+          if (AnnotationFactory.checkRemoval(this, annotation)) {
+          removeAnnotation(annotation);
+              undoManager.addEdit(new AddDeleteAnnotationEdit(this, annotation, false));
+              loadForm(null);
+              repaint();
+              return true;
           }
-        } else if (annotation instanceof ResourceAnnotation) {
-          getItems(EventAnnotation.class).forEach(eventAnnotation -> eventAnnotation.removeResource((ResourceAnnotation) annotation));
-          removeAnnotation(annotation);
-        } else {
-          removeAnnotation(annotation);
-        }
-        undoManager.addEdit(new AddDeleteAnnotationEdit(this, annotation, false));
-        loadForm(null);
-        repaint();
-        return true;
       }
     }
     //TODO should we also allow removal of relation anchors?
@@ -190,7 +176,7 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
   }
 
   private void resetAllAttributesState(UMLClass relatedClass) {
-    updateAttributesState(relatedClass, State.NORMAL, false, null);
+      updateAttributesState(relatedClass, State.NORMAL, false, (DataType[]) null);
   }
 
   private void updateAttributeState(UMLClass relatedClass, State state, boolean functional, DataType... dataType) {
@@ -215,6 +201,12 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     }
   }
 
+    @Override
+    public void addAnnotation(Annotation annotation) {
+        shapes.add(annotation);
+        loadForm(null);
+    }
+
   @Override
   public void removeAnnotation(Annotation annotation) {
     //TODO check if there is any EVENT related to deleted annotation
@@ -222,14 +214,9 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     loadForm(null);
   }
 
-  @Override
-  public void addAnnotation(Annotation annotation) {
-    shapes.add(annotation);
-    loadForm(null);
-  }
-
-  public void resetAttributeStates() {
-    getClasses().forEach(this::resetAllAttributesState);
+    public void startNavigation(NavigationListener _navigationListener) {
+        navigationListener = _navigationListener;
+        setCurrentAction(AnnotationActionType.NAVIGATE);
   }
 
   public void resetNavigation() {
@@ -243,9 +230,8 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     updateAttributeState(relatedClass, State.HIGHLIGHTED, functional, dataType);
   }
 
-  public void startNavigation(NavigationListener _navigationListener) {
-    navigationListener = _navigationListener;
-    setCurrentAction(AnnotationActionType.NAVIGATE);
+    public void resetAttributeStates() {
+        getClasses().forEach(this::resetAllAttributesState);
   }
 
   @Override

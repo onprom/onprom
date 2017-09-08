@@ -6,10 +6,10 @@
  * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,12 @@
 package it.unibz.inf.kaos.annotation;
 
 import it.unibz.inf.kaos.data.AbstractAnnotation;
+import it.unibz.inf.kaos.data.ActionType;
 import it.unibz.inf.kaos.data.AnnotationProperties;
 import it.unibz.inf.kaos.data.FileType;
-import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
+import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
-import it.unibz.inf.kaos.io.SimpleQueryExporter;
 import it.unibz.inf.kaos.owl.OWLImporter;
 import it.unibz.inf.kaos.ui.action.DrawingPanelAction;
 import it.unibz.inf.kaos.ui.form.QueryEditor;
@@ -73,7 +73,10 @@ public class AnnotationEditor extends UMLEditor {
       if (asFile) {
         loadedFile = IOUtility.exportJSON(FileType.ANNOTATION, diagramPanel.getAllShapes(true));
       } else {
-        AnnotationQueriesV2 annotationsQueries = new SimpleQueryExporter().getQueries(diagramPanel.getItems(Annotation.class));
+        AnnotationQueries annotationsQueries = new AnnotationQueries();
+        for (Annotation annotation : diagramPanel.getItems(Annotation.class)) {
+          annotationsQueries.addQuery(annotation.getQuery());
+        }
         if (annotationsQueries.getQueryCount() > 0) {
           new QueryEditor(annotationsQueries);
           if (listener != null) {
@@ -110,9 +113,30 @@ public class AnnotationEditor extends UMLEditor {
   protected JToolBar createToolbar() {
     //get default toolbar
     JToolBar toolBar = getMainToolbar(diagramPanel);
-    new Reflections("it.unibz.inf.kaos.data").getSubTypesOf(AbstractAnnotation.class).forEach(annotation -> toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(diagramPanel,
-        annotation.getAnnotation(AnnotationProperties.class).action())))
-    );
+    new Reflections("it.unibz.inf.kaos.data").getSubTypesOf(AbstractAnnotation.class).forEach(annotation -> {
+      final AnnotationProperties annotationProperties = annotation.getAnnotation(AnnotationProperties.class);
+      toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(diagramPanel, new ActionType() {
+        @Override
+        public char getMnemonic() {
+          return annotationProperties.mnemonic();
+        }
+
+        @Override
+        public String getTooltip() {
+          return annotationProperties.tooltip();
+        }
+
+        @Override
+        public String getTitle() {
+          return annotationProperties.title();
+        }
+
+        @Override
+        public String toString() {
+          return annotationProperties.label();
+        }
+      })));
+    });
     return toolBar;
   }
 }

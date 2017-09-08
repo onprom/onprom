@@ -25,17 +25,22 @@
  */
 package it.unibz.inf.kaos.data;
 
-import it.unibz.inf.kaos.data.query.old.V2.CaseAnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.AnnotationQuery;
+import it.unibz.inf.kaos.data.query.BinaryAnnotationQuery;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
 import it.unibz.inf.kaos.ui.form.CaseForm;
 import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
+import org.apache.jena.arq.querybuilder.SelectBuilder;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Case annotation class
  * <p>
  * @author T. E. Kalayci on 09/11/16.
  */
-@AnnotationProperties(type = "Case", color = "#E5BABA", action = AnnotationActionType.CASE)
+@AnnotationProperties(label = "Case", color = "#E5BABA", mnemonic = 'c', tooltip = "Create <u>C</u>", title = "<u>C</u>ase")
 public class CaseAnnotation extends AbstractAnnotation {
 
   private StringAttribute caseName;
@@ -48,14 +53,32 @@ public class CaseAnnotation extends AbstractAnnotation {
   }
 
   public String toString() {
-    if (caseName != null)
+      if (caseName != null) {
       return caseName.toString() + " [" + relatedClass.toString() + "]";
-    return relatedClass.toString();
+      }
+      return super.toString();
   }
 
   @Override
-  public CaseAnnotationQueryV2 getQuery() {
-    return new CaseAnnotationQueryV2(SimpleQueryExporter.getStringAttributeQuery(getCaseName(), getRelatedClass(), null), getRelatedClass().getCleanName(), "n", SimpleQueryExporter.getAttributeQueries(getAttributes()));
+  public List<AnnotationQuery> getQuery() {
+      List<AnnotationQuery> queries = new LinkedList<>();
+      try {
+          //case name attribute query
+          SelectBuilder builder = SimpleQueryExporter.getStringAttributeQueryBuilder(getCaseName(), getRelatedClass(), null);
+          builder.addVar(XESConstants.literalExpr, XESConstants.attTypeVar);
+          builder.addVar(XESConstants.nameExpr, XESConstants.attKeyVar);
+          String query = builder.toString();
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.traceAttributeURI, new String[]{getRelatedClass().getCleanName()}, XESConstants.attArray));
+          //attType query
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, XESConstants.attArray, XESConstants.attTypeArr));
+          //attKey query
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, XESConstants.attArray, XESConstants.attKeyArr));
+          //attValue query
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, XESConstants.attArray, XESConstants.attValueArr));
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
+      return queries;
   }
 
   @Override

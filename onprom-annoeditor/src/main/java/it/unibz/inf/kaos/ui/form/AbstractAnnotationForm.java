@@ -28,11 +28,7 @@ package it.unibz.inf.kaos.ui.form;
 
 import it.unibz.inf.kaos.data.Attribute;
 import it.unibz.inf.kaos.data.UMLClass;
-import it.unibz.inf.kaos.interfaces.Annotation;
-import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
-import it.unibz.inf.kaos.interfaces.AnnotationForm;
-import it.unibz.inf.kaos.interfaces.DiagramShape;
-import it.unibz.inf.kaos.interfaces.NavigationListener;
+import it.unibz.inf.kaos.interfaces.*;
 import it.unibz.inf.kaos.ui.component.UpdateListener;
 
 import javax.swing.*;
@@ -41,7 +37,8 @@ import java.awt.event.KeyEvent;
 import java.util.Set;
 
 /**
- * Super class for annotation forms
+ * This class provides a skeletal implementation of the AnnotationForm interface,
+ * to minimize the effort required to implement this interface.
  * <p>
  * @author T. E. Kalayci on 13/12/16.
  */
@@ -69,10 +66,7 @@ public abstract class AbstractAnnotationForm extends JPanel implements Annotatio
     updateListener.updateAttribute(path, selectedClass, selectedAttribute);
   }
 
-  /**
-   * This method populates the form empty of with an information
-   */
-  public abstract void populateForm();
+  protected abstract void populateForm();
 
   void addTabbedPane(JPanel mainPanel, JPanel attributeForm) {
     JTabbedPane tabbedPane = new JTabbedPane();

@@ -38,19 +38,15 @@ import java.util.Set;
  * @author T. E. Kalayci on 04-Apr-2017.
  */
 public interface AnnotationDiagram {
-  void removeAnnotation(Annotation annotation);
-
   void addAnnotation(Annotation annotation);
 
-  void resetAttributeStates();
+    void removeAnnotation(Annotation annotation);
 
+    void startNavigation(NavigationListener _navigationListener);
   void resetNavigation();
-
   void highlightAttribute(UMLClass relatedClass, boolean functional, DataType... dataType);
 
-  void startNavigation(NavigationListener _navigationListener);
-
+    void resetAttributeStates();
   Set<NavigationalAttribute> getAttributes(UMLClass startNode, boolean functional, DataType... types);
-
   <T extends Annotation> Set<NavigationalAttribute> getAnnotations(UMLClass startNode, boolean functional, Class<T> type);
 }

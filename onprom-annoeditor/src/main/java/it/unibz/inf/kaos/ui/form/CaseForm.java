@@ -115,21 +115,22 @@ public class CaseForm extends AbstractAnnotationForm {
     addTabbedPane(mainPanel, attributeForm);
   }
 
-  public void populateForm() {
-    if (annotation != null) {
-      CaseAnnotation caseAnnotation = (CaseAnnotation) annotation;
-      if (caseAnnotation.getCaseName() != null) {
-        //before updating the text field, we remove attribute from listener
-        nameListener.updateAttribute(null);
-        name = caseAnnotation.getCaseName();
-        txtName.setText(name.toString());
-        txtNameFilter.setText(name.getFilterClause());
-        attributeForm.setAttributes(annotation.getAttributes());
-        //now we add the attribute to the listener to listen the text field
-        nameListener.updateAttribute(name);
-      }
+    @Override
+    public void populateForm() {
+        if (annotation != null) {
+            CaseAnnotation caseAnnotation = (CaseAnnotation) annotation;
+            if (caseAnnotation.getCaseName() != null) {
+                //before updating the text field, we remove attribute from listener
+                nameListener.updateAttribute(null);
+                name = caseAnnotation.getCaseName();
+                txtName.setText(name.toString());
+                txtNameFilter.setText(name.getFilterClause());
+                attributeForm.setAttributes(annotation.getAttributes());
+                //now we add the attribute to the listener to listen the text field
+                nameListener.updateAttribute(name);
+            }
+        }
     }
-  }
 
   private void ok() {
     if (name == null && txtName.getText().isEmpty()) {

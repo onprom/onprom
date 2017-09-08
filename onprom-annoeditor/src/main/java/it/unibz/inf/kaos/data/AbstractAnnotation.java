@@ -27,18 +27,18 @@
 package it.unibz.inf.kaos.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.AnnotationQuery;
 import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.AnnotationForm;
 import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
 import it.unibz.inf.kaos.ui.utility.DrawingConstants;
 
 import java.awt.*;
-import java.util.LinkedList;
+import java.util.List;
 
 /**
- * Abstract class to store various annotations.
+ * This class provides a skeletal implementation of the Annotation interface,
+ * to minimize the effort required to implement it.
  * <p>
  * @author T. E. Kalayci on 03/11/16.
  *
@@ -46,13 +46,13 @@ import java.util.LinkedList;
  */
 public abstract class AbstractAnnotation extends AbstractDiagramShape implements Annotation {
   @JsonIgnore
-  private final static Font ANNOTATION_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
+  private final static Font ANNOTATION_FONT = new Font(Font.DIALOG, Font.PLAIN, 14);
   @JsonIgnore
   private final AnnotationProperties properties = getClass().getAnnotation(AnnotationProperties.class);
 
   UMLClass relatedClass;
   private String label;
-  private LinkedList<AnnotationAttribute> attributes;
+    private List<AnnotationAttribute> attributes;
 
   AbstractAnnotation() {
   }
@@ -73,7 +73,7 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
     int fontHeight = g2d.getFontMetrics().getHeight();
     int startX = getStartX();
     int startY = getStartY();
-    String typeLabel = properties.type();
+      String typeLabel = properties.label();
     String label = getLabel();
     //draw shapes, string
     int rectangleWidth = g2d.getFontMetrics().stringWidth(typeLabel) + 2 * DrawingConstants.GAP;
@@ -118,41 +118,32 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
     return relatedClass.toString();
   }
 
-  public int getAttributeCount() {
-    if (attributes != null) {
-      return attributes.size();
-    }
-    return 0;
+    public String getLabel() {
+        return label;
   }
 
-  public void setCoordinates(int x, int y) {
-    setStartX(x);
-    setStartY(y);
+    public void setLabel(String label) {
+        this.label = label;
   }
 
-  public LinkedList<AnnotationAttribute> getAttributes() {
+    @Override
+    public List<AnnotationAttribute> getAttributes() {
     return attributes;
   }
 
-  public UMLClass getRelatedClass() {
-    return relatedClass;
-  }
+    public void setAttributes(List<AnnotationAttribute> attributes) {
+        this.attributes = attributes;
+    }
+
+    @Override
+    public UMLClass getRelatedClass() {
+        return relatedClass;
+    }
 
   @Override
-  public abstract <T extends AnnotationQueryV2> T getQuery();
+  public abstract List<AnnotationQuery> getQuery();
 
-  public abstract AnnotationForm getForm(AnnotationDiagramPanel panel);
-
-  public void setAttributes(LinkedList<AnnotationAttribute> attributes) {
-    this.attributes = attributes;
-  }
-
-  public String getLabel() {
-    return label;
-  }
-
-  public void setLabel(String label) {
-    this.label = label;
-  }
+    @Override
+    public abstract AnnotationForm getForm(AnnotationDiagramPanel panel);
 
 }

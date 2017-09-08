@@ -44,7 +44,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -138,7 +138,8 @@ class AttributeForm extends AbstractAnnotationForm {
     add(tblScroll, gridBagConstraints);
   }
 
-  public void populateForm() {
+    @Override
+    protected void populateForm() {
     valueListener.updateAttribute(null);
     if (tblAttributes.getSelectedRow() > -1) {
       AnnotationAttribute attribute = tblAttributes.getSelectedAttribute();
@@ -168,11 +169,11 @@ class AttributeForm extends AbstractAnnotationForm {
     populateForm();
   }
 
-  LinkedList<AnnotationAttribute> getAttributes() {
+    List<AnnotationAttribute> getAttributes() {
     return tblAttributes.getAttributes();
   }
 
-  void setAttributes(LinkedList<AnnotationAttribute> attributes) {
+    void setAttributes(List<AnnotationAttribute> attributes) {
     tblAttributes.setAttributes(attributes);
   }
 }

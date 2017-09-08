@@ -28,10 +28,10 @@ package it.unibz.inf.kaos.onprom;
 
 import it.unibz.inf.kaos.annotation.AnnotationEditor;
 import it.unibz.inf.kaos.data.FileType;
-import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
+import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
-import it.unibz.inf.kaos.logextractor.XESLogExtractor;
+import it.unibz.inf.kaos.logextractor.XESLogExtractorWithEBDAMapping;
 import it.unibz.inf.kaos.ui.component.CustomTree;
 import it.unibz.inf.kaos.ui.component.ExtractionFrame;
 import it.unibz.inf.kaos.ui.component.LogSummaryPanel;
@@ -321,24 +321,23 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         switch (IOUtility.getFileType(selectedFile)) {
           case ONTOLOGY:
             try {
-              OWLOntology ontology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(selectedFile);
-              addObject(selectedFile.getName(), FileType.ONTOLOGY, ontology);
+                addObject(selectedFile.getName(), FileType.ONTOLOGY, OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(selectedFile));
             } catch (Exception e) {
+                e.printStackTrace();
               logError(e);
             }
             break;
           case MAPPING:
-            OBDAModel obdaModel = OBDADataFactoryImpl.getInstance().getOBDAModel();
-            ModelIOManager ioManager = new ModelIOManager(obdaModel);
             try {
-              ioManager.load(selectedFile);
+                OBDAModel obdaModel = OBDADataFactoryImpl.getInstance().getOBDAModel();
+                new ModelIOManager(obdaModel).load(selectedFile);
               addObject(selectedFile.getName(), FileType.MAPPING, obdaModel);
             } catch (Exception e) {
               logError(e);
             }
             break;
           case QUERIES:
-            addObject(selectedFile.getName(), FileType.QUERIES, IOUtility.readJSON(selectedFile, AnnotationQueriesV2.class));
+              addObject(selectedFile.getName(), FileType.QUERIES, IOUtility.readJSON(selectedFile, AnnotationQueries.class));
             break;
           case ANNOTATION:
             addObject(selectedFile.getName(), FileType.ANNOTATION, IOUtility.importJSON(selectedFile));
@@ -437,22 +436,21 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     if (paths != null) {
       OWLOntology ontology = null;
       OBDAModel model = null;
-      AnnotationQueriesV2 queries = null;
+        AnnotationQueries queries = null;
       for (TreePath path : paths) {
         Object object = ((TreeNode) path.getLastPathComponent()).getUserObject();
         if (object instanceof OWLOntology)
           ontology = (OWLOntology) object;
         if (object instanceof OBDAModel)
           model = (OBDAModel) object;
-        if (object instanceof AnnotationQueriesV2)
-          queries = (AnnotationQueriesV2) object;
+          if (object instanceof AnnotationQueries)
+              queries = (AnnotationQueries) object;
       }
       if (ontology != null && model != null && queries != null) {
         try {
           long start = System.currentTimeMillis();
           File tempLog = File.createTempFile("xes-log", "tmp");
-          //XES_SERIALIZER.serialize(XESLogExtractor.extractXESLog(ontology, model, queries), new FileOutputStream(tempLog));
-          XES_SERIALIZER.serialize(new XESLogExtractor().extractXESLog(ontology, model, queries), new FileOutputStream(tempLog));
+            XES_SERIALIZER.serialize(new XESLogExtractorWithEBDAMapping().extractXESLog(ontology, model, queries), new FileOutputStream(tempLog));
           logger.error("It took " + (System.currentTimeMillis() - start) + " ms to export log");
           for (XLog xlog : XES_PARSER.parse(new FileInputStream(tempLog))) {
             displayLogSummary(addObject("Extracted Log", FileType.XLOG, xlog));
@@ -513,7 +511,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
   }
 
   @Override
-  public void store(String identifier, AnnotationQueriesV2 annotationQueries) {
+  public void store(String identifier, AnnotationQueries annotationQueries) {
     addObject(identifier, FileType.QUERIES, annotationQueries);
   }
 

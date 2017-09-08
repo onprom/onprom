@@ -30,6 +30,7 @@ import it.unibz.inf.kaos.data.AnnotationAttribute;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Table model to hold and display annotation attributes in annotation forms
@@ -41,9 +42,9 @@ class AnnotationAttributeTableModel extends AbstractTableModel {
   private final String[] columnNames = {"Name", "Value"};
   private final Class<?>[] columnClass = {String.class, String.class};
 
-  private LinkedList<AnnotationAttribute> attributes;
+    private List<AnnotationAttribute> attributes;
 
-  AnnotationAttributeTableModel(LinkedList<AnnotationAttribute> _attributes) {
+    AnnotationAttributeTableModel(List<AnnotationAttribute> _attributes) {
     super();
     attributes = _attributes;
   }
@@ -81,11 +82,11 @@ class AnnotationAttributeTableModel extends AbstractTableModel {
     return columnClass[columnIndex];
   }
 
-  LinkedList<AnnotationAttribute> getAttributes() {
+    List<AnnotationAttribute> getAttributes() {
     return attributes;
   }
 
-  void setAttributes(LinkedList<AnnotationAttribute> _attributes) {
+    void setAttributes(List<AnnotationAttribute> _attributes) {
     attributes = _attributes;
     fireTableDataChanged();
   }

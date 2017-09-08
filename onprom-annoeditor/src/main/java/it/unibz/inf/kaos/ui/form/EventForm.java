@@ -26,23 +26,12 @@
 
 package it.unibz.inf.kaos.ui.form;
 
-import it.unibz.inf.kaos.data.Attribute;
-import it.unibz.inf.kaos.data.DataType;
-import it.unibz.inf.kaos.data.EventAnnotation;
-import it.unibz.inf.kaos.data.NavigationalAttribute;
-import it.unibz.inf.kaos.data.ResourceAnnotation;
-import it.unibz.inf.kaos.data.StringAttribute;
-import it.unibz.inf.kaos.data.TransactionalLifecycle;
-import it.unibz.inf.kaos.data.UMLClass;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.component.StringDocumentListener;
 import it.unibz.inf.kaos.ui.component.UpdateListener;
-import it.unibz.inf.kaos.ui.utility.AnnotationEditorButtons;
-import it.unibz.inf.kaos.ui.utility.AnnotationEditorLabels;
-import it.unibz.inf.kaos.ui.utility.AnnotationEditorMessages;
-import it.unibz.inf.kaos.ui.utility.NavigationUtility;
-import it.unibz.inf.kaos.ui.utility.UIUtility;
+import it.unibz.inf.kaos.ui.utility.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,8 +54,8 @@ public class EventForm extends AbstractAnnotationForm {
   private final JComboBox<NavigationalAttribute> cmbTimestamp;
   private final JComboBox<Set<DiagramShape>> cmbTimestampPath;
 
-  private final JComboBox<NavigationalAttribute> cmbResource;
-  private final JComboBox<Set<DiagramShape>> cmbResourcePath;
+  //private final JComboBox<NavigationalAttribute> cmbResource;
+  //private final JComboBox<Set<DiagramShape>> cmbResourcePath;
 
   private final JComboBox<Set<DiagramShape>> cmbTracePath;
 
@@ -165,7 +154,7 @@ public class EventForm extends AbstractAnnotationForm {
     gridBagConstraints.gridy = 2;
     mainPanel.add(UIUtility.createLabel(AnnotationEditorLabels.EVENT_RESOURCE, BTN_SIZE), gridBagConstraints);
 
-    gridBagConstraints.gridx = 1;
+    /*gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 2;
     cmbResource = UIUtility.createWideComboBox(drawingPanel.getAnnotations(eventAnnotation.getRelatedClass(), false, ResourceAnnotation.class), TXT_SIZE, e -> populateResourcePath(), true, true);
     mainPanel.add(cmbResource, gridBagConstraints);
@@ -180,12 +169,10 @@ public class EventForm extends AbstractAnnotationForm {
     mainPanel.add(UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> super.startNavigation(new UpdateListener() {
       @Override
       public void updateAttribute(Set<DiagramShape> navigation, UMLClass selectedClass, Attribute selectedAttribute) {
-        //TODO should we only update path to the RESOURCE or recreate the instance?
-        if (resource != null) {
+        if(resource!=null)
           resource.setPath(navigation);
-        }
       }
-    }, false)), gridBagConstraints);
+    }, false)), gridBagConstraints);*/
 
     gridBagConstraints.gridx = 4;
     gridBagConstraints.gridy = 2;
@@ -240,30 +227,30 @@ public class EventForm extends AbstractAnnotationForm {
       if (eventAnnotation.getTimestamp() != null) {
         cmbTimestampPath.setSelectedItem(eventAnnotation.getTimestamp().getPath());
       }
-      cmbResource.setSelectedItem(eventAnnotation.getResource());
+      /*cmbResource.setSelectedItem(eventAnnotation.getResource());
       if (eventAnnotation.getResource() != null) {
         cmbResourcePath.setSelectedItem(eventAnnotation.getResource().getPath());
-      }
+      }*/
       cmbLifecycle.setSelectedItem(eventAnnotation.getLifecycle());
       attributeForm.setAttributes(eventAnnotation.getAttributes());
     }
   }
 
-  private void populateResourcePath() {
+  /*private void populateResourcePath() {
     try {
       NavigationalAttribute ra = (NavigationalAttribute) cmbResource.getSelectedItem();
       UIUtility.loadItems(cmbResourcePath, NavigationUtility.getAllPaths(annotation.getRelatedClass(), ra.getUmlClass()));
     } catch (Exception e) {
-      logger.info(e.getMessage());
+      logger.info(e.getMessage(), e);
     }
-  }
+  }*/
 
   private void populateTimestampPath() {
     try {
       NavigationalAttribute ts = (NavigationalAttribute) cmbTimestamp.getSelectedItem();
       UIUtility.loadItems(cmbTimestampPath, NavigationUtility.getFunctionalPaths(annotation.getRelatedClass(), ts.getUmlClass()));
     } catch (Exception e) {
-      logger.info(e.getMessage());
+      logger.info(e.getMessage(), e);
     }
   }
 
@@ -279,11 +266,11 @@ public class EventForm extends AbstractAnnotationForm {
       NavigationalAttribute selectedTimestamp = (NavigationalAttribute) cmbTimestamp.getSelectedItem();
       selectedTimestamp.setPath((Set<DiagramShape>) cmbTimestampPath.getSelectedItem());
       eventAnnotation.setTimestamp(selectedTimestamp);
-      NavigationalAttribute selectedResource = (NavigationalAttribute) cmbResource.getSelectedItem();
+      /*NavigationalAttribute selectedResource = (NavigationalAttribute) cmbResource.getSelectedItem();
       eventAnnotation.setResource(selectedResource);
       if (selectedResource != null) {
         selectedResource.setPath(cmbResourcePath.getItemAt(cmbResourcePath.getSelectedIndex()));
-      }
+      }*/
       Object tracePath = cmbTracePath.getSelectedItem();
       if (tracePath instanceof NavigationalAttribute) {
         eventAnnotation.setCasePath(((NavigationalAttribute) tracePath).getPath());

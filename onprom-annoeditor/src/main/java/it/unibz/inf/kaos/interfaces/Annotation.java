@@ -28,22 +28,20 @@ package it.unibz.inf.kaos.interfaces;
 
 import it.unibz.inf.kaos.data.AnnotationAttribute;
 import it.unibz.inf.kaos.data.UMLClass;
-import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueryV2;
+import it.unibz.inf.kaos.data.query.AnnotationQuery;
 import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
 
-import java.util.LinkedList;
+import java.util.List;
 
 /**
+ * Interface of annotations supported by editor
+ *
  * @author T. E. Kalayci on 19-Jun-2017.
  */
 public interface Annotation extends DiagramShape {
-  void setCoordinates(int x, int y);
-
-  LinkedList<AnnotationAttribute> getAttributes();
-
+    List<AnnotationAttribute> getAttributes();
   UMLClass getRelatedClass();
 
-  <T extends AnnotationQueryV2> T getQuery();
-
+    List<AnnotationQuery> getQuery();
   AnnotationForm getForm(AnnotationDiagramPanel panel);
 }

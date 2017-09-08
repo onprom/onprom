@@ -36,8 +36,13 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AnnotationProperties {
-  String type();
+    String label();
+
   String color();
 
-  AnnotationActionType action();
+    char mnemonic();
+
+    String tooltip();
+
+    String title();
 }

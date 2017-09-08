@@ -27,10 +27,10 @@
 package it.unibz.inf.kaos.interfaces;
 
 /**
+ * Interface of UI forms for supported annotations by the editor
+ *
  * @author T. E. Kalayci on 19-Jun-2017.
  */
 public interface AnnotationForm {
   void setVisible(boolean visible);
-
-  void populateForm();
 }

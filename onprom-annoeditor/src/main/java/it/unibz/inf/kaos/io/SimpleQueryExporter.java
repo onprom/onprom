@@ -26,26 +26,23 @@
 
 package it.unibz.inf.kaos.io;
 
-import it.unibz.inf.kaos.data.AnnotationAttribute;
-import it.unibz.inf.kaos.data.Association;
-import it.unibz.inf.kaos.data.Inheritance;
-import it.unibz.inf.kaos.data.Relationship;
-import it.unibz.inf.kaos.data.StringAttribute;
-import it.unibz.inf.kaos.data.UMLClass;
-import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueriesV2;
-import it.unibz.inf.kaos.data.query.old.V2.AnnotationQueryV2;
-import it.unibz.inf.kaos.interfaces.Annotation;
-import it.unibz.inf.kaos.interfaces.AnnotationExporter;
+import it.unibz.inf.kaos.data.*;
+import it.unibz.inf.kaos.data.query.AnnotationQuery;
+import it.unibz.inf.kaos.data.query.BinaryAnnotationQuery;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.owl.OWLExporter;
 import it.unibz.inf.kaos.ui.form.InformationDialog;
+import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.apache.jena.arq.querybuilder.SelectBuilder;
+import org.apache.jena.query.QueryFactory;
 import org.apache.jena.sparql.core.Var;
+import org.apache.jena.sparql.lang.sparql_11.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -57,14 +54,45 @@ import java.util.Set;
  * <p>
  * @author T. E. Kalayci on 06/12/16.
  */
-public class SimpleQueryExporter implements AnnotationExporter {
+public class SimpleQueryExporter {
   private static final Logger logger = LoggerFactory.getLogger(SimpleQueryExporter.class.getName());
+
+    /*
+   * Alternatives to Apache Jena query builder:
+   * RDF4J:           https://github.com/eclipse/rdf4j/blob/master/core/queryrender/src/main/java/org/eclipse/rdf4j/queryrender/builder/QueryBuilder.java
+   * sparql-java:    https://bitbucket.org/rehei/sparql-java
+   * spanqit:        https://github.com/anqit/spanqit
+   * other:           https://stackoverflow.com/questions/7250189/how-to-build-sparql-queries-in-java
+   * templating, SPARQL Algebra, etc.:     http://blog.mynarz.net/2016/06/on-generating-sparql.html
+   * <p>
+   * RDF4J currently doesn't support additional projection settings (such as adding AS)!
+   * <p>
+   * Example code:
+   * <p>
+   * final QueryBuilder<ParsedTupleQuery> select = QueryBuilderFactory.select();
+   * select.addProjectionVar(relatedClass.getName()).addProjectionVar("\""+name.getValue()+"\"","as","?n");
+   * select.group().atom(relatedClass.getName(), "a",relatedClass.getLongName()).closeGroup();
+   * return new SPARQLQueryRenderer().render(select.query());
+   */
 
   // TODO what about having spaces or some other characters that is not supported in query?
 
-  public static LinkedList<AnnotationQueryV2> getAttributeQueries(LinkedList<AnnotationAttribute> attributes) {
+    public static String checkQuery(String queryStr) {
+        try {
+            // attempt to create the query from the string using Apache Jena
+            // query factory and return the result if successful
+            return QueryFactory.create(queryStr).toString();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            UIUtility.error(e.getMessage());
+        }
+        // in case of parsing error, return the original string
+        return queryStr;
+    }
+
+    public static List<AnnotationQuery> getAttributeQueries(List<AnnotationAttribute> attributes) {
     if (attributes != null && attributes.size() > 0) {
-      LinkedList<AnnotationQueryV2> queries = new LinkedList<>();
+        List<AnnotationQuery> queries = new LinkedList<>();
       attributes.forEach(attribute -> queries.add(getAttributeQuery(attribute)));
       return queries;
     }
@@ -112,47 +140,56 @@ public class SimpleQueryExporter implements AnnotationExporter {
     }
   }
 
-  public static String getStringAttributeQuery(StringAttribute name, UMLClass relatedClass, Set<DiagramShape> casePath) {
-    try {
-      //create select builder
-      SelectBuilder builder = new SelectBuilder();
-      //builder.setDistinct(true);
-      final Var classVar = Var.alloc(relatedClass.getCleanName());
-      final String classIRI = "<" + relatedClass.getLongName() + ">";
-      final Var nameVar = Var.alloc("n");
-      // add class variable
-      builder.addVar(classVar);
-      if (casePath != null) {
-        addJoin(builder, casePath);
-      } else {
-        builder.addWhere(classVar, "a", classIRI);
-      }
-      if (name.getAttribute() == null) {
-        //add name variable
-        builder.addVar("\"" + name.getValue() + "\"", nameVar);
-        return builder.toString();
-      } else {
-        //add name variable
-        builder.addVar(nameVar);
-        // add path to the name
-        addJoin(builder, name.getPath());
-        //add attribute
-        builder.addWhere("?" + name.getUmlClass().getCleanName(), "<" + name.getAttribute().getLongName() + ">", nameVar);
-        //we only add filter if it is a dynamic value
-        if (name.getFilterClause() != null && !name.getFilterClause().isEmpty()) {
-          //add filter clause to the query
-          builder.addFilter(name.getFilterClause().replaceAll("%1", "?n"));
+    public static SelectBuilder getStringAttributeQueryBuilder(StringAttribute name, UMLClass relatedClass, Set<DiagramShape> casePath) {
+        final Var classVar = Var.alloc(relatedClass.getCleanName());
+        final String classIRI = "<" + relatedClass.getLongName() + ">";
+        final Var nameVar = XESConstants.attValueVar;
+        // add class variable
+        SelectBuilder builder = new SelectBuilder();
+        builder.addVar(classVar);
+        if (casePath != null) {
+            addJoin(builder, casePath);
+        } else {
+            builder.addWhere(classVar, "a", classIRI);
         }
-        return builder.toString();
-      }
-    } catch (Exception e) {
-      logger.error(e.getMessage(), e);
-      InformationDialog.display(e.toString());
-      return "ERROR: QUERY IS NOT GENERATED (" + e.getMessage() + ")";
+        if (name.getAttribute() == null) {
+            //add name variable
+            try {
+                builder.addVar("\"" + name.getValue() + "\"", nameVar);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            //add name variable
+            builder.addVar(nameVar);
+            // add path to the name
+            addJoin(builder, name.getPath());
+            //add attribute
+            builder.addWhere("?" + name.getUmlClass().getCleanName(), "<" + name.getAttribute().getLongName() + ">", nameVar);
+            //we only add filter if it is a dynamic value
+            if (name.getFilterClause() != null && !name.getFilterClause().isEmpty()) {
+                //add filter clause to the query
+                try {
+                    builder.addFilter(name.getFilterClause().replaceAll("%1", "?n"));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return builder;
     }
-  }
 
-  private static AnnotationQueryV2 getAttributeQuery(AnnotationAttribute attribute) {
+    public static String getStringAttributeQuery(StringAttribute name, UMLClass relatedClass, Set<DiagramShape> casePath) {
+        try {
+            return getStringAttributeQueryBuilder(name, relatedClass, casePath).toString();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            InformationDialog.display(e.toString());
+            return "ERROR: QUERY IS NOT GENERATED (" + e.getMessage() + ")";
+        }
+    }
+
+    private static AnnotationQuery getAttributeQuery(AnnotationAttribute attribute) {
     //TODO IS-A relationships?
     try {
       SelectBuilder builder = new SelectBuilder();
@@ -162,53 +199,26 @@ public class SimpleQueryExporter implements AnnotationExporter {
       final UMLClass valueClass = value.getUmlClass();
       final Var classVar = Var.alloc(valueClass.getCleanName());
       //answer variables
-      final Var nameVar = Var.alloc("n");
-      final Var valueVar = Var.alloc("v");
-      builder.addVar("\"" + attribute.getName() + "\"", nameVar);
-      builder.addVar(valueVar);
+        builder.addVar("\"" + attribute.getName() + "\"", XESConstants.labelVar);
+        builder.addVar(XESConstants.attValueVar);
       //where clauses
       builder.addWhere(classVar, "a", "<" + valueClass.getLongName() + ">");
       // add path of the value
       addJoin(builder, value.getPath());
       //add attribute
-      builder.addWhere(classVar, "<" + value.getAttribute().getLongName() + ">", valueVar);
+        builder.addWhere(classVar, "<" + value.getAttribute().getLongName() + ">", XESConstants.attValueVar);
       //we only add filter if it is a dynamic value
       if (value.getFilterClause() != null && !value.getFilterClause().isEmpty()) {
         //add filter clause to the query
-        builder.addFilter(value.getFilterClause().replaceAll("%1", "?v"));
+          builder.addFilter(value.getFilterClause().replaceAll("%1", XESConstants.attValue));
       }
-      return new AnnotationQueryV2(builder.toString(), "n", "v");
+        //TODO unary annotation query
+        //TODO adding target URI for attribute
+        return new BinaryAnnotationQuery(builder.toString(), null, new String[]{XESConstants.label}, new String[]{XESConstants.attValue});
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
       InformationDialog.display(e.toString());
-      return new AnnotationQueryV2("ERROR: QUERY IS NOT GENERATED (" + e.getMessage() + ")", "n", "v");
+        return new BinaryAnnotationQuery("ERROR: QUERY IS NOT GENERATED (" + e.getMessage() + ")", null, new String[]{XESConstants.label}, new String[]{XESConstants.attValue});
     }
-  }
-
-  /**
-   * Alternatives to Apache Jena query builder:
-   * RDF4J:           https://github.com/eclipse/rdf4j/blob/master/core/queryrender/src/main/java/org/eclipse/rdf4j/queryrender/builder/QueryBuilder.java
-   * sparql-java:    https://bitbucket.org/rehei/sparql-java
-   * spanqit:        https://github.com/anqit/spanqit
-   * other:           https://stackoverflow.com/questions/7250189/how-to-build-sparql-queries-in-java
-   * templating, SPARQL Algebra, etc.:     http://blog.mynarz.net/2016/06/on-generating-sparql.html
-   * <p>
-   * RDF4J currently doesn't support additional projection settings (such as adding AS)!
-   * <p>
-   * Example code:
-   * <p>
-   * final QueryBuilder<ParsedTupleQuery> select = QueryBuilderFactory.select();
-   * select.addProjectionVar(relatedClass.getName()).addProjectionVar("\""+name.getValue()+"\"","as","?n");
-   * select.group().atom(relatedClass.getName(), "a",relatedClass.getLongName()).closeGroup();
-   * return new SPARQLQueryRenderer().render(select.query());
-   */
-
-  @Override
-  public AnnotationQueriesV2 getQueries(Set<Annotation> annotations) {
-    AnnotationQueriesV2 queries = new AnnotationQueriesV2();
-    for (Annotation annotation : annotations) {
-      queries.addQuery(annotation.getQuery());
-    }
-    return queries;
   }
 }

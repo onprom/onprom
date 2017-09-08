@@ -26,29 +26,25 @@
 
 package it.unibz.inf.kaos.factory;
 
-import it.unibz.inf.kaos.data.ActionType;
-import it.unibz.inf.kaos.data.AnnotationActionType;
-import it.unibz.inf.kaos.data.CaseAnnotation;
-import it.unibz.inf.kaos.data.EventAnnotation;
-import it.unibz.inf.kaos.data.ResourceAnnotation;
-import it.unibz.inf.kaos.data.UMLClass;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.Annotation;
+import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorMessages;
 import it.unibz.inf.kaos.ui.utility.NavigationUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
 /**
- * Annotation creation factory
+ * Annotation creation factory and additional methods
  * <p>
  * @author T. E. Kalayci on 24-May-2017.
  */
 public class AnnotationFactory {
   public static Annotation createAnnotation(ActionType currentAction, UMLClass selectedCls, CaseAnnotation caseAnnotation) {
-    if (currentAction == AnnotationActionType.CASE) {
+      if (currentAction.toString().equals(CaseAnnotation.class.getAnnotation(AnnotationProperties.class).label())) {
       if (caseAnnotation == null || UIUtility.confirm(AnnotationEditorMessages.CHANGE_CASE)) {
         return new CaseAnnotation(selectedCls);
       }
-    } else if (currentAction == AnnotationActionType.EVENT) {
+      } else if (currentAction.toString().equals(EventAnnotation.class.getAnnotation(AnnotationProperties.class).label())) {
       if (caseAnnotation == null) {
         UIUtility.error(AnnotationEditorMessages.SELECT_CASE);
       } else {
@@ -58,10 +54,12 @@ public class AnnotationFactory {
           return new EventAnnotation(caseAnnotation, selectedCls);
         }
       }
-    } else if (currentAction == AnnotationActionType.RESOURCE) {
-      return new ResourceAnnotation(selectedCls);
     }
     return null;
   }
+
+    public static boolean checkRemoval(AnnotationDiagramPanel panel, Annotation annotation) {
+        return !(annotation instanceof CaseAnnotation) || panel.getItemCount(Annotation.class) < 2 || UIUtility.confirm(AnnotationEditorMessages.CASE_DELETE_CONFIRMATION);
+    }
 
 }

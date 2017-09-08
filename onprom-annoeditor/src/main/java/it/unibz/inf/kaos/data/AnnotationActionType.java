@@ -32,9 +32,6 @@ package it.unibz.inf.kaos.data;
  * @author T. E. Kalayci on 25-May-2017.
  */
 public enum AnnotationActionType implements ActionType {
-  CASE("case", 'c', "Create <u>C</u>", "<u>C</u>ase"),
-  EVENT("event", 'e', "Create <u>E</u>vent", "<u>E</u>vent"),
-  RESOURCE("resource", 'r', "Create <u>R</u>esource", "<u>R</u>esource"),
   NAVIGATE("navigate", 'n', "Navigate the diagram", "Navigate");
 
   private final String actionCommand;
