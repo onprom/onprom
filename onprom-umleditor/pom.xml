@@ -38,8 +38,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <properties>
-        <xmlgraphics.version>1.9</xmlgraphics.version>
-        <jackson.version>2.8.9</jackson.version>
+        <xmlgraphics.version>1.9.1</xmlgraphics.version>
+        <jackson.version>2.9.1</jackson.version>
     </properties>
     <build>
         <plugins>
@@ -55,12 +55,6 @@
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <!-- fix for Reflections -->
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>22.0</version>
-        </dependency>
         <dependency>
             <groupId>net.sourceforge.owlapi</groupId>
             <artifactId>owlapi-apibinding</artifactId>

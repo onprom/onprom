@@ -58,7 +58,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <logback.version>1.2.3</logback.version>
-        <maven.compiler.version>3.6.1</maven.compiler.version>
+        <maven.compiler.version>3.7.0</maven.compiler.version>
+        <maven.assembly.version>3.1.0</maven.assembly.version>
         <owlapi.version>4.2.5</owlapi.version>
         <local.repository>file://${basedir}/../onprom-maven</local.repository>
     </properties>
