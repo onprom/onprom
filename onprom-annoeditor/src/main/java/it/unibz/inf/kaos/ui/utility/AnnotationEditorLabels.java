@@ -37,6 +37,7 @@ public enum AnnotationEditorLabels implements Labels {
   NAME("Name", "Please enter or select the name", false),
   VALUE("Value", "Please enter or select the value", false),
   LABEL("Label", "Please enter label of the annotation", false),
+    TYPE("Type", "Please enter type", false),
   FILTER("Filter", "Please enter <em>FILTER</em> clause for filtering. You should use %1 for the variable to filter. It must be a correct <em>FILTER</em> clause, " +
     "so generated query will be a valid query. You don't need to write FILTER part, only what will be inside it. Such as: " +
     "<ul>" +

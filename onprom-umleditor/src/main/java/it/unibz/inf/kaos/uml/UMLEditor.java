@@ -232,7 +232,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
   public void loadEditor(JPanel panel) {
     splitPane.setTopComponent(scrollPane);
     splitPane.setBottomComponent(panel);
-    splitPane.setDividerLocation(0.8);
+    splitPane.setDividerLocation(0.75);
     diagramPanel.setCurrentAction(UMLActionType.select);
   }
 

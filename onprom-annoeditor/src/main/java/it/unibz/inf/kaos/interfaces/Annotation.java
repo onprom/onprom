@@ -40,8 +40,11 @@ import java.util.List;
  */
 public interface Annotation extends DiagramShape {
     List<AnnotationAttribute> getAttributes();
-  UMLClass getRelatedClass();
 
+    void setAttributes(List<AnnotationAttribute> _attributes);
+
+    UMLClass getRelatedClass();
     List<AnnotationQuery> getQuery();
-  AnnotationForm getForm(AnnotationDiagramPanel panel);
+
+    AnnotationForm getForm(AnnotationDiagramPanel panel);
 }

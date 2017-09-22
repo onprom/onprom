@@ -40,7 +40,7 @@ import java.util.List;
  * <p>
  * @author T. E. Kalayci on 09/11/16.
  */
-@AnnotationProperties(label = "Case", color = "#E5BABA", mnemonic = 'c', tooltip = "Create <u>C</u>", title = "<u>C</u>ase")
+@AnnotationProperties(label = "Case", color = "#E5BABA", mnemonic = 'c', tooltip = "Create <u>C</u>ase", title = "<u>C</u>ase")
 public class CaseAnnotation extends AbstractAnnotation {
 
   private StringAttribute caseName;

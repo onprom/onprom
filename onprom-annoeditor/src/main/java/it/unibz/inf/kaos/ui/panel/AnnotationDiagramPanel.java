@@ -27,7 +27,6 @@
 package it.unibz.inf.kaos.ui.panel;
 
 import it.unibz.inf.kaos.data.*;
-import it.unibz.inf.kaos.factory.AnnotationFactory;
 import it.unibz.inf.kaos.interfaces.*;
 import it.unibz.inf.kaos.ui.edit.AddDeleteAnnotationEdit;
 import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
@@ -53,9 +52,11 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
   private Set<DiagramShape> tempNavigation = new LinkedHashSet<>();
 
   private NavigationListener navigationListener;
+    private final AnnotationFactory factory;
 
-  public AnnotationDiagramPanel(DiagramEditor editor) {
+    public AnnotationDiagramPanel(DiagramEditor editor, AnnotationFactory _factory) {
     super(editor);
+        factory = _factory;
     isUpdateAllowed = false;
   }
 
@@ -121,7 +122,7 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
       if (_selected != null) {
         //create a new annotation to the selected UML class
         if (_selected instanceof UMLClass) {
-          Annotation annotation = AnnotationFactory.createAnnotation(currentAction, (UMLClass) _selected, getFirstItem(CaseAnnotation.class));
+            Annotation annotation = factory.createAnnotation(currentAction, (UMLClass) _selected, getItems(Annotation.class));
           if (annotation != null) {
               annotation.setStartX(ZoomUtility.get(e.getX()));
               annotation.setStartY(ZoomUtility.get(e.getY()));
@@ -151,8 +152,8 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     if (_selected != null && _selected instanceof Annotation) {
       if (UIUtility.confirm(AnnotationEditorMessages.DELETE_CONFIRMATION)) {
         Annotation annotation = (Annotation) _selected;
-          if (AnnotationFactory.checkRemoval(this, annotation)) {
-          removeAnnotation(annotation);
+          if (factory.checkRemoval(this, annotation)) {
+              removeAnnotation(annotation);
               undoManager.addEdit(new AddDeleteAnnotationEdit(this, annotation, false));
               loadForm(null);
               repaint();

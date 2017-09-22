@@ -43,7 +43,7 @@ import java.util.Set;
  *
  * @author T. E. Kalayci on 09/11/16.
  */
-@AnnotationProperties(label = "Event", color = "#F2C78F", mnemonic = 'e', tooltip = "Create <u>E</u>ven", title = "<u>E</u>vent")
+@AnnotationProperties(label = "Event", color = "#F2C78F", mnemonic = 'e', tooltip = "Create <u>E</u>vent", title = "<u>E</u>vent")
 public class EventAnnotation extends AbstractAnnotation {
     private StringAttribute name;
     private NavigationalAttribute timestamp;

@@ -52,7 +52,7 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
 
   UMLClass relatedClass;
   private String label;
-    private List<AnnotationAttribute> attributes;
+  private List<AnnotationAttribute> attributes;
 
   AbstractAnnotation() {
   }
@@ -129,6 +129,12 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
     @Override
     public List<AnnotationAttribute> getAttributes() {
     return attributes;
+  }
+
+  public int getAttributeCount() {
+    if (attributes == null)
+      return 0;
+    return attributes.size();
   }
 
     public void setAttributes(List<AnnotationAttribute> attributes) {

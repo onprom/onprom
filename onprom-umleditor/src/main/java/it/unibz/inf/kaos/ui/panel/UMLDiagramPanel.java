@@ -143,14 +143,6 @@ public class UMLDiagramPanel extends JPanel implements MouseListener, MouseMotio
       .count();
   }
 
-  <T extends DiagramShape> T getFirstItem(Class<T> type) {
-    return shapes.stream()
-      .filter(type::isInstance)
-      .findFirst()
-      .map(type::cast)
-      .orElse(null);
-  }
-
   @Override
   public void mouseClicked(MouseEvent e) {
   }

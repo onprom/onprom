@@ -30,8 +30,10 @@ import it.unibz.inf.kaos.data.ActionType;
 import it.unibz.inf.kaos.data.AnnotationProperties;
 import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.factory.DefaultAnnotationFactory;
 import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
+import it.unibz.inf.kaos.interfaces.AnnotationFactory;
 import it.unibz.inf.kaos.owl.OWLImporter;
 import it.unibz.inf.kaos.ui.action.DrawingPanelAction;
 import it.unibz.inf.kaos.ui.form.QueryEditor;
@@ -52,10 +54,14 @@ import javax.swing.*;
  */
 public class AnnotationEditor extends UMLEditor {
   public AnnotationEditor(OWLOntology _ontology, AnnotationEditorListener _listener) {
+    this(_ontology, _listener, new DefaultAnnotationFactory());
+  }
+
+  public AnnotationEditor(OWLOntology _ontology, AnnotationEditorListener _listener, AnnotationFactory factory) {
     super(_ontology);
     supportedFormats = new FileType[]{FileType.ONTOLOGY, FileType.UML, FileType.ANNOTATION};
     listener = _listener;
-    diagramPanel = new AnnotationDiagramPanel(this);
+    diagramPanel = new AnnotationDiagramPanel(this, factory);
     initUI();
     if (ontology != null) {
       diagramPanel.load(OWLImporter.getShapes(ontology));
@@ -80,7 +86,11 @@ public class AnnotationEditor extends UMLEditor {
         if (annotationsQueries.getQueryCount() > 0) {
           new QueryEditor(annotationsQueries);
           if (listener != null) {
-            ((AnnotationEditorListener) listener).store(getOntologyName(), annotationsQueries);
+            String title = getOntologyName();
+            if (title == null || title.isEmpty()) {
+              title = "Exported Queries";
+            }
+            ((AnnotationEditorListener) listener).store(title, annotationsQueries);
           }
           if (UIUtility.confirm(UMLEditorMessages.SAVE_FILE)) {
             IOUtility.exportJSON(FileType.QUERIES, annotationsQueries);

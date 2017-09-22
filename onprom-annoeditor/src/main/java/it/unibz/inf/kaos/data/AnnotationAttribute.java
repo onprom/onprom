@@ -32,6 +32,7 @@ package it.unibz.inf.kaos.data;
  */
 public class AnnotationAttribute {
   private String name;
+  private String type;
   private StringAttribute value;
 
   AnnotationAttribute() {
@@ -41,6 +42,7 @@ public class AnnotationAttribute {
   public AnnotationAttribute(String _name, StringAttribute _value) {
     this.name = _name;
     this.value = _value;
+    this.type = "literal";
   }
 
   public String getName() {
@@ -49,6 +51,14 @@ public class AnnotationAttribute {
 
   public StringAttribute getValue() {
     return value;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String _type) {
+    type = _type;
   }
 
   public String toString() {

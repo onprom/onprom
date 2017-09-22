@@ -31,6 +31,7 @@ import java.awt.*;
 /**
  * This class contains static drawing methods
  * <p>
+ *
  * @author T. E. Kalayci
  * Date: 28-Sep-16
  */
@@ -47,9 +48,9 @@ public class DrawingConstants {
     public static final float ANCHOR_RADIUS = 12;
     public static final float HALF_ANCHOR_RADIUS = ANCHOR_RADIUS / 2;
     //fonts
-    public final static Font CLASS_NAME_FONT = new Font(Font.DIALOG, Font.BOLD, 14);
-  public final static Font RELATION_FONT = new Font(Font.DIALOG, Font.ITALIC, 12);
-  public final static Font ATTRIBUTE_NAME_FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
+    public final static Font CLASS_NAME_FONT = new Font(Font.DIALOG, Font.BOLD, 15);
+    public final static Font RELATION_FONT = new Font(Font.DIALOG, Font.ITALIC, 12);
+    public final static Font ATTRIBUTE_NAME_FONT = new Font(Font.DIALOG, Font.PLAIN, 13);
     //colors
     public static final Color BACKGROUND = new Color(240, 248, 250);
 
