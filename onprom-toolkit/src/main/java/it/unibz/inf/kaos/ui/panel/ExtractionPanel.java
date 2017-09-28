@@ -45,85 +45,86 @@ import static it.unibz.inf.kaos.ui.component.CustomTree.INT_ARRAY_FLAVOR;
 /**
  * Extraction process panel
  * <p>
+ *
  * @author T. E. Kalayci on 10-Jul-2017.
  */
 public class ExtractionPanel extends UMLDiagramPanel {
-  private final ResourceShape ontology = new ResourceShape("data ontology", null);
-  private final ResourceShape event = new ResourceShape("event ontology", null);
-  private final ResourceShape mapping = new ResourceShape("mapping", null);
-  private final ResourceShape queries = new ResourceShape("queries", null);
-  private final ResourceShape extraction = new ResourceShape("extraction", null);
-  private final ResourceShape xesLog = new ResourceShape("XES", null);
+    private final ResourceShape ontology = new ResourceShape("data ontology", null);
+    private final ResourceShape event = new ResourceShape("event ontology", null);
+    private final ResourceShape mapping = new ResourceShape("mapping", null);
+    private final ResourceShape queries = new ResourceShape("queries", null);
+    private final ResourceShape extraction = new ResourceShape("extraction", null);
+    private final ResourceShape xesLog = new ResourceShape("XES", null);
 
-  public ExtractionPanel(OnpromToolkit toolkit) {
-    super(null);
-    ontology.setStartX(50);
-    ontology.setStartY(100);
+    public ExtractionPanel(OnpromToolkit toolkit) {
+        super(null);
+        ontology.setStartX(50);
+        ontology.setStartY(100);
 
-    mapping.setStartX(200);
-    mapping.setStartY(100);
+        mapping.setStartX(200);
+        mapping.setStartY(100);
 
-    queries.setStartX(350);
-    queries.setStartY(100);
+        queries.setStartX(350);
+        queries.setStartY(100);
 
-    event.setStartX(500);
-    event.setStartY(300);
+        event.setStartX(500);
+        event.setStartY(300);
 
-    extraction.setStartX(200);
-    extraction.setStartY(300);
+        extraction.setStartX(200);
+        extraction.setStartY(300);
 
-    xesLog.setStartX(200);
-    xesLog.setStartY(500);
-    //connections
-    shapes.add(new ResourceConnection(ontology, extraction));
-    shapes.add(new ResourceConnection(mapping, extraction));
-    shapes.add(new ResourceConnection(queries, extraction));
-    shapes.add(new ResourceConnection(event, extraction));
-    shapes.add(new ResourceConnection(extraction, xesLog));
-    shapes.add(ontology);
-    shapes.add(mapping);
-    shapes.add(queries);
-    shapes.add(event);
-    shapes.add(extraction);
-    shapes.add(xesLog);
+        xesLog.setStartX(200);
+        xesLog.setStartY(500);
+        //connections
+        shapes.add(new ResourceConnection(ontology, extraction));
+        shapes.add(new ResourceConnection(mapping, extraction));
+        shapes.add(new ResourceConnection(queries, extraction));
+        shapes.add(new ResourceConnection(event, extraction));
+        shapes.add(new ResourceConnection(extraction, xesLog));
+        shapes.add(ontology);
+        shapes.add(mapping);
+        shapes.add(queries);
+        shapes.add(event);
+        shapes.add(extraction);
+        shapes.add(xesLog);
 
-    this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetAdapter() {
-      @Override
-      public void drop(DropTargetDropEvent dtde) {
-        try {
-          dtde.acceptDrop(dtde.getDropAction());
-          Transferable transferData = dtde.getTransferable();
-          int[] selected = (int[]) transferData.getTransferData(INT_ARRAY_FLAVOR);
-          for (int i : selected) {
-            TreeNode node = toolkit.getResourceNode(i);
-            if (node.getType().equals(FileType.ONTOLOGY)) {
-              ontology.setTreeNode(node);
+        this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetAdapter() {
+            @Override
+            public void drop(DropTargetDropEvent dtde) {
+                try {
+                    dtde.acceptDrop(dtde.getDropAction());
+                    Transferable transferData = dtde.getTransferable();
+                    int[] selected = (int[]) transferData.getTransferData(INT_ARRAY_FLAVOR);
+                    for (int i : selected) {
+                        TreeNode node = toolkit.getResourceNode(i);
+                        if (node.getType().equals(FileType.ONTOLOGY)) {
+                            ontology.setTreeNode(node);
+                        }
+                        if (node.getType().equals(FileType.MAPPING)) {
+                            mapping.setTreeNode(node);
+                        }
+                        if (node.getType().equals(FileType.QUERIES)) {
+                            queries.setTreeNode(node);
+                        }
+                        repaint();
+                    }
+                    dtde.dropComplete(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            if (node.getType().equals(FileType.MAPPING)) {
-              mapping.setTreeNode(node);
-            }
-            if (node.getType().equals(FileType.QUERIES)) {
-              queries.setTreeNode(node);
-            }
-            repaint();
-          }
-          dtde.dropComplete(true);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
-    }));
-  }
+        }));
+    }
 
-  @Override
-  public void mouseDragged(MouseEvent e) {
+    @Override
+    public void mouseDragged(MouseEvent e) {
 
-  }
+    }
 
-  @Override
-  public void paintComponent(Graphics g) {
-    super.paintComponent(g);
-    Graphics2D g2d = (Graphics2D) g;
-    shapes.forEach(shape -> shape.draw(g2d));
-  }
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        shapes.forEach(shape -> shape.draw(g2d));
+    }
 }

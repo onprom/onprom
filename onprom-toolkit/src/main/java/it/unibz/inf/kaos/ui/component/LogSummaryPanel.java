@@ -46,70 +46,71 @@ import java.awt.*;
 /**
  * Frame showing log summary
  * <p>
+ *
  * @author T. E. Kalayci on 04-Jul-2017
  */
 public class LogSummaryPanel extends JInternalFrame {
-  private static final Dimension TXT_SIZE = new Dimension(400, 25);
-  private static final Logger logger = LoggerFactory.getLogger(LogSummaryPanel.class.getSimpleName());
-  private final XLogInfo info;
+    private static final Dimension TXT_SIZE = new Dimension(400, 25);
+    private static final Logger logger = LoggerFactory.getLogger(LogSummaryPanel.class.getSimpleName());
+    private final XLogInfo info;
 
-  public LogSummaryPanel(XLogInfo _info) {
-    super("Log Summary", true, true, true, true);
-    info = _info;
-    initUI();
-  }
-
-  private void initUI() {
-    this.getContentPane().setLayout(new BorderLayout());
-    JScrollPane scrollPane = new JScrollPane(createPanel());
-    this.getContentPane().add(scrollPane, BorderLayout.CENTER);
-    this.setSize(new Dimension(1024, 768));
-    this.setVisible(true);
-  }
-
-  private JPanel createPanel() {
-    JPanel panel = new JPanel(new GridBagLayout());
-    GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.gridx = 0;
-    panel.add(UIUtility.createLabel("Number of traces: " + info.getNumberOfTraces(), TXT_SIZE), gridBagConstraints);
-    gridBagConstraints.gridy++;
-    panel.add(UIUtility.createLabel("Number of events: " + info.getNumberOfEvents(), TXT_SIZE), gridBagConstraints);
-    gridBagConstraints.gridy++;
-    panel.add(UIUtility.createLabel("Start date of the log: " + info.getLogTimeBoundaries().getStartDate(), TXT_SIZE), gridBagConstraints);
-    gridBagConstraints.gridy++;
-    panel.add(UIUtility.createLabel("End date of the log: " + info.getLogTimeBoundaries().getEndDate(), TXT_SIZE), gridBagConstraints);
-    XEventClasses eventClasses = info.getEventClasses();
-    final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-    for (int i = 0; i < eventClasses.size(); i++) {
-      XEventClass eventClass = eventClasses.getByIndex(i);
-      dataset.addValue(eventClass.size(), eventClass.toString(), "");
+    public LogSummaryPanel(XLogInfo _info) {
+        super("Log Summary", true, true, true, true);
+        info = _info;
+        initUI();
     }
-    gridBagConstraints.gridy++;
-    JFreeChart barChart = ChartFactory.createBarChart(
-      "Events",
-      "Event Name", "Count",
-      dataset, PlotOrientation.HORIZONTAL,
-      true, true, false);
-    panel.add(new ChartPanel(barChart), gridBagConstraints);
-    //JTable showing all cases
-    gridBagConstraints.gridy++;
-    panel.add(UIUtility.createLabel("All Traces Available in the Log", TXT_SIZE), gridBagConstraints);
-    gridBagConstraints.gridy++;
-    DefaultListModel<String> listModel = new DefaultListModel<>();
-    JList<String> list = new JList<>(listModel);
-    for (XTrace trace : info.getLog()) {
-      StringBuilder events = new StringBuilder();
-      for (XEvent event : trace) {
-        events.append(event.getAttributes().get("concept:name").toString()).append("▷");
-      }
-      try {
-        listModel.addElement(trace.getAttributes().get("concept:name").toString() + " (" + events.substring(0, events.length() - 1) + ")");
-      } catch (NullPointerException e) {
-        logger.warn(e.getMessage(), e);
-      }
+
+    private void initUI() {
+        this.getContentPane().setLayout(new BorderLayout());
+        JScrollPane scrollPane = new JScrollPane(createPanel());
+        this.getContentPane().add(scrollPane, BorderLayout.CENTER);
+        this.setSize(new Dimension(1024, 768));
+        this.setVisible(true);
     }
-    panel.add(new JScrollPane(list), gridBagConstraints);
-    return panel;
-  }
+
+    private JPanel createPanel() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        panel.add(UIUtility.createLabel("Number of traces: " + info.getNumberOfTraces(), TXT_SIZE), gridBagConstraints);
+        gridBagConstraints.gridy++;
+        panel.add(UIUtility.createLabel("Number of events: " + info.getNumberOfEvents(), TXT_SIZE), gridBagConstraints);
+        gridBagConstraints.gridy++;
+        panel.add(UIUtility.createLabel("Start date of the log: " + info.getLogTimeBoundaries().getStartDate(), TXT_SIZE), gridBagConstraints);
+        gridBagConstraints.gridy++;
+        panel.add(UIUtility.createLabel("End date of the log: " + info.getLogTimeBoundaries().getEndDate(), TXT_SIZE), gridBagConstraints);
+        XEventClasses eventClasses = info.getEventClasses();
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (int i = 0; i < eventClasses.size(); i++) {
+            XEventClass eventClass = eventClasses.getByIndex(i);
+            dataset.addValue(eventClass.size(), eventClass.toString(), "");
+        }
+        gridBagConstraints.gridy++;
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "Events",
+                "Event Name", "Count",
+                dataset, PlotOrientation.HORIZONTAL,
+                true, true, false);
+        panel.add(new ChartPanel(barChart), gridBagConstraints);
+        //JTable showing all cases
+        gridBagConstraints.gridy++;
+        panel.add(UIUtility.createLabel("All Traces Available in the Log", TXT_SIZE), gridBagConstraints);
+        gridBagConstraints.gridy++;
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        JList<String> list = new JList<>(listModel);
+        for (XTrace trace : info.getLog()) {
+            StringBuilder events = new StringBuilder();
+            for (XEvent event : trace) {
+                events.append(event.getAttributes().get("concept:name").toString()).append("▷");
+            }
+            try {
+                listModel.addElement(trace.getAttributes().get("concept:name").toString() + " (" + events.substring(0, events.length() - 1) + ")");
+            } catch (NullPointerException e) {
+                logger.warn(e.getMessage(), e);
+            }
+        }
+        panel.add(new JScrollPane(list), gridBagConstraints);
+        return panel;
+    }
 }
