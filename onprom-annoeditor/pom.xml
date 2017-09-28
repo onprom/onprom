@@ -97,11 +97,11 @@
             <artifactId>reflections</artifactId>
             <version>0.9.11</version>
         </dependency>
-        <dependency>
-            <!-- fix for Reflections -->
+        <!--<dependency>
+            fix for Reflections
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>22.0</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 </project>
