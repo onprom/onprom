@@ -1,0 +1,1 @@
+Custom Annotation editor of onprom tool in KAOS project. It is used to annotate custom event ontologies.
