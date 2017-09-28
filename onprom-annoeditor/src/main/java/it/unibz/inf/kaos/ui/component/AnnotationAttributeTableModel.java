@@ -27,6 +27,7 @@
 package it.unibz.inf.kaos.ui.component;
 
 import it.unibz.inf.kaos.data.AnnotationAttribute;
+import it.unibz.inf.kaos.data.NavigationalAttribute;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.LinkedList;
@@ -39,78 +40,88 @@ import java.util.List;
  */
 class AnnotationAttributeTableModel extends AbstractTableModel {
 
-  private final String[] columnNames = {"Name", "Value"};
-  private final Class<?>[] columnClass = {String.class, String.class};
+    private final String[] columnNames;
+    private final Class<?>[] columnClasses;
 
     private List<AnnotationAttribute> attributes;
 
-    AnnotationAttributeTableModel(List<AnnotationAttribute> _attributes) {
-    super();
-    attributes = _attributes;
-  }
-
-  @Override
-  public int getRowCount() {
-    if (attributes == null)
-      return 0;
-    return attributes.size();
-  }
-
-  @Override
-  public int getColumnCount() {
-    return columnNames.length;
-  }
-
-  @Override
-  public Object getValueAt(int rowIndex, int columnIndex) {
-    switch (columnIndex) {
-      case 0:
-        return attributes.get(rowIndex).getName();
-      case 1:
-        return attributes.get(rowIndex).getValue().toString();
+    AnnotationAttributeTableModel(List<AnnotationAttribute> _attributes, boolean withType) {
+        super();
+        attributes = _attributes;
+        if (withType) {
+            columnNames = new String[]{"Name", "Value", "Type"};
+            columnClasses = new Class[]{String.class, NavigationalAttribute.class, String.class};
+        } else {
+            columnNames = new String[]{"Name", "Value"};
+            columnClasses = new Class[]{String.class, NavigationalAttribute.class};
+        }
     }
-    return null;
-  }
 
-  @Override
-  public String getColumnName(int column) {
-    return columnNames[column];
-  }
 
-  @Override
-  public Class<?> getColumnClass(int columnIndex) {
-    return columnClass[columnIndex];
-  }
+    @Override
+    public int getRowCount() {
+        if (attributes == null)
+            return 0;
+        return attributes.size();
+    }
+
+    @Override
+    public int getColumnCount() {
+        return columnNames.length;
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return attributes.get(rowIndex).getName();
+            case 1:
+                return attributes.get(rowIndex).getValue().toString();
+            case 2:
+                return attributes.get(rowIndex).getType();
+        }
+        return null;
+    }
+
+    @Override
+    public String getColumnName(int column) {
+        return columnNames[column];
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return columnClasses[columnIndex];
+    }
 
     List<AnnotationAttribute> getAttributes() {
-    return attributes;
-  }
+        return attributes;
+    }
 
     void setAttributes(List<AnnotationAttribute> _attributes) {
-    attributes = _attributes;
-    fireTableDataChanged();
-  }
+        attributes = _attributes;
+        fireTableDataChanged();
+    }
 
-  AnnotationAttribute getAttribute(int i) {
-    if (attributes != null && attributes.size() > i)
-      return attributes.get(i);
-    return null;
-  }
+    AnnotationAttribute getAttribute(int i) {
+        if (attributes != null && attributes.size() > i)
+            return attributes.get(i);
+        return null;
+    }
 
-  void removeAttribute(int selectedRow) {
-    attributes.remove(selectedRow);
-    fireTableDataChanged();
-  }
+    void removeAttribute(int selectedRow) {
+        attributes.remove(selectedRow);
+        fireTableDataChanged();
+    }
 
-  void addAttribute(AnnotationAttribute annotationAttribute) {
-    if (attributes == null)
-      attributes = new LinkedList<>();
-    attributes.add(annotationAttribute);
-    fireTableDataChanged();
-  }
+    void addAttribute(AnnotationAttribute annotationAttribute) {
+        if (attributes == null)
+            attributes = new LinkedList<>();
+        attributes.add(annotationAttribute);
+        fireTableDataChanged();
+    }
 
-  void updateAttributeAt(int index, AnnotationAttribute annotationAttribute) {
-    attributes.set(index, annotationAttribute);
-    fireTableDataChanged();
-  }
+    void updateAttributeAt(int index, AnnotationAttribute annotationAttribute) {
+        attributes.set(index, annotationAttribute);
+        fireTableDataChanged();
+    }
 }

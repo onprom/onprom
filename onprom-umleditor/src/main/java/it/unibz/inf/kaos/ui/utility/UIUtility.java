@@ -169,28 +169,35 @@ public class UIUtility {
                 new Point(0, 0), "img");
     }
 
+    public static <E> WidePopupComboBox createWideComboBox(Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
+        WidePopupComboBox<E> cmb = new WidePopupComboBox<>();
+        setupWidePopupComboBox(cmb, dimension, listener, editable, withEmpty);
+        return cmb;
+    }
+
     public static <E> WidePopupComboBox<E> createWideComboBox(Set<E> values, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
         WidePopupComboBox<E> cmb = new WidePopupComboBox<>(values);
         setupWidePopupComboBox(cmb, dimension, listener, editable, withEmpty);
         return cmb;
     }
 
-    public static <E> WidePopupComboBox<E> createWideComboBoxArray(E[] values, Dimension dimension, boolean editable) {
+    public static <E> WidePopupComboBox<E> createWideComboBox(E[] values, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
         WidePopupComboBox<E> cmb = new WidePopupComboBox<>(values);
-        setupWidePopupComboBox(cmb, dimension, null, editable, true);
+        setupWidePopupComboBox(cmb, dimension, listener, editable, withEmpty);
         return cmb;
     }
 
     private static <E> void setupWidePopupComboBox(WidePopupComboBox<E> cmb, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
-        if (withEmpty) {
-            cmb.insertItemAt(null, 0);
-        }
         cmb.setPreferredSize(dimension);
         cmb.setEditable(editable);
         cmb.setEnabled(editable);
         if (listener != null) {
             cmb.addItemListener(listener);
         }
+        if (withEmpty) {
+            cmb.insertItemAt(null, 0);
+        }
+        if (cmb.getItemCount() > 0) cmb.setSelectedIndex(0);
     }
 
     private static JButton createButton(String text, char mnemonic, String tooltip, ActionListener actionListener, Dimension preferredSize) {

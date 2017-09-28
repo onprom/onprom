@@ -81,11 +81,11 @@ public class RelationForm extends JPanel {
         add(UIUtility.createLabel(UMLEditorLabels.CARDINALITY, lblDimension), gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        cmbFirstCardinality = UIUtility.createWideComboBoxArray(Cardinality.values(), txtDimension, editable);
+        cmbFirstCardinality = UIUtility.createWideComboBox(Cardinality.values(), txtDimension, null, editable, false);
         add(cmbFirstCardinality, gridBagConstraints);
 
         gridBagConstraints.gridx = 2;
-        cmbSecondCardinality = UIUtility.createWideComboBoxArray(Cardinality.values(), txtDimension, editable);
+        cmbSecondCardinality = UIUtility.createWideComboBox(Cardinality.values(), txtDimension, null, editable, false);
         add(cmbSecondCardinality, gridBagConstraints);
 
 

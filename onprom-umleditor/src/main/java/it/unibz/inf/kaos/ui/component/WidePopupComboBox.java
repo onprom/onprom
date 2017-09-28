@@ -37,6 +37,10 @@ import java.util.Set;
 public class WidePopupComboBox<E> extends JComboBox<E> {
     private boolean layingOut = false;
 
+    public WidePopupComboBox() {
+        super();
+    }
+
     public WidePopupComboBox(Set<E> objs) {
         super();
         if (objs != null && objs.size() > 0) {

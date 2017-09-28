@@ -39,36 +39,37 @@ import java.util.List;
  * @author T. E. Kalayci
  */
 public class AnnotationAttributeTable extends JTable {
-  private final AnnotationAttributeTableModel model = new AnnotationAttributeTableModel(new LinkedList<>());
+    private final AnnotationAttributeTableModel model;
 
-  public AnnotationAttributeTable() {
-    super();
-    setModel(model);
-  }
+    public AnnotationAttributeTable(boolean showType) {
+        super();
+        model = new AnnotationAttributeTableModel(new LinkedList<>(), showType);
+        setModel(model);
+    }
 
     public List<AnnotationAttribute> getAttributes() {
-    return model.getAttributes();
-  }
+        return model.getAttributes();
+    }
 
     public void setAttributes(List<AnnotationAttribute> attributes) {
-    model.setAttributes(attributes);
-  }
-
-  public void removeSelectedAttribute() {
-    if (UIUtility.deleteConfirm()) {
-      model.removeAttribute(getSelectedRow());
+        model.setAttributes(attributes);
     }
-  }
 
-  public void updateAttributeAt(int index, AnnotationAttribute annotationAttribute) {
-    model.updateAttributeAt(index, annotationAttribute);
-  }
+    public void removeSelectedAttribute() {
+        if (UIUtility.deleteConfirm()) {
+            model.removeAttribute(getSelectedRow());
+        }
+    }
 
-  public void addAttribute(AnnotationAttribute annotationAttribute) {
-    model.addAttribute(annotationAttribute);
-  }
+    public void updateAttributeAt(int index, AnnotationAttribute annotationAttribute) {
+        model.updateAttributeAt(index, annotationAttribute);
+    }
 
-  public AnnotationAttribute getSelectedAttribute() {
-    return model.getAttribute(getSelectedRow());
-  }
+    public void addAttribute(AnnotationAttribute annotationAttribute) {
+        model.addAttribute(annotationAttribute);
+    }
+
+    public AnnotationAttribute getSelectedAttribute() {
+        return model.getAttribute(getSelectedRow());
+    }
 }

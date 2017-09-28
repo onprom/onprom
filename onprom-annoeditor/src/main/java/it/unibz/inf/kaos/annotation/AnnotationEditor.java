@@ -121,7 +121,6 @@ public class AnnotationEditor extends UMLEditor {
 
   @Override
   protected JToolBar createToolbar() {
-    //get default toolbar
     JToolBar toolBar = getMainToolbar(diagramPanel);
     new Reflections("it.unibz.inf.kaos.data").getSubTypesOf(AbstractAnnotation.class).forEach(annotation -> {
       final AnnotationProperties annotationProperties = annotation.getAnnotation(AnnotationProperties.class);

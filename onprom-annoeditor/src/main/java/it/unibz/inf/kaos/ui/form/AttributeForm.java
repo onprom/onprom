@@ -26,15 +26,11 @@
 
 package it.unibz.inf.kaos.ui.form;
 
-import it.unibz.inf.kaos.data.AnnotationAttribute;
-import it.unibz.inf.kaos.data.Attribute;
-import it.unibz.inf.kaos.data.StringAttribute;
-import it.unibz.inf.kaos.data.UMLClass;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.component.AnnotationAttributeTable;
-import it.unibz.inf.kaos.ui.component.StringDocumentListener;
 import it.unibz.inf.kaos.ui.component.UpdateListener;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorButtons;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorLabels;
@@ -52,24 +48,21 @@ import java.util.Set;
  */
 class AttributeForm extends AbstractAnnotationForm {
 
-    final private JTextField txtName;
-    final private JTextField txtValue;
+    final private JComboBox<String> txtName;
+    final private JComboBox<NavigationalAttribute> txtValue;
     private final AnnotationAttributeTable tblAttributes;
-    private final StringDocumentListener valueListener;
+    private JComboBox<String> txtType = null;
     private JTextField txtValueFilter = null;
-    private JTextField txtType = null;
-    private StringAttribute value = new StringAttribute();
-
 
     AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation) {
-        this(_drawingPanel, _annotation, true, false);
+        this(_drawingPanel, _annotation, true, false, null, null, null);
     }
 
-    AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation, boolean withFilter, boolean withType) {
+    AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation, boolean withFilter, boolean withType, String[] names, Set<NavigationalAttribute> values, String[] types) {
 
         super(_drawingPanel, _annotation);
 
-        tblAttributes = new AnnotationAttributeTable();
+        tblAttributes = new AnnotationAttributeTable(withType);
 
         setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
@@ -82,7 +75,7 @@ class AttributeForm extends AbstractAnnotationForm {
         add(UIUtility.createLabel(AnnotationEditorLabels.NAME, BTN_SIZE), gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        txtName = UIUtility.createTextField("", txtDimension);
+        txtName = UIUtility.createWideComboBox(names, txtDimension, null, true, true);
         add(txtName, gridBagConstraints);
 
         //components in the second row
@@ -91,9 +84,7 @@ class AttributeForm extends AbstractAnnotationForm {
         add(UIUtility.createLabel(AnnotationEditorLabels.VALUE, BTN_SIZE), gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        txtValue = UIUtility.createTextField("Please enter name of the attribute", txtDimension);
-        valueListener = new StringDocumentListener(value, txtValue);
-        txtValue.getDocument().addDocumentListener(valueListener);
+        txtValue = UIUtility.createWideComboBox(values, txtDimension, null, true, true);
         add(txtValue, gridBagConstraints);
 
         gridBagConstraints.gridx = 2;
@@ -101,10 +92,7 @@ class AttributeForm extends AbstractAnnotationForm {
                 e -> startNavigation(new UpdateListener() {
                     @Override
                     public void updateAttribute(Set<DiagramShape> navigation, UMLClass selectedClass, Attribute selectedAttribute) {
-                        valueListener.updateAttribute(null);
-                        value = new StringAttribute(navigation, selectedClass, selectedAttribute);
-                        txtValue.setText(value.toString());
-                        valueListener.updateAttribute(value);
+                        txtValue.setSelectedItem(new StringAttribute(navigation, selectedClass, selectedAttribute));
                     }
                 }, false)), gridBagConstraints);
 
@@ -124,7 +112,7 @@ class AttributeForm extends AbstractAnnotationForm {
             add(UIUtility.createLabel(AnnotationEditorLabels.TYPE, BTN_SIZE), gridBagConstraints);
 
             gridBagConstraints.gridx = 1;
-            txtType = UIUtility.createTextField(AnnotationEditorLabels.TYPE.getTooltip(), txtDimension);
+            txtType = UIUtility.createWideComboBox(types, txtDimension, null, true, true);
             add(txtType, gridBagConstraints);
         }
 
@@ -156,35 +144,36 @@ class AttributeForm extends AbstractAnnotationForm {
 
     @Override
     protected void populateForm() {
-        valueListener.updateAttribute(null);
         if (tblAttributes.getSelectedRow() > -1) {
             AnnotationAttribute attribute = tblAttributes.getSelectedAttribute();
-            txtName.setText(attribute.getName());
-            value = attribute.getValue();
-            txtValue.setText(value.toString());
+            txtName.setSelectedItem(attribute.getName());
+            txtValue.setSelectedItem(attribute.getValue());
             if (txtValueFilter != null)
-                txtValueFilter.setText(value.getFilterClause());
+                txtValueFilter.setText(attribute.getValue().getFilterClause());
             if (txtType != null)
-                txtType.setText(attribute.getType());
+                txtType.setSelectedItem(attribute.getType());
         } else {
             //clean the form
-            txtName.setText("");
-            value = new StringAttribute();
-            txtValue.setText("");
+            txtName.setSelectedItem("");
+            txtValue.setSelectedItem("");
             if (txtValueFilter != null)
                 txtValueFilter.setText("");
             if (txtType != null)
-                txtType.setText("");
+                txtType.setSelectedItem("");
         }
-        valueListener.updateAttribute(value);
     }
 
     private void ok() {
-        if (txtValueFilter != null)
-            value.setFilterClause(txtValueFilter.getText());
-        AnnotationAttribute attribute = new AnnotationAttribute(txtName.getText(), value.getClone());
-        if (txtType != null)
-            attribute.setType(txtType.getText());
+        Object object = txtValue.getSelectedItem();
+        StringAttribute attributeValue;
+        if (object instanceof NavigationalAttribute) {
+            attributeValue = new StringAttribute((NavigationalAttribute) object);
+        } else {
+            attributeValue = new StringAttribute(object.toString());
+        }
+        if (txtValueFilter != null) attributeValue.setFilterClause(txtValueFilter.getText());
+        AnnotationAttribute attribute = new AnnotationAttribute(txtName.getSelectedItem().toString(), attributeValue);
+        if (txtType != null) attribute.setType(txtType.getSelectedItem().toString());
         if (tblAttributes.getSelectedRow() > -1) {
             tblAttributes.updateAttributeAt(tblAttributes.getSelectedRow(), attribute);
         } else {

@@ -123,7 +123,7 @@ public class EventForm extends AbstractAnnotationForm {
 
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 1;
-    cmbTimestampPath = UIUtility.createWideComboBox(null, TXT_SIZE, null, true, true);
+    cmbTimestampPath = UIUtility.createWideComboBox(TXT_SIZE, null, true, true);
     mainPanel.add(cmbTimestampPath, gridBagConstraints);
 
     gridBagConstraints.gridx = 3;
@@ -147,7 +147,7 @@ public class EventForm extends AbstractAnnotationForm {
 
     gridBagConstraints.gridx = 5;
     gridBagConstraints.gridy = 1;
-    cmbLifecycle = UIUtility.createWideComboBoxArray(TransactionalLifecycle.values(), TXT_SIZE, true);
+    cmbLifecycle = UIUtility.createWideComboBox(TransactionalLifecycle.values(), TXT_SIZE, null, true, false);
     mainPanel.add(cmbLifecycle, gridBagConstraints);
 
     gridBagConstraints.gridx = 0;

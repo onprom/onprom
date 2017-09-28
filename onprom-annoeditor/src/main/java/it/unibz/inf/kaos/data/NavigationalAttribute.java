@@ -87,22 +87,23 @@ public class NavigationalAttribute {
     return annotation;
   }
 
-  public String toString() {
-    StringBuilder stringBuilder = new StringBuilder("");
-    if (attribute != null)
-      stringBuilder.append(attribute.getName()).append(" in ");
-    if (umlClass != null)
-      stringBuilder.append(umlClass.toString());
-    if (path != null && path.size() > 0) {
-      stringBuilder.append(" [ ");
-      for (DiagramShape node : path) {
-        stringBuilder.append(node).append("\u25b7");
-      }
-      //remove last character
-      stringBuilder.deleteCharAt(stringBuilder.length() - 1).append("]");
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("");
+        if (attribute != null)
+            stringBuilder.append(attribute.getName()).append(" in ");
+        if (umlClass != null)
+            stringBuilder.append(umlClass.toString());
+        if (path != null && path.size() > 0) {
+            stringBuilder.append(" [ ");
+            for (DiagramShape node : path) {
+                stringBuilder.append(node).append("\u25b7");
+            }
+            //remove last character
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1).append("]");
+        }
+        return stringBuilder.toString();
     }
-    return stringBuilder.toString();
-  }
 
   public String getFilterClause() {
     return filterClause;

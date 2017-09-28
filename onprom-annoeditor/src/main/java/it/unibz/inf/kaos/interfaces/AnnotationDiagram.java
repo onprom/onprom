@@ -35,18 +35,23 @@ import java.util.Set;
 /**
  * Interface to provide classes to use annotation diagram panel
  * <p>
+ *
  * @author T. E. Kalayci on 04-Apr-2017.
  */
 public interface AnnotationDiagram {
-  void addAnnotation(Annotation annotation);
+    void addAnnotation(Annotation annotation);
 
     void removeAnnotation(Annotation annotation);
 
     void startNavigation(NavigationListener _navigationListener);
-  void resetNavigation();
-  void highlightAttribute(UMLClass relatedClass, boolean functional, DataType... dataType);
+
+    void resetNavigation();
+
+    void highlightAttribute(UMLClass relatedClass, boolean functional, DataType... dataType);
 
     void resetAttributeStates();
-  Set<NavigationalAttribute> getAttributes(UMLClass startNode, boolean functional, DataType... types);
-  <T extends Annotation> Set<NavigationalAttribute> getAnnotations(UMLClass startNode, boolean functional, Class<T> type);
+
+    Set<NavigationalAttribute> getAttributes(UMLClass startNode, boolean functional, DataType... types);
+
+    <T extends Annotation> Set<NavigationalAttribute> getAnnotations(UMLClass startNode, boolean functional, Class<T> type);
 }

@@ -26,11 +26,7 @@
 
 package it.unibz.inf.kaos.ui.utility;
 
-import it.unibz.inf.kaos.data.Association;
-import it.unibz.inf.kaos.data.AssociationClass;
-import it.unibz.inf.kaos.data.Inheritance;
-import it.unibz.inf.kaos.data.Relationship;
-import it.unibz.inf.kaos.data.UMLClass;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,7 +105,6 @@ public class NavigationUtility {
     }
 
     private static Set<Set<DiagramShape>> findAllPaths(UMLClass startNode, UMLClass endNode, boolean functionalCheck) {
-        //logger.info("start:"+startNode+" end:"+endNode+" functional:"+functionalCheck);
         Set<Set<DiagramShape>> paths = new LinkedHashSet<>();
         traverse(new Stack<>(), new LinkedHashSet<>(), paths, startNode, endNode, functionalCheck);
         return paths;
