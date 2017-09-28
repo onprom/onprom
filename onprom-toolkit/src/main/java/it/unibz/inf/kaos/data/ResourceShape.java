@@ -33,53 +33,54 @@ import java.awt.*;
 /**
  * Resource shape to draw in extraction panel
  * <p>
+ *
  * @author T. E. Kalayci on 10-Jul-2017.
  */
 public class ResourceShape extends AbstractDiagramShape {
-  private final static int EDGE = 100;
-  private final static Color LOADED = new Color(232, 241, 250);
-  private final static Color NOT_LOADED = new Color(255, 182, 176);
-  private TreeNode<Object> treeNode;
+    private final static int EDGE = 100;
+    private final static Color LOADED = new Color(232, 241, 250);
+    private final static Color NOT_LOADED = new Color(255, 182, 176);
+    private TreeNode<Object> treeNode;
 
-  public ResourceShape(String _name, TreeNode<Object> _node) {
-    super(_name, "");
-    treeNode = _node;
-  }
+    public ResourceShape(String _name, TreeNode<Object> _node) {
+        super(_name, "");
+        treeNode = _node;
+    }
 
-  public void setTreeNode(TreeNode<Object> _node) {
-    treeNode = _node;
-  }
+    public void setTreeNode(TreeNode<Object> _node) {
+        treeNode = _node;
+    }
 
-  @Override
-  public void draw(Graphics2D g2d) {
-    Color oldColor = g2d.getColor();
-    Stroke oldStroke = g2d.getStroke();
-    Font oldFont = g2d.getFont();
-    int startX = getStartX();
-    int startY = getStartY();
-    String label = getName();
-    //draw shapes, string
-    //rectangle background color
-    if (treeNode != null)
-      g2d.setColor(LOADED);
-    else
-      g2d.setColor(NOT_LOADED);
-    //filled rectangle background of annotation
-    g2d.fillRect(startX, startY, EDGE, EDGE);
-    //set color of rectangle outline according to annotation state
-    g2d.setColor(getState().getColor());
-    //draw rectangle outline
-    g2d.drawRect(startX, startY, EDGE, EDGE);
-    //draw label of annotation if it exists
-    int fontWidth = g2d.getFontMetrics().stringWidth(label);
-    int typeCoord = startX + (EDGE - fontWidth) / 2;
-    g2d.drawString(label, typeCoord, startY + (EDGE / 2));
-    //set end coordinates for annotation
-    setEndX(startX + EDGE);
-    setEndY(startY + EDGE);
-    //load previous properties again
-    g2d.setColor(oldColor);
-    g2d.setStroke(oldStroke);
-    g2d.setFont(oldFont);
-  }
+    @Override
+    public void draw(Graphics2D g2d) {
+        Color oldColor = g2d.getColor();
+        Stroke oldStroke = g2d.getStroke();
+        Font oldFont = g2d.getFont();
+        int startX = getStartX();
+        int startY = getStartY();
+        String label = getName();
+        //draw shapes, string
+        //rectangle background color
+        if (treeNode != null)
+            g2d.setColor(LOADED);
+        else
+            g2d.setColor(NOT_LOADED);
+        //filled rectangle background of annotation
+        g2d.fillRect(startX, startY, EDGE, EDGE);
+        //set color of rectangle outline according to annotation state
+        g2d.setColor(getState().getColor());
+        //draw rectangle outline
+        g2d.drawRect(startX, startY, EDGE, EDGE);
+        //draw label of annotation if it exists
+        int fontWidth = g2d.getFontMetrics().stringWidth(label);
+        int typeCoord = startX + (EDGE - fontWidth) / 2;
+        g2d.drawString(label, typeCoord, startY + (EDGE / 2));
+        //set end coordinates for annotation
+        setEndX(startX + EDGE);
+        setEndY(startY + EDGE);
+        //load previous properties again
+        g2d.setColor(oldColor);
+        g2d.setStroke(oldStroke);
+        g2d.setFont(oldFont);
+    }
 }

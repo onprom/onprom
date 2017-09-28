@@ -35,116 +35,116 @@ import java.awt.geom.Path2D;
  * @author T. E. Kalayci on 10-Jul-2017.
  */
 public class ResourceConnection extends AbstractDiagramShape {
-  private ResourceShape firstResource;
-  private ResourceShape secondResource;
+    private ResourceShape firstResource;
+    private ResourceShape secondResource;
 
-  public ResourceConnection() {
-  }
-
-  public ResourceConnection(ResourceShape _first, ResourceShape _second) {
-    super("", "");
-    setFirstResource(_first);
-    setSecondResource(_second);
-  }
-
-  private ResourceShape getFirstResource() {
-    return firstResource;
-  }
-
-  private void setFirstResource(ResourceShape firstResource) {
-    this.firstResource = firstResource;
-  }
-
-  private ResourceShape getSecondResource() {
-    return secondResource;
-  }
-
-  private void setSecondResource(ResourceShape secondResource) {
-    this.secondResource = secondResource;
-  }
-
-  public String toString() {
-    return getName();
-  }
-
-  public int getStartX() {
-    return getFirstResource().getCenterX();
-  }
-
-  public int getStartY() {
-    return getFirstResource().getCenterY();
-  }
-
-  @Override
-  public int getCenterX() {
-    return (getStartX() + getEndX()) / 2;
-  }
-
-  @Override
-  public int getCenterY() {
-    return (getStartY() + getEndY()) / 2;
-  }
-
-  public int getEndX() {
-    return getSecondResource().getCenterX();
-  }
-
-  public int getEndY() {
-    return getSecondResource().getCenterY();
-  }
-
-  @Override
-  Shape getShape() {
-
-    int xDiff = Math.abs(secondResource.getCenterX() - firstResource.getCenterX());
-    int yDiff = Math.abs(secondResource.getCenterY() - firstResource.getCenterY());
-    if (xDiff > 2 * yDiff) {
-      if (secondResource.getStartX() > firstResource.getEndX()) {
-        return drawArrow(firstResource.getCenterX(), firstResource.getCenterY(),
-          secondResource.getStartX(), secondResource.getCenterY());
-      } else {
-        return drawArrow(firstResource.getCenterX(), firstResource.getCenterY(),
-          secondResource.getEndX(), secondResource.getCenterY());
-      }
-    } else {
-      if (secondResource.getStartY() > firstResource.getEndY()) {
-        return drawArrow(firstResource.getCenterX(), firstResource.getCenterY(),
-          secondResource.getCenterX(), secondResource.getStartY());
-      } else {
-        return drawArrow(firstResource.getCenterX(), firstResource.getCenterY(),
-          secondResource.getCenterX(), secondResource.getEndY());
-      }
+    public ResourceConnection() {
     }
-  }
 
-  private Path2D drawArrow(int x1, int y1, int x2, int y2) {
-    Path2D context = new Path2D.Float();
-    int headlen = 10;   // length of head in pixels
-    double angle = Math.atan2(y2 - y1, x2 - x1);
-    context.moveTo(x1, y1);
-    context.lineTo(x2, y2);
-    context.lineTo(x2 - headlen * Math.cos(angle - Math.PI / 6), y2 - headlen * Math.sin(angle - Math.PI / 6));
-    context.moveTo(x2, y2);
-    context.lineTo(x2 - headlen * Math.cos(angle + Math.PI / 6), y2 - headlen * Math.sin(angle + Math.PI / 6));
-    context.closePath();
-    return context;
-  }
+    public ResourceConnection(ResourceShape _first, ResourceShape _second) {
+        super("", "");
+        setFirstResource(_first);
+        setSecondResource(_second);
+    }
 
-  public void draw(Graphics2D g2d) {
-    // store current stroke and color
-    Font oldFont = g2d.getFont();
-    Stroke oldStroke = g2d.getStroke();
-    Color oldColor = g2d.getColor();
-    g2d.setFont(DrawingConstants.RELATION_FONT);
-    // color according to state
-    g2d.setColor(getState().getColor());
-    g2d.setStroke(DrawingConstants.RELATION_STROKE);
-    g2d.draw(getShape());
+    private ResourceShape getFirstResource() {
+        return firstResource;
+    }
 
-    //arrow
-    g2d.setColor(oldColor);
-    g2d.setStroke(oldStroke);
-    g2d.setFont(oldFont);
-  }
+    private void setFirstResource(ResourceShape firstResource) {
+        this.firstResource = firstResource;
+    }
+
+    private ResourceShape getSecondResource() {
+        return secondResource;
+    }
+
+    private void setSecondResource(ResourceShape secondResource) {
+        this.secondResource = secondResource;
+    }
+
+    public String toString() {
+        return getName();
+    }
+
+    public int getStartX() {
+        return getFirstResource().getCenterX();
+    }
+
+    public int getStartY() {
+        return getFirstResource().getCenterY();
+    }
+
+    @Override
+    public int getCenterX() {
+        return (getStartX() + getEndX()) / 2;
+    }
+
+    @Override
+    public int getCenterY() {
+        return (getStartY() + getEndY()) / 2;
+    }
+
+    public int getEndX() {
+        return getSecondResource().getCenterX();
+    }
+
+    public int getEndY() {
+        return getSecondResource().getCenterY();
+    }
+
+    @Override
+    Shape getShape() {
+
+        int xDiff = Math.abs(secondResource.getCenterX() - firstResource.getCenterX());
+        int yDiff = Math.abs(secondResource.getCenterY() - firstResource.getCenterY());
+        if (xDiff > 2 * yDiff) {
+            if (secondResource.getStartX() > firstResource.getEndX()) {
+                return drawArrow(firstResource.getCenterX(), firstResource.getCenterY(),
+                        secondResource.getStartX(), secondResource.getCenterY());
+            } else {
+                return drawArrow(firstResource.getCenterX(), firstResource.getCenterY(),
+                        secondResource.getEndX(), secondResource.getCenterY());
+            }
+        } else {
+            if (secondResource.getStartY() > firstResource.getEndY()) {
+                return drawArrow(firstResource.getCenterX(), firstResource.getCenterY(),
+                        secondResource.getCenterX(), secondResource.getStartY());
+            } else {
+                return drawArrow(firstResource.getCenterX(), firstResource.getCenterY(),
+                        secondResource.getCenterX(), secondResource.getEndY());
+            }
+        }
+    }
+
+    private Path2D drawArrow(int x1, int y1, int x2, int y2) {
+        Path2D context = new Path2D.Float();
+        int headlen = 10;   // length of head in pixels
+        double angle = Math.atan2(y2 - y1, x2 - x1);
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.lineTo(x2 - headlen * Math.cos(angle - Math.PI / 6), y2 - headlen * Math.sin(angle - Math.PI / 6));
+        context.moveTo(x2, y2);
+        context.lineTo(x2 - headlen * Math.cos(angle + Math.PI / 6), y2 - headlen * Math.sin(angle + Math.PI / 6));
+        context.closePath();
+        return context;
+    }
+
+    public void draw(Graphics2D g2d) {
+        // store current stroke and color
+        Font oldFont = g2d.getFont();
+        Stroke oldStroke = g2d.getStroke();
+        Color oldColor = g2d.getColor();
+        g2d.setFont(DrawingConstants.RELATION_FONT);
+        // color according to state
+        g2d.setColor(getState().getColor());
+        g2d.setStroke(DrawingConstants.RELATION_STROKE);
+        g2d.draw(getShape());
+
+        //arrow
+        g2d.setColor(oldColor);
+        g2d.setStroke(oldStroke);
+        g2d.setFont(oldFont);
+    }
 
 }

@@ -67,14 +67,6 @@ public class AnnotationQueries {
     queries.addAll(_queries);
   }
 
-  public String toString() {
-    StringBuilder queryString = new StringBuilder();
-    for (AnnotationQuery query : queries) {
-      queryString.append(query.toString()).append(System.getProperty("line.separator")).append(System.getProperty("line.separator"));
-    }
-    return queryString.toString();
-  }
-
   public int getQueryCount() {
     return queries.size();
   }

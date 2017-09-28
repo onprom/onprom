@@ -48,146 +48,145 @@ import java.util.concurrent.Callable;
  * @author T. E. Kalayci on 28-Apr-2017
  */
 public class CustomTree<T> extends JTree {
-  private static final Logger logger = LoggerFactory.getLogger(CustomTree.class.getSimpleName());
-  public final static DataFlavor INT_ARRAY_FLAVOR = new DataFlavor(int[].class, "Int Array");
+    public final static DataFlavor INT_ARRAY_FLAVOR = new DataFlavor(int[].class, "Int Array");
+    private static final Logger logger = LoggerFactory.getLogger(CustomTree.class.getSimpleName());
+    private final TreeNode<T> root;
+    private JPopupMenu menu;
+    private Callable action;
 
-  private final TreeNode<T> root;
-  private JPopupMenu menu;
-  private Callable action;
-
-  public CustomTree(TreeNode<T> _root) {
-    super(new DefaultTreeModel(_root));
-    this.setDragEnabled(true);
-    this.setTransferHandler(new TransferHandler() {
-      public boolean canImport(TransferHandler.TransferSupport info) {
-        return false;
-      }
-
-      public int getSourceActions(JComponent c) {
-        return TransferHandler.COPY;
-      }
-
-      protected Transferable createTransferable(JComponent c) {
-        return new Transferable() {
-          @Override
-          public DataFlavor[] getTransferDataFlavors() {
-            return new DataFlavor[]{INT_ARRAY_FLAVOR};
-          }
-
-          @Override
-          public boolean isDataFlavorSupported(DataFlavor flavor) {
-            return flavor.equals(INT_ARRAY_FLAVOR);
-          }
-
-          @Override
-          public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-            return getSelectionRows();
-          }
-        };
-      }
-    });
-    root = _root;
-    setCellRenderer(new DefaultTreeCellRenderer() {
-      @Override
-      public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
-                                                    boolean leaf, int row, boolean hasFocus) {
-        super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-        TreeNode node = (TreeNode) value;
-        if (node.getIcon() != null) {
-          URL imageUrl = IOUtility.getImageURL(node.getIcon());
-          if (imageUrl != null) {
-            setIcon(new ImageIcon(imageUrl));
-          }
-        }
-        return this;
-      }
-    });
-  }
-
-  public void setDoubleClickAction(Callable _action) {
-    action = _action;
-  }
-
-  public void setPopMenu(JPopupMenu _menu) {
-    menu = _menu;
-    if (menu != null) {
-      addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-          if (SwingUtilities.isRightMouseButton(e)) {
-            setSelectionRow(getClosestRowForLocation(e.getX(), e.getY()));
-            if (getSelectionCount() > 0 && isRootNotSelected()) {
-              menu.show(CustomTree.this, e.getX(), e.getY());
+    public CustomTree(TreeNode<T> _root) {
+        super(new DefaultTreeModel(_root));
+        this.setDragEnabled(true);
+        this.setTransferHandler(new TransferHandler() {
+            public boolean canImport(TransferHandler.TransferSupport info) {
+                return false;
             }
-          } else if (e.getClickCount() == 2) {
-            try {
-              if (action != null)
-                action.call();
-            } catch (Exception ex) {
-              logger.warn(ex.getMessage(), ex);
+
+            public int getSourceActions(JComponent c) {
+                return TransferHandler.COPY;
             }
-          }
+
+            protected Transferable createTransferable(JComponent c) {
+                return new Transferable() {
+                    @Override
+                    public DataFlavor[] getTransferDataFlavors() {
+                        return new DataFlavor[]{INT_ARRAY_FLAVOR};
+                    }
+
+                    @Override
+                    public boolean isDataFlavorSupported(DataFlavor flavor) {
+                        return flavor.equals(INT_ARRAY_FLAVOR);
+                    }
+
+                    @Override
+                    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+                        return getSelectionRows();
+                    }
+                };
+            }
+        });
+        root = _root;
+        setCellRenderer(new DefaultTreeCellRenderer() {
+            @Override
+            public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
+                                                          boolean leaf, int row, boolean hasFocus) {
+                super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+                TreeNode node = (TreeNode) value;
+                if (node.getIcon() != null) {
+                    URL imageUrl = IOUtility.getImageURL(node.getIcon());
+                    if (imageUrl != null) {
+                        setIcon(new ImageIcon(imageUrl));
+                    }
+                }
+                return this;
+            }
+        });
+    }
+
+    public void setDoubleClickAction(Callable _action) {
+        action = _action;
+    }
+
+    public void setPopMenu(JPopupMenu _menu) {
+        menu = _menu;
+        if (menu != null) {
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (SwingUtilities.isRightMouseButton(e)) {
+                        setSelectionRow(getClosestRowForLocation(e.getX(), e.getY()));
+                        if (getSelectionCount() > 0 && isRootNotSelected()) {
+                            menu.show(CustomTree.this, e.getX(), e.getY());
+                        }
+                    } else if (e.getClickCount() == 2) {
+                        try {
+                            if (action != null)
+                                action.call();
+                        } catch (Exception ex) {
+                            logger.warn(ex.getMessage(), ex);
+                        }
+                    }
+                }
+            });
         }
-      });
     }
-  }
 
-  public int getCount() {
-    return root.getChildCount();
-  }
-
-  public boolean isRootNotSelected() {
-    return !getLastSelectedPathComponent().equals(root);
-  }
-
-  public TreeNode<T> getSelectedNode() {
-    return (TreeNode<T>) getLastSelectedPathComponent();
-  }
-
-  public T getSelectedObject() {
-    TreeNode<T> node = getSelectedNode();
-    if (node != null)
-      return node.getUserObject();
-    return null;
-  }
-
-  private void reload() {
-    ((DefaultTreeModel) super.getModel()).reload();
-  }
-
-  public void removeAll() {
-    root.removeAllChildren();
-    reload();
-  }
-
-  public TreeNode<T> getNode(int i) {
-    return root.getChildAt(i);
-  }
-
-  public void add(String title, FileType type, T object) {
-    root.add(new TreeNode<>(root.getChildCount(), title, type, object));
-    reload();
-  }
-
-  public void removeNodeWithObject(Object toRemove) {
-    for (int i = 0; i < getCount(); i++) {
-      TreeNode childAt = getNode(i);
-      if (childAt.getUserObject().equals(toRemove)) {
-        removeNode(i);
-        return;
-      }
+    public int getCount() {
+        return root.getChildCount();
     }
-  }
 
-  public void removeSelected() {
-    if (isRootNotSelected()) {
-      root.remove((TreeNode<T>) getLastSelectedPathComponent());
-      reload();
+    public boolean isRootNotSelected() {
+        return !getLastSelectedPathComponent().equals(root);
     }
-  }
 
-  public void removeNode(int i) {
-    root.remove(i);
-    reload();
-  }
+    public TreeNode<T> getSelectedNode() {
+        return (TreeNode<T>) getLastSelectedPathComponent();
+    }
+
+    public T getSelectedObject() {
+        TreeNode<T> node = getSelectedNode();
+        if (node != null)
+            return node.getUserObject();
+        return null;
+    }
+
+    private void reload() {
+        ((DefaultTreeModel) super.getModel()).reload();
+    }
+
+    public void removeAll() {
+        root.removeAllChildren();
+        reload();
+    }
+
+    public TreeNode<T> getNode(int i) {
+        return root.getChildAt(i);
+    }
+
+    public void add(String title, FileType type, T object) {
+        root.add(new TreeNode<>(root.getChildCount(), title, type, object));
+        reload();
+    }
+
+    public void removeNodeWithObject(Object toRemove) {
+        for (int i = 0; i < getCount(); i++) {
+            TreeNode childAt = getNode(i);
+            if (childAt.getUserObject().equals(toRemove)) {
+                removeNode(i);
+                return;
+            }
+        }
+    }
+
+    public void removeSelected() {
+        if (isRootNotSelected()) {
+            root.remove((TreeNode<T>) getLastSelectedPathComponent());
+            reload();
+        }
+    }
+
+    public void removeNode(int i) {
+        root.remove(i);
+        reload();
+    }
 }

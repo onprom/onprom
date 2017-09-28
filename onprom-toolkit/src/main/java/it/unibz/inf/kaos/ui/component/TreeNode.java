@@ -29,47 +29,53 @@ package it.unibz.inf.kaos.ui.component;
 import it.unibz.inf.kaos.data.FileType;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import java.time.ZonedDateTime;
 
 /**
  * @author T. E. Kalayci on 26-Apr-2017
  */
 public class TreeNode<T> extends DefaultMutableTreeNode {
-  private final String title;
-  private final FileType type;
-  private final int id;
+    private final String title;
+    private final FileType type;
+    private final int id;
+    private final ZonedDateTime timestamp = ZonedDateTime.now();
 
-  public TreeNode(int _id, String _title, FileType _type, T object) {
-    super(object);
-    id = _id;
-    title = _title;
-    type = _type;
-  }
+    public TreeNode(int _id, String _title, FileType _type, T object) {
+        super(object);
+        id = _id;
+        title = _title;
+        type = _type;
+    }
 
-  @Override
-  public TreeNode<T> getChildAt(int index) {
-    return (TreeNode<T>) super.getChildAt(index);
-  }
+    @Override
+    public TreeNode<T> getChildAt(int index) {
+        return (TreeNode<T>) super.getChildAt(index);
+    }
 
-  @Override
-  public T getUserObject() {
-    return (T) super.getUserObject();
-  }
+    @Override
+    public T getUserObject() {
+        return (T) super.getUserObject();
+    }
 
-  public String toString() {
-    if (type.equals(FileType.OTHER))
-      return title;
-    return getUserObject().toString() + "(" + title + ")";
-  }
+    public String toString() {
+        if (title == null || title.isEmpty()) {
+            return getUserObject().toString();
+        }
+        if (isRoot()) {
+            return title;
+        }
+        return title + " (" + timestamp + ")";
+    }
 
-  public FileType getType() {
-    return type;
-  }
+    public FileType getType() {
+        return type;
+    }
 
-  public String getIdentifier() {
-    return Integer.toString(id);
-  }
+    public String getIdentifier() {
+        return Integer.toString(id);
+    }
 
-  String getIcon() {
-    return type.getDefaultExtension();
-  }
+    String getIcon() {
+        return type.getDefaultExtension();
+    }
 }

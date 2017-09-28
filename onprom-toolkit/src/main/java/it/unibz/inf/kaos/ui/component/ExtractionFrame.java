@@ -36,18 +36,18 @@ import java.awt.*;
  * @author T. E. Kalayci on 10-Jul-2017.
  */
 public class ExtractionFrame extends JInternalFrame {
-  private JProgressBar progressBar;
+    private JProgressBar progressBar;
 
-  public ExtractionFrame(OnpromToolkit toolkit) {
-    super("Log Extraction Diagram", true, true, true, true);
-    this.getContentPane().setLayout(new BorderLayout());
-    this.getContentPane().add(new JScrollPane(new ExtractionPanel(toolkit)), BorderLayout.CENTER);
-    this.setSize(new Dimension(1024, 768));
-    this.setVisible(true);
-  }
+    public ExtractionFrame(OnpromToolkit toolkit) {
+        super("Log Extraction Diagram", true, true, true, true);
+        this.getContentPane().setLayout(new BorderLayout());
+        this.getContentPane().add(new JScrollPane(new ExtractionPanel(toolkit)), BorderLayout.CENTER);
+        this.setSize(new Dimension(1024, 768));
+        this.setVisible(true);
+    }
 
-  public void setProgressBar(JProgressBar _bar) {
-    progressBar = _bar;
-  }
+    public void setProgressBar(JProgressBar _bar) {
+        progressBar = _bar;
+    }
 
 }
