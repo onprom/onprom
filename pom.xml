@@ -68,8 +68,8 @@
         <module>onprom-umleditor</module>
         <module>onprom-annoeditor</module>
         <module>onprom-varianteditor</module>
-        <module>onprom-logextractor</module>
         <module>onprom-obdamapper</module>
+        <module>onprom-logextractor</module>
         <module>onprom-toolkit</module>
         <module>onprom-plugin</module>
     </modules>
@@ -80,7 +80,7 @@
             <url>${local.repository}</url>
         </repository>
     </repositories>
-    <!-- Only common dependencies that are required in all projects -->
+    <!-- common dependencies that are required in all projects -->
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -91,6 +91,16 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
         </dependency>
     </dependencies>
 </project>
