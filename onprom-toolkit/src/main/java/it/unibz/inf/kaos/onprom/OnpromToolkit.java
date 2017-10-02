@@ -449,15 +449,9 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
             if (ontology != null && model != null && queries != null) {
                 try {
                     long start = System.currentTimeMillis();
-                    File tempLog = File.createTempFile("xes-log", "tmp");
-                    XES_SERIALIZER.serialize(new XESLogExtractorWithEBDAMapping().extractXESLog(ontology, model, queries), new FileOutputStream(tempLog));
+                    XLog xlog = new XESLogExtractorWithEBDAMapping().extractXESLog(ontology, model, queries);
                     logger.error("It took " + (System.currentTimeMillis() - start) + " ms to export log");
-                    for (XLog xlog : XES_PARSER.parse(new FileInputStream(tempLog))) {
-                        displayLogSummary(addObject("Extracted Log", FileType.XLOG, xlog));
-                    }
-                    if (!tempLog.delete()) {
-                        logger.warn("Temp File is Not Deleted");
-                    }
+                    displayLogSummary(addObject("Extracted Log", FileType.XLOG, xlog));
                 } catch (Exception e) {
                     logError(e);
                 }
