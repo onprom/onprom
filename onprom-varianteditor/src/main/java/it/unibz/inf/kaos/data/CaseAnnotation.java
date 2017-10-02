@@ -54,11 +54,12 @@ public class CaseAnnotation extends AbstractAnnotation {
         try {
             if (getAttributeCount() > 0) {
                 for (AnnotationAttribute attribute : getAttributes()) {
-                    SelectBuilder builder = SimpleQueryExporter.getStringAttributeQueryBuilder(attribute.getValue(), getRelatedClass(), null);
+                    SelectBuilder builder = SimpleQueryExporter.getStringAttributeQueryBuilder(attribute.getValue(), relatedClass, null);
                     builder.addVar("\"" + attribute.getType() + "\"", XESConstants.attTypeVar);
                     builder.addVar("\"" + attribute.getName() + "\"", XESConstants.attKeyVar);
+                    builder.addVar("\"" + relatedClass.getLongName() + "\"", XESConstants.labelVar);
                     String query = builder.toString();
-                    queries.add(new BinaryAnnotationQuery(query, XESConstants.traceAttributeURI, new String[]{getRelatedClass().getCleanName()}, XESConstants.attArray));
+                    queries.add(new BinaryAnnotationQuery(query, XESConstants.traceAttributeURI, new String[]{relatedClass.getCleanName()}, XESConstants.attArray));
                     queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, XESConstants.attArray, XESConstants.attTypeArr));
                     queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, XESConstants.attArray, XESConstants.attKeyArr));
                     queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, XESConstants.attArray, XESConstants.attValueArr));

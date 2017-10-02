@@ -26,10 +26,7 @@
 
 package it.unibz.inf.kaos.ui.form;
 
-import it.unibz.inf.kaos.data.Attribute;
-import it.unibz.inf.kaos.data.EventAnnotation;
-import it.unibz.inf.kaos.data.NavigationalAttribute;
-import it.unibz.inf.kaos.data.UMLClass;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.component.UpdateListener;
@@ -77,26 +74,34 @@ public class EventForm extends AbstractAnnotationForm {
         }, false));
         mainPanel.add(btnTraceAdd, gridBagConstraints);
 
+        attributeForm = new AttributeForm(drawingPanel, annotation, false, true, drawingPanel.getAttributes(annotation.getRelatedClass(), false, (DataType) null));
+
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
-        mainPanel.add(UIUtility.createButton(AnnotationEditorButtons.SAVE, e -> ok(), BTN_SIZE), gridBagConstraints);
+        mainPanel.add(UIUtility.createButton(AnnotationEditorButtons.SAVE, e -> {
+            Object tracePath = cmbTracePath.getSelectedItem();
+            if (tracePath instanceof NavigationalAttribute) {
+                eventAnnotation.setCasePath(((NavigationalAttribute) tracePath).getPath());
+            } else if (tracePath instanceof Set) {
+                eventAnnotation.setCasePath((Set<DiagramShape>) tracePath);
+            }
+            eventAnnotation.setAttributes(attributeForm.getAttributes());
+            setVisible(false);
+        }, BTN_SIZE), gridBagConstraints);
 
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
-        mainPanel.add(UIUtility.createButton(AnnotationEditorButtons.CANCEL, e -> {
-            setVisible(false);
-            drawingPanel.resetNavigation();
-        }, BTN_SIZE), gridBagConstraints);
+        mainPanel.add(UIUtility.createButton(AnnotationEditorButtons.CANCEL, e -> setVisible(false), BTN_SIZE), gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 5;
-        attributeForm = new AttributeForm(drawingPanel, annotation, false, true, CaseForm.NAMES, drawingPanel.getAttributes(annotation.getRelatedClass(), false, null), CaseForm.TYPES);
         mainPanel.add(attributeForm, gridBagConstraints);
 
         add(mainPanel);
     }
 
+    @Override
     public void populateForm() {
         if (annotation != null) {
             attributeForm.setAttributes(annotation.getAttributes());
@@ -104,15 +109,4 @@ public class EventForm extends AbstractAnnotationForm {
         }
     }
 
-    private void ok() {
-        EventAnnotation eventAnnotation = (EventAnnotation) annotation;
-        Object tracePath = cmbTracePath.getSelectedItem();
-        if (tracePath instanceof NavigationalAttribute) {
-            eventAnnotation.setCasePath(((NavigationalAttribute) tracePath).getPath());
-        } else if (tracePath instanceof Set) {
-            eventAnnotation.setCasePath((Set<DiagramShape>) tracePath);
-        }
-        eventAnnotation.setAttributes(attributeForm.getAttributes());
-        setVisible(false);
-    }
 }

@@ -59,28 +59,24 @@ public class EventAnnotation extends AbstractAnnotation {
         LinkedList<AnnotationQuery> queries = new LinkedList<>();
         try {
             String eventClassName = relatedClass.getCleanName();
-            Var eventVar = Var.alloc(eventClassName);
-            String eventIRI = "<" + getRelatedClass().getLongName() + ">";
+            Var eventClassVar = Var.alloc(eventClassName);
+            String eventIRI = "<" + relatedClass.getLongName() + ">";
             String caseClassName = getCase().getRelatedClass().getCleanName();
             Var caseVar = Var.alloc(caseClassName);
             boolean inheritanceWithCase = relatedClass.isRelationExist(getCase().getRelatedClass(), Inheritance.class);
             if (inheritanceWithCase) {
-                caseVar = eventVar;
+                caseVar = eventClassVar;
             }
-            SelectBuilder builder;
-            final Var classVar = Var.alloc(relatedClass.getCleanName());
-            final String classIRI = "<" + relatedClass.getLongName() + ">";
             final Var nameVar = XESConstants.attValueVar;
-            // add class variable
-            builder = new SelectBuilder();
-            builder.addVar(classVar);
+            SelectBuilder builder = new SelectBuilder();
+            builder.addVar(eventClassVar);
             if (!inheritanceWithCase && casePath != null) {
                 SimpleQueryExporter.addJoin(builder, casePath);
             } else {
-                builder.addWhere(classVar, "a", classIRI);
+                builder.addWhere(eventClassVar, "a", eventIRI);
             }
             builder.addVar("\"" + eventClassName + "\"", nameVar);
-            builder.addVar("\"" + classVar + "\"", XESConstants.labelVar);
+            builder.addVar("\"" + relatedClass.getLongName() + "\"", XESConstants.labelVar);
 
             //t-contains-e query
             SelectBuilder caseBuilder = builder.clone();
@@ -93,12 +89,13 @@ public class EventAnnotation extends AbstractAnnotation {
                     builder = SimpleQueryExporter.getStringAttributeQueryBuilder(attribute.getValue(), getRelatedClass(), getCasePath());
                     builder.addVar("\"" + attribute.getType() + "\"", XESConstants.attTypeVar);
                     builder.addVar("\"" + attribute.getName() + "\"", XESConstants.attKeyVar);
+                    builder.addVar("\"" + relatedClass.getLongName() + "\"", XESConstants.labelVar);
                     String query = builder.toString();
                     queries.add(new BinaryAnnotationQuery(query, XESConstants.eventAttributeURI,
                             eventAnswerVariable, XESConstants.attArray)
                     );
-                    queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, XESConstants.attArray, XESConstants.attTypeArr));
                     queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, XESConstants.attArray, XESConstants.attKeyArr));
+                    queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, XESConstants.attArray, XESConstants.attTypeArr));
                     queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, XESConstants.attArray, XESConstants.attValueArr));
                 }
             }

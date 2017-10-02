@@ -27,6 +27,7 @@
 package it.unibz.inf.kaos.ui.form;
 
 import it.unibz.inf.kaos.data.CaseAnnotation;
+import it.unibz.inf.kaos.data.DataType;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorButtons;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
@@ -38,8 +39,6 @@ import java.awt.*;
  * @author T. E. Kalayci on 19-Sep-17.
  */
 public class CaseForm extends AbstractAnnotationForm {
-    final static String[] NAMES = {"concept:name", "time:timestamp", "lifecycle:transition"};
-    final static String[] TYPES = {"literal", "timestamp"};
 
     private final AttributeForm attributeForm;
 
@@ -53,15 +52,15 @@ public class CaseForm extends AbstractAnnotationForm {
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        attributeForm = new AttributeForm(drawingPanel, annotation, false, true, NAMES, drawingPanel.getAttributes(annotation.getRelatedClass(), false, null), TYPES);
+        attributeForm = new AttributeForm(drawingPanel, annotation, false, true, drawingPanel.getAttributes(annotation.getRelatedClass(), false, (DataType) null));
         mainPanel.add(attributeForm, gridBagConstraints);
 
         JPanel buttonPanel = new JPanel(new BorderLayout());
-        buttonPanel.add(UIUtility.createButton(AnnotationEditorButtons.SAVE, e -> ok(), BTN_SIZE), BorderLayout.NORTH);
-        buttonPanel.add(UIUtility.createButton(AnnotationEditorButtons.CANCEL, e -> {
+        buttonPanel.add(UIUtility.createButton(AnnotationEditorButtons.SAVE, e -> {
+            this.annotation.setAttributes(attributeForm.getAttributes());
             setVisible(false);
-            drawingPanel.resetNavigation();
-        }, BTN_SIZE), BorderLayout.SOUTH);
+        }, BTN_SIZE), BorderLayout.NORTH);
+        buttonPanel.add(UIUtility.createButton(AnnotationEditorButtons.CANCEL, e -> setVisible(false), BTN_SIZE), BorderLayout.SOUTH);
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -77,8 +76,4 @@ public class CaseForm extends AbstractAnnotationForm {
         }
     }
 
-    private void ok() {
-        annotation.setAttributes(attributeForm.getAttributes());
-        setVisible(false);
-    }
 }
