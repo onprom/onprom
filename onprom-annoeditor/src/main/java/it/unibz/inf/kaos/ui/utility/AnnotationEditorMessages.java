@@ -32,13 +32,12 @@ import it.unibz.inf.kaos.ui.interfaces.Messages;
  * Messages shown on annotation editor
  * <p>
  *
- * @author T. E. Kalayci on 16/02/17.
+ * @author T. E. Kalayci on 16-Feb-17.
  */
 public enum AnnotationEditorMessages implements Messages {
     EVENT_NAME_ERROR("Event name is Missing", "Please enter a <em>name</em> for the Event"),
     TIMESTAMP_ERROR("Timestamp is Missing", "Please select a <em>timestamp</em> for the Event"),
     CASE_NAME_ERROR("Please enter a <em>case name</em> for the Case", "Case Name is Missing"),
-    RESOURCE_MISSING_ERROR("Please enter or select a <em>resource</em> for the annotation", "Resource is not available"),
     DELETE_CONFIRMATION("Delete Confirmation", "Are you sure you want to delete selected annotation?"),
     CASE_DELETE_CONFIRMATION("Delete Confirmation", "There are resources and events related with this <em>Case</em> and deleting it may cause inconsistencies, are you sure you want to delete?"),
     CHANGE_CASE("New Case", "You already have a <em>Case</em>. Do you want to <em>add</em> another <em>Case</em> annotation?"),

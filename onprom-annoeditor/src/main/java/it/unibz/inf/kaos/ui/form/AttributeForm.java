@@ -47,7 +47,8 @@ import java.util.Set;
  * @author T. E. Kalayci on 8-Feb-17.
  */
 class AttributeForm extends AbstractAnnotationForm {
-
+    final static String[] NAMES = {"concept:name", "time:timestamp", "lifecycle:transition", "org:resource"};
+    final static String[] TYPES = {"literal", "timestamp"};
     final private JComboBox<String> txtName;
     final private JComboBox<NavigationalAttribute> txtValue;
     private final AnnotationAttributeTable tblAttributes;
@@ -55,10 +56,14 @@ class AttributeForm extends AbstractAnnotationForm {
     private JTextField txtValueFilter = null;
 
     AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation) {
-        this(_drawingPanel, _annotation, true, false, null, null, null);
+        this(_drawingPanel, _annotation, true, false, NAMES, TYPES, null);
     }
 
-    AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation, boolean withFilter, boolean withType, String[] names, Set<NavigationalAttribute> values, String[] types) {
+    AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation, boolean withFilter, boolean withType, Set<NavigationalAttribute> values) {
+        this(_drawingPanel, _annotation, withFilter, withType, NAMES, TYPES, values);
+    }
+
+    AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation, boolean withFilter, boolean withType, String[] names, String[] types, Set<NavigationalAttribute> values) {
 
         super(_drawingPanel, _annotation);
 

@@ -54,9 +54,6 @@ public class EventForm extends AbstractAnnotationForm {
   private final JComboBox<NavigationalAttribute> cmbTimestamp;
   private final JComboBox<Set<DiagramShape>> cmbTimestampPath;
 
-  //private final JComboBox<NavigationalAttribute> cmbResource;
-  //private final JComboBox<Set<DiagramShape>> cmbResourcePath;
-
   private final JComboBox<Set<DiagramShape>> cmbTracePath;
 
   private final JComboBox<TransactionalLifecycle> cmbLifecycle;
@@ -154,26 +151,6 @@ public class EventForm extends AbstractAnnotationForm {
     gridBagConstraints.gridy = 2;
     mainPanel.add(UIUtility.createLabel(AnnotationEditorLabels.EVENT_RESOURCE, BTN_SIZE), gridBagConstraints);
 
-    /*gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 2;
-    cmbResource = UIUtility.createWideComboBox(drawingPanel.getAnnotations(eventAnnotation.getRelatedClass(), false, ResourceAnnotation.class), TXT_SIZE, e -> populateResourcePath(), true, true);
-    mainPanel.add(cmbResource, gridBagConstraints);
-
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 2;
-    cmbResourcePath = UIUtility.createWideComboBox(null, TXT_SIZE, null, true, true);
-    mainPanel.add(cmbResourcePath, gridBagConstraints);
-
-    gridBagConstraints.gridx = 3;
-    gridBagConstraints.gridy = 2;
-    mainPanel.add(UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> super.startNavigation(new UpdateListener() {
-      @Override
-      public void updateAttribute(Set<DiagramShape> navigation, UMLClass selectedClass, Attribute selectedAttribute) {
-        if(resource!=null)
-          resource.setPath(navigation);
-      }
-    }, false)), gridBagConstraints);*/
-
     gridBagConstraints.gridx = 4;
     gridBagConstraints.gridy = 2;
     mainPanel.add(UIUtility.createLabel(AnnotationEditorLabels.CASE_PATH, BTN_SIZE), gridBagConstraints);
@@ -200,10 +177,7 @@ public class EventForm extends AbstractAnnotationForm {
 
     gridBagConstraints.gridx = 6;
     gridBagConstraints.gridy = 1;
-    mainPanel.add(UIUtility.createButton(AnnotationEditorButtons.CANCEL, e -> {
-      setVisible(false);
-      drawingPanel.resetNavigation();
-    }, BTN_SIZE), gridBagConstraints);
+      mainPanel.add(UIUtility.createButton(AnnotationEditorButtons.CANCEL, e -> setVisible(false), BTN_SIZE), gridBagConstraints);
 
     attributeForm = new AttributeForm(drawingPanel, annotation);
     addTabbedPane(mainPanel, attributeForm);
@@ -227,23 +201,10 @@ public class EventForm extends AbstractAnnotationForm {
       if (eventAnnotation.getTimestamp() != null) {
         cmbTimestampPath.setSelectedItem(eventAnnotation.getTimestamp().getPath());
       }
-      /*cmbResource.setSelectedItem(eventAnnotation.getResource());
-      if (eventAnnotation.getResource() != null) {
-        cmbResourcePath.setSelectedItem(eventAnnotation.getResource().getPath());
-      }*/
       cmbLifecycle.setSelectedItem(eventAnnotation.getLifecycle());
       attributeForm.setAttributes(eventAnnotation.getAttributes());
     }
   }
-
-  /*private void populateResourcePath() {
-    try {
-      NavigationalAttribute ra = (NavigationalAttribute) cmbResource.getSelectedItem();
-      UIUtility.loadItems(cmbResourcePath, NavigationUtility.getAllPaths(annotation.getRelatedClass(), ra.getUmlClass()));
-    } catch (Exception e) {
-      logger.info(e.getMessage(), e);
-    }
-  }*/
 
   private void populateTimestampPath() {
     try {
@@ -266,11 +227,6 @@ public class EventForm extends AbstractAnnotationForm {
       NavigationalAttribute selectedTimestamp = (NavigationalAttribute) cmbTimestamp.getSelectedItem();
       selectedTimestamp.setPath((Set<DiagramShape>) cmbTimestampPath.getSelectedItem());
       eventAnnotation.setTimestamp(selectedTimestamp);
-      /*NavigationalAttribute selectedResource = (NavigationalAttribute) cmbResource.getSelectedItem();
-      eventAnnotation.setResource(selectedResource);
-      if (selectedResource != null) {
-        selectedResource.setPath(cmbResourcePath.getItemAt(cmbResourcePath.getSelectedIndex()));
-      }*/
       Object tracePath = cmbTracePath.getSelectedItem();
       if (tracePath instanceof NavigationalAttribute) {
         eventAnnotation.setCasePath(((NavigationalAttribute) tracePath).getPath());

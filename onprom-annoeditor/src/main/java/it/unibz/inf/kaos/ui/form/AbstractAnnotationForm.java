@@ -84,6 +84,7 @@ public abstract class AbstractAnnotationForm extends JPanel implements Annotatio
       populateForm();
     } else {
       drawingPanel.resetAttributeStates();
+      drawingPanel.resetNavigation();
     }
   }
 }
