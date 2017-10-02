@@ -106,10 +106,7 @@ public class CaseForm extends AbstractAnnotationForm {
 
     gridBagConstraints.gridx = 5;
     gridBagConstraints.gridy = 1;
-    mainPanel.add(UIUtility.createButton(AnnotationEditorButtons.CANCEL, e -> {
-      setVisible(false);
-      drawingPanel.resetNavigation();
-    }, BTN_SIZE), gridBagConstraints);
+      mainPanel.add(UIUtility.createButton(AnnotationEditorButtons.CANCEL, e -> setVisible(false), BTN_SIZE), gridBagConstraints);
 
     attributeForm = new AttributeForm(drawingPanel, annotation);
     addTabbedPane(mainPanel, attributeForm);
@@ -138,9 +135,7 @@ public class CaseForm extends AbstractAnnotationForm {
     } else {
       CaseAnnotation caseAnnotation = (CaseAnnotation) annotation;
       name.setFilterClause(txtNameFilter.getText());
-      //set name of the case
       caseAnnotation.setCaseName(name);
-      //add additional attributes from other form
       caseAnnotation.setAttributes(attributeForm.getAttributes());
       setVisible(false);
     }
