@@ -53,5 +53,5 @@ public interface AnnotationDiagram {
 
     Set<NavigationalAttribute> getAttributes(UMLClass startNode, boolean functional, DataType... types);
 
-    <T extends Annotation> Set<NavigationalAttribute> getAnnotations(UMLClass startNode, boolean functional, Class<T> type);
+    <T extends Annotation> Set<T> getAnnotations(UMLClass startNode, boolean functional, Class<T> type);
 }

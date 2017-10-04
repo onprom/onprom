@@ -199,13 +199,4 @@ public class EventAnnotation extends AbstractAnnotation {
         this.lifecycle = lifecycle;
     }
 
-    //public NavigationalAttribute getResource() {return resource;}
-
-    //public void setResource(NavigationalAttribute resource) { this.resource = resource;}
-
-  /*public void removeResource(ResourceAnnotation annotation) {
-    if (resource.getAnnotation().equals(annotation)) {
-      resource = null;
-    }
-  }*/
 }

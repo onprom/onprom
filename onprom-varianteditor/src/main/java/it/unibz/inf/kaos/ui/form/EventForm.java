@@ -26,7 +26,10 @@
 
 package it.unibz.inf.kaos.ui.form;
 
-import it.unibz.inf.kaos.data.*;
+import it.unibz.inf.kaos.data.Attribute;
+import it.unibz.inf.kaos.data.EventAnnotation;
+import it.unibz.inf.kaos.data.NavigationalAttribute;
+import it.unibz.inf.kaos.data.UMLClass;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.component.UpdateListener;
@@ -74,7 +77,7 @@ public class EventForm extends AbstractAnnotationForm {
         }, false));
         mainPanel.add(btnTraceAdd, gridBagConstraints);
 
-        attributeForm = new AttributeForm(drawingPanel, annotation, false, true, drawingPanel.getAttributes(annotation.getRelatedClass(), false, (DataType) null));
+        attributeForm = new AttributeForm(drawingPanel, annotation, false, true, drawingPanel.getAttributes(annotation.getRelatedClass(), false, null));
 
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;

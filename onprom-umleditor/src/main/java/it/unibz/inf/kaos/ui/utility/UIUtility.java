@@ -190,7 +190,7 @@ public class UIUtility {
     private static <E> void setupWidePopupComboBox(WidePopupComboBox<E> cmb, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
         cmb.setPreferredSize(dimension);
         cmb.setEditable(editable);
-        cmb.setEnabled(editable);
+        //cmb.setEnabled(editable);
         if (listener != null) {
             cmb.addItemListener(listener);
         }

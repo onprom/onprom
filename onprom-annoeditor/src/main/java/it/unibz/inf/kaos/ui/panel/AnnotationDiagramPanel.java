@@ -252,14 +252,14 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     }
 
     @Override
-    public <T extends Annotation> Set<NavigationalAttribute> getAnnotations(UMLClass startNode, boolean functional, Class<T> type) {
-        Set<NavigationalAttribute> annotations = new LinkedHashSet<>();
+    public <T extends Annotation> Set<T> getAnnotations(UMLClass startNode, boolean functional, Class<T> type) {
+        Set<T> annotations = new LinkedHashSet<>();
         for (Annotation annotation : getItems(type)) {
             UMLClass endNode = annotation.getRelatedClass();
             if (startNode.equals(endNode)) {
-                annotations.add(new NavigationalAttribute(annotation));
+                annotations.add((T) annotation);
             } else if (NavigationUtility.isConnected(startNode, endNode, functional)) {
-                annotations.add(new NavigationalAttribute(annotation));
+                annotations.add((T) annotation);
             }
         }
         return annotations;

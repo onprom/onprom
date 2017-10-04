@@ -58,7 +58,6 @@ public class EventForm extends AbstractAnnotationForm {
 
   private final JComboBox<TransactionalLifecycle> cmbLifecycle;
   private final AttributeForm attributeForm;
-  private final NavigationalAttribute resource = null;
   private final StringDocumentListener nameListener;
   //variables
   private NavigationalAttribute timestamp = null;
@@ -207,11 +206,9 @@ public class EventForm extends AbstractAnnotationForm {
   }
 
   private void populateTimestampPath() {
-    try {
+    if (cmbTimestamp != null && cmbTimestamp.getItemCount() > 0 && cmbTimestamp.getSelectedItem() != null) {
       NavigationalAttribute ts = (NavigationalAttribute) cmbTimestamp.getSelectedItem();
       UIUtility.loadItems(cmbTimestampPath, NavigationUtility.getFunctionalPaths(annotation.getRelatedClass(), ts.getUmlClass()));
-    } catch (Exception e) {
-      logger.info(e.getMessage(), e);
     }
   }
 

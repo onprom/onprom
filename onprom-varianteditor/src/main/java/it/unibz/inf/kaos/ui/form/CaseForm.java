@@ -27,7 +27,6 @@
 package it.unibz.inf.kaos.ui.form;
 
 import it.unibz.inf.kaos.data.CaseAnnotation;
-import it.unibz.inf.kaos.data.DataType;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorButtons;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
@@ -52,7 +51,7 @@ public class CaseForm extends AbstractAnnotationForm {
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        attributeForm = new AttributeForm(drawingPanel, annotation, false, true, drawingPanel.getAttributes(annotation.getRelatedClass(), false, (DataType) null));
+        attributeForm = new AttributeForm(drawingPanel, annotation, false, true, drawingPanel.getAttributes(annotation.getRelatedClass(), false, null));
         mainPanel.add(attributeForm, gridBagConstraints);
 
         JPanel buttonPanel = new JPanel(new BorderLayout());

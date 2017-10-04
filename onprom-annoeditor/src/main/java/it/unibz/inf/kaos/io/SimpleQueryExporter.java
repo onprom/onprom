@@ -140,7 +140,7 @@ public class SimpleQueryExporter {
     }
   }
 
-    public static SelectBuilder getStringAttributeQueryBuilder(StringAttribute name, UMLClass relatedClass, Set<DiagramShape> casePath) {
+    public static SelectBuilder getStringAttributeQueryBuilder(NavigationalAttribute name, UMLClass relatedClass, Set<DiagramShape> casePath) {
         final Var classVar = Var.alloc(relatedClass.getCleanName());
         final String classIRI = "<" + relatedClass.getLongName() + ">";
         final Var nameVar = XESConstants.attValueVar;
@@ -152,23 +152,18 @@ public class SimpleQueryExporter {
         } else {
             builder.addWhere(classVar, "a", classIRI);
         }
-        if (name.getAttribute() == null) {
-            //add name variable
+        if (name instanceof StringAttribute && name.getAttribute() == null) {
             try {
-                builder.addVar("\"" + name.getValue() + "\"", nameVar);
+                builder.addVar("\"" + ((StringAttribute) name).getValue() + "\"", nameVar);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         } else {
-            //add name variable
             builder.addVar(nameVar);
-            // add path to the name
             addJoin(builder, name.getPath());
-            //add attribute
             builder.addWhere("?" + name.getUmlClass().getCleanName(), "<" + name.getAttribute().getLongName() + ">", nameVar);
             //we only add filter if it is a dynamic value
             if (name.getFilterClause() != null && !name.getFilterClause().isEmpty()) {
-                //add filter clause to the query
                 try {
                     builder.addFilter(name.getFilterClause().replaceAll("%1", "?n"));
                 } catch (ParseException e) {
