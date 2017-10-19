@@ -136,6 +136,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
   }
 
   protected void initUI() {
+    this.getContentPane().removeAll();
     this.setJMenuBar(getMenuBar(diagramPanel));
     this.getContentPane().setLayout(new BorderLayout());
     this.getContentPane().add(createToolbar(), BorderLayout.WEST);

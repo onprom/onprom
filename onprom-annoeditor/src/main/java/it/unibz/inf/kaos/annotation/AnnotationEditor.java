@@ -25,10 +25,7 @@
  */
 package it.unibz.inf.kaos.annotation;
 
-import it.unibz.inf.kaos.data.AbstractAnnotation;
-import it.unibz.inf.kaos.data.ActionType;
-import it.unibz.inf.kaos.data.AnnotationProperties;
-import it.unibz.inf.kaos.data.FileType;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.factory.DefaultAnnotationFactory;
 import it.unibz.inf.kaos.interfaces.Annotation;
@@ -42,110 +39,117 @@ import it.unibz.inf.kaos.ui.utility.IOUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorMessages;
 import it.unibz.inf.kaos.uml.UMLEditor;
-import org.reflections.Reflections;
 import org.semanticweb.owlapi.model.OWLOntology;
 
 import javax.swing.*;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Graphical editor for annotating ontologies with XES standard using UML class diagram
  * <p>
+ *
  * @author T. E. Kalayci on 25-Oct-16.
  */
 public class AnnotationEditor extends UMLEditor {
-  public AnnotationEditor(OWLOntology _ontology, AnnotationEditorListener _listener) {
-    this(_ontology, _listener, new DefaultAnnotationFactory());
-  }
-
-  public AnnotationEditor(OWLOntology _ontology, AnnotationEditorListener _listener, AnnotationFactory factory) {
-    super(_ontology);
-    supportedFormats = new FileType[]{FileType.ONTOLOGY, FileType.UML, FileType.ANNOTATION};
-    listener = _listener;
-    diagramPanel = new AnnotationDiagramPanel(this, factory);
-    initUI();
-    if (ontology != null) {
-      diagramPanel.load(OWLImporter.getShapes(ontology));
+    public AnnotationEditor(OWLOntology _ontology, AnnotationEditorListener _listener) {
+        this(_ontology, _listener, new DefaultAnnotationFactory());
     }
-    setTitle("Annotation Editor");
-  }
 
-  public static void main(String a[]) {
-    new AnnotationEditor(null, null).display();
-  }
-
-  @Override
-  public void export(boolean asFile) {
-    UIUtility.executeInBackground(() -> {
-      if (asFile) {
-        loadedFile = IOUtility.exportJSON(FileType.ANNOTATION, diagramPanel.getAllShapes(true));
-      } else {
-        AnnotationQueries annotationsQueries = new AnnotationQueries();
-        for (Annotation annotation : diagramPanel.getItems(Annotation.class)) {
-          annotationsQueries.addQuery(annotation.getQuery());
+    public AnnotationEditor(OWLOntology _ontology, AnnotationEditorListener _listener, AnnotationFactory factory) {
+        super(_ontology);
+        supportedFormats = new FileType[]{FileType.ONTOLOGY, FileType.UML, FileType.ANNOTATION};
+        listener = _listener;
+        diagramPanel = new AnnotationDiagramPanel(this, factory);
+        initUI();
+        if (ontology != null) {
+            diagramPanel.load(OWLImporter.getShapes(ontology));
         }
-        if (annotationsQueries.getQueryCount() > 0) {
-          new QueryEditor(annotationsQueries);
-          if (listener != null) {
-            String title = getOntologyName();
-            if (title == null || title.isEmpty()) {
-              title = "Exported Queries";
+        setTitle("Annotation Editor");
+    }
+
+    public static void main(String a[]) {
+        new AnnotationEditor(null, null).display();
+    }
+
+    @Override
+    public void export(boolean asFile) {
+        UIUtility.executeInBackground(() -> {
+            if (asFile) {
+                loadedFile = IOUtility.exportJSON(FileType.ANNOTATION, diagramPanel.getAllShapes(true));
+            } else {
+                AnnotationQueries annotationsQueries = new AnnotationQueries();
+                for (Annotation annotation : diagramPanel.getItems(Annotation.class)) {
+                    annotationsQueries.addQuery(annotation.getQuery());
+                }
+                if (annotationsQueries.getQueryCount() > 0) {
+                    new QueryEditor(annotationsQueries);
+                    if (listener != null) {
+                        String title = getOntologyName();
+                        if (title == null || title.isEmpty()) {
+                            title = "Exported Queries";
+                        }
+                        ((AnnotationEditorListener) listener).store(title, annotationsQueries);
+                    }
+                    if (UIUtility.confirm(UMLEditorMessages.SAVE_FILE)) {
+                        IOUtility.exportJSON(FileType.QUERIES, annotationsQueries);
+                    }
+                }
             }
-            ((AnnotationEditorListener) listener).store(title, annotationsQueries);
-          }
-          if (UIUtility.confirm(UMLEditorMessages.SAVE_FILE)) {
-            IOUtility.exportJSON(FileType.QUERIES, annotationsQueries);
-          }
-        }
-      }
-      return null;
-    }, progressBar);
-  }
+            return null;
+        }, progressBar);
+    }
 
-  @Override
-  public void save() {
-    UIUtility.executeInBackground(() -> {
-      if (loadedFile != null) {
-        FileType fileType = IOUtility.getFileType(loadedFile);
-        if (fileType.equals(FileType.ONTOLOGY)) {
-          loadedFile = IOUtility.exportJSON(FileType.ANNOTATION, diagramPanel.getAllShapes(true));
-        } else {
-          IOUtility.exportJSON(loadedFile, diagramPanel.getAllShapes(true));
-        }
-      }
-      if (listener != null) {
-        listener.store(identifier, FileType.ANNOTATION, diagramPanel.getAllShapes(true));
-      }
-      return null;
-    }, progressBar);
-  }
+    @Override
+    public void save() {
+        UIUtility.executeInBackground(() -> {
+            if (loadedFile != null) {
+                FileType fileType = IOUtility.getFileType(loadedFile);
+                if (fileType.equals(FileType.ONTOLOGY)) {
+                    loadedFile = IOUtility.exportJSON(FileType.ANNOTATION, diagramPanel.getAllShapes(true));
+                } else {
+                    IOUtility.exportJSON(loadedFile, diagramPanel.getAllShapes(true));
+                }
+            }
+            if (listener != null) {
+                listener.store(identifier, FileType.ANNOTATION, diagramPanel.getAllShapes(true));
+            }
+            return null;
+        }, progressBar);
+    }
 
-  @Override
-  protected JToolBar createToolbar() {
-    JToolBar toolBar = getMainToolbar(diagramPanel);
-    new Reflections("it.unibz.inf.kaos.data").getSubTypesOf(AbstractAnnotation.class).forEach(annotation -> {
-      final AnnotationProperties annotationProperties = annotation.getAnnotation(AnnotationProperties.class);
-      toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(diagramPanel, new ActionType() {
-        @Override
-        public char getMnemonic() {
-          return annotationProperties.mnemonic();
-        }
+    protected Collection<AnnotationProperties> getAnnotationProperties() {
+        return Arrays.asList(
+                CaseAnnotation.class.getAnnotation(AnnotationProperties.class),
+                EventAnnotation.class.getAnnotation(AnnotationProperties.class)
+        );
+    }
 
-        @Override
-        public String getTooltip() {
-          return annotationProperties.tooltip();
-        }
+    @Override
+    protected JToolBar createToolbar() {
+        JToolBar toolBar = getMainToolbar(diagramPanel);
+        getAnnotationProperties().forEach(annotationProperties -> toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(diagramPanel, new ActionType() {
+            @Override
+            public char getMnemonic() {
+                return annotationProperties.mnemonic();
+            }
 
-        @Override
-        public String getTitle() {
-          return annotationProperties.title();
-        }
+            @Override
+            public String getTooltip() {
+                return annotationProperties.tooltip();
+            }
 
-        @Override
-        public String toString() {
-          return annotationProperties.label();
-        }
-      })));
-    });
-    return toolBar;
-  }
+            @Override
+            public String getTitle() {
+                return annotationProperties.title();
+            }
+
+            @Override
+            public String toString() {
+                return annotationProperties.label();
+            }
+        }))));
+        return toolBar;
+    }
+
 }

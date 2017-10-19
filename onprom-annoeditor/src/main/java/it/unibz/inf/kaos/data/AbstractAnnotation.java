@@ -32,6 +32,7 @@ import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.AnnotationForm;
 import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
 import it.unibz.inf.kaos.ui.utility.DrawingConstants;
+import it.unibz.inf.kaos.ui.utility.UIUtility;
 
 import java.awt.*;
 import java.util.List;
@@ -40,102 +41,110 @@ import java.util.List;
  * This class provides a skeletal implementation of the Annotation interface,
  * to minimize the effort required to implement it.
  * <p>
- * @author T. E. Kalayci on 03/11/16.
  *
+ * @author T. E. Kalayci on 03/11/16.
  * @see AbstractDiagramShape
  */
 public abstract class AbstractAnnotation extends AbstractDiagramShape implements Annotation {
-  @JsonIgnore
-  private final static Font ANNOTATION_FONT = new Font(Font.DIALOG, Font.PLAIN, 14);
-  @JsonIgnore
-  private final AnnotationProperties properties = getClass().getAnnotation(AnnotationProperties.class);
+    @JsonIgnore
+    private final static Font ANNOTATION_FONT = new Font(Font.DIALOG, Font.PLAIN, 14);
+    @JsonIgnore
+    AnnotationProperties properties = getClass().getAnnotation(AnnotationProperties.class);
 
-  UMLClass relatedClass;
-  private String label;
-  private List<AnnotationAttribute> attributes;
+    UMLClass relatedClass;
+    private String label;
+    private List<AnnotationAttribute> attributes;
 
-  AbstractAnnotation() {
-  }
-
-  AbstractAnnotation(UMLClass _relatedClass) {
-    relatedClass = _relatedClass;
-  }
-
-  public String getName() {
-    return label;
-  }
-
-  public void draw(Graphics2D g2d) {
-    Color oldColor = g2d.getColor();
-    Stroke oldStroke = g2d.getStroke();
-    Font oldFont = g2d.getFont();
-    g2d.setFont(ANNOTATION_FONT);
-    int fontHeight = g2d.getFontMetrics().getHeight();
-    int startX = getStartX();
-    int startY = getStartY();
-      String typeLabel = properties.label();
-    String label = getLabel();
-    //draw shapes, string
-    int rectangleWidth = g2d.getFontMetrics().stringWidth(typeLabel) + 2 * DrawingConstants.GAP;
-    int rectangleHeight = fontHeight * 2;
-    if (label != null && !label.isEmpty()) {
-      if (label.length() > typeLabel.length()) {
-        rectangleWidth = g2d.getFontMetrics().stringWidth(label) + 2 * DrawingConstants.GAP;
-      }
-      rectangleHeight = fontHeight * 3;
+    AbstractAnnotation() {
     }
-    //rectangle background color
-    g2d.setColor(Color.decode(properties.color()));
-    //filled rectangle background of annotation
-    g2d.fillRect(startX, startY, rectangleWidth, rectangleHeight);
-    //line between class and annotation
-    g2d.drawLine(startX + rectangleWidth / 2, startY + rectangleHeight / 2, getRelatedClass().getCenterX(),
-      getRelatedClass().getCenterY());
-    //set color of rectangle outline according to annotation state
-    g2d.setColor(getState().getColor());
-    //draw rectangle outline
-    g2d.drawRect(startX, startY, rectangleWidth, rectangleHeight);
-    //draw type label of annotation
-    int fontWidth = g2d.getFontMetrics().stringWidth(typeLabel);
-    int typeCoord = startX + (rectangleWidth - fontWidth) / 2;
-    g2d.drawString(typeLabel, typeCoord, startY + fontHeight + DrawingConstants.GAP);
-    if (label != null && !label.isEmpty()) {
-      //draw label of annotation if it exists
-      fontWidth = g2d.getFontMetrics().stringWidth(label);
-      typeCoord = startX + (rectangleWidth - fontWidth) / 2;
-      g2d.drawString(label, typeCoord, startY + 2 * fontHeight);
-    }
-    //set end coordinates for annotation
-    setEndX(startX + rectangleWidth);
-    setEndY(startY + rectangleHeight);
-    //load previous properties again
-    g2d.setColor(oldColor);
-    g2d.setStroke(oldStroke);
-    g2d.setFont(oldFont);
-  }
 
-  public String toString() {
-    return relatedClass.toString();
-  }
+    AbstractAnnotation(UMLClass _relatedClass) {
+        relatedClass = _relatedClass;
+    }
+
+    public String getName() {
+        return label;
+    }
+
+    public AnnotationProperties getAnnotationProperties() {
+        return properties;
+    }
+
+    @Override
+    public String getLongName() {
+        return relatedClass.getLongName();
+    }
+
+    public void draw(Graphics2D g2d) {
+        final Color oldColor = g2d.getColor();
+        final Stroke oldStroke = g2d.getStroke();
+        final Font oldFont = g2d.getFont();
+
+        final int fontHeight = g2d.getFontMetrics().getHeight();
+        final int startX = getStartX();
+        final int startY = getStartY();
+        final String typeLabel = getAnnotationProperties().label();
+        final Color bgColor = Color.decode(getAnnotationProperties().color());
+        final String label = getLabel();
+        //calculate required width and height
+        int rectangleWidth = g2d.getFontMetrics().stringWidth(typeLabel) + 2 * DrawingConstants.GAP;
+        int rectangleHeight = fontHeight * 2;
+        if (label != null && !label.isEmpty()) {
+            if (label.length() > typeLabel.length()) {
+                rectangleWidth = g2d.getFontMetrics().stringWidth(label) + 2 * DrawingConstants.GAP;
+            }
+            rectangleHeight = fontHeight * 3;
+        }
+        g2d.setFont(ANNOTATION_FONT);
+        //set background color of the rectangle
+        g2d.setColor(bgColor);
+        //draw filled rectangle with background color of the annotation
+        g2d.fillRect(startX, startY, rectangleWidth, rectangleHeight);
+        //draw line between the class and the annotation
+        g2d.drawLine(startX + rectangleWidth / 2, startY + rectangleHeight / 2, getRelatedClass().getCenterX(),
+                getRelatedClass().getCenterY());
+        //set color of rectangle outline according to annotation state
+        g2d.setColor(getState().getColor());
+        //draw outline rectangle
+        g2d.drawRect(startX, startY, rectangleWidth, rectangleHeight);
+        //draw type of the annotation
+        int fontWidth = g2d.getFontMetrics().stringWidth(typeLabel);
+        int typeCoord = startX + (rectangleWidth - fontWidth) / 2;
+        if (UIUtility.isDark(bgColor)) {
+            g2d.setColor(Color.WHITE);
+        }
+        g2d.drawString(typeLabel, typeCoord, startY + fontHeight + DrawingConstants.GAP);
+        if (label != null && !label.isEmpty()) {
+            //draw label of the annotation if it exists
+            fontWidth = g2d.getFontMetrics().stringWidth(label);
+            typeCoord = startX + (rectangleWidth - fontWidth) / 2;
+            g2d.drawString(label, typeCoord, startY + 2 * fontHeight);
+        }
+        //set end coordinates of the annotation
+        setEndX(startX + rectangleWidth);
+        setEndY(startY + rectangleHeight);
+        //load previous properties again
+        g2d.setColor(oldColor);
+        g2d.setStroke(oldStroke);
+        g2d.setFont(oldFont);
+    }
+
+    public String toString() {
+        return relatedClass.toString();
+    }
 
     public String getLabel() {
         return label;
-  }
+    }
 
     public void setLabel(String label) {
         this.label = label;
-  }
+    }
 
     @Override
     public List<AnnotationAttribute> getAttributes() {
-    return attributes;
-  }
-
-  public int getAttributeCount() {
-    if (attributes == null)
-      return 0;
-    return attributes.size();
-  }
+        return attributes;
+    }
 
     public void setAttributes(List<AnnotationAttribute> attributes) {
         this.attributes = attributes;
@@ -146,8 +155,8 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
         return relatedClass;
     }
 
-  @Override
-  public abstract List<AnnotationQuery> getQuery();
+    @Override
+    public abstract List<AnnotationQuery> getQuery();
 
     @Override
     public abstract AnnotationForm getForm(AnnotationDiagramPanel panel);

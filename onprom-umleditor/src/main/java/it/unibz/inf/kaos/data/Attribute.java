@@ -112,6 +112,15 @@ public class Attribute implements Cloneable {
     return result;
   }
 
+  @Override
+  public boolean equals(Object object) {
+    if (object != null && object instanceof Attribute) {
+      Attribute attribute = (Attribute) object;
+      return attribute.getName().equals(getName()) && attribute.getType().equals(getType());
+    }
+    return super.equals(object);
+  }
+
   public Attribute getClone() {
     try {
       return (Attribute) super.clone();

@@ -26,10 +26,7 @@
 
 package it.unibz.inf.kaos.ui.form;
 
-import it.unibz.inf.kaos.data.Attribute;
-import it.unibz.inf.kaos.data.EventAnnotation;
-import it.unibz.inf.kaos.data.NavigationalAttribute;
-import it.unibz.inf.kaos.data.UMLClass;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.component.UpdateListener;
@@ -47,8 +44,9 @@ import java.util.Set;
  */
 public class EventForm extends AbstractAnnotationForm {
     private final AttributeForm attributeForm;
-    private final JComboBox<Set<DiagramShape>> cmbTracePath;
-    private NavigationalAttribute tracePath;
+    private final JComboBox<CaseAnnotation> cmbCase;
+    private final JComboBox<Set<DiagramShape>> cmbCasePath;
+    private final JTextField txtLabel;
 
     public EventForm(AnnotationDiagram drawingPanel, EventAnnotation eventAnnotation) {
         super(drawingPanel, eventAnnotation);
@@ -57,22 +55,30 @@ public class EventForm extends AbstractAnnotationForm {
 
         GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
 
-        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        mainPanel.add(UIUtility.createLabel(AnnotationEditorLabels.CASE_PATH, BTN_SIZE), gridBagConstraints);
+        gridBagConstraints.gridx = 0;
+        mainPanel.add(UIUtility.createLabel(AnnotationEditorLabels.LABEL, BTN_SIZE), gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        cmbTracePath = UIUtility.createWideComboBox(NavigationUtility.getAllPaths(eventAnnotation.getRelatedClass(), eventAnnotation.getCase().getRelatedClass()), TXT_SIZE, null, true, false);
-        mainPanel.add(cmbTracePath, gridBagConstraints);
+        txtLabel = UIUtility.createTextField(AnnotationEditorLabels.LABEL.getTooltip(), TXT_SIZE);
+        mainPanel.add(txtLabel, gridBagConstraints);
 
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
+        mainPanel.add(UIUtility.createLabel("Case", TXT_SIZE), gridBagConstraints);
+
+        gridBagConstraints.gridx = 3;
+        cmbCase = UIUtility.createWideComboBox(drawingPanel.getAnnotations(eventAnnotation.getRelatedClass(), true, CaseAnnotation.class), TXT_SIZE, e -> populateCasePath(), false, true);
+        mainPanel.add(cmbCase, gridBagConstraints);
+
+        gridBagConstraints.gridx = 4;
+        cmbCasePath = UIUtility.createWideComboBox(TXT_SIZE, null, false, true);
+        mainPanel.add(cmbCasePath, gridBagConstraints);
+
+        gridBagConstraints.gridx = 5;
         JButton btnTraceAdd = UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> super.startNavigation(new UpdateListener() {
             @Override
             public void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute) {
-                tracePath = new NavigationalAttribute(path, selectedClass, selectedAttribute);
-                cmbTracePath.setSelectedItem(tracePath);
+                cmbCasePath.setSelectedItem(new NavigationalAttribute(path, selectedClass, selectedAttribute));
             }
         }, false));
         mainPanel.add(btnTraceAdd, gridBagConstraints);
@@ -82,13 +88,15 @@ public class EventForm extends AbstractAnnotationForm {
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         mainPanel.add(UIUtility.createButton(AnnotationEditorButtons.SAVE, e -> {
-            Object tracePath = cmbTracePath.getSelectedItem();
+            eventAnnotation.setCase(cmbCase.getItemAt(cmbCase.getSelectedIndex()));
+            Object tracePath = cmbCasePath.getSelectedItem();
             if (tracePath instanceof NavigationalAttribute) {
                 eventAnnotation.setCasePath(((NavigationalAttribute) tracePath).getPath());
             } else if (tracePath instanceof Set) {
                 eventAnnotation.setCasePath((Set<DiagramShape>) tracePath);
             }
             eventAnnotation.setAttributes(attributeForm.getAttributes());
+            eventAnnotation.setLabel(txtLabel.getText());
             setVisible(false);
         }, BTN_SIZE), gridBagConstraints);
 
@@ -98,17 +106,28 @@ public class EventForm extends AbstractAnnotationForm {
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 6;
         mainPanel.add(attributeForm, gridBagConstraints);
 
         add(mainPanel);
     }
 
+    private void populateCasePath() {
+        if (cmbCase != null && cmbCase.getItemCount() > 0 && cmbCase.getSelectedItem() != null) {
+            CaseAnnotation caseAnnotation = (CaseAnnotation) cmbCase.getSelectedItem();
+            if (caseAnnotation != null)
+                UIUtility.loadItems(cmbCasePath, NavigationUtility.getFunctionalPaths(annotation.getRelatedClass(), caseAnnotation.getRelatedClass()));
+        }
+    }
+
     @Override
     public void populateForm() {
         if (annotation != null) {
+            EventAnnotation eventAnnotation = (EventAnnotation) annotation;
             attributeForm.setAttributes(annotation.getAttributes());
-            cmbTracePath.setSelectedItem(((EventAnnotation) annotation).getCasePath());
+            txtLabel.setText(eventAnnotation.getLabel());
+            cmbCase.setSelectedItem(eventAnnotation.getCase());
+            cmbCasePath.setSelectedItem(eventAnnotation.getCasePath());
         }
     }
 

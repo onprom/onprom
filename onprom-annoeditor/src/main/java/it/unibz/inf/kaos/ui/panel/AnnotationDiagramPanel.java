@@ -209,7 +209,6 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
 
     @Override
     public void removeAnnotation(Annotation annotation) {
-        //TODO check if there is any EVENT related to deleted annotation
         shapes.remove(annotation);
         loadForm(null);
     }
@@ -240,9 +239,7 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
         for (UMLClass endNode : getClasses()) {
             for (Attribute attr : endNode.getAttributes()) {
                 if (types == null || Arrays.asList(types).contains(attr.getType())) {
-                    if (startNode.equals(endNode)) {
-                        attributes.add(new NavigationalAttribute(startNode, attr));
-                    } else if (NavigationUtility.isConnected(startNode, endNode, functional)) {
+                    if (NavigationUtility.isConnected(startNode, endNode, functional)) {
                         attributes.add(new NavigationalAttribute(endNode, attr));
                     }
                 }

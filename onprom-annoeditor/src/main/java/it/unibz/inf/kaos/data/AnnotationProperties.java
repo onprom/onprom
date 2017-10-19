@@ -32,13 +32,14 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Properties for annotations
  * <p>
+ *
  * @author T. E. Kalayci on 24/05/17.
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AnnotationProperties {
     String label();
 
-  String color();
+    String color();
 
     char mnemonic();
 

@@ -36,48 +36,50 @@ import java.util.Set;
  * @author T. E. Kalayci on 17/11/16.
  */
 public class StringAttribute extends NavigationalAttribute implements Cloneable {
-  private String value;
+    private String value;
 
-  public StringAttribute() {
-    super();
-  }
-
-  public StringAttribute(String _value) {
-    this();
-    value = _value;
-  }
-
-  public StringAttribute(NavigationalAttribute navigationalAttribute) {
-    this(navigationalAttribute.getPath(), navigationalAttribute.getUmlClass(), navigationalAttribute.getAttribute());
-  }
-
-  public StringAttribute(Set<DiagramShape> _path, UMLClass _cls, Attribute _attr) {
-    super(_path, _cls, _attr);
-    this.value = null;
-  }
-
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String _value) {
-    reset();
-    this.value = _value;
-  }
-
-  public String toString() {
-    if (getAttribute() == null) {
-      return value;
+    public StringAttribute() {
+        super();
     }
-    return super.toString();
-  }
 
-  public StringAttribute getClone() {
-    try {
-      return (StringAttribute) super.clone();
-    } catch (CloneNotSupportedException e) {
-      e.printStackTrace();
-      return this;
+    public StringAttribute(String _value) {
+        this();
+        value = _value;
     }
-  }
+
+    public StringAttribute(NavigationalAttribute navigationalAttribute) {
+        this(navigationalAttribute.getPath(), navigationalAttribute.getUmlClass(), navigationalAttribute.getAttribute());
+    }
+
+    public StringAttribute(Set<DiagramShape> _path, UMLClass _cls, Attribute _attr) {
+        super(_path, _cls, _attr);
+        this.value = null;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String _value) {
+        reset();
+        this.value = _value;
+    }
+
+    public String toString() {
+        if (getAttribute() == null) {
+            return value;
+        }
+        return super.toString();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof StringAttribute) {
+            StringAttribute other = (StringAttribute) object;
+            if (other.getValue() != null && getValue() != null) {
+                return other.getValue().equals(getValue());
+            }
+        }
+        return super.equals(object);
+    }
 }

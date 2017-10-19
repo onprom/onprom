@@ -26,27 +26,13 @@
 
 package it.unibz.inf.kaos.owl;
 
-import it.unibz.inf.kaos.data.Association;
-import it.unibz.inf.kaos.data.AssociationClass;
-import it.unibz.inf.kaos.data.Attribute;
-import it.unibz.inf.kaos.data.Cardinality;
-import it.unibz.inf.kaos.data.DataType;
-import it.unibz.inf.kaos.data.Disjoint;
-import it.unibz.inf.kaos.data.Inheritance;
-import it.unibz.inf.kaos.data.UMLClass;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.search.EntitySearcher;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Class used to import OWL ontologies to the tool.
@@ -178,7 +164,7 @@ public class OWLImporter extends OWLUtility {
       if (domains.size() > 1) {
         messages.add("Multiple domains are found for for <em>" + attrName + "</em> " + domains.toString());
       }
-      for (OWLClassExpression owlClassExpression : domains) {
+      domains.forEach(owlClassExpression -> {
         UMLClass domainClass = umlClasses.get(owlClassExpression.asOWLClass());
         if (domainClass != null) {
           OWLDataRange range = EntitySearcher.getRanges(dataProperty, ontology).stream().findFirst().orElse(null);
@@ -191,7 +177,7 @@ public class OWLImporter extends OWLUtility {
           attr.setMultiplicity(Cardinality.get(existentialDataProperties.contains(dataProperty), EntitySearcher.isFunctional(dataProperty, ontology) || functionalDataProperties.contains(dataProperty)));
           domainClass.addAttribute(attr);
         }
-      }
+      });
       if (domains.size() < 1) {
         messages.add("No domain is found for " + dataProperty.getIRI() + " adding it to the Thing class");
         thingClass.addAttribute(attr);

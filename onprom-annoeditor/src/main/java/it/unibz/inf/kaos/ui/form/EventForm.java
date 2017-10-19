@@ -222,13 +222,17 @@ public class EventForm extends AbstractAnnotationForm {
       name.setFilterClause(txtNameFilter.getText());
       eventAnnotation.setEventName(name);
       NavigationalAttribute selectedTimestamp = (NavigationalAttribute) cmbTimestamp.getSelectedItem();
-      selectedTimestamp.setPath((Set<DiagramShape>) cmbTimestampPath.getSelectedItem());
+      if (cmbTimestampPath.getSelectedItem() != null) {
+        selectedTimestamp.setPath((Set<DiagramShape>) cmbTimestampPath.getSelectedItem());
+      }
       eventAnnotation.setTimestamp(selectedTimestamp);
       Object tracePath = cmbTracePath.getSelectedItem();
-      if (tracePath instanceof NavigationalAttribute) {
-        eventAnnotation.setCasePath(((NavigationalAttribute) tracePath).getPath());
-      } else if (tracePath instanceof Set) {
-        eventAnnotation.setCasePath((Set<DiagramShape>) tracePath);
+      if (tracePath != null) {
+        if (tracePath instanceof NavigationalAttribute) {
+          eventAnnotation.setCasePath(((NavigationalAttribute) tracePath).getPath());
+        } else if (tracePath instanceof Set) {
+          eventAnnotation.setCasePath((Set<DiagramShape>) tracePath);
+        }
       }
       eventAnnotation.setLifecycle((TransactionalLifecycle) cmbLifecycle.getSelectedItem());
       eventAnnotation.setLabel(txtLabel.getText());

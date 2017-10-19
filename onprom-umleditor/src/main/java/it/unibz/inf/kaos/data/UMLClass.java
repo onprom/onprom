@@ -106,9 +106,7 @@ public class UMLClass extends AbstractDiagramShape {
 
   @Override
   protected Object clone() throws CloneNotSupportedException {
-    //clone class itself
     UMLClass clone = (UMLClass) super.clone();
-    //clone attributes
     clone.setAttributes(cloneAttributes());
     return clone;
   }

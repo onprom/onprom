@@ -92,10 +92,5 @@
             <artifactId>jena-querybuilder</artifactId>
             <version>3.4.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.11</version>
-        </dependency>
     </dependencies>
 </project>

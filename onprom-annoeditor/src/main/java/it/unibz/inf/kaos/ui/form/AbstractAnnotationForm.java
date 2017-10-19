@@ -44,7 +44,7 @@ import java.util.Set;
  */
 public abstract class AbstractAnnotationForm extends JPanel implements AnnotationForm, NavigationListener {
   static final Dimension BTN_SIZE = new Dimension(85, 25);
-  static final Dimension TXT_SIZE = new Dimension(200, 25);
+  static final Dimension TXT_SIZE = new Dimension(125, 25);
   final AnnotationDiagram drawingPanel;
   final Annotation annotation;
   private UpdateListener updateListener;

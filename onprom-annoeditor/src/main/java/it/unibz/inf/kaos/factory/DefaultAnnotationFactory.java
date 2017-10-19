@@ -28,19 +28,20 @@ package it.unibz.inf.kaos.factory;
 
 import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.Annotation;
-import it.unibz.inf.kaos.interfaces.AnnotationFactory;
 import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorMessages;
 import it.unibz.inf.kaos.ui.utility.NavigationUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
 /**
- * Annotation creation factory and additional methods
+ * Annotation creation factory and additional methods for default annotation editor
  * <p>
  *
  * @author T. E. Kalayci on 24-May-2017.
  */
-public class DefaultAnnotationFactory implements AnnotationFactory {
+public class DefaultAnnotationFactory extends AbstractAnnotationFactory {
+
+    @Override
     public Annotation createAnnotation(AnnotationDiagramPanel panel, ActionType currentAction, UMLClass selectedCls) {
         CaseAnnotation caseAnnotation = panel.getFirstItem(CaseAnnotation.class);
 
@@ -55,13 +56,14 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
                 if (!NavigationUtility.isConnected(selectedCls, caseAnnotation.getRelatedClass(), false)) {
                     UIUtility.error("Event class is not connected to Trace class!");
                 } else {
-                    return new EventAnnotation(caseAnnotation, selectedCls);
+                    return new EventAnnotation("event" + panel.getItemCount(EventAnnotation.class), caseAnnotation, selectedCls);
                 }
             }
         }
         return null;
     }
 
+    @Override
     public boolean checkRemoval(AnnotationDiagramPanel panel, Annotation annotation) {
         return !(annotation instanceof CaseAnnotation) || panel.getItemCount(Annotation.class) < 2 || UIUtility.confirm(AnnotationEditorMessages.CASE_DELETE_CONFIRMATION);
     }

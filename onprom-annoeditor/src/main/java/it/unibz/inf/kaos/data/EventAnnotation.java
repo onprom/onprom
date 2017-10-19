@@ -55,6 +55,11 @@ public class EventAnnotation extends AbstractAnnotation {
 
     }
 
+    public EventAnnotation(String _label, CaseAnnotation _caseAnnotation, UMLClass _relatedClass) {
+        this(_caseAnnotation, _relatedClass);
+        setLabel(_label);
+    }
+
     public EventAnnotation(CaseAnnotation _caseAnnotation, UMLClass _relatedClass) {
         super(_relatedClass);
         caseAnnotation = _caseAnnotation;

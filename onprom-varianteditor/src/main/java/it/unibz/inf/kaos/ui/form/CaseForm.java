@@ -49,9 +49,9 @@ public class CaseForm extends AbstractAnnotationForm {
         mainPanel.setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
 
-        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        attributeForm = new AttributeForm(drawingPanel, annotation, false, true, drawingPanel.getAttributes(annotation.getRelatedClass(), false, null));
+        gridBagConstraints.gridx = 0;
+        attributeForm = new AttributeForm(drawingPanel, annotation, false, true, drawingPanel.getAttributes(annotation.getRelatedClass(), true, null));
         mainPanel.add(attributeForm, gridBagConstraints);
 
         JPanel buttonPanel = new JPanel(new BorderLayout());
@@ -62,7 +62,6 @@ public class CaseForm extends AbstractAnnotationForm {
         buttonPanel.add(UIUtility.createButton(AnnotationEditorButtons.CANCEL, e -> setVisible(false), BTN_SIZE), BorderLayout.SOUTH);
 
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
         mainPanel.add(buttonPanel, gridBagConstraints);
 
         add(mainPanel);

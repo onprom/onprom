@@ -124,6 +124,13 @@ public class UIUtility {
         BACKGROUND_WORKERS.add(worker);
     }
 
+    public static String strToHexColor(String str) {
+        Integer i = str.hashCode();
+        return Integer.toHexString(((i >> 24) & 0xFF)) +
+                Integer.toHexString(((i >> 16) & 0xFF)) +
+                Integer.toHexString(((i >> 8) & 0xFF));
+    }
+
     public static void stopWorkers() {
         BACKGROUND_WORKERS.forEach(sw -> sw.cancel(true));
     }
@@ -276,12 +283,13 @@ public class UIUtility {
         button.setToolTipText(String.format(HTML_STRING, action.getTooltip()));
         button.addActionListener(e -> action.execute());
         button.setMnemonic(action.getMnemonic());
-      URL imageURL = IOUtility.getImageURL(action.getActionName().toLowerCase());
+        URL imageURL = IOUtility.getImageURL(action.getActionName().toLowerCase());
         if (imageURL != null) {
             ImageIcon imageIcon = new ImageIcon(imageURL, action.getTitle());
             button.setIcon(imageIcon);
         } else {
-            button.setText(String.format(HTML_STRING, action.getTitle()));
+            button.setText(String.format(HTML_STRING, Character.toUpperCase(action.getMnemonic())));
+            button.setFont(new Font("Monospaced", Font.PLAIN, 30));
         }
         return button;
     }
@@ -301,5 +309,9 @@ public class UIUtility {
         for (T item : items) {
             comboBox.addItem(item);
         }
+    }
+
+    public static boolean isDark(Color color) {
+        return color != null && ((30 * color.getRed() + 59 * color.getGreen() + 11 * color.getBlue()) / 100) < 128;
     }
 }

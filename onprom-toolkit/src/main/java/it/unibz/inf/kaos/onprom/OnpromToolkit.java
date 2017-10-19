@@ -65,11 +65,11 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Set;
 
@@ -137,11 +137,27 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                 add(menuItem);
             }
         });
+        objects.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                    objects.removeSelected();
+                }
+            }
+        });
         windows.setPopMenu(new JPopupMenu() {
             {
                 JMenuItem menuItem = new JMenuItem("Close", KeyEvent.VK_C);
                 menuItem.addActionListener(e -> closeSelectedWindow());
                 add(menuItem);
+            }
+        });
+        windows.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                    closeSelectedWindow();
+                }
             }
         });
         windows.addTreeSelectionListener(e -> {
