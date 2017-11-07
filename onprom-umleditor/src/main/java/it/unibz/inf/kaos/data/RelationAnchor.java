@@ -63,9 +63,10 @@ public class RelationAnchor extends AbstractDiagramShape {
   }
 
   public void draw(Graphics2D g2d) {
-    Color oldColor = g2d.getColor();
-    if (getState().equals(State.SELECTED))
-      g2d.setColor(getState().getColor());
+      final Color oldColor = g2d.getColor();
+      if (getState().equals(State.SELECTED)) {
+          g2d.setColor(getState().getColor());
+      }
     g2d.fill(getShape());
     g2d.setColor(oldColor);
   }

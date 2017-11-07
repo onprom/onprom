@@ -140,7 +140,7 @@ public class SimpleQueryExporter {
     }
   }
 
-    public static SelectBuilder getStringAttributeQueryBuilder(NavigationalAttribute name, UMLClass relatedClass, Set<DiagramShape> casePath) {
+    public static SelectBuilder getStringAttributeQueryBuilder(NavigationalAttribute navigationalAttribute, UMLClass relatedClass, Set<DiagramShape> casePath) {
         final Var classVar = Var.alloc(relatedClass.getCleanName());
         final String classIRI = "<" + relatedClass.getLongName() + ">";
         final Var nameVar = XESConstants.attValueVar;
@@ -152,20 +152,20 @@ public class SimpleQueryExporter {
         } else {
             builder.addWhere(classVar, "a", classIRI);
         }
-        if (name instanceof StringAttribute && name.getAttribute() == null) {
+        if (navigationalAttribute instanceof StringAttribute && navigationalAttribute.getAttribute() == null) {
             try {
-                builder.addVar("\"" + ((StringAttribute) name).getValue() + "\"", nameVar);
+                builder.addVar("\"" + ((StringAttribute) navigationalAttribute).getValue() + "\"", nameVar);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         } else {
             builder.addVar(nameVar);
-            addJoin(builder, name.getPath());
-            builder.addWhere("?" + name.getUmlClass().getCleanName(), "<" + name.getAttribute().getLongName() + ">", nameVar);
+            addJoin(builder, navigationalAttribute.getPath());
+            builder.addWhere("?" + navigationalAttribute.getUmlClass().getCleanName(), "<" + navigationalAttribute.getAttribute().getLongName() + ">", nameVar);
             //we only add filter if it is a dynamic value
-            if (name.getFilterClause() != null && !name.getFilterClause().isEmpty()) {
+            if (navigationalAttribute.getFilterClause() != null && !navigationalAttribute.getFilterClause().isEmpty()) {
                 try {
-                    builder.addFilter(name.getFilterClause().replaceAll("%1", "?n"));
+                    builder.addFilter(navigationalAttribute.getFilterClause().replaceAll("%1", "?n"));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

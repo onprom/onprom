@@ -132,9 +132,9 @@ public class ResourceConnection extends AbstractDiagramShape {
 
     public void draw(Graphics2D g2d) {
         // store current stroke and color
-        Font oldFont = g2d.getFont();
-        Stroke oldStroke = g2d.getStroke();
-        Color oldColor = g2d.getColor();
+        final Font oldFont = g2d.getFont();
+        final Stroke oldStroke = g2d.getStroke();
+        final Color oldColor = g2d.getColor();
         g2d.setFont(DrawingConstants.RELATION_FONT);
         // color according to state
         g2d.setColor(getState().getColor());

@@ -28,7 +28,10 @@ package it.unibz.inf.kaos.ui.form;
 
 import it.unibz.inf.kaos.data.Attribute;
 import it.unibz.inf.kaos.data.UMLClass;
-import it.unibz.inf.kaos.interfaces.*;
+import it.unibz.inf.kaos.interfaces.Annotation;
+import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
+import it.unibz.inf.kaos.interfaces.DiagramShape;
+import it.unibz.inf.kaos.interfaces.NavigationListener;
 import it.unibz.inf.kaos.ui.component.UpdateListener;
 
 import javax.swing.*;
@@ -42,9 +45,9 @@ import java.util.Set;
  * <p>
  * @author T. E. Kalayci on 13/12/16.
  */
-public abstract class AbstractAnnotationForm extends JPanel implements AnnotationForm, NavigationListener {
-  static final Dimension BTN_SIZE = new Dimension(85, 25);
-  static final Dimension TXT_SIZE = new Dimension(125, 25);
+public abstract class AbstractAnnotationForm extends JPanel implements NavigationListener {
+    public static final Dimension BTN_SIZE = new Dimension(85, 25);
+    public static final Dimension TXT_SIZE = new Dimension(125, 25);
   final AnnotationDiagram drawingPanel;
   final Annotation annotation;
   private UpdateListener updateListener;

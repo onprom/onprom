@@ -129,9 +129,9 @@ public abstract class Relationship extends AbstractDiagramShape {
 
     public void draw(Graphics2D g2d) {
         // store current stroke and color
-        Font oldFont = g2d.getFont();
-        Stroke oldStroke = g2d.getStroke();
-        Color oldColor = g2d.getColor();
+        final Font oldFont = g2d.getFont();
+        final Stroke oldStroke = g2d.getStroke();
+        final Color oldColor = g2d.getColor();
         g2d.setFont(DrawingConstants.RELATION_FONT);
         // color according to state
         g2d.setColor(getState().getColor());
@@ -139,8 +139,8 @@ public abstract class Relationship extends AbstractDiagramShape {
         g2d.draw(getShape());
         drawAnchors(g2d);
         if (!getDisplayString().isEmpty()) {
-            int[] namePosition = getNamePosition();
-            Rectangle2D nameRectangle = g2d.getFontMetrics().getStringBounds(getDisplayString(), g2d);
+            final int[] namePosition = getNamePosition();
+            final Rectangle2D nameRectangle = g2d.getFontMetrics().getStringBounds(getDisplayString(), g2d);
             drawLabel(g2d, getDisplayString(), namePosition[0] - (int) (nameRectangle.getWidth() / 2), namePosition[1] - DrawingConstants.GAP, true);
         }
         g2d.setColor(oldColor);

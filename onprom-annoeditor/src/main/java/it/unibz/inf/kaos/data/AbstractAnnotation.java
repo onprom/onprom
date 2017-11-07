@@ -29,7 +29,7 @@ package it.unibz.inf.kaos.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.unibz.inf.kaos.data.query.AnnotationQuery;
 import it.unibz.inf.kaos.interfaces.Annotation;
-import it.unibz.inf.kaos.interfaces.AnnotationForm;
+import it.unibz.inf.kaos.ui.form.AbstractAnnotationForm;
 import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
 import it.unibz.inf.kaos.ui.utility.DrawingConstants;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
@@ -130,7 +130,7 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
     }
 
     public String toString() {
-        return relatedClass.toString();
+        return getAnnotationProperties().label() + " (" + relatedClass.toString() + ")";
     }
 
     public String getLabel() {
@@ -159,6 +159,6 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
     public abstract List<AnnotationQuery> getQuery();
 
     @Override
-    public abstract AnnotationForm getForm(AnnotationDiagramPanel panel);
+    public abstract AbstractAnnotationForm getForm(AnnotationDiagramPanel panel);
 
 }

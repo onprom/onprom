@@ -110,14 +110,14 @@ public class Association extends Relationship {
   @Override
   public void draw(Graphics2D g2d) {
     super.draw(g2d);
-    Font oldFont = g2d.getFont();
-    Stroke oldStroke = g2d.getStroke();
-    Color oldColor = g2d.getColor();
+      final Font oldFont = g2d.getFont();
+      final Stroke oldStroke = g2d.getStroke();
+      final Color oldColor = g2d.getColor();
     g2d.setFont(DrawingConstants.RELATION_FONT);
     g2d.setColor(getState().getColor());
     g2d.setStroke(DrawingConstants.RELATION_STROKE);
-    int[] m1Position = getM1Position(g2d);
-    int[] m2Position = getM2Position(g2d);
+      final int[] m1Position = getM1Position(g2d);
+      final int[] m2Position = getM2Position(g2d);
     drawLabel(g2d, getFirstMultiplicityString(), m1Position[0], m1Position[1] - DrawingConstants.GAP, true);
     drawLabel(g2d, getSecondMultiplicityString(), m2Position[0], m2Position[1] - DrawingConstants.GAP, true);
     g2d.setColor(oldColor);

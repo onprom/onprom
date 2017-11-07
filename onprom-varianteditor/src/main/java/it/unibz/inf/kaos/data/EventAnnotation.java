@@ -61,7 +61,7 @@ public class EventAnnotation extends AbstractAnnotation {
             final String eventClassName = relatedClass.getCleanName();
             final Var eventClassVar = Var.alloc(eventClassName);
             final String eventLabel = getLabel();
-            final String eventIRI = "<" + getLongName() + ">";
+            final String eventIRI = "<" + relatedClass.getLongName() + ">";
             final String caseClassName = getCase().getRelatedClass().getCleanName();
             Var caseVar = Var.alloc(caseClassName);
             boolean inheritanceWithCase = relatedClass.isRelationExist(getCase().getRelatedClass(), Inheritance.class);

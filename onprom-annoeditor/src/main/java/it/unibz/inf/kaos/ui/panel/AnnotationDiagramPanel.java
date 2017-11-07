@@ -29,6 +29,7 @@ package it.unibz.inf.kaos.ui.panel;
 import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.*;
 import it.unibz.inf.kaos.ui.edit.AddDeleteAnnotationEdit;
+import it.unibz.inf.kaos.ui.form.AbstractAnnotationForm;
 import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorMessages;
 import it.unibz.inf.kaos.ui.utility.NavigationUtility;
@@ -262,10 +263,10 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
         return annotations;
     }
 
-    private void loadForm(AnnotationForm form) {
+    private void loadForm(AbstractAnnotationForm form) {
         if (form != null) {
             form.setVisible(true);
         }
-        diagramEditor.loadEditor((javax.swing.JPanel) form);
+        diagramEditor.loadEditor(form);
     }
 }

@@ -231,9 +231,21 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
   }
 
   public void loadEditor(JPanel panel) {
-    splitPane.setTopComponent(scrollPane);
-    splitPane.setBottomComponent(panel);
     splitPane.setDividerLocation(0.75);
+    splitPane.setTopComponent(scrollPane);
+    if (panel != null) {
+      splitPane.setBottomComponent(new JScrollPane(panel));
+      panel.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentHidden(java.awt.event.ComponentEvent e) {
+          splitPane.setBottomComponent(null);
+          super.componentHidden(e);
+        }
+      });
+    }
+    else {
+      splitPane.setBottomComponent(null);
+    }
     diagramPanel.setCurrentAction(UMLActionType.select);
   }
 

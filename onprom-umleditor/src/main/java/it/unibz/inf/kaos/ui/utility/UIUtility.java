@@ -80,7 +80,7 @@ public class UIUtility {
 
     public static GridBagConstraints getGridBagConstraints() {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(1, 1, 1, 1);
         gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
         return gridBagConstraints;
     }
@@ -246,6 +246,7 @@ public class UIUtility {
 
     public static JLabel createLabel(String text, Dimension preferredSize) {
         JLabel lbl = new JLabel(String.format(HTML_STRING, text));
+        lbl.setToolTipText(text);
         lbl.setPreferredSize(preferredSize);
         return lbl;
     }

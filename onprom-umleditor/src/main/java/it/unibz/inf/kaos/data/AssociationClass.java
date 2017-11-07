@@ -70,8 +70,8 @@ public class AssociationClass extends UMLClass {
   }
 
   public void draw(Graphics2D g2d) {
-    Stroke oldStroke = g2d.getStroke();
-    int[] coordinates = association.getNamePosition();
+      final Stroke oldStroke = g2d.getStroke();
+      final int[] coordinates = association.getNamePosition();
     g2d.setStroke(DrawingConstants.DISJOINT_STROKE);
     g2d.drawLine(getCenterX(), getCenterY(), coordinates[0], coordinates[1]);
     g2d.setStroke(oldStroke);

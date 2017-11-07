@@ -53,12 +53,12 @@ public class ResourceShape extends AbstractDiagramShape {
 
     @Override
     public void draw(Graphics2D g2d) {
-        Color oldColor = g2d.getColor();
-        Stroke oldStroke = g2d.getStroke();
-        Font oldFont = g2d.getFont();
-        int startX = getStartX();
-        int startY = getStartY();
-        String label = getName();
+        final Color oldColor = g2d.getColor();
+        final Stroke oldStroke = g2d.getStroke();
+        final Font oldFont = g2d.getFont();
+        final int startX = getStartX();
+        final int startY = getStartY();
+        final String label = getName();
         //draw shapes, string
         //rectangle background color
         if (treeNode != null)
@@ -72,8 +72,8 @@ public class ResourceShape extends AbstractDiagramShape {
         //draw rectangle outline
         g2d.drawRect(startX, startY, EDGE, EDGE);
         //draw label of annotation if it exists
-        int fontWidth = g2d.getFontMetrics().stringWidth(label);
-        int typeCoord = startX + (EDGE - fontWidth) / 2;
+        final int fontWidth = g2d.getFontMetrics().stringWidth(label);
+        final int typeCoord = startX + (EDGE - fontWidth) / 2;
         g2d.drawString(label, typeCoord, startY + (EDGE / 2));
         //set end coordinates for annotation
         setEndX(startX + EDGE);

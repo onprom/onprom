@@ -158,9 +158,9 @@ public class UMLClass extends AbstractDiagramShape {
 
   public void draw(Graphics2D g2d) {
     //store previous font, stroke and color
-    Font oldFont = g2d.getFont();
-    Stroke oldStroke = g2d.getStroke();
-    Color oldColor = g2d.getColor();
+      final Font oldFont = g2d.getFont();
+      final Stroke oldStroke = g2d.getStroke();
+      final Color oldColor = g2d.getColor();
     //set default color
     g2d.setColor(DrawingConstants.BACKGROUND);
     final int width = getEndX() - getStartX();
@@ -173,8 +173,8 @@ public class UMLClass extends AbstractDiagramShape {
     g2d.draw(new Rectangle2D.Double(getStartX(), getStartY(), width, height));
     // draw class name
     g2d.setFont(DrawingConstants.CLASS_NAME_FONT);
-    int fontHeight = g2d.getFontMetrics().getHeight();
-    int classNameWidth = g2d.getFontMetrics().stringWidth(getName());
+      final int fontHeight = g2d.getFontMetrics().getHeight();
+      final int classNameWidth = g2d.getFontMetrics().stringWidth(getName());
     drawLabel(g2d, getName(), getStartX() + ((width - classNameWidth) / 2), getStartY() + fontHeight, false);
     // draw line after class name
     g2d.draw(new Line2D.Float(getStartX(), getStartY() +
@@ -184,7 +184,7 @@ public class UMLClass extends AbstractDiagramShape {
     int currentY = getStartY() + fontHeight + DrawingConstants.GAP;
     // draw class attributes
     g2d.setFont(DrawingConstants.ATTRIBUTE_NAME_FONT);
-    int attrHeight = g2d.getFontMetrics().getHeight();
+      final int attrHeight = g2d.getFontMetrics().getHeight();
     for (Attribute attr : attributes) {
       currentY = currentY + attrHeight;
       g2d.setColor(attr.getState().getColor());
