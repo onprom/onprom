@@ -30,8 +30,7 @@ import it.unibz.inf.kaos.data.Association;
 import it.unibz.inf.kaos.data.Relationship;
 import it.unibz.inf.kaos.data.UMLClass;
 
-import javax.swing.undo.UndoableEdit;
-import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Interface for classes to use UML Diagram Panel
@@ -39,24 +38,13 @@ import java.util.Set;
  * @author T. E. Kalayci
  * 04-Apr-2017
  */
-public interface UMLDiagram {
+public interface UMLDiagram extends Diagram {
     void addClass(UMLClass cls);
-
     void addRelation(Relationship relationship);
-
     void removeClass(UMLClass cls);
-
     void removeRelation(Relationship relationship);
 
-    void addEdit(UndoableEdit edit);
+    Stream<Association> getAssociations();
 
-    void createClass(UMLClass cls);
-
-    Set<Association> getRelations();
-
-    Set<DiagramShape> getAllShapes(boolean forJSON);
-
-    boolean removeShape(DiagramShape _selected);
-
-    Set<UMLClass> getClasses();
+    Stream<UMLClass> getClasses();
 }

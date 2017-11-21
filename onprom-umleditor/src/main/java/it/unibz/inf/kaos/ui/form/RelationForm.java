@@ -30,14 +30,14 @@ import it.unibz.inf.kaos.data.Association;
 import it.unibz.inf.kaos.data.Cardinality;
 import it.unibz.inf.kaos.data.UMLClass;
 import it.unibz.inf.kaos.interfaces.UMLDiagram;
-import it.unibz.inf.kaos.ui.edit.UpdateRelationEdit;
+import it.unibz.inf.kaos.ui.edit.EditFactory;
+import it.unibz.inf.kaos.ui.utility.DiagramUndoManager;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorButtons;
 import it.unibz.inf.kaos.ui.utility.UMLEditorLabels;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Set;
 
 /**
  * Relation form
@@ -53,9 +53,8 @@ public class RelationForm extends JPanel {
     private final Association association;
     private final JTextField txtRelationName;
 
-    public RelationForm(UMLDiagram drawingPanel, Association _association, boolean editable) {
+    public RelationForm(UMLDiagram drawingPanel, Association _association, boolean isUpdateAllowed) {
         association = _association;
-
         setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
 
@@ -67,12 +66,11 @@ public class RelationForm extends JPanel {
         add(UIUtility.createLabel(UMLEditorLabels.FROM_TO, lblDimension), gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        final Set<UMLClass> classes = drawingPanel.getClasses();
-        cmbFirstClass = UIUtility.createWideComboBox(classes, txtDimension, null, editable, true);
+        cmbFirstClass = UIUtility.createWideComboBox(drawingPanel.getClasses(), txtDimension, null, isUpdateAllowed, true);
         add(cmbFirstClass, gridBagConstraints);
 
         gridBagConstraints.gridx = 2;
-        cmbSecondClass = UIUtility.createWideComboBox(classes, txtDimension, null, editable, true);
+        cmbSecondClass = UIUtility.createWideComboBox(drawingPanel.getClasses(), txtDimension, null, isUpdateAllowed, true);
         add(cmbSecondClass, gridBagConstraints);
 
 
@@ -81,11 +79,11 @@ public class RelationForm extends JPanel {
         add(UIUtility.createLabel(UMLEditorLabels.CARDINALITY, lblDimension), gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        cmbFirstCardinality = UIUtility.createWideComboBox(Cardinality.values(), txtDimension, null, editable, false);
+        cmbFirstCardinality = UIUtility.createWideComboBox(Cardinality.values(), txtDimension, null, isUpdateAllowed, false);
         add(cmbFirstCardinality, gridBagConstraints);
 
         gridBagConstraints.gridx = 2;
-        cmbSecondCardinality = UIUtility.createWideComboBox(Cardinality.values(), txtDimension, null, editable, false);
+        cmbSecondCardinality = UIUtility.createWideComboBox(Cardinality.values(), txtDimension, null, isUpdateAllowed, false);
         add(cmbSecondCardinality, gridBagConstraints);
 
 
@@ -95,15 +93,14 @@ public class RelationForm extends JPanel {
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridwidth = 2;
-      txtRelationName = UIUtility.createTextField(UMLEditorLabels.RELATION_NAME.getTooltip(), new Dimension(400, 25), e -> {
-      }, editable);
+        txtRelationName = UIUtility.createTextField(UMLEditorLabels.RELATION_NAME.getTooltip(), new Dimension(400, 25), isUpdateAllowed);
         add(txtRelationName, gridBagConstraints);
         txtRelationName.setText(association.getName());
 
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridx = 3;
         add(UIUtility.createButton(UMLEditorButtons.CANCEL, e -> setVisible(false), lblDimension), gridBagConstraints);
-        if (editable) {
+        if (isUpdateAllowed) {
             gridBagConstraints.gridy = 0;
             add(UIUtility.createButton(UMLEditorButtons.SAVE, e -> {
                 String prevName = association.getName();
@@ -116,7 +113,7 @@ public class RelationForm extends JPanel {
                 association.setSecondClass((UMLClass) cmbSecondClass.getSelectedItem());
                 setVisible(false);
                 //undo operation
-                drawingPanel.addEdit(new UpdateRelationEdit(association, prevName, prevFirst, prevSecond));
+                DiagramUndoManager.addEdit(EditFactory.relationUpdated(association, prevName, prevFirst, prevSecond));
             }, lblDimension), gridBagConstraints);
         }
 

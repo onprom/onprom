@@ -31,6 +31,9 @@ import it.unibz.inf.kaos.data.ResourceConnection;
 import it.unibz.inf.kaos.data.ResourceShape;
 import it.unibz.inf.kaos.onprom.OnpromToolkit;
 import it.unibz.inf.kaos.ui.component.TreeNode;
+import it.unibz.inf.kaos.ui.utility.UIUtility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.datatransfer.Transferable;
@@ -38,7 +41,6 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.MouseEvent;
 
 import static it.unibz.inf.kaos.ui.component.CustomTree.INT_ARRAY_FLAVOR;
 
@@ -49,6 +51,8 @@ import static it.unibz.inf.kaos.ui.component.CustomTree.INT_ARRAY_FLAVOR;
  * @author T. E. Kalayci on 10-Jul-2017.
  */
 public class ExtractionPanel extends UMLDiagramPanel {
+    private static final Logger logger = LoggerFactory.getLogger(ExtractionPanel.class.getSimpleName());
+
     private final ResourceShape ontology = new ResourceShape("data ontology", null);
     private final ResourceShape event = new ResourceShape("event ontology", null);
     private final ResourceShape mapping = new ResourceShape("mapping", null);
@@ -96,29 +100,25 @@ public class ExtractionPanel extends UMLDiagramPanel {
                     Transferable transferData = dtde.getTransferable();
                     int[] selected = (int[]) transferData.getTransferData(INT_ARRAY_FLAVOR);
                     for (int i : selected) {
-                        TreeNode node = toolkit.getResourceNode(i);
-                        if (node.getType().equals(FileType.ONTOLOGY)) {
+                        TreeNode<Object> node = toolkit.getResourceNode(i);
+                        if (node.getType() == FileType.ONTOLOGY) {
                             ontology.setTreeNode(node);
                         }
-                        if (node.getType().equals(FileType.MAPPING)) {
+                        if (node.getType() == FileType.MAPPING) {
                             mapping.setTreeNode(node);
                         }
-                        if (node.getType().equals(FileType.QUERIES)) {
+                        if (node.getType() == FileType.QUERIES) {
                             queries.setTreeNode(node);
                         }
                         repaint();
                     }
                     dtde.dropComplete(true);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage(), e);
+                    UIUtility.error(e.getMessage());
                 }
             }
         }));
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
     }
 
     @Override

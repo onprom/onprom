@@ -38,14 +38,14 @@ import java.util.Set;
  * <p>
  * @author T. E. Kalayci on 22/02/17.
  */
-public abstract class UpdateListener {
+@FunctionalInterface
+public interface UpdateListener {
 
-  public static final DataType[] TIMESTAMP_TYPES = new DataType[]{DataType.DATE_TIME, DataType.DATE_TIME_STAMP};
-  private static final DataType[] DEFAULT_TYPE = new DataType[]{DataType.STRING};
+    DataType[] TIMESTAMP_TYPES = {DataType.DATE_TIME, DataType.DATE_TIME_STAMP};
 
-  public abstract void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute);
+    void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute);
 
-  public DataType[] getDataType() {
-    return DEFAULT_TYPE;
+    default DataType[] getDataType() {
+        return new DataType[]{DataType.STRING};
   }
 }

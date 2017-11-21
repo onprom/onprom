@@ -46,17 +46,17 @@ import java.io.InputStream;
  * 17-Oct-16
  */
 public class OWLUtility {
-    final static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-    final static OWLDataFactory factory = manager.getOWLDataFactory();
-    private static final Logger logger = LoggerFactory.getLogger(OWLUtility.class.getSimpleName());
-    private final static String DOMAIN = "domain";
-    private final static String RANGE = "range";
-    private final static String ONPROM_IRI = "http://kaos.inf.unibz.it/onprom/";
-    private final static String COORDINATES = "coordinates";
-    private final static String DISJOINT_COORDINATES = "disjointCoordinates";
-    private final static String ISA_COORDINATES = "subclassCoordinates";
-    private final static String ASSOCIATION = "association";
-    private final static String ASSOCIATION_TYPE = "type";
+    static final OWLOntologyManager ONTOLOGY_MANAGER = OWLManager.createOWLOntologyManager();
+    static final OWLDataFactory DATA_FACTORY = OWLManager.getOWLDataFactory();
+    private static final Logger LOGGER = LoggerFactory.getLogger(OWLUtility.class.getSimpleName());
+    private static final String DOMAIN = "domain";
+    private static final String RANGE = "range";
+    private static final String ONPROM_IRI = "http://kaos.inf.unibz.it/onprom/";
+    private static final String COORDINATES = "coordinates";
+    private static final String DISJOINT_COORDINATES = "disjointCoordinates";
+    private static final String ISA_COORDINATES = "subclassCoordinates";
+    private static final String ASSOCIATION = "association";
+    private static final String ASSOCIATION_TYPE = "type";
 
     static IRI getIRI(IRI defaultIRI, String name) {
         return IRI.create(defaultIRI + name);
@@ -75,15 +75,15 @@ public class OWLUtility {
     }
 
     private static OWLAnnotation getCoordinatesAnnotation(IRI iri, String coordinates) {
-        return factory.getOWLAnnotation(factory.getOWLAnnotationProperty(iri), factory.getOWLLiteral(coordinates));
+        return DATA_FACTORY.getOWLAnnotation(DATA_FACTORY.getOWLAnnotationProperty(iri), DATA_FACTORY.getOWLLiteral(coordinates));
     }
 
     static OWLAnnotation getAssociationAnnotation(String associationName) {
-        return factory.getOWLAnnotation(factory.getOWLAnnotationProperty(getAssociationIRI()), factory.getOWLLiteral(associationName));
+        return DATA_FACTORY.getOWLAnnotation(DATA_FACTORY.getOWLAnnotationProperty(getAssociationIRI()), DATA_FACTORY.getOWLLiteral(associationName));
     }
 
     static OWLAnnotation getCommentAnnotation(String value) {
-        return factory.getOWLAnnotation(factory.getRDFSComment(), factory.getOWLLiteral(value));
+        return DATA_FACTORY.getOWLAnnotation(DATA_FACTORY.getRDFSComment(), DATA_FACTORY.getOWLLiteral(value));
     }
 
     static IRI getAssociationIRI() {
@@ -91,7 +91,7 @@ public class OWLUtility {
     }
 
     private static OWLAnnotation getTypeAnnotation(String type) {
-        return factory.getOWLAnnotation(factory.getOWLAnnotationProperty(getTypeIRI()), factory.getOWLLiteral(type));
+        return DATA_FACTORY.getOWLAnnotation(DATA_FACTORY.getOWLAnnotationProperty(getTypeIRI()), DATA_FACTORY.getOWLLiteral(type));
     }
 
     static OWLAnnotation getDomainAnnotation() {
@@ -127,16 +127,16 @@ public class OWLUtility {
     }
 
     static void checkOWL2QLCompliance(OWLOntology ontology) {
-        new OWL2QLProfile().checkOntology(ontology).getViolations().forEach(violation -> logger.error(violation.toString()));
+        new OWL2QLProfile().checkOntology(ontology).getViolations().forEach(violation -> LOGGER.warn(violation.toString()));
     }
 
     static void saveOntology(OWLOntology ontology, File file) throws Exception {
         if (file.getName().endsWith(".ttl")) {
-            manager.saveOntology(ontology, new TurtleDocumentFormat(), new FileOutputStream(file));
+            ONTOLOGY_MANAGER.saveOntology(ontology, new TurtleDocumentFormat(), new FileOutputStream(file));
         } else if (file.getName().endsWith(".xml")) {
-            manager.saveOntology(ontology, new OWLXMLDocumentFormat(), new FileOutputStream(file));
+            ONTOLOGY_MANAGER.saveOntology(ontology, new OWLXMLDocumentFormat(), new FileOutputStream(file));
         } else {
-            manager.saveOntology(ontology, new RDFXMLDocumentFormat(), new FileOutputStream(file));
+            ONTOLOGY_MANAGER.saveOntology(ontology, new RDFXMLDocumentFormat(), new FileOutputStream(file));
         }
     }
 
@@ -144,11 +144,11 @@ public class OWLUtility {
         if (stream == null)
             return null;
         try {
-            OWLOntology ontology = manager.loadOntologyFromOntologyDocument(stream);
-            manager.removeOntology(ontology);
+            OWLOntology ontology = ONTOLOGY_MANAGER.loadOntologyFromOntologyDocument(stream);
+            ONTOLOGY_MANAGER.removeOntology(ontology);
             return ontology;
         } catch (Exception e) {
-            logger.error("An error is occured during loading: " + e.getMessage(), e);
+            LOGGER.error("An error is occurred during loading: " + e.getMessage(), e);
         }
         return null;
     }
@@ -157,11 +157,11 @@ public class OWLUtility {
         if (file == null)
             return null;
         try {
-            OWLOntology ontology = manager.loadOntologyFromOntologyDocument(file);
-            manager.removeOntology(ontology);
+            OWLOntology ontology = ONTOLOGY_MANAGER.loadOntologyFromOntologyDocument(file);
+            ONTOLOGY_MANAGER.removeOntology(ontology);
             return ontology;
         } catch (Exception e) {
-            logger.error("An error is occured during loading " + file.getName() + ": " + e.getMessage(), e);
+            LOGGER.error("An error is occurred during loading " + file.getName() + ": " + e.getMessage(), e);
         }
         return null;
     }

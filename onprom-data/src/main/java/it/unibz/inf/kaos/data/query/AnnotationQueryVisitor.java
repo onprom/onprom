@@ -8,8 +8,8 @@ package it.unibz.inf.kaos.data.query;
  */
 public interface AnnotationQueryVisitor{
 
-	public void visit(BinaryAnnotationQuery baq);
+    void visit(BinaryAnnotationQuery baq);
 
-	public void visit(UnaryAnnotationQuery uaq);
+    void visit(UnaryAnnotationQuery uaq);
 
 }

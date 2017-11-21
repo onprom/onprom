@@ -5,6 +5,10 @@
  */
 package org.processmining.plugins.kaos;
 
+import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.obdamapper.OBDAMapper;
+import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
+import it.unibz.inf.ontop.model.OBDAModel;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.plugin.annotations.Plugin;
@@ -12,12 +16,6 @@ import org.processmining.framework.plugin.annotations.PluginCategory;
 import org.processmining.framework.plugin.annotations.PluginQuality;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.semanticweb.owlapi.model.OWLOntology;
-
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.obdamapper.OBDAMapper;
-import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
-import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
-import it.unibz.inf.ontop.model.OBDAModel;
 
 /**
  * 
@@ -29,11 +27,10 @@ public class OBDAMapperPlugin {
 	
 	@Plugin(
 	        name = "OnProM - OBDA Mapper", 
-	        parameterLabels = {"Source Ontology", "Target Ontology", "Source OBDAModel", "Annotation Queries"}, 
-	        returnLabels = { "OBDA Mapping" }, 
-	        returnTypes = { OBDAMapping.class }, 
-	        userAccessible = true, 
-	        help = "OBDA Mapper - Generate an OBDA Mapping from the given data source into the target ontology",
+	        parameterLabels = {"Source Ontology", "Target Ontology", "Source OBDAModel", "Annotation Queries"},
+			returnLabels = {"OBDA Mapping"},
+			returnTypes = {OBDAMapping.class},
+			help = "OBDA Mapper - Generate an OBDA Mapping from the given data source into the target ontology",
 	        quality = PluginQuality.VeryGood, 
 	        categories = {PluginCategory.Analytics}
 	)
@@ -53,10 +50,9 @@ public class OBDAMapperPlugin {
 		try {
 			
 			obdaMapping = new OBDAMapper().createOBDAMapping(sourceOnto, targetOnto, sourceObdaModel, annotationQueries);
-			
-		} catch (InvalidDataSourcesNumberException e) {
-			e.printStackTrace();
-            context.log("Failed to generate the OBDA Mapping: " + e.getMessage());
+
+		} catch (Exception e) {
+			context.log(e);
 		}
 
         context.getFutureResult(0).setLabel("OBDA Mapping");

@@ -26,6 +26,8 @@
 
 package it.unibz.inf.kaos.io;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.data.query.AnnotationQuery;
 import it.unibz.inf.kaos.data.query.BinaryAnnotationQuery;
@@ -41,7 +43,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -91,20 +92,32 @@ public class SimpleQueryExporter {
     }
 
     public static List<AnnotationQuery> getAttributeQueries(List<AnnotationAttribute> attributes) {
-    if (attributes != null && attributes.size() > 0) {
-        List<AnnotationQuery> queries = new LinkedList<>();
+        if (attributes != null && !attributes.isEmpty()) {
+            List<AnnotationQuery> queries = Lists.newLinkedList();
       attributes.forEach(attribute -> queries.add(getAttributeQuery(attribute)));
       return queries;
     }
     return null;
   }
 
-  public static void addJoin(SelectBuilder builder, Set<DiagramShape> path) {
+  public static String addJoin(SelectBuilder builder, Set<DiagramShape> path){
+        return addJoin(builder, path, null);
+  }
+
+  private static String getVarName(ImmutableMap<String, String> varNames, String varName){
+        if(varNames!=null) {
+                return varNames.getOrDefault(varName, varName);
+        }
+        return varName;
+  }
+
+    public static String addJoin(SelectBuilder builder, Set<DiagramShape> path, ImmutableMap<String, String> varNames) {
     if (path == null || path.stream().filter(Relationship.class::isInstance).count() < 1) {
-      return;
+        return null;
     }
     String isaSubject = null;
     String isaURI = null;
+        String last = null;
     Iterator<DiagramShape> shapeIterator = path.iterator();
     while (shapeIterator.hasNext()) {
       DiagramShape shape = shapeIterator.next();
@@ -117,57 +130,111 @@ public class SimpleQueryExporter {
           String subject = association.getCleanName();
           if (isaSubject != null) {
             subject = isaSubject;
-            builder.addWhere("?" + isaSubject, "a", "<" + isaURI + ">");
+              builder.addWhere("?" + getVarName(varNames, subject), "a", "<" + isaURI + ">");
             isaSubject = null;
           }
           DiagramShape nextNode = shapeIterator.next();
-          builder.addWhere("?" + subject, "<" + association.getLongName() + OWLExporter.REIFICATION_SEPARATOR + nextNode.getCleanName() + ">", "?" + nextNode.getCleanName());
+          builder.addWhere("?" + getVarName(varNames, subject), "<" + association.getLongName() + OWLExporter.REIFICATION_SEPARATOR + nextNode.getCleanName() + ">", "?" + getVarName(varNames, nextNode.getCleanName()));
+            last = getVarName(varNames, nextNode.getCleanName());
         } else {
           String subject = association.getFirstClass().getCleanName();
           if (isaSubject != null) {
             subject = isaSubject;
             isaSubject = null;
           }
-          builder.addWhere("?" + subject, "<" + association.getLongName() + ">", "?" + association.getSecondClass().getCleanName());
+          builder.addWhere("?" + getVarName(varNames, subject), "<" + association.getLongName() + ">", "?" + getVarName(varNames, association.getSecondClass().getCleanName()));
+            last = getVarName(varNames, association.getSecondClass().getCleanName());
         }
       } else if (shape instanceof UMLClass) {
         if (isaSubject != null) {
-          builder.addWhere("?" + isaSubject, "a", "<" + shape.getLongName() + ">");
+          builder.addWhere("?" + getVarName(varNames, isaSubject), "a", "<" + shape.getLongName() + ">");
           isaSubject = null;
         }
-
       }
     }
+        return last;
   }
 
     public static SelectBuilder getStringAttributeQueryBuilder(NavigationalAttribute navigationalAttribute, UMLClass relatedClass, Set<DiagramShape> casePath) {
-        final Var classVar = Var.alloc(relatedClass.getCleanName());
-        final String classIRI = "<" + relatedClass.getLongName() + ">";
-        final Var nameVar = XESConstants.attValueVar;
+        return getStringAttributeQueryBuilder(navigationalAttribute, relatedClass, casePath, XESConstants.attValueVar);
+    }
+
+    public static SelectBuilder getStringAttributeQueryBuilder(NavigationalAttribute navigationalAttribute, Annotation relatedAnnotation, Set<DiagramShape> casePath) {
+        return getStringAttributeQueryBuilder(navigationalAttribute, relatedAnnotation, casePath, XESConstants.attValueVar);
+    }
+
+    public static SelectBuilder getStringAttributeQueryBuilder(NavigationalAttribute navigationalAttribute, Annotation relatedAnnotation, Set<DiagramShape> casePath, Var nameVar) {
+        final Var classVar = Var.alloc(relatedAnnotation.getVarName());
+        final String classIRI = "<" + relatedAnnotation.getLongName() + ">";
         // add class variable
         SelectBuilder builder = new SelectBuilder();
         builder.addVar(classVar);
         if (casePath != null) {
             addJoin(builder, casePath);
-        } else {
-            builder.addWhere(classVar, "a", classIRI);
         }
         if (navigationalAttribute instanceof StringAttribute && navigationalAttribute.getAttribute() == null) {
             try {
+                if(casePath==null) {
+                    builder.addWhere(classVar, "a", classIRI);
+                }
                 builder.addVar("\"" + ((StringAttribute) navigationalAttribute).getValue() + "\"", nameVar);
             } catch (ParseException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         } else {
             builder.addVar(nameVar);
             addJoin(builder, navigationalAttribute.getPath());
-            builder.addWhere("?" + navigationalAttribute.getUmlClass().getCleanName(), "<" + navigationalAttribute.getAttribute().getLongName() + ">", nameVar);
+            if (navigationalAttribute.getUmlClass().equalsOrInherits(relatedAnnotation.getRelatedClass())) {
+                builder.addWhere("?" + relatedAnnotation.getVarName(), "<" + navigationalAttribute.getAttribute().getLongName() + ">", nameVar);
+            } else {
+                builder.addWhere("?" + navigationalAttribute.getUmlClass().getCleanName(), "<" + navigationalAttribute.getAttribute().getLongName() + ">", nameVar);
+            }
+
             //we only add filter if it is a dynamic value
             if (navigationalAttribute.getFilterClause() != null && !navigationalAttribute.getFilterClause().isEmpty()) {
                 try {
                     builder.addFilter(navigationalAttribute.getFilterClause().replaceAll("%1", "?n"));
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        }
+        return builder;
+    }
+
+    public static SelectBuilder getStringAttributeQueryBuilder(NavigationalAttribute navigationalAttribute, UMLClass relatedClass, Set<DiagramShape> casePath, Var nameVar) {
+        final Var classVar = Var.alloc(relatedClass.getCleanName());
+        final String classIRI = "<" + relatedClass.getLongName() + ">";
+        // add class variable
+        SelectBuilder builder = new SelectBuilder();
+        builder.addVar(classVar);
+        if (casePath != null) {
+            addJoin(builder, casePath);
+        }
+        if (navigationalAttribute instanceof StringAttribute && navigationalAttribute.getAttribute() == null) {
+            try {
+                if(casePath==null) {
+                    builder.addWhere(classVar, "a", classIRI);
+                }
+                builder.addVar("\"" + ((StringAttribute) navigationalAttribute).getValue() + "\"", nameVar);
+            } catch (ParseException e) {
+                logger.error(e.getMessage(), e);
+            }
+        } else {
+            builder.addVar(nameVar);
+            addJoin(builder, navigationalAttribute.getPath());
+            if (navigationalAttribute.getUmlClass().equalsOrInherits(relatedClass)) {
+                builder.addWhere("?" + relatedClass.getCleanName(), "<" + navigationalAttribute.getAttribute().getLongName() + ">", nameVar);
+            } else {
+                builder.addWhere("?" + navigationalAttribute.getUmlClass().getCleanName(), "<" + navigationalAttribute.getAttribute().getLongName() + ">", nameVar);
+            }
+
+            //we only add filter if it is a dynamic value
+            if (navigationalAttribute.getFilterClause() != null && !navigationalAttribute.getFilterClause().isEmpty()) {
+                try {
+                    builder.addFilter(navigationalAttribute.getFilterClause().replaceAll("%1", "?n"));
+                } catch (ParseException e) {
+                    logger.error(e.getMessage(), e);
                 }
             }
         }

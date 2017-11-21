@@ -36,10 +36,11 @@ import javax.swing.undo.AbstractUndoableEdit;
 /**
  * Association addition and removal undo-redo edit
  * <p>
+ *
  * @author T. E. Kalayci
  * Date: 29-Sep-16
  */
-public class AddDeleteRelationEdit extends AbstractUndoableEdit {
+class AddDeleteRelationEdit extends AbstractUndoableEdit {
 
     private final UMLDiagram drawingPanel;
     private final Relationship relation;
@@ -47,7 +48,7 @@ public class AddDeleteRelationEdit extends AbstractUndoableEdit {
     // true for adding, false for deletion
     private final boolean adding;
 
-    public AddDeleteRelationEdit(UMLDiagram _panel, Relationship _rel, AssociationClass _associationClass, boolean _adding) {
+    AddDeleteRelationEdit(UMLDiagram _panel, Relationship _rel, AssociationClass _associationClass, boolean _adding) {
         drawingPanel = _panel;
         relation = _rel;
         associationClass = _associationClass;

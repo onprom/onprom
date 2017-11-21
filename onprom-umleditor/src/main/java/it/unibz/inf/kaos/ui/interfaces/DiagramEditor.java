@@ -44,5 +44,5 @@ public interface DiagramEditor {
 
     void save();
 
-    void loadEditor(JPanel panel);
+    void loadForm(JPanel panel);
 }

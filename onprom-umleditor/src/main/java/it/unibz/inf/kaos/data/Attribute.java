@@ -107,7 +107,7 @@ public class Attribute implements Cloneable {
 
   public String toString() {
     String result = name + ": " + type;
-    if (!multiplicity.equals(Cardinality.C1_1))
+      if (multiplicity != Cardinality.C1_1)
       return result + " [" + multiplicity + "]";
     return result;
   }
@@ -116,7 +116,7 @@ public class Attribute implements Cloneable {
   public boolean equals(Object object) {
     if (object != null && object instanceof Attribute) {
       Attribute attribute = (Attribute) object;
-      return attribute.getName().equals(getName()) && attribute.getType().equals(getType());
+        return attribute.getName().equals(getName()) && attribute.getType() == getType();
     }
     return super.equals(object);
   }

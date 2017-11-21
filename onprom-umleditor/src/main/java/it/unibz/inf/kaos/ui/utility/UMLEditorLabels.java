@@ -41,9 +41,9 @@ public enum UMLEditorLabels implements Labels {
     CARDINALITY("Cardinalities", "Please select cardinalities of the relation", false),
     RELATION("Association", "Please select relation", false),;
 
-    final private String label;
-    final private String tooltip;
-    final private boolean clickable;
+    private final String label;
+    private final String tooltip;
+    private final boolean clickable;
 
     UMLEditorLabels(String _label, String _tooltip, boolean _clickable) {
         this.label = _label;

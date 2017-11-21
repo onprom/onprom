@@ -34,7 +34,7 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Table for displaying and editing attributes in class form
@@ -42,7 +42,7 @@ import java.util.LinkedList;
  * @author T. E. Kalayci
  */
 public class AttributeTable extends JTable implements MouseListener {
-    private final AttributeTableModel model = new AttributeTableModel(new LinkedList<>());
+    private final AttributeTableModel model = new AttributeTableModel();
 
     public AttributeTable(boolean editable) {
         super();
@@ -58,11 +58,11 @@ public class AttributeTable extends JTable implements MouseListener {
         }
     }
 
-    public LinkedList<Attribute> getAttributes() {
+    public List<Attribute> getAttributes() {
         return model.getAttributes();
     }
 
-    public void setAttributes(LinkedList<Attribute> attributes) {
+    public void setAttributes(List<Attribute> attributes) {
         model.setAttributes(attributes);
     }
 

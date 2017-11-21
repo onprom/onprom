@@ -26,8 +26,8 @@
 
 package it.unibz.inf.kaos.ui.action;
 
-import it.unibz.inf.kaos.data.ActionType;
-import it.unibz.inf.kaos.data.UMLActionType;
+import it.unibz.inf.kaos.data.UMLDiagramActions;
+import it.unibz.inf.kaos.interfaces.ActionType;
 import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
 
 /**
@@ -36,27 +36,27 @@ import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
  * @author T. E. Kalayci
  * Date: 27-Oct-16
  */
-public class DialogAction extends ToolbarAction {
+public class DiagramEditorAction extends ToolbarAction {
 
-    private final DiagramEditor dialog;
+    private final DiagramEditor diagramEditor;
 
-    public DialogAction(DiagramEditor _dialog, ActionType _actionType) {
-        super(null, _actionType);
-        dialog = _dialog;
+    public DiagramEditorAction(ActionType _actionType, DiagramEditor _editor) {
+        super(_actionType);
+        diagramEditor = _editor;
     }
 
     @Override
     public void execute() {
-      if (actionType.equals(UMLActionType.open)) {
-        dialog.open(null);
-      } else if (actionType.equals(UMLActionType.export)) {//export as OWL
-        dialog.export(false);
-      } else if (actionType.equals(UMLActionType.save)) {//save over the files
-        dialog.save();
-      } else if (actionType.equals(UMLActionType.saveas)) {//save as JSON file
-        dialog.export(true);
-      } else if (actionType.equals(UMLActionType.close)) {
-        dialog.close();
+        if (actionType.equals(UMLDiagramActions.open)) {
+            diagramEditor.open(null);
+        } else if (actionType.equals(UMLDiagramActions.export)) {//export as OWL
+            diagramEditor.export(false);
+        } else if (actionType.equals(UMLDiagramActions.save)) {//save over the files
+            diagramEditor.save();
+        } else if (actionType.equals(UMLDiagramActions.saveas)) {//save as JSON file
+            diagramEditor.export(true);
+        } else if (actionType.equals(UMLDiagramActions.close)) {
+            diagramEditor.close();
 
         }
     }

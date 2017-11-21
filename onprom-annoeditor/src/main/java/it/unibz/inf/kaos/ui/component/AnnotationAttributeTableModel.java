@@ -26,11 +26,11 @@
 
 package it.unibz.inf.kaos.ui.component;
 
+import com.google.common.collect.Lists;
 import it.unibz.inf.kaos.data.AnnotationAttribute;
 import it.unibz.inf.kaos.data.NavigationalAttribute;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -44,6 +44,10 @@ class AnnotationAttributeTableModel extends AbstractTableModel {
     private final Class<?>[] columnClasses;
 
     private List<AnnotationAttribute> attributes;
+
+    AnnotationAttributeTableModel(boolean withType) {
+        this(Lists.newLinkedList(), withType);
+    }
 
     AnnotationAttributeTableModel(List<AnnotationAttribute> _attributes, boolean withType) {
         super();
@@ -114,8 +118,9 @@ class AnnotationAttributeTableModel extends AbstractTableModel {
     }
 
     void addAttribute(AnnotationAttribute annotationAttribute) {
-        if (attributes == null)
-            attributes = new LinkedList<>();
+        if (attributes == null) {
+            attributes = Lists.newLinkedList();
+        }
         attributes.add(annotationAttribute);
         fireTableDataChanged();
     }

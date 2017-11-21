@@ -26,8 +26,6 @@
 
 package org.processmining.plugins.kaos;
 
-import it.unibz.inf.kaos.data.FileType;
-import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.interfaces.UMLEditorListener;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.uml.UMLEditor;
@@ -37,8 +35,6 @@ import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.framework.plugin.events.Logger.MessageLevel;
 import org.semanticweb.owlapi.model.OWLOntology;
-
-import java.util.Set;
 
 /**
  * @author T. E. Kalayci
@@ -81,11 +77,6 @@ public class OntologyEditorPlugin implements UMLEditorListener {
         } else {
             context.log("OWL ontology is not created", MessageLevel.ERROR);
         }
-    }
-
-    @Override
-    public void store(String identifier, FileType type, Set<DiagramShape> shapes) {
-
     }
 
     private void loadUMLEditor(final UIPluginContext _context, OWLOntology ontology) {

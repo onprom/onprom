@@ -27,7 +27,6 @@
 package it.unibz.inf.kaos.ui.form;
 
 import it.unibz.inf.kaos.data.*;
-import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.component.AnnotationAttributeTable;
@@ -48,14 +47,14 @@ import java.util.Set;
  * @author T. E. Kalayci on 8-Feb-17.
  */
 class AttributeForm extends AbstractAnnotationForm {
-    final static String[] NAMES = {"concept:name", "time:timestamp", "lifecycle:transition", "org:resource"};
-    final static String[] TYPES = {"literal", "timestamp"};
-    final private JComboBox<String> txtName;
-    final private JComboBox<NavigationalAttribute> cmbValue;
-    final private JComboBox<Set<DiagramShape>> cmbValuePath;
+    static final String[] NAMES = {"concept:name", "time:timestamp", "lifecycle:transition", "org:resource"};
+    static final String[] TYPES = {"literal", "timestamp"};
+    private final JComboBox<String> txtName;
+    private final JComboBox<NavigationalAttribute> cmbValue;
+    private final JComboBox<Set<DiagramShape>> cmbValuePath;
     private final AnnotationAttributeTable tblAttributes;
-    private JComboBox<String> txtType = null;
-    private JTextField txtValueFilter = null;
+    private JComboBox<String> txtType;
+    private JTextField txtValueFilter;
 
     AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation) {
         this(_drawingPanel, _annotation, true, false, NAMES, TYPES, null);
@@ -65,7 +64,7 @@ class AttributeForm extends AbstractAnnotationForm {
         this(_drawingPanel, _annotation, withFilter, withType, NAMES, TYPES, values);
     }
 
-    AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation, boolean withFilter, boolean withType, String[] names, String[] types, Set<NavigationalAttribute> values) {
+    private AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation, boolean withFilter, boolean withType, String[] names, String[] types, Set<NavigationalAttribute> values) {
 
         super(_drawingPanel, _annotation);
 
@@ -184,24 +183,28 @@ class AttributeForm extends AbstractAnnotationForm {
 
     private void ok() {
         Object object = cmbValue.getSelectedItem();
-        StringAttribute attributeValue;
+        StringAttribute attributeValue = new StringAttribute();
         if (object instanceof StringAttribute) {
             attributeValue = new StringAttribute(object.toString());
         } else if (object instanceof NavigationalAttribute) {
             attributeValue = new StringAttribute((NavigationalAttribute) object);
             attributeValue.setPath(cmbValuePath.getItemAt(cmbValuePath.getSelectedIndex()));
-        } else {
+        } else if (object != null) {
             attributeValue = new StringAttribute(object.toString());
         }
         if (txtValueFilter != null) attributeValue.setFilterClause(txtValueFilter.getText());
-        AnnotationAttribute attribute = new AnnotationAttribute(txtName.getSelectedItem().toString(), attributeValue);
-        if (txtType != null) attribute.setType(txtType.getSelectedItem().toString());
-        if (tblAttributes.getSelectedRow() > -1) {
-            tblAttributes.updateAttributeAt(tblAttributes.getSelectedRow(), attribute);
-        } else {
-            tblAttributes.addAttribute(attribute);
+        if (txtName.getSelectedItem() != null) {
+            AnnotationAttribute attribute = new AnnotationAttribute(txtName.getSelectedItem().toString(), attributeValue);
+            if (txtType != null && txtType.getSelectedItem() != null) {
+                attribute.setType(txtType.getSelectedItem().toString());
+            }
+            if (tblAttributes.getSelectedRow() > -1) {
+                tblAttributes.updateAttributeAt(tblAttributes.getSelectedRow(), attribute);
+            } else {
+                tblAttributes.addAttribute(attribute);
+            }
+            tblAttributes.clearSelection();
         }
-        tblAttributes.clearSelection();
         populateForm();
     }
 

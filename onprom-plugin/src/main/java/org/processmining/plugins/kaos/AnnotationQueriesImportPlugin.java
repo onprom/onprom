@@ -56,8 +56,7 @@ public class AnnotationQueriesImportPlugin extends AbstractImportPlugin {
             context.getFutureResult(0).setLabel("Queries (" + filename + ") " + UIUtility.getCurrentDateTime());
             return IOUtility.readJSON(input, AnnotationQueries.class);
         } catch (Exception e) {
-            e.printStackTrace();
-            context.log("Couldn't import queries from: " + filename);
+            context.log(e);
         }
         return null;
     }

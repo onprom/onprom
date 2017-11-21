@@ -26,6 +26,7 @@
 
 package it.unibz.inf.kaos.interfaces;
 
+import it.unibz.inf.kaos.data.Annotation;
 import it.unibz.inf.kaos.data.DataType;
 import it.unibz.inf.kaos.data.NavigationalAttribute;
 import it.unibz.inf.kaos.data.UMLClass;
@@ -38,7 +39,7 @@ import java.util.Set;
  *
  * @author T. E. Kalayci on 04-Apr-2017.
  */
-public interface AnnotationDiagram {
+public interface AnnotationDiagram extends Diagram {
     void addAnnotation(Annotation annotation);
 
     void removeAnnotation(Annotation annotation);
@@ -51,7 +52,7 @@ public interface AnnotationDiagram {
 
     void resetAttributeStates();
 
-    Set<NavigationalAttribute> getAttributes(UMLClass startNode, boolean functional, DataType... types);
+    Set<NavigationalAttribute> findAttributes(UMLClass startNode, boolean functional, DataType... types);
 
-    <T extends Annotation> Set<T> getAnnotations(UMLClass startNode, boolean functional, Class<T> type);
+    <T extends Annotation> Set<T> findAnnotations(UMLClass startNode, boolean functional, Class<T> type);
 }

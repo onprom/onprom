@@ -26,9 +26,9 @@
 
 package it.unibz.inf.kaos.ui.form;
 
+import it.unibz.inf.kaos.data.Annotation;
 import it.unibz.inf.kaos.data.Attribute;
 import it.unibz.inf.kaos.data.UMLClass;
-import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.interfaces.NavigationListener;

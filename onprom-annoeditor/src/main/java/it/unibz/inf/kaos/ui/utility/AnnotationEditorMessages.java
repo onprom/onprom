@@ -43,8 +43,8 @@ public enum AnnotationEditorMessages implements Messages {
     CHANGE_CASE("New Case", "You already have a <em>Case</em>. Do you want to <em>add</em> another <em>Case</em> annotation?"),
     SELECT_CASE("Selecting Case", "Please select a <em>Case</em> first"),;
 
-    final private String title;
-    final private String message;
+    private final String title;
+    private final String message;
 
     AnnotationEditorMessages(String _title, String _message) {
         this.title = _title;

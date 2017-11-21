@@ -27,17 +27,12 @@ package it.unibz.inf.kaos.annotation;
 
 import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.factory.DefaultAnnotationFactory;
-import it.unibz.inf.kaos.interfaces.Annotation;
-import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
-import it.unibz.inf.kaos.interfaces.AnnotationFactory;
+import it.unibz.inf.kaos.interfaces.*;
 import it.unibz.inf.kaos.owl.OWLImporter;
-import it.unibz.inf.kaos.ui.action.DrawingPanelAction;
+import it.unibz.inf.kaos.ui.action.DiagramPanelAction;
 import it.unibz.inf.kaos.ui.form.QueryEditor;
 import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
-import it.unibz.inf.kaos.ui.utility.IOUtility;
-import it.unibz.inf.kaos.ui.utility.UIUtility;
-import it.unibz.inf.kaos.ui.utility.UMLEditorMessages;
+import it.unibz.inf.kaos.ui.utility.*;
 import it.unibz.inf.kaos.uml.UMLEditor;
 import org.semanticweb.owlapi.model.OWLOntology;
 
@@ -53,7 +48,34 @@ import java.util.Collection;
  */
 public class AnnotationEditor extends UMLEditor {
     public AnnotationEditor(OWLOntology _ontology, AnnotationEditorListener _listener) {
-        this(_ontology, _listener, new DefaultAnnotationFactory());
+        this(_ontology, _listener, new AnnotationFactory() {
+            @Override
+            public Annotation createAnnotation(AnnotationDiagram panel, ActionType currentAction, UMLClass selectedCls) {
+                CaseAnnotation caseAnnotation = panel.findFirst(CaseAnnotation.class);
+
+                if (currentAction.toString().equals(CaseAnnotation.class.getAnnotation(AnnotationProperties.class).title())) {
+                    if (caseAnnotation == null || UIUtility.confirm(AnnotationEditorMessages.CHANGE_CASE)) {
+                        return new CaseAnnotation(selectedCls);
+                    }
+                } else if (currentAction.toString().equals(EventAnnotation.class.getAnnotation(AnnotationProperties.class).title())) {
+                    if (caseAnnotation == null) {
+                        UIUtility.error(AnnotationEditorMessages.SELECT_CASE);
+                    } else {
+                        if (!NavigationUtility.isConnected(selectedCls, caseAnnotation.getRelatedClass(), false)) {
+                            UIUtility.error("Event class is not connected to Trace class!");
+                        } else {
+                            return new EventAnnotation("event" + panel.count(EventAnnotation.class), caseAnnotation, selectedCls);
+                        }
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public boolean checkRemoval(AnnotationDiagram panel, Annotation annotation) {
+                return !(annotation instanceof CaseAnnotation) || panel.count(Annotation.class) < 2 || UIUtility.confirm(AnnotationEditorMessages.CASE_DELETE_CONFIRMATION);
+            }
+        });
     }
 
     public AnnotationEditor(OWLOntology _ontology, AnnotationEditorListener _listener, AnnotationFactory factory) {
@@ -76,12 +98,10 @@ public class AnnotationEditor extends UMLEditor {
     public void export(boolean asFile) {
         UIUtility.executeInBackground(() -> {
             if (asFile) {
-                loadedFile = IOUtility.exportJSON(FileType.ANNOTATION, diagramPanel.getAllShapes(true));
+                loadedFile = IOUtility.exportJSON(FileType.ANNOTATION, diagramPanel.getShapes(true));
             } else {
                 AnnotationQueries annotationsQueries = new AnnotationQueries();
-                for (Annotation annotation : diagramPanel.getItems(Annotation.class)) {
-                    annotationsQueries.addQuery(annotation.getQuery());
-                }
+                diagramPanel.getAll(Annotation.class).map(Annotation::getQuery).forEach(annotationsQueries::addQuery);
                 if (annotationsQueries.getQueryCount() > 0) {
                     new QueryEditor(annotationsQueries);
                     if (listener != null) {
@@ -105,14 +125,14 @@ public class AnnotationEditor extends UMLEditor {
         UIUtility.executeInBackground(() -> {
             if (loadedFile != null) {
                 FileType fileType = IOUtility.getFileType(loadedFile);
-                if (fileType.equals(FileType.ONTOLOGY)) {
-                    loadedFile = IOUtility.exportJSON(FileType.ANNOTATION, diagramPanel.getAllShapes(true));
+                if (fileType == FileType.ONTOLOGY) {
+                    loadedFile = IOUtility.exportJSON(FileType.ANNOTATION, diagramPanel.getShapes(true));
                 } else {
-                    IOUtility.exportJSON(loadedFile, diagramPanel.getAllShapes(true));
+                    IOUtility.exportJSON(loadedFile, diagramPanel.getShapes(true));
                 }
             }
             if (listener != null) {
-                listener.store(identifier, FileType.ANNOTATION, diagramPanel.getAllShapes(true));
+                listener.store(identifier, FileType.ANNOTATION, diagramPanel.getShapes(true));
             }
             return null;
         }, progressBar);
@@ -128,7 +148,7 @@ public class AnnotationEditor extends UMLEditor {
     @Override
     protected JToolBar createToolbar() {
         JToolBar toolBar = getMainToolbar(diagramPanel);
-        getAnnotationProperties().forEach(annotationProperties -> toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(diagramPanel, new ActionType() {
+        getAnnotationProperties().forEach(annotationProperties -> toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(new AbstractActionType() {
             @Override
             public char getMnemonic() {
                 return annotationProperties.mnemonic();
@@ -143,12 +163,7 @@ public class AnnotationEditor extends UMLEditor {
             public String getTitle() {
                 return annotationProperties.title();
             }
-
-            @Override
-            public String toString() {
-                return annotationProperties.label();
-            }
-        }))));
+        }, diagramPanel))));
         return toolBar;
     }
 

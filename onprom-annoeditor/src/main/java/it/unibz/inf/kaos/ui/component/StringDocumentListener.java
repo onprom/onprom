@@ -38,7 +38,7 @@ import javax.swing.event.DocumentListener;
  * @author T. E. Kalayci on 15/02/17.
  */
 public class StringDocumentListener implements DocumentListener {
-  final private JTextField textField;
+    private final JTextField textField;
   private StringAttribute attribute;
 
   public StringDocumentListener(StringAttribute _attribute, JTextField _textField) {

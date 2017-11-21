@@ -24,20 +24,19 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.data;
+package it.unibz.inf.kaos.interfaces;
 
 /**
  * @author T. E. Kalayci
  * Date: 25-May-2017
- *
  */
 public interface ActionType {
-  char getMnemonic();
+    char getMnemonic();
 
-  String getTooltip();
+    String getTooltip();
 
-  String getTitle();
+    String getTitle();
 
-  @Override
-  String toString();
+    @Override
+    String toString();
 }

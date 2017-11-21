@@ -26,7 +26,8 @@
 
 package it.unibz.inf.kaos.data.query;
 
-import java.util.LinkedHashSet;
+import com.google.common.collect.Sets;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ import java.util.stream.Collectors;
  * - change the name of the class
  */
 public class AnnotationQueries {
-  private Set<AnnotationQuery> queries = new LinkedHashSet<>();
+    private final Set<AnnotationQuery> queries = Sets.newLinkedHashSet();
 
   public AnnotationQueries() {
     //

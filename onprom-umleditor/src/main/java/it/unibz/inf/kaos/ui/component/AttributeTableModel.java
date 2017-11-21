@@ -26,13 +26,14 @@
 
 package it.unibz.inf.kaos.ui.component;
 
+import com.google.common.collect.Lists;
 import it.unibz.inf.kaos.data.Attribute;
 import it.unibz.inf.kaos.data.Cardinality;
 import it.unibz.inf.kaos.data.DataType;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Table model to hold and display attributes in class form
@@ -40,15 +41,17 @@ import java.util.LinkedList;
  * @author T. E. Kalayci
  */
 class AttributeTableModel extends AbstractTableModel {
-
-    private static final long serialVersionUID = 1L;
-
-    private final String[] columnNames = {"Atrribute Name", "Attribute Type", "Attribute Cardinality"};
+    private final String[] columnNames = {"Name", "Type", "Cardinality"};
     private final Class<?>[] columnClass = {String.class, DataType.class, String.class};
 
-    private LinkedList<Attribute> attributes = new LinkedList<>();
+    private List<Attribute> attributes;
 
-    AttributeTableModel(LinkedList<Attribute> _attributes) {
+    AttributeTableModel() {
+        super();
+        attributes = Lists.newLinkedList();
+    }
+
+    AttributeTableModel(List<Attribute> _attributes) {
         super();
         attributes = _attributes;
     }
@@ -112,11 +115,11 @@ class AttributeTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    LinkedList<Attribute> getAttributes() {
+    List<Attribute> getAttributes() {
         return attributes;
     }
 
-    void setAttributes(LinkedList<Attribute> _attributes) {
+    void setAttributes(List<Attribute> _attributes) {
         attributes = _attributes;
         fireTableDataChanged();
     }

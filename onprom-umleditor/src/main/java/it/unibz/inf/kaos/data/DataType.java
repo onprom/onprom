@@ -54,7 +54,7 @@ public enum DataType {
     DATE_TIME(XSDVocabulary.DATE_TIME),
     DATE_TIME_STAMP(XSDVocabulary.DATE_TIME_STAMP);
 
-    private final static Logger logger = LoggerFactory.getLogger(DataType.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(DataType.class.getName());
 
     private final XSDVocabulary vocabulary;
 
@@ -66,7 +66,7 @@ public enum DataType {
         try {
             XSDVocabulary vocabulary = XSDVocabulary.parseShortName(value);
             for (DataType dataType : values()) {
-                if (dataType.vocabulary.equals(vocabulary)) {
+                if (dataType.vocabulary == vocabulary) {
                     return dataType;
                 }
             }

@@ -26,7 +26,9 @@
 
 package it.unibz.inf.kaos.data;
 
-import it.unibz.inf.kaos.ui.utility.DrawingConstants;
+import it.unibz.inf.kaos.interfaces.UMLDiagram;
+import it.unibz.inf.kaos.ui.form.RelationForm;
+import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
 import java.awt.*;
 
@@ -34,7 +36,7 @@ import java.awt.*;
  * @author T. E. Kalayci
  */
 public class Association extends Relationship {
-  private AssociationClass associationClass = null;
+  private AssociationClass associationClass;
   private Cardinality firstMultiplicity = Cardinality.C0_1;
   private Cardinality secondMultiplicity = Cardinality.C0_1;
 
@@ -113,13 +115,13 @@ public class Association extends Relationship {
       final Font oldFont = g2d.getFont();
       final Stroke oldStroke = g2d.getStroke();
       final Color oldColor = g2d.getColor();
-    g2d.setFont(DrawingConstants.RELATION_FONT);
+    g2d.setFont(DrawingUtility.RELATION_FONT);
     g2d.setColor(getState().getColor());
-    g2d.setStroke(DrawingConstants.RELATION_STROKE);
+    g2d.setStroke(DrawingUtility.RELATION_STROKE);
       final int[] m1Position = getM1Position(g2d);
       final int[] m2Position = getM2Position(g2d);
-    drawLabel(g2d, getFirstMultiplicityString(), m1Position[0], m1Position[1] - DrawingConstants.GAP, true);
-    drawLabel(g2d, getSecondMultiplicityString(), m2Position[0], m2Position[1] - DrawingConstants.GAP, true);
+    drawLabel(g2d, getFirstMultiplicityString(), m1Position[0], m1Position[1] - DrawingUtility.GAP, true);
+    drawLabel(g2d, getSecondMultiplicityString(), m2Position[0], m2Position[1] - DrawingUtility.GAP, true);
     g2d.setColor(oldColor);
     g2d.setStroke(oldStroke);
     g2d.setFont(oldFont);
@@ -175,14 +177,14 @@ public class Association extends Relationship {
     int y = centerY - b;
     // arrange coordinates according size of string
     //check the angle to find correct position of label
-    if (angle >= -DrawingConstants.D45 && angle < DrawingConstants.D45) {
+    if (angle >= -DrawingUtility.D45 && angle < DrawingUtility.D45) {
       x = startX - g2d.getFontMetrics().stringWidth(getFirstMultiplicityString());
-    } else if (angle >= DrawingConstants.D45 && angle < DrawingConstants.D135) {
-      y = startY - DrawingConstants.GAP;
-    } else if (angle <= -DrawingConstants.D45 && angle > -DrawingConstants.D135) {
-      y = firstClass.getEndY() + g2d.getFontMetrics().getHeight() + DrawingConstants.GAP;
+    } else if (angle >= DrawingUtility.D45 && angle < DrawingUtility.D135) {
+      y = startY - DrawingUtility.GAP;
+    } else if (angle <= -DrawingUtility.D45 && angle > -DrawingUtility.D135) {
+      y = firstClass.getEndY() + g2d.getFontMetrics().getHeight() + DrawingUtility.GAP;
     } else {
-      x = firstClass.getEndX() + DrawingConstants.GAP;
+      x = firstClass.getEndX() + DrawingUtility.GAP;
     }
     // return calculated position
     return new int[]{x, y};
@@ -228,12 +230,12 @@ public class Association extends Relationship {
     int x = centerX + a;
     int y = centerY + b;
     //check the angle to find correct position of label
-    if (angle > -DrawingConstants.D45 && angle < DrawingConstants.D45) {
-      x = secondClass.getEndX() + DrawingConstants.GAP;
-    } else if (angle > DrawingConstants.D45 && angle < DrawingConstants.D135) {
-      y = secondClass.getEndY() + g2d.getFontMetrics().getHeight() + DrawingConstants.GAP;
-    } else if (angle < -DrawingConstants.D45 && angle > -DrawingConstants.D135) {
-      y = startY - DrawingConstants.GAP;
+    if (angle > -DrawingUtility.D45 && angle < DrawingUtility.D45) {
+      x = secondClass.getEndX() + DrawingUtility.GAP;
+    } else if (angle > DrawingUtility.D45 && angle < DrawingUtility.D135) {
+      y = secondClass.getEndY() + g2d.getFontMetrics().getHeight() + DrawingUtility.GAP;
+    } else if (angle < -DrawingUtility.D45 && angle > -DrawingUtility.D135) {
+      y = startY - DrawingUtility.GAP;
     } else {
       x = startX - g2d.getFontMetrics().stringWidth(getSecondMultiplicityString());
     }
@@ -261,6 +263,11 @@ public class Association extends Relationship {
     }
     //up pointing triangle
     return " △";
+  }
+
+  @Override
+  public RelationForm getForm(UMLDiagram panel) {
+    return new RelationForm(panel, this, panel.isUpdateAllowed());
   }
 
 }

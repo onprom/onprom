@@ -26,21 +26,19 @@
 
 package it.unibz.inf.kaos.ui.form;
 
+import com.google.common.collect.Lists;
 import it.unibz.inf.kaos.data.Association;
 import it.unibz.inf.kaos.data.AssociationClass;
 import it.unibz.inf.kaos.data.Attribute;
 import it.unibz.inf.kaos.data.UMLClass;
 import it.unibz.inf.kaos.interfaces.UMLDiagram;
 import it.unibz.inf.kaos.ui.component.AttributeTable;
-import it.unibz.inf.kaos.ui.edit.UpdateClassEdit;
-import it.unibz.inf.kaos.ui.utility.UIUtility;
-import it.unibz.inf.kaos.ui.utility.UMLEditorButtons;
-import it.unibz.inf.kaos.ui.utility.UMLEditorLabels;
-import it.unibz.inf.kaos.ui.utility.UMLEditorMessages;
+import it.unibz.inf.kaos.ui.edit.EditFactory;
+import it.unibz.inf.kaos.ui.utility.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -52,16 +50,14 @@ import java.util.stream.Collectors;
 public class ClassForm extends JPanel {
     private final JTextField txtName;
     private final AttributeTable tblAttributes;
-    private final UMLDiagram drawingPanel;
     private JComboBox<Association> cmbRelations;
-    private UMLClass newClass;
-    private String prevName;
-    private LinkedList<Attribute> prevAttributes;
+    private final UMLClass newClass;
+    private final String prevName;
+    private final List<Attribute> prevAttributes;
 
-    public ClassForm(UMLDiagram _panel, UMLClass _newClass, boolean editable) {
+    public ClassForm(UMLDiagram drawingPanel, UMLClass _newClass, boolean isUpdateAllowed) {
         newClass = _newClass;
-        drawingPanel = _panel;
-        tblAttributes = new AttributeTable(editable);
+        tblAttributes = new AttributeTable(isUpdateAllowed);
 
         setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
@@ -75,7 +71,7 @@ public class ClassForm extends JPanel {
 
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
-        txtName = UIUtility.createTextField(UMLEditorLabels.CLASS_NAME.getTooltip(), txtDimension, e -> ok(), editable);
+        txtName = UIUtility.createTextField(UMLEditorLabels.CLASS_NAME.getTooltip(), txtDimension, e -> ok(), isUpdateAllowed);
         add(txtName, gridBagConstraints);
 
         if (newClass instanceof AssociationClass) {
@@ -86,9 +82,9 @@ public class ClassForm extends JPanel {
 
             gridBagConstraints.gridy = 3;
             gridBagConstraints.gridwidth = 2;
-            cmbRelations = UIUtility.createWideComboBox(drawingPanel.getRelations(), txtDimension, null, true, false);
-            cmbRelations.setEditable(editable);
-            cmbRelations.setEnabled(editable);
+            cmbRelations = UIUtility.createWideComboBox(drawingPanel.getAssociations(), txtDimension, null, true, false);
+            cmbRelations.setEditable(isUpdateAllowed);
+            cmbRelations.setEnabled(isUpdateAllowed);
             cmbRelations.setSelectedItem(((AssociationClass) newClass).getAssociation());
             add(cmbRelations, gridBagConstraints);
         }
@@ -98,7 +94,7 @@ public class ClassForm extends JPanel {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridx = 4;
         add(UIUtility.createButton(UMLEditorButtons.CANCEL, e -> setVisible(false), lblDimension), gridBagConstraints);
-        if (editable) {
+        if (isUpdateAllowed) {
             gridBagConstraints.gridy = 0;
             add(UIUtility.createButton(UMLEditorButtons.SAVE, e -> ok(), lblDimension), gridBagConstraints);
 
@@ -123,22 +119,20 @@ public class ClassForm extends JPanel {
         JScrollPane tblScroll = new JScrollPane();
         tblScroll.setPreferredSize(new Dimension(500, 125));
         tblScroll.setViewportView(tblAttributes);
-        if (editable) {
+        if (isUpdateAllowed) {
             tblScroll.addMouseListener(tblAttributes);
         }
-        tblAttributes.setEnabled(editable);
+        tblAttributes.setEnabled(isUpdateAllowed);
         add(tblScroll, gridBagConstraints);
 
-        if (newClass != null) {
-            // load class form to update information
-            prevName = newClass.getName();
-            prevAttributes = new LinkedList<>();
-            if (newClass.getAttributeCount() > 0) {
-                prevAttributes.addAll(newClass.getAttributes().stream().map(Attribute::getClone).collect(Collectors.toList()));
-            }
-            txtName.setText(newClass.getName());
-            tblAttributes.setAttributes(newClass.getAttributes().stream().map(Attribute::getClone).collect(Collectors.toCollection(LinkedList::new)));
+        // load class form to update information
+        prevName = newClass.getName();
+        prevAttributes = Lists.newLinkedList();
+        if (newClass.getAttributeCount() > 0) {
+            prevAttributes.addAll(newClass.getAttributes().stream().map(Attribute::getClone).collect(Collectors.toList()));
         }
+        txtName.setText(newClass.getName());
+        tblAttributes.setAttributes(newClass.getAttributes().stream().map(Attribute::getClone).collect(Collectors.toList()));
         setVisible(true);
     }
 
@@ -146,11 +140,6 @@ public class ClassForm extends JPanel {
         if (txtName.getText().isEmpty()) {
             UIUtility.error(UMLEditorMessages.CLASS_NAME_ERROR);
         } else {
-            boolean isNew = false;
-            if (newClass == null) {
-                newClass = new UMLClass();
-                isNew = true;
-            }
             String name = txtName.getText();
             if (!name.equals(newClass.getName()) && UIUtility.isNameExist(name)) {
                 UIUtility.error(UMLEditorMessages.CLASS_NAME_DUPLICATE_ERROR);
@@ -163,7 +152,7 @@ public class ClassForm extends JPanel {
                 UIUtility.addName(newClass.getName());
                 newClass.setAttributes(tblAttributes.getAttributes());
                 //remove previous names of attributes
-                if (prevAttributes != null && prevAttributes.size() > 0) {
+                if (prevAttributes != null && !prevAttributes.isEmpty()) {
                     prevAttributes.forEach(attr -> UIUtility.removeName(attr.getName()));
                 }
                 if (newClass instanceof AssociationClass) {
@@ -177,12 +166,7 @@ public class ClassForm extends JPanel {
                 }
                 //add names of all attributes to the unique name set
                 newClass.getAttributes().forEach(attr -> UIUtility.addName(attr.getName()));
-                if (isNew) {
-                    drawingPanel.createClass(newClass);
-                } else {
-                    //undo operation
-                    drawingPanel.addEdit(new UpdateClassEdit(newClass, prevName, prevAttributes));
-                }
+                DiagramUndoManager.addEdit(EditFactory.classUpdated(newClass, prevName, prevAttributes));
                 setVisible(false);
             }
         }

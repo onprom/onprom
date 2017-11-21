@@ -67,7 +67,7 @@ public class EventForm extends AbstractAnnotationForm {
         mainPanel.add(UIUtility.createLabel("Case", TXT_SIZE), gridBagConstraints);
 
         gridBagConstraints.gridx = 3;
-        cmbCase = UIUtility.createWideComboBox(drawingPanel.getAnnotations(eventAnnotation.getRelatedClass(), true, CaseAnnotation.class), TXT_SIZE, e -> populateCasePath(), false, true);
+        cmbCase = UIUtility.createWideComboBox(drawingPanel.findAnnotations(eventAnnotation.getRelatedClass(), true, CaseAnnotation.class), TXT_SIZE, e -> populateCasePath(), false, true);
         mainPanel.add(cmbCase, gridBagConstraints);
 
         gridBagConstraints.gridx = 4;
@@ -83,7 +83,7 @@ public class EventForm extends AbstractAnnotationForm {
         }, false));
         mainPanel.add(btnTraceAdd, gridBagConstraints);
 
-        attributeForm = new AttributeForm(drawingPanel, annotation, false, true, drawingPanel.getAttributes(annotation.getRelatedClass(), false, null));
+        attributeForm = new AttributeForm(drawingPanel, annotation, false, true, drawingPanel.findAttributes(annotation.getRelatedClass(), false));
 
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;

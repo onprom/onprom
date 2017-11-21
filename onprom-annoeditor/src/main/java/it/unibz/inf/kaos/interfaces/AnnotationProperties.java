@@ -1,7 +1,7 @@
 /*
  * onprom-annoeditor
  *
- * AnnotationActionType.java
+ * AnnotationProperties.java
  *
  * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
  *
@@ -24,46 +24,24 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.data;
+package it.unibz.inf.kaos.interfaces;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
- * Actions for specific annotations
+ * Properties for annotations
  * <p>
- * @author T. E. Kalayci on 25-May-2017.
+ *
+ * @author T. E. Kalayci on 24/05/17.
  */
-public enum AnnotationActionType implements ActionType {
-  NAVIGATE("navigate", 'n', "Navigate the diagram", "Navigate");
+@Retention(RetentionPolicy.RUNTIME)
+public @interface AnnotationProperties {
+    String color();
 
-  private final String actionCommand;
-  private final char mnemonic;
-  private final String tooltip;
-  private final String title;
+    char mnemonic();
 
-  AnnotationActionType(final String text, char _mnemonic, String _tooltip, String _text) {
-    this.actionCommand = text;
-    this.mnemonic = _mnemonic;
-    this.tooltip = _tooltip;
-    this.title = _text;
-  }
+    String tooltip();
 
-  @Override
-  public char getMnemonic() {
-    return this.mnemonic;
-  }
-
-  @Override
-  public String getTooltip() {
-    return tooltip;
-  }
-
-  @Override
-  public String getTitle() {
-    return title;
-  }
-
-  @Override
-  public String toString() {
-    return actionCommand;
-  }
-
+    String title();
 }

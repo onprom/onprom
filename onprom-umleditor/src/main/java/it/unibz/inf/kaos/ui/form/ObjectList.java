@@ -28,7 +28,7 @@ package it.unibz.inf.kaos.ui.form;
 
 import it.unibz.inf.kaos.data.State;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
-import it.unibz.inf.kaos.interfaces.UMLDiagram;
+import it.unibz.inf.kaos.ui.panel.UMLDiagramPanel;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorButtons;
 
@@ -44,10 +44,10 @@ public class ObjectList extends JPanel {
     private DiagramShape previous;
     private State previousState;
 
-    public ObjectList(final UMLDiagram drawingPanel) {
+    public ObjectList(final UMLDiagramPanel drawingPanel) {
 
         final DefaultListModel<DiagramShape> mdlObjects = new DefaultListModel<>();
-        drawingPanel.getAllShapes(false).forEach(mdlObjects::addElement);
+        drawingPanel.getShapes(false).forEach(mdlObjects::addElement);
         JList lstObjects = new JList<>(mdlObjects);
         lstObjects.addListSelectionListener(e -> {
             int selectedIndex = lstObjects.getSelectedIndex();

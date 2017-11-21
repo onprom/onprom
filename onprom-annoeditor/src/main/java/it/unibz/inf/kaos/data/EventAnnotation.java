@@ -25,16 +25,21 @@
  */
 package it.unibz.inf.kaos.data;
 
+import com.google.common.collect.Lists;
 import it.unibz.inf.kaos.data.query.AnnotationQuery;
 import it.unibz.inf.kaos.data.query.BinaryAnnotationQuery;
+import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
+import it.unibz.inf.kaos.interfaces.AnnotationProperties;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
 import it.unibz.inf.kaos.ui.form.EventForm;
-import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
+import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.apache.jena.sparql.core.Var;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -43,8 +48,9 @@ import java.util.Set;
  *
  * @author T. E. Kalayci on 09/11/16.
  */
-@AnnotationProperties(label = "Event", color = "#F2C78F", mnemonic = 'e', tooltip = "Create <u>E</u>vent", title = "<u>E</u>vent")
-public class EventAnnotation extends AbstractAnnotation {
+@AnnotationProperties(title = "Event", color = "#F2C78F", mnemonic = 'e', tooltip = "Create <u>E</u>vent")
+public class EventAnnotation extends Annotation {
+    private static final Logger logger = LoggerFactory.getLogger(EventAnnotation.class.getName());
     private StringAttribute name;
     private NavigationalAttribute timestamp;
     private TransactionalLifecycle lifecycle;
@@ -70,16 +76,15 @@ public class EventAnnotation extends AbstractAnnotation {
     }
 
     @Override
-    public LinkedList<AnnotationQuery> getQuery() {
-        LinkedList<AnnotationQuery> queries = new LinkedList<>();
+    public List<AnnotationQuery> getQuery() {
+        List<AnnotationQuery> queries = Lists.newLinkedList();
         try {
             //concept name attribute
             String eventClassName = relatedClass.getCleanName();
             Var eventVar = Var.alloc(eventClassName);
             String eventIRI = "<" + getRelatedClass().getLongName() + ">";
-            String caseClassName = getCase().getRelatedClass().getCleanName();
-            Var caseVar = Var.alloc(caseClassName);
-            boolean inheritanceWithCase = relatedClass.isRelationExist(getCase().getRelatedClass(), Inheritance.class);
+            Var caseVar = Var.alloc(getCase().getRelatedClass().getCleanName());
+            boolean inheritanceWithCase = getCase().getRelatedClass().equalsOrInherits(relatedClass);
             if (inheritanceWithCase) {
                 caseVar = eventVar;
             }
@@ -95,7 +100,7 @@ public class EventAnnotation extends AbstractAnnotation {
             SelectBuilder caseBuilder = builder.clone();
             caseBuilder.addVar(caseVar);
             final String[] eventAnswerVariable = {XESConstants.label, eventClassName};
-            queries.add(new BinaryAnnotationQuery(caseBuilder.toString(), XESConstants.traceEventURI, new String[]{caseClassName}, eventAnswerVariable));
+            queries.add(new BinaryAnnotationQuery(caseBuilder.toString(), XESConstants.traceEventURI, new String[]{caseVar.getVarName()}, eventAnswerVariable));
 
             //other event queries
             builder.addVar(XESConstants.literalExpr, XESConstants.attTypeVar);
@@ -114,7 +119,7 @@ public class EventAnnotation extends AbstractAnnotation {
             //add timestamp path
             SimpleQueryExporter.addJoin(builder, getTimestamp().getPath());
             //add timestamp property
-            if (getTimestamp().getUmlClass().isRelationExist(relatedClass, Inheritance.class)) {
+            if (getTimestamp().getUmlClass().equalsOrInherits(relatedClass)) {
                 builder.addWhere("?" + eventClassName, "<" + getTimestamp().getAttribute().getLongName() + ">", XESConstants.attValueVar);
             } else {
                 builder.addWhere("?" + getTimestamp().getUmlClass().getCleanName(), "<" + getTimestamp().getAttribute().getLongName() + ">", XESConstants.attValueVar);
@@ -156,13 +161,14 @@ public class EventAnnotation extends AbstractAnnotation {
             queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, XESConstants.attArray, XESConstants.attKeyArr));
             queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, XESConstants.attArray, XESConstants.attValueArr));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
+            UIUtility.error(e.getMessage());
         }
         return queries;
     }
 
     @Override
-    public EventForm getForm(AnnotationDiagramPanel panel) {
+    public EventForm getForm(AnnotationDiagram panel) {
         return new EventForm(panel, this);
     }
 

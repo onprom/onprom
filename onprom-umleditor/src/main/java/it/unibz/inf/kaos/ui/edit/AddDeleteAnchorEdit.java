@@ -34,10 +34,11 @@ import javax.swing.undo.AbstractUndoableEdit;
 /**
  * Anchor addition and removal undo-redo edit
  * <p>
+ *
  * @author T. E. Kalayci
  * Date: 29-Sep-16
  */
-public class AddDeleteAnchorEdit extends AbstractUndoableEdit {
+class AddDeleteAnchorEdit extends AbstractUndoableEdit {
     private static final long serialVersionUID = 1L;
 
     private final Relationship relation;
@@ -45,7 +46,7 @@ public class AddDeleteAnchorEdit extends AbstractUndoableEdit {
     // true for adding, false for deletion
     private final boolean adding;
 
-    public AddDeleteAnchorEdit(Relationship _rel, RelationAnchor _anchor, boolean
+    AddDeleteAnchorEdit(Relationship _rel, RelationAnchor _anchor, boolean
             _adding) {
         relation = _rel;
         anchor = _anchor;

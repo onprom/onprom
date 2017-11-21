@@ -33,8 +33,7 @@ public class AnnotationImportPlugin extends AbstractImportPlugin {
             context.getFutureResult(0).setLabel("Annotations (" + filename + ") " + UIUtility.getCurrentDateTime());
             return IOUtility.open(input, FileType.ANNOTATION);
         } catch (Exception e) {
-            e.printStackTrace();
-            context.log("Couldn't import queries from: " + filename);
+            context.log(e);
         }
         return null;
     }

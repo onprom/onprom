@@ -60,9 +60,9 @@ public enum AnnotationEditorLabels implements Labels {
   TIMESTAMP("Timestamp", "Please select timestamp of the EVENT", false),
   EVENT_RESOURCE("Resource", "Please select RESOURCE for the EVENT", false);
 
-  final private String label;
-  final private String tooltip;
-  final private boolean clickable;
+    private final String label;
+    private final String tooltip;
+    private final boolean clickable;
 
   AnnotationEditorLabels(String _label, String _tooltip, boolean _clickable) {
     this.label = _label;

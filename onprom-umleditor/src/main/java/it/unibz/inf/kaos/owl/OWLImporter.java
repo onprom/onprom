@@ -26,6 +26,9 @@
 
 package it.unibz.inf.kaos.owl;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
@@ -42,21 +45,21 @@ import java.util.*;
  */
 public class OWLImporter extends OWLUtility {
   public static Set<DiagramShape> getShapes(OWLOntology ontology) {
-    LinkedList<String> messages = new LinkedList<>();
+      LinkedList<String> messages = Lists.newLinkedList();
 
-    HashMap<OWLClass, UMLClass> umlClasses = new HashMap<>();
-    HashMap<String, AssociationClass> associationClasses = new HashMap<>();
+      HashMap<OWLClass, UMLClass> umlClasses = Maps.newHashMap();
+      HashMap<String, AssociationClass> associationClasses = Maps.newHashMap();
 
-    HashSet<OWLDataPropertyExpression> existentialDataProperties = new HashSet<>();
-    HashSet<OWLDataPropertyExpression> functionalDataProperties = new HashSet<>();
+      HashSet<OWLDataPropertyExpression> existentialDataProperties = Sets.newHashSet();
+      HashSet<OWLDataPropertyExpression> functionalDataProperties = Sets.newHashSet();
 
-    HashSet<OWLObjectPropertyExpression> existentialObjectProperties = new HashSet<>();
-    HashSet<OWLObjectPropertyExpression> inverseExistentialObjectProperties = new HashSet<>();
+      HashSet<OWLObjectPropertyExpression> existentialObjectProperties = Sets.newHashSet();
+      HashSet<OWLObjectPropertyExpression> inverseExistentialObjectProperties = Sets.newHashSet();
 
-    HashSet<OWLObjectPropertyExpression> functionalObjectProperties = new HashSet<>();
-    HashSet<OWLObjectPropertyExpression> inverserFunctionalObjectProperties = new HashSet<>();
+      HashSet<OWLObjectPropertyExpression> functionalObjectProperties = Sets.newHashSet();
+      HashSet<OWLObjectPropertyExpression> inverserFunctionalObjectProperties = Sets.newHashSet();
 
-    Set<DiagramShape> shapes = new LinkedHashSet<>();
+      Set<DiagramShape> shapes = Sets.newLinkedHashSet();
 
     UMLClass thingClass = new UMLClass("Thing");
     boolean thingAdded = false;
@@ -233,11 +236,11 @@ public class OWLImporter extends OWLUtility {
       shapes.add(association);
     }
 
-    shapes.addAll(new ArrayList<>(umlClasses.values()));
+      shapes.addAll(Lists.newArrayList(umlClasses.values()));
     if (thingAdded) {
       shapes.add(thingClass);
     }
-    if (messages.size() > 0) {
+      if (!messages.isEmpty()) {
       StringBuilder messageBuilder = new StringBuilder();
       messages.forEach(message -> messageBuilder.append(message).append("<br/>"));
       UIUtility.error(messageBuilder.toString());

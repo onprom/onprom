@@ -34,16 +34,17 @@ import javax.swing.undo.AbstractUndoableEdit;
 /**
  * Association update undo-redo action
  * <p>
+ *
  * @author T. E. Kalayci
  * Date: 29-Sep-16
  */
-public class UpdateRelationEdit extends AbstractUndoableEdit {
+class UpdateRelationEdit extends AbstractUndoableEdit {
     private final Association association;
     private String relationName;
     private Cardinality oldFirst;
     private Cardinality oldSecond;
 
-    public UpdateRelationEdit(Association _association, String _name, Cardinality _first, Cardinality _second) {
+    UpdateRelationEdit(Association _association, String _name, Cardinality _first, Cardinality _second) {
         this.association = _association;
         this.relationName = _name;
         this.oldFirst = _first;

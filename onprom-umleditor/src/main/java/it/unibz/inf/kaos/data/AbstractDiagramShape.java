@@ -27,10 +27,12 @@
 package it.unibz.inf.kaos.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
-import it.unibz.inf.kaos.ui.utility.DrawingConstants;
+import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 import it.unibz.inf.kaos.ui.utility.ZoomUtility;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -40,7 +42,7 @@ import java.awt.geom.Rectangle2D;
  * to minimize the effort required to implement this interface.
  * @author T. E. Kalayci
  */
-public abstract class AbstractDiagramShape implements DiagramShape, Cloneable {
+public abstract class AbstractDiagramShape<T extends Diagram> implements DiagramShape<T>, Cloneable {
   private int startX;
   private int startY;
   private String name;
@@ -66,6 +68,13 @@ public abstract class AbstractDiagramShape implements DiagramShape, Cloneable {
     startX = x;
     startY = y;
   }
+
+    AbstractDiagramShape(String n, int x, int y) {
+        name = n;
+        startX = x;
+        startY = y;
+    }
+
 
   @Override
   public String getName() {
@@ -148,34 +157,34 @@ public abstract class AbstractDiagramShape implements DiagramShape, Cloneable {
   }
 
   @Override
-  public void translate(int xdiff, int ydiff) {
-    this.startX += xdiff;
-    this.startY += ydiff;
+  public void translate(int diffX, int diffY) {
+      startX += diffX;
+      startY += diffY;
     checkBoundaries();
   }
 
   @Override
   public boolean over(int x, int y) {
     if (contains(x, y)) {
-      if (!state.equals(State.HIGHLIGHTED)) {
+        if (state != State.HIGHLIGHTED) {
         previous = state;
       }
       state = State.HIGHLIGHTED;
     } else {
       state = previous;
     }
-    return state.equals(State.HIGHLIGHTED);
+      return state == State.HIGHLIGHTED;
   }
 
   @Override
   public boolean notSelected() {
-    return !state.equals(State.SELECTED);
+      return state != State.SELECTED;
   }
 
   @Override
   public void stickToGrid() {
-    this.startX = this.startX - (getCenterX() % DrawingConstants.GRID_SIZE);
-    this.startY = this.startY - (getCenterY() % DrawingConstants.GRID_SIZE);
+      this.startX = this.startX - (getCenterX() % DrawingUtility.GRID_SIZE);
+      this.startY = this.startY - (getCenterY() % DrawingUtility.GRID_SIZE);
     checkBoundaries();
   }
 
@@ -187,7 +196,7 @@ public abstract class AbstractDiagramShape implements DiagramShape, Cloneable {
   private boolean contains(int x, int y) {
     Shape shape = getShape();
     if (shape instanceof Line2D) {
-      return shape.intersects(x, y, DrawingConstants.GAP, DrawingConstants.GAP);
+        return shape.intersects(x, y, DrawingUtility.GAP, DrawingUtility.GAP);
     } else {
       return shape.contains(x, y);
     }
@@ -227,4 +236,8 @@ public abstract class AbstractDiagramShape implements DiagramShape, Cloneable {
     return new Rectangle(x, y - fm.getAscent(), (int) rect.getWidth(), (int) rect.getHeight());
   }
 
+    @Override
+    public JPanel getForm(final T panel) {
+        return null;
+    }
 }

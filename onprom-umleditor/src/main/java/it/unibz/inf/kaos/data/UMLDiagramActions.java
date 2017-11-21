@@ -26,10 +26,12 @@
 
 package it.unibz.inf.kaos.data;
 
+import it.unibz.inf.kaos.interfaces.ActionType;
+
 /**
  * @author T. E. Kalayci
  */
-public enum UMLActionType implements ActionType {
+public enum UMLDiagramActions implements ActionType {
   //title are also name of images
   //so we use lowercase for the names and values
   open("open", 'o', "Open a File", "Open"),
@@ -64,7 +66,7 @@ public enum UMLActionType implements ActionType {
   private final String tooltip;
   private final String title;
 
-  UMLActionType(final String text, char _mnemonic, String _tooltip, String _text) {
+    UMLDiagramActions(final String text, char _mnemonic, String _tooltip, String _text) {
     this.actionCommand = text;
     this.mnemonic = _mnemonic;
     this.tooltip = _tooltip;

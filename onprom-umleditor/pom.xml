@@ -39,7 +39,7 @@
     </parent>
     <properties>
         <xmlgraphics.version>1.9.1</xmlgraphics.version>
-        <jackson.version>2.9.1</jackson.version>
+        <jackson.version>2.9.3</jackson.version>
     </properties>
     <build>
         <plugins>

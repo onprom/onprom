@@ -42,9 +42,9 @@ public enum AnnotationEditorButtons implements Buttons {
   REMOVE("-", "<u>R</u>emove the selected attribute of the annotation", 'r'),//"¤"
   ;
 
-  final private String text;
-  final private String tooltip;
-  final private char mnemonic;
+    private final String text;
+    private final String tooltip;
+    private final char mnemonic;
 
   AnnotationEditorButtons(final String _text, final String _tooltip, final char _mnemonic) {
     this.text = _text;

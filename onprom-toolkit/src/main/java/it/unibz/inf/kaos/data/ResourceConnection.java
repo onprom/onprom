@@ -26,7 +26,7 @@
 
 package it.unibz.inf.kaos.data;
 
-import it.unibz.inf.kaos.ui.utility.DrawingConstants;
+import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
 import java.awt.*;
 import java.awt.geom.Path2D;
@@ -135,10 +135,10 @@ public class ResourceConnection extends AbstractDiagramShape {
         final Font oldFont = g2d.getFont();
         final Stroke oldStroke = g2d.getStroke();
         final Color oldColor = g2d.getColor();
-        g2d.setFont(DrawingConstants.RELATION_FONT);
+        g2d.setFont(DrawingUtility.RELATION_FONT);
         // color according to state
         g2d.setColor(getState().getColor());
-        g2d.setStroke(DrawingConstants.RELATION_STROKE);
+        g2d.setStroke(DrawingUtility.RELATION_STROKE);
         g2d.draw(getShape());
 
         //arrow

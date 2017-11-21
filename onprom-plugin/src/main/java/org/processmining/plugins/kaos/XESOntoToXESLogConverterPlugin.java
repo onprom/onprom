@@ -16,6 +16,7 @@
 
 package org.processmining.plugins.kaos;
 
+import it.unibz.inf.kaos.logextractor.XESOntoToXESLogConverter;
 import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
@@ -24,7 +25,6 @@ import org.processmining.framework.plugin.annotations.PluginCategory;
 import org.processmining.framework.plugin.annotations.PluginQuality;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.semanticweb.owlapi.model.OWLOntology;
-import it.unibz.inf.kaos.logextractor.XESOntoToXESLogConverter;
 
 /**
  * 
@@ -36,11 +36,10 @@ public class XESOntoToXESLogConverterPlugin {
 	
 	@Plugin(
 	        name = "XES Event Onto To XES Log", 
-	        parameterLabels = {"Materialized XES Event Ontology"}, 
-	        returnLabels = { "XES Event Log" }, 
-	        returnTypes = { XLog.class }, 
-	        userAccessible = true, 
-	        help = "A converter from materialized XES event ontology into XES event log",
+	        parameterLabels = {"Materialized XES Event Ontology"},
+            returnLabels = {"XES Event Log"},
+            returnTypes = {XLog.class},
+            help = "A converter from materialized XES event ontology into XES event log",
 	        quality = PluginQuality.VeryGood, 
 	        categories = {PluginCategory.Analytics}
 	)

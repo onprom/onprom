@@ -28,12 +28,12 @@ package it.unibz.inf.kaos.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.unibz.inf.kaos.data.query.AnnotationQuery;
-import it.unibz.inf.kaos.interfaces.Annotation;
-import it.unibz.inf.kaos.ui.form.AbstractAnnotationForm;
-import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
-import it.unibz.inf.kaos.ui.utility.DrawingConstants;
+import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
+import it.unibz.inf.kaos.interfaces.AnnotationProperties;
+import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
@@ -45,9 +45,9 @@ import java.util.List;
  * @author T. E. Kalayci on 03/11/16.
  * @see AbstractDiagramShape
  */
-public abstract class AbstractAnnotation extends AbstractDiagramShape implements Annotation {
+public abstract class Annotation extends AbstractDiagramShape<AnnotationDiagram> {
     @JsonIgnore
-    private final static Font ANNOTATION_FONT = new Font(Font.DIALOG, Font.PLAIN, 14);
+    private static final Font ANNOTATION_FONT = new Font(Font.DIALOG, Font.PLAIN, 14);
     @JsonIgnore
     AnnotationProperties properties = getClass().getAnnotation(AnnotationProperties.class);
 
@@ -55,10 +55,10 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
     private String label;
     private List<AnnotationAttribute> attributes;
 
-    AbstractAnnotation() {
+    Annotation() {
     }
 
-    AbstractAnnotation(UMLClass _relatedClass) {
+    Annotation(UMLClass _relatedClass) {
         relatedClass = _relatedClass;
     }
 
@@ -66,7 +66,7 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
         return label;
     }
 
-    public AnnotationProperties getAnnotationProperties() {
+    AnnotationProperties getAnnotationProperties() {
         return properties;
     }
 
@@ -83,42 +83,41 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
         final int fontHeight = g2d.getFontMetrics().getHeight();
         final int startX = getStartX();
         final int startY = getStartY();
-        final String typeLabel = getAnnotationProperties().label();
+        final String type = getAnnotationProperties().title();
         final Color bgColor = Color.decode(getAnnotationProperties().color());
         final String label = getLabel();
-        //calculate required width and height
-        int rectangleWidth = g2d.getFontMetrics().stringWidth(typeLabel) + 2 * DrawingConstants.GAP;
+        //calculate box height and width
         int rectangleHeight = fontHeight * 2;
+        int rectangleWidth = g2d.getFontMetrics().stringWidth(type);
         if (label != null && !label.isEmpty()) {
-            if (label.length() > typeLabel.length()) {
-                rectangleWidth = g2d.getFontMetrics().stringWidth(label) + 2 * DrawingConstants.GAP;
+            rectangleHeight += fontHeight;
+            if (label.length() > type.length()) {
+                rectangleWidth = g2d.getFontMetrics().stringWidth(label);
             }
-            rectangleHeight = fontHeight * 3;
         }
+        rectangleWidth += 3 * DrawingUtility.GAP;
+        //draw a rectangle for the box using font and background color
         g2d.setFont(ANNOTATION_FONT);
-        //set background color of the rectangle
         g2d.setColor(bgColor);
-        //draw filled rectangle with background color of the annotation
         g2d.fillRect(startX, startY, rectangleWidth, rectangleHeight);
         //draw line between the class and the annotation
         g2d.drawLine(startX + rectangleWidth / 2, startY + rectangleHeight / 2, getRelatedClass().getCenterX(),
                 getRelatedClass().getCenterY());
-        //set color of rectangle outline according to annotation state
+        //draw outline rectangle according to the state of the shape
         g2d.setColor(getState().getColor());
-        //draw outline rectangle
         g2d.drawRect(startX, startY, rectangleWidth, rectangleHeight);
         //draw type of the annotation
-        int fontWidth = g2d.getFontMetrics().stringWidth(typeLabel);
+        int fontWidth = g2d.getFontMetrics().stringWidth(type);
         int typeCoord = startX + (rectangleWidth - fontWidth) / 2;
         if (UIUtility.isDark(bgColor)) {
             g2d.setColor(Color.WHITE);
         }
-        g2d.drawString(typeLabel, typeCoord, startY + fontHeight + DrawingConstants.GAP);
+        g2d.drawString(type, typeCoord, startY + fontHeight + DrawingUtility.GAP);
         if (label != null && !label.isEmpty()) {
             //draw label of the annotation if it exists
             fontWidth = g2d.getFontMetrics().stringWidth(label);
             typeCoord = startX + (rectangleWidth - fontWidth) / 2;
-            g2d.drawString(label, typeCoord, startY + 2 * fontHeight);
+            g2d.drawString(label, typeCoord, startY + 2 * fontHeight + DrawingUtility.GAP);
         }
         //set end coordinates of the annotation
         setEndX(startX + rectangleWidth);
@@ -130,7 +129,7 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
     }
 
     public String toString() {
-        return getAnnotationProperties().label() + " (" + relatedClass.toString() + ")";
+        return getAnnotationProperties().title() + (label!=null ? " "+label:" ") + " (" + relatedClass.toString() + ")";
     }
 
     public String getLabel() {
@@ -141,7 +140,6 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
         this.label = label;
     }
 
-    @Override
     public List<AnnotationAttribute> getAttributes() {
         return attributes;
     }
@@ -150,15 +148,21 @@ public abstract class AbstractAnnotation extends AbstractDiagramShape implements
         this.attributes = attributes;
     }
 
-    @Override
     public UMLClass getRelatedClass() {
         return relatedClass;
     }
 
+    public String getVarName(){
+        return relatedClass.getCleanName();
+    }
+
     @Override
+    public String getCleanName(){
+        return relatedClass.getCleanName();
+    }
+
     public abstract List<AnnotationQuery> getQuery();
 
     @Override
-    public abstract AbstractAnnotationForm getForm(AnnotationDiagramPanel panel);
-
+    public abstract JPanel getForm(AnnotationDiagram panel);
 }

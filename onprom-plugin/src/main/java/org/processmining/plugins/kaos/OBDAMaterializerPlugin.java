@@ -6,6 +6,8 @@
 
 package org.processmining.plugins.kaos;
 
+import it.unibz.inf.kaos.obdamapper.OBDAMapper;
+import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.plugin.annotations.Plugin;
@@ -13,8 +15,6 @@ import org.processmining.framework.plugin.annotations.PluginCategory;
 import org.processmining.framework.plugin.annotations.PluginQuality;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.semanticweb.owlapi.model.OWLOntology;
-import it.unibz.inf.kaos.obdamapper.OBDAMapper;
-import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
 
 /**
  * 
@@ -26,11 +26,10 @@ public class OBDAMaterializerPlugin {
 	
 	@Plugin(
 	        name = "OnProM - OBDA Materializer", 
-	        parameterLabels = {"OBDAMapping"}, 
-	        returnLabels = { "Materialized Ontology" }, 
-	        returnTypes = { OWLOntology.class }, 
-	        userAccessible = true, 
-	        help = "OBDA Materializer - Materialize the given OBDA System into an OWL file",
+	        parameterLabels = {"OBDAMapping"},
+			returnLabels = {"Materialized Ontology"},
+			returnTypes = {OWLOntology.class},
+			help = "OBDA Materializer - Materialize the given OBDA System into an OWL file",
 	        quality = PluginQuality.VeryGood, 
 	        categories = {PluginCategory.Analytics}
 	)
@@ -50,8 +49,7 @@ public class OBDAMaterializerPlugin {
 		try {
 			materializedOnto = new OBDAMapper().materializeTargetOntology(obdaMapping);
 		} catch (Exception e) {
-			e.printStackTrace();
-            context.log("Failed to materialize the given OBDA System: " + e.getMessage());
+			context.log(e);
 		}
 
         context.getFutureResult(0).setLabel("Materialized Ontology");

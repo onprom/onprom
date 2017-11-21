@@ -26,68 +26,43 @@
 
 package it.unibz.inf.kaos.ui.panel;
 
+import com.google.common.collect.Lists;
 import it.unibz.inf.kaos.data.*;
+import it.unibz.inf.kaos.interfaces.ActionType;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.interfaces.UMLDiagram;
-import it.unibz.inf.kaos.ui.edit.AddDeleteAnchorEdit;
-import it.unibz.inf.kaos.ui.edit.AddDeleteClassEdit;
-import it.unibz.inf.kaos.ui.edit.AddDeleteRelationEdit;
-import it.unibz.inf.kaos.ui.edit.MoveShapeEdit;
-import it.unibz.inf.kaos.ui.form.ClassForm;
-import it.unibz.inf.kaos.ui.form.InformationDialog;
+import it.unibz.inf.kaos.ui.edit.EditFactory;
 import it.unibz.inf.kaos.ui.form.ObjectList;
-import it.unibz.inf.kaos.ui.form.RelationForm;
 import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
 import it.unibz.inf.kaos.ui.utility.*;
-import org.apache.batik.svggen.SVGGraphics2D;
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.undo.UndoManager;
-import javax.swing.undo.UndoableEdit;
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetAdapter;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.stream.Stream;
 
 /**
- * Operations related with visualisation of the diagram
+ * Operations related with visualisation of the UML diagram
  *
  * @author T. E. Kalayci
  */
-public class UMLDiagramPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener, UMLDiagram {
+public class UMLDiagramPanel extends JPanel implements UMLDiagram {
     private static final Logger logger = LoggerFactory.getLogger(UMLDiagramPanel.class.getSimpleName());
-    final UndoManager undoManager = new UndoManager();
     final DiagramEditor diagramEditor;
-    private final ArrayList<RelationAnchor> tempAnchors = new ArrayList<>();
+    private final List<RelationAnchor> tempAnchors = Lists.newArrayList();
+    private final boolean isOpenGLEnabled;
+    Shapes shapes = new Shapes();
     boolean isUpdateAllowed = true;
     ActionType currentAction;
-    Set<DiagramShape> shapes = new LinkedHashSet<>();
-    int startX;
-    int startY;
-    private Set<DiagramShape> selecteds = new LinkedHashSet<>();
-    private int prevX;
-    private int prevY;
-    private boolean shapeMoved = false;
-    private boolean showGrid = true;
-    private boolean showLogo = true;
-    private boolean isOpenGLEnabled = false;
-
+    DiagramMouseListener diagramMouseListener;
+    private boolean gridVisible = true;
+    private boolean logoVisible = true;
     private Rectangle selectionArea;
 
     public UMLDiagramPanel(DiagramEditor _editorLoader) {
@@ -96,198 +71,63 @@ public class UMLDiagramPanel extends JPanel implements MouseListener, MouseMotio
         if (!isOpenGLEnabled) {
             logger.warn("OpenGL is not enabled, there could be some performance and quality issues. It can be enabled using -Dsun.java2d.opengl=true runtime argument.");
         }
-        // we are going to listen mouse clicks and movements for various operations
-        this.addMouseListener(this);
-        this.addMouseMotionListener(this);
-        this.addMouseWheelListener(this);
-        this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetAdapter() {
-            @Override
-            public void drop(DropTargetDropEvent dtde) {
-                if (dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                    try {
-                        dtde.acceptDrop(dtde.getDropAction());
-                        Object transferData = dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                        if (transferData != null && transferData instanceof List) {
-                            List files = (List) transferData;
-                            if (files.size() > 0) {
-                                diagramEditor.open((File) files.get(0));
-                                dtde.dropComplete(true);
-                            }
-                        }
-                    } catch (Exception e) {
-                        logger.error(e.getMessage(), e);
-                        InformationDialog.display(e.getMessage());
-                    }
-                } else {
-                    dtde.rejectDrop();
-                }
-            }
-        }));
+        diagramMouseListener = new DiagramMouseListener();
+        this.setDropTarget(new DiagramDropTarget(diagramEditor, this));
         this.setBackground(Color.WHITE);
     }
 
-    DiagramShape getSelected() {
-        DiagramShape shape = selecteds.stream().filter(UMLClass.class::isInstance).findFirst().orElse(null);
-        if (shape == null)
-            return selecteds.stream().findFirst().orElse(null);
-        return shape;
+    public boolean isUpdateAllowed() {
+        return isUpdateAllowed;
     }
 
-    public <T extends DiagramShape> Set<T> getItems(Class<T> type) {
-        return shapes.stream()
-                .filter(type::isInstance)
-                .map(type::cast)
-                .collect(Collectors.toSet());
-    }
-
-    public <T extends DiagramShape> long getItemCount(Class<T> type) {
-        return shapes.stream()
-                .filter(type::isInstance)
-                .count();
-    }
-
-    public <T extends DiagramShape> T getFirstItem(Class<T> type) {
-        return shapes.stream()
-                .filter(type::isInstance)
-                .findFirst()
-                .map(type::cast)
-                .orElse(null);
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        prevX = startX = ZoomUtility.get(e.getX());
-        prevY = startY = ZoomUtility.get(e.getY());
-        if (isUpdateAllowed && currentAction == UMLActionType.umlclass && getHoverClass() == null) {
-            diagramEditor.loadEditor(new ClassForm(this, null, true));
-        }
-        if (isUpdateAllowed && currentAction == UMLActionType.association) {
-            DiagramShape _selected = getSelected();
-            if (_selected != null && _selected instanceof Association) {
-                addAssociationClass((Association) _selected);
-            }
-        }
-        if (e.isControlDown()) {
-            final DiagramShape _selected = getSelected();
-            if (_selected != null && _selected instanceof Relationship) {
-                addAnchor((Relationship) _selected, ZoomUtility.get(e.getX()), ZoomUtility.get(e.getY()));
-            }
-        }
-        if (isUpdateAllowed && currentAction == UMLActionType.disjoint || currentAction == UMLActionType.relation
-                || currentAction == UMLActionType.isarelation) {
-            addRelation(ZoomUtility.get(e.getX()), ZoomUtility.get(e.getY()));
-            return;
-        }
-        if (e.getClickCount() == 2) {
-            if (e.isPopupTrigger()) {
-                removeSelected();
-                return;
-            } else {
-                final DiagramShape _selected = getSelected();
-                if (_selected != null) {
-                    if (_selected instanceof UMLClass) {
-                        diagramEditor.loadEditor(new ClassForm(this, (UMLClass) _selected, isUpdateAllowed));
-                    } else if (_selected instanceof Relationship) {
-                        Relationship rlt = (Relationship) _selected;
-                        if (rlt instanceof Association) {
-                            diagramEditor.loadEditor(new RelationForm(this, (Association) rlt, isUpdateAllowed));
-                        }
-
+    private void createShape(int startX, int startY, boolean isControlDown) {
+        DiagramShape selected = shapes.getSelected();
+        if (isUpdateAllowed) {
+            if (currentAction == UMLDiagramActions.umlclass) {
+                if (!shapes.isClassOver(startX, startY)) {
+                    UMLClass newClass = new UMLClass("Class_" + shapes.size(), startX, startY);
+                    if (gridVisible) {
+                        newClass.stickToGrid();
                     }
+                    shapes.add(newClass);
+                    DiagramUndoManager.addEdit(EditFactory.classCreated(this, newClass, true));
+                    diagramEditor.loadForm(newClass.getForm(this));
                 }
+            } else if (currentAction == UMLDiagramActions.disjoint || currentAction == UMLDiagramActions.relation
+                    || currentAction == UMLDiagramActions.isarelation) {
+                if (selected != null && selected instanceof UMLClass) {
+                    UMLClass secondClass = shapes.getFirstClassAt(startX, startY);
+                    if (secondClass != null) {
+                        addRelation((UMLClass) selected, secondClass);
+                    } else {
+                        tempAnchors.add(new RelationAnchor(startX, startY));
+                    }
+                } else {
+                    shapes.updateSelection(false, startX, startY);
+                }
+            } else if (currentAction == UMLDiagramActions.association) {
+                addAssociationClass(selected, startX, startY);
             }
         }
-        updateSelection(e.isControlDown());
-        repaint();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        defaultCursor();
-        //all selected items are moved
-        if (shapeMoved && selecteds.size() > 0) {
-            MoveShapeEdit moveShapeEdit = new MoveShapeEdit(selecteds, ZoomUtility.get(e.getX()) - startX, ZoomUtility.get(e.getY()) - startY);
-            undoManager.addEdit(moveShapeEdit);
-            if (showGrid) {
-                selecteds.forEach(DiagramShape::stickToGrid);
+        if (isControlDown && selected != null && selected instanceof Relationship) {
+            RelationAnchor anchor = ((Relationship) selected).addAnchor(startX, startY);
+            if (anchor != null) {
+                DiagramUndoManager.addEdit(EditFactory.anchorCreated((Relationship) selected, anchor, true));
             }
-            shapeMoved = false;
         }
-        selectionArea = null;
-        repaint();
     }
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
-    private void addAssociationClass(Relationship _relation) {
-        if (_relation instanceof Association) {
-            Association association = (Association) _relation;
-            AssociationClass aClass = new AssociationClass(association);
-            aClass.setStartX(startX);
-            aClass.setStartY(startY);
-            if (showGrid) {
+    private void addAssociationClass(DiagramShape selected, int x, int y) {
+        if (selected != null && selected instanceof Association) {
+            Association association = (Association) selected;
+            AssociationClass aClass = new AssociationClass(association, x, y);
+            if (gridVisible) {
                 aClass.stickToGrid();
             }
             association.setAssociationClass(aClass);
             shapes.add(aClass);
-            undoManager.addEdit(new AddDeleteClassEdit(this, aClass, true));
+            DiagramUndoManager.addEdit(EditFactory.classCreated(this, aClass, true));
         }
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        moveCursor();
-        int diffX = ZoomUtility.get(e.getX()) - prevX;
-        int diffY = ZoomUtility.get(e.getY()) - prevY;
-        // if right mouse is used for drag, scroll the drawing area
-        if (SwingUtilities.isRightMouseButton(e)) {
-            JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, this);
-            if (viewPort != null) {
-                Rectangle view = viewPort.getViewRect();
-                view.x -= diffX;
-                view.y -= diffY;
-                this.scrollRectToVisible(view);
-            }
-        } else {
-            //move all selected objects
-            if (selectionArea == null && selecteds.size() > 0) {
-                selecteds.forEach(_selected -> {
-                    if (_selected != null) {
-                        _selected.translate(diffX, diffY);
-                        prevX = ZoomUtility.get(e.getX());
-                        prevY = ZoomUtility.get(e.getY());
-                        shapeMoved = true;
-                        repaint();
-                    }
-                });
-            } else {
-                selectArea(startX, startY, diffX, diffY);
-            }
-        }
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        int x = ZoomUtility.get(e.getX());
-        int y = ZoomUtility.get(e.getY());
-        shapes.forEach(shape -> {
-            if (shape != null && shape.over(x, y)) {
-                handCursor();
-            } else {
-                defaultCursor();
-            }
-        });
-        repaint();
     }
 
     private void selectArea(int x, int y, int width, int height) {
@@ -300,152 +140,55 @@ public class UMLDiagramPanel extends JPanel implements MouseListener, MouseMotio
             y = y - height;
         }
         selectionArea = new Rectangle(x, y, width, height);
-        selecteds.forEach(shape -> shape.setState(State.NORMAL));
-        selecteds = shapes.stream()
-                .filter(shape -> shape.inside(selectionArea))
-                .collect(Collectors.toSet());
-        selecteds.forEach(shape -> shape.setState(State.SELECTED));
+        shapes.selectShapes(selectionArea);
         repaint();
     }
 
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
-        if (e.isControlDown()) {
-            ZoomUtility.changeZoom(e.getPreciseWheelRotation());
-            //TODO position according mouse location
-            JViewport viewPort = (JViewport) SwingUtilities
-                    .getAncestorOfClass(JViewport.class, this);
-            if (viewPort != null) {
-                Rectangle view = viewPort.getViewRect();
-                view.x = ZoomUtility.get(e.getX());
-                view.y = ZoomUtility.get(e.getY());
-                this.scrollRectToVisible(view);
+    private void addRelation(final UMLClass firstClass, final UMLClass secondClass) {
+        Relationship relationship;
+        if (currentAction == UMLDiagramActions.disjoint) {
+            if (firstClass.equals(secondClass)) {
+                UIUtility.error("Class cannot be disjoint of itself");
+                tempAnchors.clear();
+                return;
             }
-        } else if (getParent() != null) {
-            getParent().dispatchEvent(e);
-        }
-        repaint();
-    }
-
-    private void moveCursor() {
-        super.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-    }
-
-    private void defaultCursor() {
-        super.setCursor(Cursor.getDefaultCursor());
-    }
-
-    private void handCursor() {
-        super.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    }
-
-    private void addAnchor(Relationship rlt, int x, int y) {
-        RelationAnchor anchor = rlt.addAnchor(x, y);
-        if (anchor != null) {
-            undoManager.addEdit(new AddDeleteAnchorEdit(rlt, anchor, true));
-        }
-    }
-
-    private void addRelation(int x, int y) {
-        final DiagramShape _selected = getSelected();
-        if (_selected != null && _selected instanceof UMLClass) {
-            UMLClass secondClass = getHoverClass();
-            //if second class is selected
-            if (secondClass != null) {
-                UMLClass firstClass = (UMLClass) _selected;
-                Relationship relationship;
-                if (currentAction.equals(UMLActionType.disjoint)) {
-                    if (firstClass.equals(secondClass)) {
-                        UIUtility.error("Class cannot be disjoint of itself");
-                        resetTemporaryAnchors();
-                        return;
-                    }
-                    if (firstClass.isRelationExist(secondClass, Disjoint.class)) {
-                        UIUtility.error("Classes are already disjoint");
-                        resetTemporaryAnchors();
-                        return;
-                    }
-                    relationship = new Disjoint(firstClass, secondClass);
-
-                } else if (currentAction.equals(UMLActionType.isarelation)) {
-                    if (firstClass.equals(secondClass)) {
-                        UIUtility.error("Class cannot have an IS-A relationship with itself");
-                        resetTemporaryAnchors();
-                        return;
-                    }
-                    if (firstClass.isRelationExist(secondClass, Inheritance.class)) {
-                        UIUtility.error("Classes already have an IS-A relationship");
-                        resetTemporaryAnchors();
-                        return;
-                    }
-                    relationship = new Inheritance(secondClass, firstClass);
-                } else {
-                    if (firstClass.equals(secondClass) && tempAnchors.size() < 1) {
-                        tempAnchors.add(new RelationAnchor(firstClass.getEndX() + 50, firstClass.getCenterY()));
-                        tempAnchors.add(new RelationAnchor(secondClass.getEndX() + 50, secondClass.getEndY() + 50));
-                        tempAnchors.add(new RelationAnchor(secondClass.getCenterX(), secondClass.getEndY() + 50));
-                    }
-                    relationship = new Association("rel" + shapes.size(), firstClass, secondClass);
-                }
-                relationship.addAnchors(tempAnchors);
-                shapes.add(relationship);
-                if (relationship instanceof Association) {
-                    UIUtility.addName(relationship.getName());
-                    diagramEditor.loadEditor(new RelationForm(this, (Association) relationship, isUpdateAllowed));
-                }
-                relationship.getFirstClass().addRelation(relationship);
-                relationship.getSecondClass().addRelation(relationship);
-                undoManager.addEdit(new AddDeleteRelationEdit(this, relationship, null, true));
-                resetTemporaryAnchors();
-                clearSelection();
-            } else {
-                tempAnchors.add(new RelationAnchor(x, y));
+            if (firstClass.isRelationExist(secondClass, Disjoint.class)) {
+                UIUtility.error("Classes are already disjoint");
+                tempAnchors.clear();
+                return;
             }
+            relationship = new Disjoint(firstClass, secondClass);
+        } else if (currentAction == UMLDiagramActions.isarelation) {
+            if (firstClass.equals(secondClass)) {
+                UIUtility.error("Class cannot have an IS-A relationship with itself");
+                tempAnchors.clear();
+                return;
+            }
+            if (firstClass.isRelationExist(secondClass, Inheritance.class)) {
+                UIUtility.error("Classes already have an IS-A relationship");
+                tempAnchors.clear();
+                return;
+            }
+            relationship = new Inheritance(secondClass, firstClass);
         } else {
-            updateSelection(false);
+            if (firstClass.equals(secondClass) && tempAnchors.size() < 1) {
+                tempAnchors.add(new RelationAnchor(firstClass.getEndX() + 50, firstClass.getCenterY()));
+                tempAnchors.add(new RelationAnchor(secondClass.getEndX() + 50, secondClass.getEndY() + 50));
+                tempAnchors.add(new RelationAnchor(secondClass.getCenterX(), secondClass.getEndY() + 50));
+            }
+            relationship = new Association("relation_" + shapes.size(), firstClass, secondClass);
         }
-    }
-
-    private void resetTemporaryAnchors() {
+        relationship.addAnchors(tempAnchors);
+        shapes.add(relationship);
+        if (relationship instanceof Association) {
+            UIUtility.addName(relationship.getName());
+            diagramEditor.loadForm(relationship.getForm(this));
+        }
+        relationship.getFirstClass().addRelation(relationship);
+        relationship.getSecondClass().addRelation(relationship);
+        DiagramUndoManager.addEdit(EditFactory.relationCreated(this, relationship, null, true));
         tempAnchors.clear();
-    }
-
-    void clearSelection() {
-        selecteds.forEach(obj -> obj.setState(State.NORMAL));
-        selecteds.clear();
-    }
-
-    private void updateSelection(boolean isCtrlDown) {
-        DiagramShape _selected = getHoverShape();
-        if (!isCtrlDown) {
-            if (_selected == null || (!selecteds.contains(_selected))) {
-                selecteds.forEach(obj -> obj.setState(State.NORMAL));
-                selecteds.clear();
-            }
-        }
-        if (_selected != null) {
-            _selected.setState(State.SELECTED);
-            selecteds.add(_selected);
-        }
-    }
-
-    private UMLClass getHoverClass() {
-        return getClasses().stream()
-                .filter(shape -> shape.over(startX, startY))
-                .findFirst().orElse(null);
-    }
-
-    DiagramShape getHoverShape() {
-        DiagramShape _selected = getHoverClass();
-        if (_selected == null) {
-            _selected = shapes.stream()
-                    .filter(shape -> shape.over(startX, startY))
-                    .findFirst().orElse(null);
-            if (_selected instanceof Relationship) {
-                ((Relationship) _selected).selectAnchor(startX, startY);
-            }
-        }
-        return _selected;
+        shapes.clearSelection();
     }
 
     @Override
@@ -459,7 +202,6 @@ public class UMLDiagramPanel extends JPanel implements MouseListener, MouseMotio
         if (relation instanceof Association) {
             UIUtility.addName(relation.getName());
         }
-        //add relation to the classes
         relation.getFirstClass().addRelation(relation);
         relation.getSecondClass().addRelation(relation);
         shapes.add(relation);
@@ -488,72 +230,49 @@ public class UMLDiagramPanel extends JPanel implements MouseListener, MouseMotio
         shapes.remove(relation);
     }
 
-    public void addEdit(UndoableEdit edit) {
-        undoManager.addEdit(edit);
+    @Override
+    public Stream<UMLClass> getClasses() {
+        return shapes.getClasses();
     }
 
     @Override
-    public void createClass(UMLClass newClass) {
-        //stick to grid: use remainder of dividing by grid size
-        newClass.setStartX(startX);
-        newClass.setStartY(startY);
-        //if grid is enabled, stick it to the grid
-        if (showGrid)
-            newClass.stickToGrid();
-        // add class to the classes list
-        shapes.add(newClass);
-        undoManager.addEdit(new AddDeleteClassEdit(this, newClass, true));
+    public Stream<Association> getAssociations() {
+        return shapes.getAssociations();
     }
 
     @Override
-    public Set<Association> getRelations() {
-        return shapes.stream()
-                .filter(Association.class::isInstance)
-                .map(Association.class::cast)
-                .collect(Collectors.toSet());
+    public Set<DiagramShape> getShapes(final boolean forJSON) {
+        return shapes.getShapes(forJSON);
     }
 
-    @Override
-    public Set<DiagramShape> getAllShapes(boolean forJSON) {
-        if (forJSON) {
-            LinkedHashSet<DiagramShape> all = shapes.stream().filter(UMLClass.class::isInstance).collect(Collectors.toCollection(LinkedHashSet::new));
-            all.addAll(shapes.stream().filter(Association.class::isInstance).collect(Collectors.toCollection(LinkedHashSet::new)));
-            all.addAll(shapes.stream().filter(shape -> !(shape instanceof UMLClass) && !(shape instanceof Association)).collect(Collectors.toCollection(LinkedHashSet::new)));
-            return all;
-        }
-        return shapes;
-    }
-
-    @Override
-    public boolean removeShape(DiagramShape _selected) {
+    public boolean removeShape(DiagramShape selected) {
         int choice = JOptionPane.showConfirmDialog(null,
                 "Are you sure you want to delete selected object?",
                 "Delete Confirmation", JOptionPane.YES_NO_OPTION);
         if (choice == JOptionPane.YES_OPTION) {
-            if (_selected instanceof UMLClass) {
-                UMLClass cls = (UMLClass) _selected;
-                undoManager.addEdit(new AddDeleteClassEdit(this, cls, false));
+            if (selected instanceof UMLClass) {
+                UMLClass cls = (UMLClass) selected;
+                DiagramUndoManager.addEdit(EditFactory.classCreated(this, cls, false));
                 removeClass(cls);
                 return true;
             }
-            if (_selected instanceof Relationship) {
-                Relationship rel = (Relationship) _selected;
+            if (selected instanceof Relationship) {
+                Relationship rel = (Relationship) selected;
                 RelationAnchor deleted = rel.deleteAnchor();
                 if (deleted == null) {
-                    if(rel instanceof Association) {
-                        Association association = (Association)rel;
-                        undoManager.addEdit(new AddDeleteRelationEdit(this, association, association.getAssociationClass(), false));
+                    if (rel instanceof Association) {
+                        Association association = (Association) rel;
+                        DiagramUndoManager.addEdit(EditFactory.relationCreated(this, association, association.getAssociationClass(), false));
                         if (association.hasAssociation()) {
                             removeClass(association.getAssociationClass());
                         }
-                    }else{
-                        undoManager.addEdit(new AddDeleteRelationEdit(this, rel, null, false));
+                    } else {
+                        DiagramUndoManager.addEdit(EditFactory.relationCreated(this, rel, null, false));
                     }
                     removeRelation(rel);
                     return true;
                 } else {
-                    //add undo edit to the manager
-                    undoManager.addEdit(new AddDeleteAnchorEdit(rel, deleted, false));
+                    DiagramUndoManager.addEdit(EditFactory.anchorCreated(rel, deleted, false));
                     return true;
                 }
             }
@@ -561,168 +280,56 @@ public class UMLDiagramPanel extends JPanel implements MouseListener, MouseMotio
         return false;
     }
 
-    @Override
-    public Set<UMLClass> getClasses() {
-        return getItems(UMLClass.class);
-    }
-
-    private void drawGrid(Graphics2D g2d) {
-        Dimension size = getMaximumSize();
-        Color oldColor = g2d.getColor();
-        g2d.setColor(new Color(0, 0, 0, 0.1f));
-        for (int i = 0; i < size.width; i += DrawingConstants.GRID_SIZE) {
-            g2d.drawLine(i, 0, i, size.height);
-            g2d.drawLine(0, i, size.width, i);
-        }
-        g2d.setColor(oldColor);
-    }
-
     public void setCurrentAction(ActionType newAction) {
-        resetTemporaryAnchors();
-        defaultCursor();
+        tempAnchors.clear();
+        this.setCursor(Cursor.getDefaultCursor());
         this.currentAction = newAction;
     }
 
     public void clear() {
-        if (UIUtility.confirm(UMLEditorMessages.CLEAR_DIAGRAM)) {
+        clear(UIUtility.confirm(UMLEditorMessages.CLEAR_DIAGRAM));
+    }
+
+    public void clear(boolean confirmed) {
+        if (confirmed) {
             shapes.clear();
-            //after clearing it won't be possible to undo-redo operations
-            undoManager.discardAllEdits();
+            DiagramUndoManager.discardAllEdits();
             UIUtility.clearNames();
-            diagramEditor.loadEditor(null);
+            diagramEditor.loadForm(null);
         }
     }
 
-    /**
-     * Method for deleting currently selected object from diagram.
-     */
     public void removeSelected() {
-        // it requires a selected object
-        DiagramShape _selected = getSelected();
+        DiagramShape _selected = shapes.getSelected();
         if (_selected != null) {
             removeShape(_selected);
         }
     }
 
-    public void undo() {
-        if (undoManager.canUndo()) {
-            undoManager.undo();
-            repaint();
-        } else {
-            Toolkit.getDefaultToolkit().beep();
-        }
-    }
-
-    public void redo() {
-        if (undoManager.canRedo()) {
-            undoManager.redo();
-            repaint();
-        } else {
-            Toolkit.getDefaultToolkit().beep();
-        }
-    }
-
     public void toggleGrid() {
-        showGrid = !showGrid;
-        repaint();
+        gridVisible = !gridVisible;
     }
 
-    private void paintDrawing(Graphics g2d, int x, int y) {
-        //first remove logo and grid from panel
-        boolean gridStatus = showGrid;
-        boolean logoStatus = showLogo;
+    public void paintDiagram(Graphics g2d, int x, int y) {
+        boolean gridStatus = gridVisible;
+        boolean logoStatus = logoVisible;
+        //remove logo and grid from panel
         if (gridStatus) {
             toggleGrid();
         }
         if (logoStatus) {
-            toggleLogo();
+            logoVisible = !logoVisible;
         }
-        //translate according drawing area
+        //translate to find drawing area
         g2d.translate(-x, -y);
         //paint diagram to the graphics object
         print(g2d);
-        //take back grid and logo status
+        //reset grid and logo status
         if (gridStatus) {
             toggleGrid();
         }
         if (logoStatus) {
-            toggleLogo();
-        }
-    }
-
-    public void exportImage() {
-        try {
-            File file = IOUtility.selectFileToSave(FileType.IMAGE);
-            if (file != null) {
-                Rectangle drawingArea = getDrawingArea();
-                String extension = FilenameUtils.getExtension(file.getName());
-                if (extension.equals("svg")) {
-                    SVGGraphics2D svgGenerator = IOUtility.getSVGGraphics(drawingArea.getSize());
-                    paintDrawing(svgGenerator, drawingArea.x, drawingArea.y);
-                    svgGenerator.stream(new FileWriter(file));
-                    svgGenerator.dispose();
-                } else {
-                    BufferedImage bi = new BufferedImage(drawingArea.width, drawingArea.height, BufferedImage.TYPE_INT_RGB);
-                    Graphics g = bi.createGraphics();
-                    paintDrawing(g, drawingArea.x, drawingArea.y);
-                    ImageIO.write(bi, extension, file);
-                    g.dispose();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void print() {
-        PrinterJob printJob = PrinterJob.getPrinterJob();
-        printJob.setPrintable((g, format, page) -> {
-            if (page > 0) {
-                return Printable.NO_SUCH_PAGE;
-            }
-            // get the bounds of the component
-            Rectangle drawingArea = getDrawingArea();
-            double cHeight = drawingArea.getSize().getHeight();
-            double cWidth = drawingArea.getSize().getWidth();
-            // get the bounds of the printable area
-            double pHeight = format.getImageableHeight();
-            double pWidth = format.getImageableWidth();
-            double pXStart = format.getImageableX();
-            double pYStart = format.getImageableY();
-            //find ratio
-            double xRatio = pWidth / cWidth;
-            double yRatio = pHeight / cHeight;
-            Graphics2D g2d = (Graphics2D) g;
-            //translate and scale accordingly
-            g2d.translate(pXStart, pYStart);
-            g2d.scale(xRatio, yRatio);
-            paintDrawing(g2d, drawingArea.x, drawingArea.y);
-            return Printable.PAGE_EXISTS;
-        });
-        if (printJob.printDialog()) {
-            try {
-                printJob.print();
-            } catch (PrinterException e) {
-                UIUtility.error(e.getMessage());
-            }
-        }
-    }
-
-    private void toggleLogo() {
-        showLogo = !showLogo;
-    }
-
-    private void drawLogo(Graphics2D g2d, JViewport viewport) {
-        if (viewport != null) {
-            Rectangle viewportRectangle = viewport.getViewRect();
-            BufferedImage logo = UIUtility.getLogo();
-            if (logo != null) {
-                Composite oldComposite = g2d.getComposite();
-                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.05f));
-                g2d.drawImage(logo, (int) viewportRectangle.getX() + 150, (int)
-                        viewportRectangle.getY() + 300, logo.getWidth(), logo.getHeight(), null);
-                g2d.setComposite(oldComposite);
-            }
+            logoVisible = !logoVisible;
         }
     }
 
@@ -735,18 +342,20 @@ public class UMLDiagramPanel extends JPanel implements MouseListener, MouseMotio
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
             g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-            if (showLogo) {
-                drawLogo(g2d, (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, this));
+            if (logoVisible) {
+                DrawingUtility.drawLogo(g2d, (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, this));
             }
         }
         g2d.scale(ZoomUtility.ZOOMING_SCALE, ZoomUtility.ZOOMING_SCALE);
-        g2d.setStroke(DrawingConstants.NORMAL_STROKE);
-        if (showGrid) drawGrid(g2d);
-        shapes.stream().filter(UMLClass.class::isInstance).map(UMLClass.class::cast).forEach(p -> p.calculateEndCoordinates(g2d));
-        shapes.stream().filter(Relationship.class::isInstance).forEach(p -> p.draw(g2d));
-        shapes.stream().filter(UMLClass.class::isInstance).forEach(p -> p.draw(g2d));
+        g2d.setStroke(DrawingUtility.NORMAL_STROKE);
+        if (gridVisible) {
+            DrawingUtility.drawGrid(g2d, getMaximumSize());
+        }
+        shapes.getClasses().forEach(p -> p.calculateEndCoordinates(g2d));
+        shapes.getAll(Relationship.class).forEach(p -> p.draw(g2d));
+        shapes.getClasses().forEach(p -> p.draw(g2d));
         if (selectionArea != null) {
-            drawSelectionRectangle(g2d);
+            DrawingUtility.drawSelectionRectangle(g2d, selectionArea);
         }
     }
 
@@ -755,94 +364,149 @@ public class UMLDiagramPanel extends JPanel implements MouseListener, MouseMotio
         return new Dimension(ZoomUtility.getWidth(), ZoomUtility.getHeight());
     }
 
-    private void drawSelectionRectangle(Graphics2D g2d) {
-        Stroke oldStroke = g2d.getStroke();
-        Color oldColor = g2d.getColor();
-        g2d.setStroke(DrawingConstants.DISJOINT_STROKE);
-        g2d.setColor(State.SELECTED.getColor());
-        g2d.draw(selectionArea);
-        g2d.setColor(oldColor);
-        g2d.setStroke(oldStroke);
-    }
-
     public void load(Set<DiagramShape> _shapes) {
         if (_shapes != null) {
-            undoManager.discardAllEdits();
+            DiagramUndoManager.discardAllEdits();
             UIUtility.clearNames();
-            this.shapes = _shapes.stream().filter(Objects::nonNull).collect(Collectors.toSet());
+            this.shapes.load(_shapes);
             this.shapes.forEach(shape -> UIUtility.addName(shape.getName()));
         }
         if (diagramEditor != null) {
-            diagramEditor.loadEditor(null);
+            diagramEditor.loadForm(null);
         }
         repaint();
     }
 
     public void displayObjectList() {
-        diagramEditor.loadEditor(new ObjectList(this));
+        diagramEditor.loadForm(new ObjectList(this));
     }
 
-    private Set<RelationAnchor> getAllAnchors() {
-        Set<RelationAnchor> relationAnchors = new LinkedHashSet<>();
-        shapes.stream().filter(Association.class::isInstance).map(Association.class::cast).filter(r -> r.getAnchorCount() > 0).forEach(r -> relationAnchors.addAll(r.getAnchors()));
-        return relationAnchors;
+    public Set<DiagramShape> getShapesAndAnchors() {
+        return shapes.getShapesAndAnchors();
     }
 
-    private Rectangle getDrawingArea() {
-        int minX = getHeight(), minY = getWidth(), maxX = 0, maxY = 0;
-        for (DiagramShape shape : shapes) {
-            if (shape.getStartX() < minX)
-                minX = shape.getStartX();
-            if (shape.getStartY() < minY)
-                minY = shape.getStartY();
-            if (shape.getEndX() > maxX)
-                maxX = shape.getEndX();
-            if (shape.getEndY() > maxY)
-                maxY = shape.getEndY();
+    @Override
+    public <T extends DiagramShape> T findFirst(Class<T> type) {
+        return shapes.findFirst(type);
+    }
+
+    @Override
+    public <T extends DiagramShape> long count(Class<T> type) {
+        return shapes.count(type);
+    }
+
+    @Override
+    public <T extends DiagramShape> Stream<T> getAll(Class<T> type) {
+        return shapes.getAll(type);
+    }
+
+    class DiagramMouseListener extends MouseAdapter {
+        private int prevX;
+        private int prevY;
+        private boolean shapeMoved;
+        private int startX;
+        private int startY;
+
+        DiagramMouseListener() {
+            addMouseListener(this);
+            addMouseMotionListener(this);
+            addMouseWheelListener(this);
         }
-        for (RelationAnchor anchor : getAllAnchors()) {
-            if (anchor.getX() < minX)
-                minX = anchor.getX();
-            if (anchor.getY() < minY)
-                minY = anchor.getY();
-            if (anchor.getX() > maxX)
-                maxX = anchor.getX();
-            if (anchor.getY() > maxY)
-                maxY = anchor.getY();
-        }
-        return new Rectangle(minX - DrawingConstants.GAP, minY - DrawingConstants.GAP, maxX - minX + 2 * DrawingConstants.GAP, maxY - minY + 2 * DrawingConstants.GAP);
-    }
 
-    public void layoutDiagram() {
-        if (getItemCount(UMLClass.class) > 0) {
-            if (UIUtility.confirm(UMLEditorMessages.LAYOUT_DIAGRAM)) {
-                Graphics2D g2d = (Graphics2D) getGraphics();
-                try {
-                    final int columnCount = Integer.parseInt(UIUtility.input("Enter number of columns for grid layout", "5"));
-                    final int padding = 20;
-                    int currentX = padding;
-                    int currentY = padding;
-                    int i = 0;
-                    int bestY = 0;
-                    for (UMLClass cls : getClasses()) {
-                        cls.setStartX(currentX);
-                        cls.setStartY(currentY);
-                        cls.calculateEndCoordinates(g2d);
-                        currentX = cls.getEndX() + padding;
-                        if (bestY < cls.getEndY())
-                            bestY = cls.getEndY();
-                        i++;
-                        if (i % columnCount == 0) {
-                            currentY = bestY + padding;
-                            currentX = padding;
-                            bestY = currentY;
-                        }
-                    }
-                } catch (NumberFormatException e) {
-                    UIUtility.error("You didn't enter a correct integer number. Please try again.");
+        @Override
+        public void mousePressed(MouseEvent e) {
+            prevX = startX = ZoomUtility.get(e.getX());
+            prevY = startY = ZoomUtility.get(e.getY());
+            createShape(startX, startY, e.isControlDown());
+            if (e.getClickCount() == 2) {
+                if (e.isPopupTrigger()) {
+                    removeSelected();
+                    return;
+                } else if (shapes.getSelected() != null) {
+                    diagramEditor.loadForm(shapes.getSelected().getForm(UMLDiagramPanel.this));
+                }
+            }
+            shapes.updateSelection(e.isControlDown(), startX, startY);
+            repaint();
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            setCursor(Cursor.getDefaultCursor());
+            if (shapeMoved && shapes.isShapeSelected()) {
+                DiagramUndoManager.addEdit(EditFactory.shapesMoved(shapes.getSelectedShapes(), ZoomUtility.get(e.getX()) - startX, ZoomUtility.get(e.getY()) - startY));
+                if (gridVisible) {
+                    shapes.getSelectedShapes().forEach(DiagramShape::stickToGrid);
+                }
+                shapeMoved = false;
+            }
+            selectionArea = null;
+            repaint();
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+            int diffX = ZoomUtility.get(e.getX()) - prevX;
+            int diffY = ZoomUtility.get(e.getY()) - prevY;
+            if (SwingUtilities.isRightMouseButton(e)) {
+                JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, UMLDiagramPanel.this);
+                if (viewPort != null) {
+                    Rectangle view = viewPort.getViewRect();
+                    view.x -= diffX;
+                    view.y -= diffY;
+                    scrollRectToVisible(view);
+                }
+            } else {
+                if (selectionArea == null && shapes.isShapeSelected()) {
+                    shapeMoved = shapes.moveSelectedShapes(diffX, diffY);
+                    prevX = ZoomUtility.get(e.getX());
+                    prevY = ZoomUtility.get(e.getY());
+                } else {
+                    selectArea(startX, startY, diffX, diffY);
                 }
                 repaint();
             }
+        }
+
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            int x = ZoomUtility.get(e.getX());
+            int y = ZoomUtility.get(e.getY());
+            shapes.forEach(shape -> {
+                if (shape != null && shape.over(x, y)) {
+                    setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                } else {
+                    setCursor(Cursor.getDefaultCursor());
+                }
+            });
+            repaint();
+        }
+
+        @Override
+        public void mouseWheelMoved(MouseWheelEvent e) {
+            if (e.isControlDown()) {
+                ZoomUtility.changeZoom(e.getPreciseWheelRotation());
+                //TODO position according mouse location
+                JViewport viewPort = (JViewport) SwingUtilities
+                        .getAncestorOfClass(JViewport.class, UMLDiagramPanel.this);
+                if (viewPort != null) {
+                    Rectangle view = viewPort.getViewRect();
+                    view.x = ZoomUtility.get(e.getX());
+                    view.y = ZoomUtility.get(e.getY());
+                    scrollRectToVisible(view);
+                }
+            } else if (getParent() != null) {
+                getParent().dispatchEvent(e);
+            }
+            repaint();
+        }
+
+        void remove() {
+            removeMouseListener(this);
+            removeMouseMotionListener(this);
+            removeMouseWheelListener(this);
         }
     }
 }

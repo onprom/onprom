@@ -26,13 +26,12 @@
 
 package it.unibz.inf.kaos.ui.utility;
 
+import com.google.common.collect.Sets;
 import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Stack;
 
@@ -48,13 +47,13 @@ public class NavigationUtility {
     private NavigationUtility() {
     }
 
-    private synchronized static void traverse(Stack<DiagramShape> path, Set<DiagramShape> onPath, Set<Set<DiagramShape>> paths, UMLClass startNode, UMLClass endNode, boolean functionalCheck) {
+    private static synchronized void traverse(Stack<DiagramShape> path, Set<DiagramShape> onPath, Set<Set<DiagramShape>> paths, UMLClass startNode, UMLClass endNode, boolean functionalCheck) {
         onPath.add(startNode);
         //logger.info("currentNode:"+startNode);
         if (startNode.equals(endNode)) {
             path.push(endNode);
             //logger.info("found:"+path);
-            paths.add(new LinkedHashSet<>(path));
+            paths.add(Sets.newLinkedHashSet(path));
             path.pop();
         } else {
             for (Relationship relation : startNode.getRelations()) {
@@ -105,8 +104,8 @@ public class NavigationUtility {
     }
 
     private static Set<Set<DiagramShape>> findAllPaths(UMLClass startNode, UMLClass endNode, boolean functionalCheck) {
-        Set<Set<DiagramShape>> paths = new LinkedHashSet<>();
-        traverse(new Stack<>(), new LinkedHashSet<>(), paths, startNode, endNode, functionalCheck);
+        Set<Set<DiagramShape>> paths = Sets.newLinkedHashSet();
+        traverse(new Stack<>(), Sets.newLinkedHashSet(), paths, startNode, endNode, functionalCheck);
         return paths;
     }
 
@@ -123,7 +122,7 @@ public class NavigationUtility {
         if (startNode.equals(endNode))
             return true;
         Stack<UMLClass> stack = new Stack<>();
-        Set<UMLClass> visited = new HashSet<>();
+        Set<UMLClass> visited = Sets.newHashSet();
         stack.push(startNode);
         while (!stack.empty()) {
             UMLClass node = stack.pop();

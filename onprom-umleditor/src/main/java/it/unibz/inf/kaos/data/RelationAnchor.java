@@ -26,7 +26,7 @@
 
 package it.unibz.inf.kaos.data;
 
-import it.unibz.inf.kaos.ui.utility.DrawingConstants;
+import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -57,14 +57,14 @@ public class RelationAnchor extends AbstractDiagramShape {
 
   @Override
   Shape getShape() {
-    return new Rectangle2D.Double((double) getX() - DrawingConstants.HALF_ANCHOR_RADIUS,
-      (double) getY() - DrawingConstants.HALF_ANCHOR_RADIUS,
-      DrawingConstants.ANCHOR_RADIUS, DrawingConstants.ANCHOR_RADIUS);
+      return new Rectangle2D.Double((double) getX() - DrawingUtility.HALF_ANCHOR_RADIUS,
+              (double) getY() - DrawingUtility.HALF_ANCHOR_RADIUS,
+              DrawingUtility.ANCHOR_RADIUS, DrawingUtility.ANCHOR_RADIUS);
   }
 
   public void draw(Graphics2D g2d) {
       final Color oldColor = g2d.getColor();
-      if (getState().equals(State.SELECTED)) {
+      if (getState() == State.SELECTED) {
           g2d.setColor(getState().getColor());
       }
     g2d.fill(getShape());

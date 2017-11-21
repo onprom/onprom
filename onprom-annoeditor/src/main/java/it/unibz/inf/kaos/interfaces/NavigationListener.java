@@ -36,6 +36,7 @@ import java.util.Set;
  * <p>
  * @author T. E. Kalayci on 17/11/16.
  */
+@FunctionalInterface
 public interface NavigationListener {
   void navigationComplete(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute);
 }

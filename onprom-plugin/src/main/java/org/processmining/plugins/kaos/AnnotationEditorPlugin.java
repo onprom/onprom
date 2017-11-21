@@ -28,10 +28,8 @@ package org.processmining.plugins.kaos;
 
 import it.unibz.inf.kaos.annotation.AnnotationEditor;
 import it.unibz.inf.kaos.data.EditorObjects;
-import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
-import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
@@ -39,8 +37,6 @@ import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.framework.plugin.events.Logger;
 import org.semanticweb.owlapi.model.OWLOntology;
-
-import java.util.Set;
 
 /**
  * @author T. E. Kalayci
@@ -92,16 +88,6 @@ public class AnnotationEditorPlugin implements AnnotationEditorListener {
         AnnotationEditor editor = new AnnotationEditor(null, this);
         editor.load("", editorObjects.getShapes());
         editor.display(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-    }
-
-    @Override
-    public void store(String ontologyName, OWLOntology ontology) {
-
-    }
-
-    @Override
-    public void store(String identifier, FileType type, Set<DiagramShape> shapes) {
-
     }
 
     @Override

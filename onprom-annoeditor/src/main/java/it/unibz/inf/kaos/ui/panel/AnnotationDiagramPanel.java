@@ -26,21 +26,22 @@
 
 package it.unibz.inf.kaos.ui.panel;
 
+import com.google.common.collect.Sets;
 import it.unibz.inf.kaos.data.*;
-import it.unibz.inf.kaos.interfaces.*;
+import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
+import it.unibz.inf.kaos.interfaces.AnnotationFactory;
+import it.unibz.inf.kaos.interfaces.DiagramShape;
+import it.unibz.inf.kaos.interfaces.NavigationListener;
 import it.unibz.inf.kaos.ui.edit.AddDeleteAnnotationEdit;
-import it.unibz.inf.kaos.ui.form.AbstractAnnotationForm;
 import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
-import it.unibz.inf.kaos.ui.utility.AnnotationEditorMessages;
-import it.unibz.inf.kaos.ui.utility.NavigationUtility;
-import it.unibz.inf.kaos.ui.utility.UIUtility;
-import it.unibz.inf.kaos.ui.utility.ZoomUtility;
+import it.unibz.inf.kaos.ui.utility.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Drawing panel supporting annotations
@@ -51,110 +52,78 @@ import java.util.Set;
  */
 public class AnnotationDiagramPanel extends UMLDiagramPanel implements AnnotationDiagram {
     private final AnnotationFactory factory;
-    private Set<DiagramShape> tempNavigation = new LinkedHashSet<>();
-    private NavigationListener navigationListener;
+    private final DiagramNavigator diagramNavigator = new DiagramNavigator(this);
 
     public AnnotationDiagramPanel(DiagramEditor editor, AnnotationFactory _factory) {
         super(editor);
         factory = _factory;
         isUpdateAllowed = false;
-    }
-
-    private void highlight(DiagramShape node) {
-        if (node instanceof Association) {
-            //highlight classes related with this association
-            Association association = (Association) node;
-            if (!tempNavigation.contains(association.getFirstClass()) && association.getFirstClass().notSelected()) {
-                association.getFirstClass().setState(State.HIGHLIGHTED);
+        shapes = new Shapes() {
+            @Override
+            protected DiagramShape getFirstShapeAt(int x, int y) {
+                Annotation _selected = super.getAll(Annotation.class).filter(shape -> shape.over(x, y)).findFirst().orElse(null);
+                return _selected != null ? _selected : super.getFirstShapeAt(x, y);
             }
-            if (!tempNavigation.contains(association.getSecondClass()) && association.getSecondClass().notSelected()) {
-                association.getSecondClass().setState(State.HIGHLIGHTED);
-            }
-        } else if (node instanceof UMLClass) {
-            UMLClass cls = (UMLClass) node;
-            //highlight relations with this class
-            cls.getRelations().forEach(relation -> {
-                if (relation.notSelected()) {
-                    relation.setState(State.HIGHLIGHTED);
+        };
+        diagramMouseListener.remove();
+        diagramMouseListener = new DiagramMouseListener() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int x = ZoomUtility.get(e.getX());
+                int y = ZoomUtility.get(e.getY());
+                if (currentAction == AnnotationDiagramActions.NAVIGATE) {
+                    DiagramShape node = shapes.over(x, y);
+                    if (node != null) {
+                        diagramNavigator.navigate(node, x, y, e.getClickCount() == 2);
+                    }
+                } else {
+                    DiagramShape _selected = shapes.getSelected();
+                    if (_selected != null) {
+                        if (_selected instanceof UMLClass) {
+                            createAnnotation((UMLClass) _selected, x, y);
+                        } else if (e.getClickCount() == 2 && _selected instanceof Annotation) {
+                            loadForm(_selected.getForm(AnnotationDiagramPanel.this));
+                            return;
+                        }
+                    }
+                    super.mousePressed(e);
                 }
-            });
-        }
-        repaint();
+            }
+        };
     }
 
-    private void resetState() {
+    public void startNavigation(NavigationListener navigationListener) {
+        diagramNavigator.setNavigationListener(navigationListener);
+        setCurrentAction(AnnotationDiagramActions.NAVIGATE);
+    }
+
+    private void createAnnotation(final UMLClass _selected, int x, int y) {
+        Annotation annotation = factory.createAnnotation(AnnotationDiagramPanel.this, currentAction, _selected);
+        if (annotation != null) {
+            annotation.setStartX(x);
+            annotation.setStartY(y);
+            addAnnotation(annotation);
+            DiagramUndoManager.addEdit(new AddDeleteAnnotationEdit(AnnotationDiagramPanel.this, annotation, true));
+            loadForm(annotation.getForm(AnnotationDiagramPanel.this));
+        }
+    }
+
+    @Override
+    public void resetNavigation() {
+        diagramNavigator.resetNavigation();
         shapes.forEach(shape -> shape.setState(State.NORMAL));
+        setCurrentAction(UMLDiagramActions.select);
+        shapes.clearSelection();
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-        //check if it is tempNavigation action
-        if (currentAction == AnnotationActionType.NAVIGATE) {
-            //select clicked object
-            int x = ZoomUtility.get(e.getX());
-            int y = ZoomUtility.get(e.getY());
-            DiagramShape node = selectShape(x, y);
-            //add selected element to tempNavigation list
-            if (node != null) {
-                node.setState(State.SELECTED);
-                //highlight classes and relations which is accessible
-                highlight(node);
-                tempNavigation.add(node);
-                if (e.getClickCount() == 2) {
-                    //get clicked attribute of clicked class
-                    if (node instanceof UMLClass) {
-                        UMLClass cls = (UMLClass) node;
-                        Attribute selectedAttribute = cls.getClickedAttribute(x, y);
-                        if (selectedAttribute != null)
-                            selectedAttribute.setState(State.SELECTED);
-                        //end tempNavigation
-                        navigationListener.navigationComplete(tempNavigation, (UMLClass) node, selectedAttribute);
-                        //reset states of tempNavigation nodes
-                        tempNavigation.forEach(shape -> shape.setState(State.NORMAL));
-                        resetNavigation();
-                    } else {
-                        UIUtility.error("Please double click on a class to finish tempNavigation");
-                    }
-                }
-            }
-        } else {
-            DiagramShape _selected = getSelected();
-            if (_selected != null) {
-                //create a new annotation to the selected UML class
-                if (_selected instanceof UMLClass) {
-                    Annotation annotation = factory.createAnnotation(this, currentAction, (UMLClass) _selected);
-                    if (annotation != null) {
-                        annotation.setStartX(ZoomUtility.get(e.getX()));
-                        annotation.setStartY(ZoomUtility.get(e.getY()));
-                        addAnnotation(annotation);
-                        undoManager.addEdit(new AddDeleteAnnotationEdit(this, annotation, true));
-                        loadForm(annotation.getForm(this));
-                    }
-                } else if (_selected instanceof Annotation && e.getClickCount() == 2) {
-                    loadForm(((Annotation) _selected).getForm(this));
-                }
-            }
-            super.mousePressed(e);
-        }
-    }
-
-    @Override
-    DiagramShape getHoverShape() {
-        DiagramShape _selected = getItems(Annotation.class).stream().filter(shape -> shape.over(startX, startY)).findFirst().orElse(null);
-        if (_selected == null) {
-            _selected = super.getHoverShape();
-        }
-        return _selected;
-    }
-
-    @Override
-    public boolean removeShape(DiagramShape _selected) {
-        if (_selected != null && _selected instanceof Annotation) {
+    public boolean removeShape(DiagramShape selected) {
+        if (selected != null && selected instanceof Annotation) {
             if (UIUtility.confirm(AnnotationEditorMessages.DELETE_CONFIRMATION)) {
-                Annotation annotation = (Annotation) _selected;
+                Annotation annotation = (Annotation) selected;
                 if (factory.checkRemoval(this, annotation)) {
                     removeAnnotation(annotation);
-                    undoManager.addEdit(new AddDeleteAnnotationEdit(this, annotation, false));
+                    DiagramUndoManager.addEdit(new AddDeleteAnnotationEdit(this, annotation, false));
                     loadForm(null);
                     repaint();
                     return true;
@@ -168,38 +137,7 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        getItems(Annotation.class).forEach(shape -> shape.draw(g2d));
-    }
-
-    private DiagramShape selectShape(int x, int y) {
-        return shapes.stream().filter(p -> p.over(x, y)).findFirst().orElse(null);
-    }
-
-    private void resetAllAttributesState(UMLClass relatedClass) {
-        updateAttributesState(relatedClass, State.NORMAL, false, (DataType[]) null);
-    }
-
-    private void updateAttributeState(UMLClass relatedClass, State state, boolean functional, DataType... dataType) {
-        updateAttributesState(relatedClass, state, functional, dataType);
-        getClasses().forEach(cls -> updateAttributeState(relatedClass, cls, state, functional, dataType));
-        repaint();
-    }
-
-    private void updateAttributeState(UMLClass relatedClass, UMLClass cls, State state, boolean functional, DataType... dataType) {
-        if (NavigationUtility.isConnected(relatedClass, cls, functional)) {
-            updateAttributesState(cls, state, functional, dataType);
-        }
-    }
-
-    private void updateAttributesState(UMLClass cls, State state, boolean functional, DataType... dataType) {
-        for (Attribute attr : cls.getAttributes()) {
-            if (!functional || attr.isFunctional()) {
-                if (dataType == null || Arrays.asList(dataType).contains(attr.getType())) {
-                    attr.setState(state);
-                }
-            }
-        }
+        shapes.getAll(Annotation.class).forEach(shape -> shape.draw((Graphics2D) g));
     }
 
     @Override
@@ -214,59 +152,39 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
         loadForm(null);
     }
 
-    public void startNavigation(NavigationListener _navigationListener) {
-        navigationListener = _navigationListener;
-        setCurrentAction(AnnotationActionType.NAVIGATE);
-    }
-
-    public void resetNavigation() {
-        tempNavigation = new LinkedHashSet<>();
-        resetState();
-        currentAction = UMLActionType.select;
-        clearSelection();
-    }
-
-    public void highlightAttribute(UMLClass relatedClass, boolean functional, DataType... dataType) {
-        updateAttributeState(relatedClass, State.HIGHLIGHTED, functional, dataType);
-    }
-
     public void resetAttributeStates() {
-        getClasses().forEach(this::resetAllAttributesState);
+        getClasses().forEach(umlClass -> diagramNavigator.updateAttributesState(umlClass, State.NORMAL, false));
     }
 
     @Override
-    public Set<NavigationalAttribute> getAttributes(UMLClass startNode, boolean functional, DataType... types) {
-        Set<NavigationalAttribute> attributes = new LinkedHashSet<>();
-        for (UMLClass endNode : getClasses()) {
+    public void highlightAttribute(final UMLClass relatedClass, final boolean functional, final DataType... dataType) {
+        diagramNavigator.highlightAttribute(relatedClass, functional, dataType);
+    }
+
+    @Override
+    public Set<NavigationalAttribute> findAttributes(UMLClass startNode, boolean functional, DataType... types) {
+        return getClasses().map(endNode -> {
+            Set<NavigationalAttribute> attributes = Sets.newLinkedHashSet();
             for (Attribute attr : endNode.getAttributes()) {
-                if (types == null || Arrays.asList(types).contains(attr.getType())) {
+                if (types == null || types.length < 1 || Arrays.asList(types).contains(attr.getType())) {
                     if (NavigationUtility.isConnected(startNode, endNode, functional)) {
                         attributes.add(new NavigationalAttribute(endNode, attr));
                     }
                 }
             }
-        }
-        return attributes;
+            return attributes;
+        }).flatMap(Set::stream).collect(Collectors.toSet());
     }
 
     @Override
-    public <T extends Annotation> Set<T> getAnnotations(UMLClass startNode, boolean functional, Class<T> type) {
-        Set<T> annotations = new LinkedHashSet<>();
-        for (Annotation annotation : getItems(type)) {
-            UMLClass endNode = annotation.getRelatedClass();
-            if (startNode.equals(endNode)) {
-                annotations.add((T) annotation);
-            } else if (NavigationUtility.isConnected(startNode, endNode, functional)) {
-                annotations.add((T) annotation);
-            }
-        }
-        return annotations;
+    public <T extends Annotation> Set<T> findAnnotations(UMLClass startNode, boolean functional, Class<T> type) {
+        return shapes.getAll(type).filter(annotation -> NavigationUtility.isConnected(startNode, annotation.getRelatedClass(), functional)).collect(Collectors.toSet());
     }
 
-    private void loadForm(AbstractAnnotationForm form) {
+    private void loadForm(JPanel form) {
         if (form != null) {
             form.setVisible(true);
         }
-        diagramEditor.loadEditor(form);
+        diagramEditor.loadForm(form);
     }
 }

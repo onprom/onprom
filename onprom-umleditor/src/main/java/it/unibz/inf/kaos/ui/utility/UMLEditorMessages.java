@@ -48,8 +48,8 @@ public enum UMLEditorMessages implements Messages {
     "<p>The development of the tool suite still in progress, it may contain bugs and/or errors. Please <a href='http://onprom.inf.unibz.it/index.php/contact/' target=''>let us know</a> any errors or problems.</p>" +
     "<p>Please consider that this software and examples are distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</p>");
 
-    final private String title;
-    final private String message;
+    private final String title;
+    private final String message;
 
     UMLEditorMessages(String _title, String _message) {
         this.title = _title;

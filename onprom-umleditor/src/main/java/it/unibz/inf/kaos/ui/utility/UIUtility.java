@@ -26,8 +26,11 @@
 
 package it.unibz.inf.kaos.ui.utility;
 
+import com.google.common.collect.Sets;
+import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.ui.action.ToolbarAction;
 import it.unibz.inf.kaos.ui.component.WidePopupComboBox;
+import it.unibz.inf.kaos.ui.filter.FileTypeFilter;
 import it.unibz.inf.kaos.ui.form.InformationDialog;
 import it.unibz.inf.kaos.ui.interfaces.Buttons;
 import it.unibz.inf.kaos.ui.interfaces.Labels;
@@ -35,18 +38,16 @@ import it.unibz.inf.kaos.ui.interfaces.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.File;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.stream.Stream;
 
 /**
  * This class contains static variables and methods which are used by UI classes
@@ -55,12 +56,12 @@ import java.util.concurrent.Callable;
  */
 public class UIUtility {
     private static final Logger logger = LoggerFactory.getLogger(UIUtility.class.getName());
+    private static final JFileChooser FILE_CHOOSER = new JFileChooser();
     //set for storing class and relation names
-    private static final Set<String> names = new HashSet<>();
+    private static final HashSet<String> names = Sets.newHashSet();
     private static final String HTML_STRING = "<html>%s</html>";
     private static final Dimension SMALL_BUTTON_DIMENSION = new Dimension(45, 25);
-    private static final Set<SwingWorker> BACKGROUND_WORKERS = new LinkedHashSet<>();
-    private static BufferedImage LOGO = null;
+    private static final HashSet<SwingWorker> BACKGROUND_WORKERS = Sets.newHashSet();
 
     public static boolean isNameExist(String name) {
         return names.contains(name.trim());
@@ -126,9 +127,9 @@ public class UIUtility {
 
     public static String strToHexColor(String str) {
         Integer i = str.hashCode();
-        return Integer.toHexString(((i >> 24) & 0xFF)) +
-                Integer.toHexString(((i >> 16) & 0xFF)) +
-                Integer.toHexString(((i >> 8) & 0xFF));
+        return Integer.toHexString(((i >> 16) & 0xFF)) +
+                Integer.toHexString(((i >> 8) & 0xFF)) +
+                Integer.toHexString(((i >> 4) & 0xFF));
     }
 
     public static void stopWorkers() {
@@ -160,29 +161,17 @@ public class UIUtility {
         JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), title, JOptionPane.ERROR_MESSAGE);
     }
 
-    public static BufferedImage getLogo() {
-        if (LOGO == null) {
-            try {
-                LOGO = ImageIO.read(IOUtility.getImageURL("onprom"));
-            } catch (IOException e) {
-                logger.error("Couldn't load logo", e);
-            }
-        }
-        return LOGO;
+    public static <E> WidePopupComboBox<E> createWideComboBox(Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
+        return createWideComboBox(Collections.emptyList(), dimension, listener, editable, withEmpty);
     }
 
-    public static Cursor getCursorImage(String imageName) {
-        return Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage(IOUtility.getImageURL(imageName)),
-                new Point(0, 0), "img");
-    }
-
-    public static <E> WidePopupComboBox createWideComboBox(Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
-        WidePopupComboBox<E> cmb = new WidePopupComboBox<>();
+    public static <E> WidePopupComboBox<E> createWideComboBox(Iterable<E> values, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
+        WidePopupComboBox<E> cmb = new WidePopupComboBox<>(values);
         setupWidePopupComboBox(cmb, dimension, listener, editable, withEmpty);
         return cmb;
     }
 
-    public static <E> WidePopupComboBox<E> createWideComboBox(Set<E> values, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
+    public static <E> WidePopupComboBox<E> createWideComboBox(Stream<E> values, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
         WidePopupComboBox<E> cmb = new WidePopupComboBox<>(values);
         setupWidePopupComboBox(cmb, dimension, listener, editable, withEmpty);
         return cmb;
@@ -197,7 +186,6 @@ public class UIUtility {
     private static <E> void setupWidePopupComboBox(WidePopupComboBox<E> cmb, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
         cmb.setPreferredSize(dimension);
         cmb.setEditable(editable);
-        //cmb.setEnabled(editable);
         if (listener != null) {
             cmb.addItemListener(listener);
         }
@@ -218,6 +206,16 @@ public class UIUtility {
 
     public static JButton createSmallButton(Buttons button, ActionListener actionListener) {
         return createButton(button.getText(), button.getMnemonic(), button.getTooltip(), actionListener, SMALL_BUTTON_DIMENSION);
+    }
+
+    public static JCheckBox createCheckBox(String tooltip) {
+        return createCheckBox("", tooltip);
+    }
+
+    public static JCheckBox createCheckBox(String text, String tooltip) {
+        JCheckBox checkBox = new JCheckBox(text);
+        checkBox.setToolTipText(tooltip);
+        return checkBox;
     }
 
     public static JButton createButton(Buttons button, ActionListener actionListener) {
@@ -244,11 +242,24 @@ public class UIUtility {
         return lbl;
     }
 
-    public static JLabel createLabel(String text, Dimension preferredSize) {
-        JLabel lbl = new JLabel(String.format(HTML_STRING, text));
+    public static JLabel createLabel(String text, Dimension preferredSize, final boolean isHTML) {
+        if (isHTML) {
+            text = String.format(HTML_STRING, text);
+        }
+        JLabel lbl = new JLabel(text);
         lbl.setToolTipText(text);
         lbl.setPreferredSize(preferredSize);
         return lbl;
+    }
+
+    public static JLabel createLabel(String text, Dimension preferredSize, MouseListener mouseListener) {
+        JLabel lbl = createLabel(text, preferredSize);
+        lbl.addMouseListener(mouseListener);
+        return lbl;
+    }
+
+    public static JLabel createLabel(String text, Dimension preferredSize) {
+        return createLabel(text, preferredSize, true);
     }
 
     public static JTextField createTextField(Dimension preferredSize) {
@@ -263,6 +274,11 @@ public class UIUtility {
         return createTextField(tooltip, preferredSize, listener, true);
     }
 
+    public static JTextField createTextField(String tooltip, Dimension preferredSize, boolean editable) {
+        return createTextField(tooltip, preferredSize, e -> {
+        }, editable);
+    }
+
     public static JTextField createTextField(String tooltip, Dimension preferredSize, ActionListener actionListener, boolean editable) {
         JTextField txt = new JTextField();
         if (tooltip != null && !tooltip.isEmpty()) {
@@ -273,10 +289,6 @@ public class UIUtility {
         txt.setPreferredSize(preferredSize);
         txt.setEditable(editable);
         return txt;
-    }
-
-    public static boolean isCTRLPressed(ActionEvent e) {
-        return (e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK;
     }
 
     public static JButton createToolbarButton(ToolbarAction action) {
@@ -305,7 +317,7 @@ public class UIUtility {
         return menuItem;
     }
 
-    public static <T> void loadItems(JComboBox<T> comboBox, Set<T> items) {
+    public static <T> void loadItems(JComboBox<T> comboBox, Iterable<T> items) {
         comboBox.removeAllItems();
         for (T item : items) {
             comboBox.addItem(item);
@@ -314,5 +326,43 @@ public class UIUtility {
 
     public static boolean isDark(Color color) {
         return color != null && ((30 * color.getRed() + 59 * color.getGreen() + 11 * color.getBlue()) / 100) < 128;
+    }
+
+    public static File[] selectFiles(FileType... allowedFileType) {
+        FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FILE_CHOOSER.setMultiSelectionEnabled(true);
+        FILE_CHOOSER.setFileFilter(FileTypeFilter.get(allowedFileType));
+        int returnVal = FILE_CHOOSER.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            return FILE_CHOOSER.getSelectedFiles();
+        }
+        return null;
+    }
+
+    public static File selectFileToOpen(FileType... allowedFileType) {
+        FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FILE_CHOOSER.setFileFilter(FileTypeFilter.get(allowedFileType));
+        FILE_CHOOSER.setMultiSelectionEnabled(false);
+        int returnVal = FILE_CHOOSER.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            return FILE_CHOOSER.getSelectedFile();
+        }
+        return null;
+    }
+
+    public static File selectFileToSave(FileType fileType) {
+        FILE_CHOOSER.setFileFilter(FileTypeFilter.get(fileType));
+        FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FILE_CHOOSER.setSelectedFile(new File(""));
+        int returnVal = FILE_CHOOSER.showSaveDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = FILE_CHOOSER.getSelectedFile();
+            if (IOUtility.getFileExtension(selectedFile).isEmpty()) {
+                //set default extension if doesn't exist
+                selectedFile = new File(selectedFile.getAbsolutePath() + "." + fileType.getDefaultExtension());
+            }
+            return selectedFile;
+        }
+        return null;
     }
 }

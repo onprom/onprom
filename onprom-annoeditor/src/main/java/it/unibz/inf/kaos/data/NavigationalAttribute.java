@@ -26,7 +26,6 @@
 
 package it.unibz.inf.kaos.data;
 
-import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 
 import java.util.Set;
@@ -41,14 +40,8 @@ public class NavigationalAttribute {
     private UMLClass umlClass;
     private Attribute attribute;
     private String filterClause;
-    private Annotation annotation;
 
     NavigationalAttribute() {
-    }
-
-    public NavigationalAttribute(Annotation _annotation) {
-        this(null, _annotation.getRelatedClass(), null);
-        annotation = _annotation;
     }
 
     public NavigationalAttribute(UMLClass _cls, Attribute _attr) {
@@ -83,10 +76,6 @@ public class NavigationalAttribute {
         return attribute;
     }
 
-    public Annotation getAnnotation() {
-        return annotation;
-    }
-
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("");
@@ -94,7 +83,7 @@ public class NavigationalAttribute {
             stringBuilder.append(attribute.getName()).append(" in ");
         if (umlClass != null)
             stringBuilder.append(umlClass.toString());
-        if (path != null && path.size() > 0) {
+        if (path != null && !path.isEmpty()) {
             stringBuilder.append(" [ ");
             for (DiagramShape node : path) {
                 stringBuilder.append(node).append("\u25b7");

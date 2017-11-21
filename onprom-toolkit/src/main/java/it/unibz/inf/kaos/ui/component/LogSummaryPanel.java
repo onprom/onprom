@@ -34,7 +34,6 @@ import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XTrace;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.slf4j.Logger;
@@ -50,9 +49,10 @@ import java.awt.*;
  * @author T. E. Kalayci on 04-Jul-2017
  */
 public class LogSummaryPanel extends JInternalFrame {
-    private static final Dimension TXT_SIZE = new Dimension(400, 25);
-    private static final Logger logger = LoggerFactory.getLogger(LogSummaryPanel.class.getSimpleName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogSummaryPanel.class.getSimpleName());
+    private static final Dimension TXT_SIZE = new Dimension(375, 25);
     private final XLogInfo info;
+    private static final Dimension CHART_SIZE = new Dimension(800, 300);
 
     public LogSummaryPanel(XLogInfo _info) {
         super("Log Summary", true, true, true, true);
@@ -74,43 +74,49 @@ public class LogSummaryPanel extends JInternalFrame {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridx = 0;
         panel.add(UIUtility.createLabel("Number of traces: " + info.getNumberOfTraces(), TXT_SIZE), gridBagConstraints);
-        gridBagConstraints.gridy++;
+        gridBagConstraints.gridx = 1;
         panel.add(UIUtility.createLabel("Number of events: " + info.getNumberOfEvents(), TXT_SIZE), gridBagConstraints);
         gridBagConstraints.gridy++;
-        panel.add(UIUtility.createLabel("Start date of the log: " + info.getLogTimeBoundaries().getStartDate(), TXT_SIZE), gridBagConstraints);
-        gridBagConstraints.gridy++;
-        panel.add(UIUtility.createLabel("End date of the log: " + info.getLogTimeBoundaries().getEndDate(), TXT_SIZE), gridBagConstraints);
+        gridBagConstraints.gridx = 0;
+        panel.add(UIUtility.createLabel("Start: " + info.getLogTimeBoundaries().getStartDate(), TXT_SIZE), gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        panel.add(UIUtility.createLabel("End: " + info.getLogTimeBoundaries().getEndDate(), TXT_SIZE), gridBagConstraints);
+
         XEventClasses eventClasses = info.getEventClasses();
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (int i = 0; i < eventClasses.size(); i++) {
             XEventClass eventClass = eventClasses.getByIndex(i);
-            dataset.addValue(eventClass.size(), eventClass.toString(), "");
+            dataset.addValue(eventClass.size(), eventClass.getId(), "");
         }
         gridBagConstraints.gridy++;
-        JFreeChart barChart = ChartFactory.createBarChart(
-                "Events",
-                "Event Name", "Count",
-                dataset, PlotOrientation.HORIZONTAL,
-                true, true, false);
-        panel.add(new ChartPanel(barChart), gridBagConstraints);
-        //JTable showing all cases
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridwidth = 2;
+        ChartPanel chartPanel = new ChartPanel(ChartFactory.createBarChart(null, "Event Name", "Count", dataset,
+                PlotOrientation.HORIZONTAL, true, true, false));
+        chartPanel.setPreferredSize(CHART_SIZE);
+        panel.add(chartPanel, gridBagConstraints);
+
         gridBagConstraints.gridy++;
-        panel.add(UIUtility.createLabel("All Traces Available in the Log", TXT_SIZE), gridBagConstraints);
-        gridBagConstraints.gridy++;
+        //panel.add(UIUtility.createLabel("All Traces Available in the Log", TXT_SIZE), gridBagConstraints);
+        //gridBagConstraints.gridy++;
         DefaultListModel<String> listModel = new DefaultListModel<>();
         JList<String> list = new JList<>(listModel);
         for (XTrace trace : info.getLog()) {
             StringBuilder events = new StringBuilder();
+            if(!trace.getAttributes().isEmpty() && trace.getAttributes().get("concept:name")!=null) {
+                events.append(trace.getAttributes().get("concept:name").toString());
+            }
+            events.append(" ⇨");
             for (XEvent event : trace) {
-                events.append(event.getAttributes().get("concept:name").toString()).append("▷");
+                if(event.getAttributes()!=null && event.getAttributes().get("concept:name")!=null) {
+                    events.append(" ").append(event.getAttributes().get("concept:name").toString()).append(" →");
+                }
             }
-            try {
-                listModel.addElement(trace.getAttributes().get("concept:name").toString() + " (" + events.substring(0, events.length() - 1) + ")");
-            } catch (NullPointerException e) {
-                logger.warn(e.getMessage(), e);
-            }
+            listModel.addElement(events.substring(0, events.length()-1));
         }
-        panel.add(new JScrollPane(list), gridBagConstraints);
+        final JScrollPane jScrollPane = new JScrollPane(list);
+        jScrollPane.setPreferredSize(CHART_SIZE);
+        panel.add(jScrollPane, gridBagConstraints);
         return panel;
     }
 }

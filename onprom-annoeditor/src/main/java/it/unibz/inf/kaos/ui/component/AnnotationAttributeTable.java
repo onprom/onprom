@@ -30,7 +30,6 @@ import it.unibz.inf.kaos.data.AnnotationAttribute;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
 import javax.swing.*;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -43,7 +42,7 @@ public class AnnotationAttributeTable extends JTable {
 
     public AnnotationAttributeTable(boolean showType) {
         super();
-        model = new AnnotationAttributeTableModel(new LinkedList<>(), showType);
+        model = new AnnotationAttributeTableModel(showType);
         setModel(model);
     }
 

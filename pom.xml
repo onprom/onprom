@@ -67,7 +67,6 @@
         <module>onprom-data</module>
         <module>onprom-umleditor</module>
         <module>onprom-annoeditor</module>
-        <module>onprom-varianteditor</module>
         <module>onprom-obdamapper</module>
         <module>onprom-logextractor</module>
         <module>onprom-toolkit</module>
@@ -93,14 +92,9 @@
             <version>${logback.version}</version>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.6-jre</version>
         </dependency>
     </dependencies>
 </project>

@@ -25,14 +25,18 @@
  */
 package it.unibz.inf.kaos.data;
 
+import com.google.common.collect.Lists;
 import it.unibz.inf.kaos.data.query.AnnotationQuery;
 import it.unibz.inf.kaos.data.query.BinaryAnnotationQuery;
+import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
+import it.unibz.inf.kaos.interfaces.AnnotationProperties;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
 import it.unibz.inf.kaos.ui.form.CaseForm;
-import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
+import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.apache.jena.arq.querybuilder.SelectBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -40,8 +44,9 @@ import java.util.List;
  * <p>
  * @author T. E. Kalayci on 09/11/16.
  */
-@AnnotationProperties(label = "Case", color = "#E5BABA", mnemonic = 'c', tooltip = "Create <u>C</u>ase", title = "<u>C</u>ase")
-public class CaseAnnotation extends AbstractAnnotation {
+@AnnotationProperties(title = "Case", color = "#E5BABA", mnemonic = 'c', tooltip = "Create <u>C</u>ase")
+public class CaseAnnotation extends Annotation {
+    private static final Logger logger = LoggerFactory.getLogger(CaseAnnotation.class.getName());
 
   private StringAttribute caseName;
 
@@ -61,7 +66,7 @@ public class CaseAnnotation extends AbstractAnnotation {
 
   @Override
   public List<AnnotationQuery> getQuery() {
-      List<AnnotationQuery> queries = new LinkedList<>();
+      List<AnnotationQuery> queries = Lists.newLinkedList();
       try {
           //case name attribute query
           SelectBuilder builder = SimpleQueryExporter.getStringAttributeQueryBuilder(getCaseName(), getRelatedClass(), null);
@@ -76,13 +81,14 @@ public class CaseAnnotation extends AbstractAnnotation {
           //attValue query
           queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, XESConstants.attArray, XESConstants.attValueArr));
       } catch (Exception e) {
-          e.printStackTrace();
+          logger.error(e.getMessage(), e);
+          UIUtility.error(e.getMessage());
       }
       return queries;
   }
 
   @Override
-  public CaseForm getForm(AnnotationDiagramPanel panel) {
+  public CaseForm getForm(AnnotationDiagram panel) {
     return new CaseForm(panel, this);
   }
 

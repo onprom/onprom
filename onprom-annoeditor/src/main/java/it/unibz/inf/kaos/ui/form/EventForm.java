@@ -32,8 +32,6 @@ import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.component.StringDocumentListener;
 import it.unibz.inf.kaos.ui.component.UpdateListener;
 import it.unibz.inf.kaos.ui.utility.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,8 +43,6 @@ import java.util.Set;
  * @author T. E. Kalayci on 09/11/16.
  */
 public class EventForm extends AbstractAnnotationForm {
-  private static final Logger logger = LoggerFactory.getLogger(EventForm.class.getName());
-  //components
   private final JTextField txtName;
   private final JTextField txtNameFilter;
   private final JTextField txtLabel;
@@ -60,7 +56,7 @@ public class EventForm extends AbstractAnnotationForm {
   private final AttributeForm attributeForm;
   private final StringDocumentListener nameListener;
   //variables
-  private NavigationalAttribute timestamp = null;
+  private NavigationalAttribute timestamp;
   private NavigationalAttribute tracePath;
   private StringAttribute name = new StringAttribute();
 
@@ -114,7 +110,7 @@ public class EventForm extends AbstractAnnotationForm {
 
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
-    cmbTimestamp = UIUtility.createWideComboBox(drawingPanel.getAttributes(eventAnnotation.getRelatedClass(), true, DataType.DATE_TIME, DataType.DATE_TIME_STAMP), TXT_SIZE, e -> populateTimestampPath(), true, true);
+      cmbTimestamp = UIUtility.createWideComboBox(drawingPanel.findAttributes(eventAnnotation.getRelatedClass(), true, DataType.DATE_TIME, DataType.DATE_TIME_STAMP), TXT_SIZE, e -> populateTimestampPath(), true, true);
     mainPanel.add(cmbTimestamp, gridBagConstraints);
 
     gridBagConstraints.gridx = 2;
@@ -222,8 +218,10 @@ public class EventForm extends AbstractAnnotationForm {
       name.setFilterClause(txtNameFilter.getText());
       eventAnnotation.setEventName(name);
       NavigationalAttribute selectedTimestamp = (NavigationalAttribute) cmbTimestamp.getSelectedItem();
-      if (cmbTimestampPath.getSelectedItem() != null) {
-        selectedTimestamp.setPath((Set<DiagramShape>) cmbTimestampPath.getSelectedItem());
+        if (selectedTimestamp != null) {
+            if (cmbTimestampPath.getSelectedItem() != null) {
+                selectedTimestamp.setPath((Set<DiagramShape>) cmbTimestampPath.getSelectedItem());
+            }
       }
       eventAnnotation.setTimestamp(selectedTimestamp);
       Object tracePath = cmbTracePath.getSelectedItem();

@@ -32,25 +32,14 @@ import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.logextractor.XESLogExtractorWithEBDAMapping;
-import it.unibz.inf.kaos.ui.component.CustomTree;
-import it.unibz.inf.kaos.ui.component.ExtractionFrame;
-import it.unibz.inf.kaos.ui.component.LogSummaryPanel;
-import it.unibz.inf.kaos.ui.component.TreeNode;
+import it.unibz.inf.kaos.ui.component.*;
 import it.unibz.inf.kaos.ui.form.InformationDialog;
-import it.unibz.inf.kaos.ui.utility.IOUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorMessages;
 import it.unibz.inf.kaos.uml.UMLEditor;
-import it.unibz.inf.ontop.io.ModelIOManager;
 import it.unibz.inf.ontop.model.OBDAModel;
-import it.unibz.inf.ontop.model.impl.OBDADataFactoryImpl;
-import org.apache.commons.io.FilenameUtils;
-import org.deckfour.xes.in.XesXmlParser;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
-import org.deckfour.xes.out.XesXmlSerializer;
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,12 +54,11 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -78,15 +66,16 @@ import java.util.Set;
  */
 public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     private static final Logger logger = LoggerFactory.getLogger(OnpromToolkit.class.getSimpleName());
-    private static final XesXmlSerializer XES_SERIALIZER = new XesXmlSerializer();
-    private static final XesXmlParser XES_PARSER = new XesXmlParser();
     private final JProgressBar progressBar = new JProgressBar();
-    private final FileType[] supportedFormats = new FileType[]{FileType.ONTOLOGY, FileType.UML, FileType.ANNOTATION, FileType.MAPPING, FileType.QUERIES, FileType.XLOG};
+    private final FileType[] supportedFormats = {FileType.ONTOLOGY, FileType.UML, FileType.ANNOTATION, FileType.MAPPING, FileType.QUERIES, FileType.XLOG};
     private final JDesktopPane desktop = new JDesktopPane();
-    private final CustomTree<Object> objects = new CustomTree<>(new TreeNode<>(-1, "Objects", FileType.OTHER, null));
-    private final CustomTree<JInternalFrame> windows = new CustomTree<>(new TreeNode<>(-1, "Windows", FileType.OTHER, null));
+
+    private final ObjectTree objects;
+    private final WindowTree windows;
 
     private OnpromToolkit() {
+        objects = new ObjectTree(this);
+        windows = new WindowTree();
         this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetAdapter() {
             @Override
             public void drop(DropTargetDropEvent dtde) {
@@ -96,8 +85,8 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                         Object transferData = dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                         if (transferData != null && transferData instanceof java.util.List) {
                             java.util.List<File> files = (java.util.List<File>) transferData;
-                            if (files.size() > 0) {
-                                UIUtility.executeInBackground(() -> openFiles(files.toArray(new File[]{})), progressBar);
+                            if (!files.isEmpty()) {
+                                UIUtility.executeInBackground(() -> objects.openFiles(files.toArray(new File[]{})), progressBar);
                                 dtde.dropComplete(true);
                             }
                         }
@@ -109,67 +98,12 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                 }
             }
         }));
-        objects.setDoubleClickAction(() -> {
-            TreeNode selectedNode = objects.getSelectedNode();
-            if (selectedNode != null) {
-                switch (selectedNode.getType()) {
-                    case ONTOLOGY:
-                    case UML:
-                        displayUMLEditor();
-                        break;
-                    case ANNOTATION:
-                        displayAnnotationEditor();
-                        break;
-                    case XLOG:
-                        displayLogSummary(selectedNode);
-                        break;
-                }
-            }
-            return null;
-        });
-        objects.setPopMenu(new JPopupMenu() {
-            {
-                JMenuItem menuItem = new JMenuItem("Delete", KeyEvent.VK_D);
-                menuItem.addActionListener(e -> objects.removeSelected());
-                add(menuItem);
-                menuItem = new JMenuItem("Save as file", KeyEvent.VK_S);
-                menuItem.addActionListener(e -> UIUtility.executeInBackground(OnpromToolkit.this::saveSelected, progressBar));
-                add(menuItem);
-            }
-        });
-        objects.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-                    objects.removeSelected();
-                }
-            }
-        });
-        windows.setPopMenu(new JPopupMenu() {
-            {
-                JMenuItem menuItem = new JMenuItem("Close", KeyEvent.VK_C);
-                menuItem.addActionListener(e -> closeSelectedWindow());
-                add(menuItem);
-            }
-        });
-        windows.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-                    closeSelectedWindow();
-                }
-            }
-        });
-        windows.addTreeSelectionListener(e -> {
-            if (windows.getSelectedNode() != null && windows.getSelectedNode().getUserObject() != null) {
-                windows.getSelectedNode().getUserObject().toFront();
-            }
-        });
+
 
         JPanel treePanel = new JPanel(new GridLayout(0, 1));
         treePanel.setPreferredSize(new Dimension(300, 0));
-        treePanel.add(new JScrollPane(objects));
-        treePanel.add(new JScrollPane(windows));
+        treePanel.add(new JScrollPane(objects.getTreeComponent()));
+        treePanel.add(new JScrollPane(windows.getTreeComponent()));
 
         getContentPane().setLayout(new BorderLayout());
         JSplitPane splitPane = new JSplitPane();
@@ -205,10 +139,8 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         new OnpromToolkit();
     }
 
-    private void closeSelectedWindow() {
-        if (windows.isRootNotSelected() && windows.getSelectedObject() != null) {
-            windows.getSelectedObject().dispose();
-        }
+    public JProgressBar getProgressBar() {
+        return progressBar;
     }
 
     private JMenuBar createMenuBar() {
@@ -221,10 +153,10 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         openItem.addActionListener(e -> UIUtility.executeInBackground(this::openFile, progressBar));
         mnFile.add(openItem);
         JMenuItem saveItem = new JMenuItem("Save Selected...", KeyEvent.VK_S);
-        saveItem.addActionListener(e -> UIUtility.executeInBackground(this::saveSelected, progressBar));
+        saveItem.addActionListener(e -> UIUtility.executeInBackground(objects::saveSelected, progressBar));
         mnFile.add(saveItem);
         JMenuItem saveAllItem = new JMenuItem("Save All...", KeyEvent.VK_A);
-        saveAllItem.addActionListener(e -> UIUtility.executeInBackground(this::saveAll, progressBar));
+        saveAllItem.addActionListener(e -> UIUtility.executeInBackground(objects::saveAll, progressBar));
         mnFile.add(saveAllItem);
         JMenuItem clearItem = new JMenuItem("Remove All", KeyEvent.VK_R);
         clearItem.addActionListener(e -> UIUtility.executeInBackground(this::reset, progressBar));
@@ -259,139 +191,20 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         return menuBar;
     }
 
-    private Void saveSelected() {
-        if (objects.getSelectionPaths() != null) {
-            for (TreePath path : objects.getSelectionPaths()) {
-                try {
-                    TreeNode node = (TreeNode) path.getLastPathComponent();
-                    if (!node.getType().equals(FileType.OTHER)) {
-                        File selectedFile = IOUtility.selectFileToSave(node.getType());
-                        if (selectedFile != null) {
-                            saveObject(FilenameUtils.removeExtension(selectedFile.getAbsolutePath()), node.getType(), node.getUserObject());
-                        }
-                    }
-                } catch (Exception e) {
-                    logError(e);
-                }
-            }
-        }
-        return null;
-    }
-
-    private Void saveAll() {
-        File selectedFile = IOUtility.selectFileToSave(FileType.ONTOLOGY);
-        if (selectedFile != null) {
-            String fileName = FilenameUtils.removeExtension(selectedFile.getAbsolutePath());
-            for (int i = 0; i < objects.getCount(); i++) {
-                TreeNode node = objects.getNode(i);
-                saveObject(fileName, node.getType(), node.getUserObject());
-            }
-        }
-        return null;
-    }
-
-    private void saveObject(String fileName, FileType type, Object object) {
-        String filePath = fileName + "." + type.getDefaultExtension();
-        switch (type) {
-            case MAPPING:
-                try {
-                    new ModelIOManager((OBDAModel) object).save(new File(filePath));
-                } catch (Exception e) {
-                    logError(e);
-                }
-                break;
-            case ONTOLOGY:
-                try {
-                    OWLManager.createOWLOntologyManager().saveOntology((OWLOntology) object, new RDFXMLDocumentFormat(), new FileOutputStream(filePath));
-                } catch (Exception e) {
-                    logError(e);
-                }
-                break;
-            case ANNOTATION:
-            case QUERIES:
-            case UML:
-                IOUtility.exportJSON(new File(filePath), object);
-                break;
-            case XLOG:
-                try {
-                    XES_SERIALIZER.serialize((XLog) object, new FileOutputStream(filePath));
-                } catch (Exception e) {
-                    logError(e);
-                }
-
-                break;
-        }
-    }
-
     private Void openFile() {
-        return openFiles(IOUtility.selectFiles(supportedFormats));
+        return objects.openFiles(UIUtility.selectFiles(supportedFormats));
     }
 
-    public TreeNode getResourceNode(int i) {
+    public TreeNode<Object> getResourceNode(int i) {
         return objects.getNode(i - 1);
     }
 
-    private Void openFiles(File[] files) {
-        if (files != null) {
-            for (File selectedFile : files) {
-                switch (IOUtility.getFileType(selectedFile)) {
-                    case ONTOLOGY:
-                        try {
-                            addObject(selectedFile.getName(), FileType.ONTOLOGY, OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(selectedFile));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            logError(e);
-                        }
-                        break;
-                    case MAPPING:
-                        try {
-                            OBDAModel obdaModel = OBDADataFactoryImpl.getInstance().getOBDAModel();
-                            new ModelIOManager(obdaModel).load(selectedFile);
-                            addObject(selectedFile.getName(), FileType.MAPPING, obdaModel);
-                        } catch (Exception e) {
-                            logError(e);
-                        }
-                        break;
-                    case QUERIES:
-                        addObject(selectedFile.getName(), FileType.QUERIES, IOUtility.readJSON(selectedFile, AnnotationQueries.class));
-                        break;
-                    case ANNOTATION:
-                        addObject(selectedFile.getName(), FileType.ANNOTATION, IOUtility.importJSON(selectedFile));
-                        break;
-                    case UML:
-                        addObject(selectedFile.getName(), FileType.UML, IOUtility.importJSON(selectedFile));
-                        break;
-                    case JSON:
-                        addObject(selectedFile.getName(), FileType.JSON, IOUtility.importJSON(selectedFile));
-                        break;
-                    case XLOG:
-                        try {
-                            for (XLog xlog : XES_PARSER.parse(selectedFile)) {
-                                addObject(selectedFile.getName(), FileType.XLOG, xlog);
-                            }
-                        } catch (Exception e) {
-                            logError(e);
-                        }
-                        break;
-                }
-            }
-        }
-        return null;
-    }
 
-    private Void reset() {
-        objects.removeAll();
-        for (JInternalFrame internalFrame : desktop.getAllFrames()) {
-            internalFrame.dispose();
-        }
-        return null;
-    }
-
-    private Void displayUMLEditor() {
+    public Void displayUMLEditor() {
         return displayEditor(new UMLEditor(null, this));
     }
 
-    private Void displayAnnotationEditor() {
+    public Void displayAnnotationEditor() {
         return displayEditor(new AnnotationEditor(null, this));
     }
 
@@ -455,19 +268,22 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
             AnnotationQueries queries = null;
             for (TreePath path : paths) {
                 Object object = ((TreeNode) path.getLastPathComponent()).getUserObject();
-                if (object instanceof OWLOntology)
+                if (object instanceof OWLOntology) {
                     ontology = (OWLOntology) object;
-                if (object instanceof OBDAModel)
+                }
+                if (object instanceof OBDAModel) {
                     model = (OBDAModel) object;
-                if (object instanceof AnnotationQueries)
+                }
+                if (object instanceof AnnotationQueries) {
                     queries = (AnnotationQueries) object;
+                }
             }
             if (ontology != null && model != null && queries != null) {
                 try {
                     long start = System.currentTimeMillis();
                     XLog xlog = new XESLogExtractorWithEBDAMapping().extractXESLog(ontology, model, queries);
                     logger.error("It took " + (System.currentTimeMillis() - start) + " ms to export log");
-                    displayLogSummary(addObject("Extracted Log", FileType.XLOG, xlog));
+                    displayLogSummary(objects.addObject("Extracted Log", FileType.XLOG, xlog));
                 } catch (Exception e) {
                     logError(e);
                 }
@@ -478,23 +294,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         return null;
     }
 
-    private TreeNode<Object> addObject(String title, FileType type, Object object) {
-        if (title != null) {
-            try {
-                Integer i = Integer.parseInt(title);
-                TreeNode<Object> node = objects.getNode(i);
-                if (node != null && node.getType().equals(type)) {
-                    objects.removeNode(i);
-                }
-            } catch (Exception e) {
-                logger.warn(e.getMessage());
-            }
-        }
-        objects.add(title, type, object);
-        return objects.getNode(objects.getCount() - 1);
-    }
-
-    private void displayLogSummary(TreeNode node) {
+    public void displayLogSummary(TreeNode node) {
         Object selectedObject = node.getUserObject();
         if (selectedObject != null) {
             XLog log = (XLog) selectedObject;
@@ -515,6 +315,14 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         }
     }
 
+    private Void reset() {
+        objects.removeAll();
+        for (JInternalFrame internalFrame : desktop.getAllFrames()) {
+            internalFrame.dispose();
+        }
+        return null;
+    }
+
     private void logError(Exception e) {
         logger.error(e.getMessage(), e);
         InformationDialog.display(e.getMessage());
@@ -522,16 +330,16 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
 
     @Override
     public void store(String identifier, AnnotationQueries annotationQueries) {
-        addObject(identifier, FileType.QUERIES, annotationQueries);
+        objects.addObject(identifier, FileType.QUERIES, annotationQueries);
     }
 
     @Override
     public void store(String identifier, OWLOntology ontology) {
-        addObject(identifier, FileType.ONTOLOGY, ontology);
+        objects.addObject(identifier, FileType.ONTOLOGY, ontology);
     }
 
     @Override
-    public void store(String identifier, FileType type, Set<DiagramShape> shapes) {
-        addObject(identifier, type, shapes);
+    public void store(String identifier, FileType type, Collection<DiagramShape> shapes) {
+        objects.addObject(identifier, type, shapes);
     }
 }

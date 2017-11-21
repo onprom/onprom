@@ -36,30 +36,30 @@ import org.semanticweb.owlapi.model.IRI;
  */
 public class XESConstants {
 
-    public final static String label = "_label";
-    public final static Var labelVar = Var.alloc(label);
-    public final static String attValue = "_value";
-    public final static Var attValueVar = Var.alloc(attValue);
+    public static final String label = "_label";
+    public static final Var labelVar = Var.alloc(label);
+    public static final String attValue = "_value";
+    public static final Var attValueVar = Var.alloc(attValue);
     //TODO should we add ^^xsd:string to the expressions?
-    final static String literalExpr = "\"literal\"";
-    final static String lifecycleExpr = "\"lifecycle:transition\"";
-    final static String timestampTypeExpr = "\"timestamp\"";
-    final static String timestampExpr = "\"time:timestamp\"";
-    final static String nameExpr = "\"concept:name\"";
-    final static String attType = "_type";
-    final static Var attTypeVar = Var.alloc(attType);
-    final static String attKey = "_key";
-    final static Var attKeyVar = Var.alloc(attKey);
-    final static IRI traceAttributeURI = IRI.create("http://onprom.inf.unibz.it/t-has-a");
-    final static IRI eventAttributeURI = IRI.create("http://onprom.inf.unibz.it/e-has-a");
-    final static IRI traceEventURI = IRI.create("http://onprom.inf.unibz.it/t-contains-e");
-    final static IRI attTypeURI = IRI.create("http://onprom.inf.unibz.it/attType");
-    final static IRI attKeyURI = IRI.create("http://onprom.inf.unibz.it/attKey");
-    final static IRI attValueURI = IRI.create("http://onprom.inf.unibz.it/attValue");
-    final static String[] attArray = {attType, attKey, attValue};
-    final static String[] attTypeArr = {attType};
-    final static String[] attKeyArr = {attKey};
-    final static String[] attValueArr = {attValue};
+    static final String literalExpr = "\"literal\"";
+    static final String lifecycleExpr = "\"lifecycle:transition\"";
+    static final String timestampTypeExpr = "\"timestamp\"";
+    static final String timestampExpr = "\"time:timestamp\"";
+    static final String nameExpr = "\"concept:name\"";
+    static final String attType = "_type";
+    static final Var attTypeVar = Var.alloc(attType);
+    static final String attKey = "_key";
+    static final Var attKeyVar = Var.alloc(attKey);
+    static final IRI traceAttributeURI = IRI.create("http://onprom.inf.unibz.it/t-has-a");
+    static final IRI eventAttributeURI = IRI.create("http://onprom.inf.unibz.it/e-has-a");
+    static final IRI traceEventURI = IRI.create("http://onprom.inf.unibz.it/t-contains-e");
+    static final IRI attTypeURI = IRI.create("http://onprom.inf.unibz.it/attType");
+    static final IRI attKeyURI = IRI.create("http://onprom.inf.unibz.it/attKey");
+    static final IRI attValueURI = IRI.create("http://onprom.inf.unibz.it/attValue");
+    static final String[] attArray = {attType, attKey, attValue};
+    static final String[] attTypeArr = {attType};
+    static final String[] attKeyArr = {attKey};
+    static final String[] attValueArr = {attValue};
     //public final String resourceTypeExpr = "\"org:resource\""; //not used currently
 
 }

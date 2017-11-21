@@ -37,9 +37,9 @@ import java.awt.*;
  * @author T. E. Kalayci on 10-Jul-2017.
  */
 public class ResourceShape extends AbstractDiagramShape {
-    private final static int EDGE = 100;
-    private final static Color LOADED = new Color(232, 241, 250);
-    private final static Color NOT_LOADED = new Color(255, 182, 176);
+    private static final int EDGE = 100;
+    private static final Color LOADED = new Color(232, 241, 250);
+    private static final Color NOT_LOADED = new Color(255, 182, 176);
     private TreeNode<Object> treeNode;
 
     public ResourceShape(String _name, TreeNode<Object> _node) {

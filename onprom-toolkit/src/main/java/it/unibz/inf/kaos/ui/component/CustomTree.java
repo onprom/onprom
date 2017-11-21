@@ -37,10 +37,8 @@ import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.Callable;
 
@@ -48,7 +46,7 @@ import java.util.concurrent.Callable;
  * @author T. E. Kalayci on 28-Apr-2017
  */
 public class CustomTree<T> extends JTree {
-    public final static DataFlavor INT_ARRAY_FLAVOR = new DataFlavor(int[].class, "Int Array");
+    public static final DataFlavor INT_ARRAY_FLAVOR = new DataFlavor(int[].class, "Int Array");
     private static final Logger logger = LoggerFactory.getLogger(CustomTree.class.getSimpleName());
     private final TreeNode<T> root;
     private JPopupMenu menu;
@@ -79,7 +77,7 @@ public class CustomTree<T> extends JTree {
                     }
 
                     @Override
-                    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+                    public Object getTransferData(DataFlavor flavor) {
                         return getSelectionRows();
                     }
                 };
@@ -90,7 +88,7 @@ public class CustomTree<T> extends JTree {
             @Override
             public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
                                                           boolean leaf, int row, boolean hasFocus) {
-                super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+                Component component = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
                 TreeNode node = (TreeNode) value;
                 if (node.getIcon() != null) {
                     URL imageUrl = IOUtility.getImageURL(node.getIcon());
@@ -98,7 +96,7 @@ public class CustomTree<T> extends JTree {
                         setIcon(new ImageIcon(imageUrl));
                     }
                 }
-                return this;
+                return component;
             }
         });
     }
@@ -120,8 +118,9 @@ public class CustomTree<T> extends JTree {
                         }
                     } else if (e.getClickCount() == 2) {
                         try {
-                            if (action != null)
+                            if (action != null) {
                                 action.call();
+                            }
                         } catch (Exception ex) {
                             logger.warn(ex.getMessage(), ex);
                         }
@@ -145,8 +144,9 @@ public class CustomTree<T> extends JTree {
 
     public T getSelectedObject() {
         TreeNode<T> node = getSelectedNode();
-        if (node != null)
+        if (node != null) {
             return node.getUserObject();
+        }
         return null;
     }
 

@@ -26,11 +26,11 @@
 package it.unibz.inf.kaos.variant;
 
 import it.unibz.inf.kaos.annotation.AnnotationEditor;
-import it.unibz.inf.kaos.data.*;
-import it.unibz.inf.kaos.factory.AbstractAnnotationFactory;
-import it.unibz.inf.kaos.interfaces.Annotation;
-import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
-import it.unibz.inf.kaos.ui.panel.AnnotationDiagramPanel;
+import it.unibz.inf.kaos.data.Annotation;
+import it.unibz.inf.kaos.data.CaseAnnotation;
+import it.unibz.inf.kaos.data.EventAnnotation;
+import it.unibz.inf.kaos.data.UMLClass;
+import it.unibz.inf.kaos.interfaces.*;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorMessages;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -43,7 +43,22 @@ import java.util.Collection;
  */
 public class VariantAnnotationEditor extends AnnotationEditor {
     public VariantAnnotationEditor(OWLOntology _ontology, AnnotationEditorListener _listener) {
-        super(_ontology, _listener, new VariantAnnotationFactory());
+        super(_ontology, _listener, new AnnotationFactory() {
+            @Override
+            public Annotation createAnnotation(AnnotationDiagram panel, ActionType currentAction, UMLClass selectedCls) {
+                if (currentAction.toString().equals(CaseAnnotation.class.getAnnotation(AnnotationProperties.class).title())) {
+                    return new CaseAnnotation(selectedCls);
+                } else if (currentAction.toString().equals(EventAnnotation.class.getAnnotation(AnnotationProperties.class).title())) {
+                    return new EventAnnotation("event" + panel.count(EventAnnotation.class), selectedCls);
+                }
+                return null;
+            }
+
+            @Override
+            public boolean checkRemoval(AnnotationDiagram panel, Annotation annotation) {
+                return !(annotation instanceof CaseAnnotation) || panel.count(Annotation.class) < 2 || UIUtility.confirm(AnnotationEditorMessages.CASE_DELETE_CONFIRMATION);
+            }
+        });
         setTitle("Variant Annotation Editor");
     }
 
@@ -57,25 +72,6 @@ public class VariantAnnotationEditor extends AnnotationEditor {
                 CaseAnnotation.class.getAnnotation(AnnotationProperties.class),
                 EventAnnotation.class.getAnnotation(AnnotationProperties.class)
         );
-    }
-
-    static class VariantAnnotationFactory extends AbstractAnnotationFactory {
-
-        @Override
-        public Annotation createAnnotation(AnnotationDiagramPanel panel, ActionType currentAction, UMLClass selectedCls) {
-            if (currentAction.toString().equals(CaseAnnotation.class.getAnnotation(AnnotationProperties.class).label())) {
-                return new CaseAnnotation(selectedCls);
-            } else if (currentAction.toString().equals(EventAnnotation.class.getAnnotation(AnnotationProperties.class).label())) {
-                return new EventAnnotation("event" + panel.getItemCount(EventAnnotation.class), selectedCls);
-            }
-            return null;
-        }
-
-        @Override
-        public boolean checkRemoval(AnnotationDiagramPanel panel, Annotation annotation) {
-            return !(annotation instanceof CaseAnnotation) || panel.getItemCount(Annotation.class) < 2 || UIUtility.confirm(AnnotationEditorMessages.CASE_DELETE_CONFIRMATION);
-        }
-
     }
 
 }

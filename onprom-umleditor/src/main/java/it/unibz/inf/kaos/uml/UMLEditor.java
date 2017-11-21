@@ -28,14 +28,14 @@ package it.unibz.inf.kaos.uml;
 
 import it.unibz.inf.kaos.data.EditorObjects;
 import it.unibz.inf.kaos.data.FileType;
-import it.unibz.inf.kaos.data.UMLActionType;
+import it.unibz.inf.kaos.data.UMLDiagramActions;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.interfaces.UMLEditorListener;
 import it.unibz.inf.kaos.owl.OWLExporter;
 import it.unibz.inf.kaos.owl.OWLImporter;
 import it.unibz.inf.kaos.owl.OWLUtility;
-import it.unibz.inf.kaos.ui.action.DialogAction;
-import it.unibz.inf.kaos.ui.action.DrawingPanelAction;
+import it.unibz.inf.kaos.ui.action.DiagramEditorAction;
+import it.unibz.inf.kaos.ui.action.DiagramPanelAction;
 import it.unibz.inf.kaos.ui.action.ZoomAction;
 import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
 import it.unibz.inf.kaos.ui.panel.UMLDiagramPanel;
@@ -58,14 +58,14 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
   protected JProgressBar progressBar;
   protected UMLDiagramPanel diagramPanel;
   protected OWLOntology ontology;
-  protected File loadedFile = null;
+  protected File loadedFile;
   protected FileType[] supportedFormats;
   protected UMLEditorListener listener;
   protected String identifier;
   private JSplitPane splitPane;
   private JScrollPane scrollPane;
 
-  public UMLEditor(OWLOntology _ontology) {
+    protected UMLEditor(OWLOntology _ontology) {
     super("", true, true, true, true);
     ontology = _ontology;
   }
@@ -87,11 +87,11 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     new UMLEditor(null, null).display();
   }
 
-  protected static JToolBar getMainToolbar(UMLDiagramPanel panel) {
+  protected JToolBar getMainToolbar(UMLDiagramPanel panel) {
     JToolBar toolBar = new JToolBar("mainToolBar", JToolBar.VERTICAL);
-    toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(panel, UMLActionType.select)));
-    toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(panel, UMLActionType.objects)));
-    toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(panel, UMLActionType.delete)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.select, panel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.objects, panel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.delete, panel)));
     return toolBar;
   }
 
@@ -146,6 +146,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     this.getContentPane().add(splitPane, BorderLayout.CENTER);
     this.setSize(new Dimension(1024, 768));
     this.setVisible(true);
+      diagramPanel.clear(true);
   }
 
   @Override
@@ -158,7 +159,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
         ontology = editorObjects.getOntology();
         diagramPanel.load(editorObjects.getShapes());
       }
-      loadEditor(null);
+        loadForm(null);
       return null;
     }, progressBar);
   }
@@ -168,7 +169,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     UIUtility.executeInBackground(() -> {
       if (jsonFile) {
         //export as JSON file
-        loadedFile = IOUtility.exportJSON(FileType.UML, diagramPanel.getAllShapes(true));
+        loadedFile = IOUtility.exportJSON(FileType.UML, diagramPanel.getShapes(true));
       } else {
         String documentIRI = null;
         if (ontology != null) {
@@ -180,9 +181,9 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
         File file = null;
         if (iri != null) {
           if (UIUtility.confirm(UMLEditorMessages.SAVE_FILE)) {
-            file = IOUtility.selectOntologyFileToSave();
+            file = UIUtility.selectFileToSave(FileType.ONTOLOGY);
           }
-          ontology = OWLExporter.export(iri, diagramPanel.getAllShapes(false), file);
+          ontology = OWLExporter.export(iri, diagramPanel.getShapes(false), file);
           //loaded file is changed
           loadedFile = file;
         }
@@ -209,20 +210,20 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     UIUtility.executeInBackground(() -> {
       if (loadedFile != null) {
         FileType fileType = IOUtility.getFileType(loadedFile);
-        if (fileType.equals(FileType.ONTOLOGY)) {
+          if (fileType == FileType.ONTOLOGY) {
           if (ontology != null) {
-            ontology = OWLExporter.export(OWLUtility.getDocumentIRI(ontology), diagramPanel.getAllShapes(false), loadedFile);
+            ontology = OWLExporter.export(OWLUtility.getDocumentIRI(ontology), diagramPanel.getShapes(false), loadedFile);
           }
         }
-        if (fileType.equals(FileType.JSON) | fileType.equals(FileType.UML)) {
-          IOUtility.exportJSON(loadedFile, diagramPanel.getAllShapes(true));
+          if (fileType == FileType.JSON | fileType == FileType.UML) {
+            IOUtility.exportJSON(loadedFile, diagramPanel.getShapes(true));
         }
       }
       if (listener != null) {
         if (ontology != null) {
-          listener.store(identifier, OWLExporter.export(OWLUtility.getDocumentIRI(ontology), diagramPanel.getAllShapes(false), loadedFile));
+          listener.store(identifier, OWLExporter.export(OWLUtility.getDocumentIRI(ontology), diagramPanel.getShapes(false), loadedFile));
         } else {
-          listener.store(identifier, FileType.UML, diagramPanel.getAllShapes(true));
+          listener.store(identifier, FileType.UML, diagramPanel.getShapes(true));
         }
       }
 
@@ -230,7 +231,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     }, progressBar);
   }
 
-  public void loadEditor(JPanel panel) {
+    public void loadForm(JPanel panel) {
     splitPane.setDividerLocation(0.75);
     splitPane.setTopComponent(scrollPane);
     if (panel != null) {
@@ -242,11 +243,10 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
           super.componentHidden(e);
         }
       });
-    }
-    else {
+    } else {
       splitPane.setBottomComponent(null);
     }
-    diagramPanel.setCurrentAction(UMLActionType.select);
+      diagramPanel.setCurrentAction(UMLDiagramActions.select);
   }
 
   protected String getOntologyName() {
@@ -260,11 +260,11 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     //Get default toolbar
     JToolBar toolBar = getMainToolbar(diagramPanel);
     //add additional buttons for this editor
-    toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(diagramPanel, UMLActionType.umlclass)));
-    toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(diagramPanel, UMLActionType.association)));
-    toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(diagramPanel, UMLActionType.isarelation)));
-    toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(diagramPanel, UMLActionType.relation)));
-    toolBar.add(UIUtility.createToolbarButton(new DrawingPanelAction(diagramPanel, UMLActionType.disjoint)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.umlclass, diagramPanel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.association, diagramPanel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.isarelation, diagramPanel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.relation, diagramPanel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.disjoint, diagramPanel)));
     return toolBar;
   }
 
@@ -272,29 +272,29 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     JMenuBar menuBar = new JMenuBar();
     JMenu mnFile = new JMenu("File");
     mnFile.setMnemonic('f');
-    mnFile.add(UIUtility.createMenuItem(new DrawingPanelAction(panel, UMLActionType.newdiagram)));
-    mnFile.add(UIUtility.createMenuItem(new DialogAction(this, UMLActionType.open)));
-    mnFile.add(UIUtility.createMenuItem(new DialogAction(this, UMLActionType.save)));
-    mnFile.add(UIUtility.createMenuItem(new DialogAction(this, UMLActionType.saveas)));
-    mnFile.add(UIUtility.createMenuItem(new DialogAction(this, UMLActionType.export)));
-    mnFile.add(UIUtility.createMenuItem(new DrawingPanelAction(panel, UMLActionType.image)));
-    mnFile.add(UIUtility.createMenuItem(new DrawingPanelAction(panel, UMLActionType.print)));
-    mnFile.add(UIUtility.createMenuItem(new DialogAction(this, UMLActionType.close)));
+    mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.newdiagram, panel)));
+    mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.open, this)));
+    mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.save, this)));
+    mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.saveas, this)));
+    mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.export, this)));
+    mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.image, panel)));
+    mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.print, panel)));
+    mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.close, this)));
     menuBar.add(mnFile);
-    //Edit menu
+
     JMenu mnEdit = new JMenu("Edit");
     mnEdit.setMnemonic('e');
-    mnEdit.add(UIUtility.createMenuItem(new DrawingPanelAction(panel, UMLActionType.undo)));
-    mnEdit.add(UIUtility.createMenuItem(new DrawingPanelAction(panel, UMLActionType.redo)));
+    mnEdit.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.undo, panel)));
+    mnEdit.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.redo, panel)));
     menuBar.add(mnEdit);
-    //Edit menu
+
     JMenu mnDiagram = new JMenu("Diagram");
     mnDiagram.setMnemonic('d');
-    mnDiagram.add(UIUtility.createMenuItem(new DrawingPanelAction(panel, UMLActionType.layout)));
-    mnDiagram.add(UIUtility.createMenuItem(new ZoomAction(panel, UMLActionType.zoomin)));
-    mnDiagram.add(UIUtility.createMenuItem(new ZoomAction(panel, UMLActionType.zoomout)));
-    mnDiagram.add(UIUtility.createMenuItem(new ZoomAction(panel, UMLActionType.resetzoom)));
-    mnDiagram.add(UIUtility.createMenuItem(new DrawingPanelAction(panel, UMLActionType.grid)));
+    mnDiagram.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.layout, panel)));
+    mnDiagram.add(UIUtility.createMenuItem(new ZoomAction(panel, UMLDiagramActions.zoomin)));
+    mnDiagram.add(UIUtility.createMenuItem(new ZoomAction(panel, UMLDiagramActions.zoomout)));
+    mnDiagram.add(UIUtility.createMenuItem(new ZoomAction(panel, UMLDiagramActions.resetzoom)));
+    mnDiagram.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.grid, panel)));
     menuBar.add(mnDiagram);
     return menuBar;
   }
