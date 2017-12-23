@@ -152,7 +152,7 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 		 */
 		public XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) throws OWLOntologyCreationException, InvalidDataSourcesNumberException, IOException, it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException, XESLogExtractionFailureException {
 	
-			return extractOnPromXESLogUsingOnlyAtomicQueriesAndEBDAModelImpl3MO(domainOntology, obdaModel, annotation);	
+			return extractXESLogUsingOnlyAtomicQueriesMO(domainOntology, obdaModel, annotation);	
 		}
 		
 		/**
@@ -167,7 +167,7 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 		 */
 		public XLog extractXESLog(EBDAMapping ebdaModel) throws XESLogExtractionFailureException{
 			
-			return extractOnPromXESLogUsingOnlyAtomicQueriesMO(ebdaModel);
+			return extractXESLogUsingOnlyAtomicQueriesMO(ebdaModel);
 		}
 	
 		
@@ -402,7 +402,133 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 			}
 		}
 
+
+		
+		/**
+		 * Generates XES log based on the given inputs, namely: 
+		 * Domain Ontology, OBDA Model, and annotation information
+		 * 
+		 * <br /><br />
+		 * Feature(s)/Note(s):
+		 * <ul>
+		 * 		<li>It splits the query for retrieving XAttributes information</li>
+		 * 		<li>It is optimized for minimizing the memory usage</li>
+		 * </ul>
+		 * 
+		 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
+		 * @param domainOntology
+		 * @param obdaModel
+		 * @param annotation
+		 * @return event log - XLog
+		 * @throws it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException 
+		 * @throws IOException 
+		 * @throws InvalidDataSourcesNumberException 
+		 * @throws OWLOntologyCreationException 
+		 * @throws XESLogExtractionFailureException 
+		 */
+		public XLog extractXESLogUsingOnlyAtomicQueriesMO(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) throws OWLOntologyCreationException, InvalidDataSourcesNumberException, IOException, it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException, XESLogExtractionFailureException 
+		{
 	
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Start creating an EBDA Mapping"));
+			
+			EBDAMapping ebdaModel = createEBDAMapping(domainOntology, obdaModel, annotation);
+	
+			if(ebdaModel == null) 
+				throw new XESLogExtractionFailureException(LEConstants.MSG_EBDA_CONSTRUCTION_FAILURE);
+	
+			XLog xlog = extractXESLogUsingOnlyAtomicQueriesMO(ebdaModel);
+			return xlog;	
+		}
+	
+		/**
+		 * 
+		 * Generates XES log based on the given particular OBDA model that connects a 
+		 * Database to the Event Ontology (i.e., EBDA).
+		 * 
+		 * <br /><br />
+		 * Feature(s)/Note(s):
+		 * <ul>
+		 * 		<li>It splits the query for retrieving XAttributes information</li>
+		 * 		<li>It is optimized for minimizing the memory usage</li>
+		 * </ul>
+		 * 
+		 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
+		 * @param ebdaModel - an Event OBDA model (i.e., a particular OBDA model) that 
+		 * 						connects a Database to the Event Ontology
+		 * @return event log - XLog
+		 * @throws OWLException 
+		 */
+		public XLog extractXESLogUsingOnlyAtomicQueriesMO(EBDAMapping ebdaModel) throws XESLogExtractionFailureException{
+			
+			logger.info(String.format(
+					LEConstants.LOG_INFO_TEMPLATE, "Start extracting XES Log from the EBDA Mapping"));
+			
+			EBDAReasonerImpl ebdaR = new EBDAReasonerImpl(ebdaModel);
+			ebdaR.setExecutionLogListener(this);
+			
+			try{
+			
+				//extract all attributes
+				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Retrieving XES attributes information"));
+				
+				snapshotMemory();
+				
+				EfficientHashMap<XAtt> xatts = ebdaR.getXAttributesWithSplitQueryMO();
+				
+				logger.info("result: "+ xatts.values().size()+" attributes are extracted.");
+	
+				snapshotMemory();
+	
+				//extract all events and associate each event with their attributes
+				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Retrieving XES events information"));
+				
+				snapshotMemory();
+	
+				EfficientHashMap<XEventOnPromEfficient> xevents = ebdaR.getXEventsOnPromUsingAtomicQueryMO(xatts);
+	
+				logger.info("result: "+ xevents.values().size()+" events are extracted.");
+	
+				snapshotMemory();
+	
+				//extract all traces and associate each trace with their events
+				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Retrieving XES traces information"));
+				
+				snapshotMemory();
+	
+				EfficientHashMap<XTrace> xtraces = ebdaR.getXTracesUsingAtomicQueriesAndWithoutEventMandatoryAttributesCheckMO(xevents, xatts);
+	
+				logger.info("result: "+ xtraces.values().size()+" traces are extracted.");
+	
+				snapshotMemory();
+	
+				xatts = null;
+				xevents = null;
+				ebdaR.dispose();
+				
+				//add the traces into the log
+				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Constructing XES log"));
+				
+				//Create XLogOnProm 
+				XLogOnProm xlog = XFactoryOnProm.getInstance().createXLogOnProm(true);
+				if(xlog == null) 
+					throw new XESLogExtractionFailureException(LEConstants.MSG_LOG_CREATION_FAILURE);
+		
+				//Add traces to the log
+				xlog.addAll(xtraces.values());
+				
+				logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Finish extracting XES Log from the EBDA Model"));
+		
+				xtraces = null;
+	
+				//return the log
+				return xlog;
+			
+			} catch (OWLException e) {
+				e.printStackTrace();
+				throw new XESLogExtractionFailureException();
+			}
+		}
+
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	//EBDA Mapping CREATOR

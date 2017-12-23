@@ -4115,7 +4115,273 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
         		
 		return traces;	
 	}	
-	
+
+	/**
+	 * It retrieves all association between traces and their events, as well as 
+	 * the association between traces and their attributes. 
+	 * Then it creates a hashmap of XTrace where the keys are the Trace URIs.
+	 * Each XTrace within the created hashmap of XTraces is filled with the corresponding 
+	 * XEvent objects (resp. XAttribute objects) that are taken from the given hashmap of 
+	 * XEvents (resp. XAttributes)
+	 * 
+	 * It uses the following query for retrieving the association between traces and events:
+	 * 
+	 * <pre>
+	 * <code>
+	 * PREFIX : <http://www.example.org/>
+	 * SELECT Distinct ?trace ?event 
+	 * WHERE {
+	 * 		?trace :TcontainsE ?event . 
+	 * } 
+	 * </code>
+	 * </pre>
+	 * 
+	 * It uses the following query for retrieving the association between traces and attributes:
+	 * 
+	 * <pre>
+	 * <code>
+	 * PREFIX : <http://www.example.org/>
+	 * SELECT distinct ?trace ?att 
+	 * WHERE {
+	 * 		?trace :TcontainsA ?att .  
+	 * }
+	 * </code>
+	 * </pre>
+	 * 
+	 * It uses the following query for retrieving all traces:
+	 * 
+	 * <pre>
+	 * <code>
+	 * PREFIX : <http://www.example.org/>
+	 * SELECT distinct ?trace 
+	 * WHERE {
+	 * 		?trace a :Trace . 
+	 * }
+	 * </code>
+	 * </pre>
+	 * 
+	 * <br/><br/>
+	 * Main feature:
+	 * <ul>
+	 * 		<li>
+	 * 			It is optimized for minimizing the memory usage 
+	 * 		</li>
+	 * </ul>
+	 * 
+	 * <br/><br/>
+	 * Notes:
+	 * <ul>
+	 * 		<li>
+	 * 			It checks event's mandatory attributes (name, lifecycle, timestamp) and 
+	 * 			only retrieves the events that has the mandatory attributes. The checks are performed
+	 * 			within the program.
+	 * 		</li>
+	 * 		<li> 
+	 * 			It retrieves all traces, even if they have neither events nor attributes.
+	 * 		</li>
+	 * 		<li> 
+	 * 			It accesses the query result using the name of the answer 
+	 * 			variables.
+	 * 		</li>
+	 * </ul>
+	 * 
+	 * @param EfficientHashMap<XEventOnPromNoURI> xevtmap - A hashMap between an event URI and the corresponding XEventOnPromNoURI object
+	 * @param EfficientHashMap<XAtt> xattmap - A hashMap between an attribute URI and the corresponding XAtt
+	 * @return EfficientHashMap<XTrace> - A hashMap between a trace URI and the corresponding XTrace object
+	 * @throws OWLException
+	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
+	 * @since June 2017
+	 */
+	public EfficientHashMap<XTrace> getXTracesUsingAtomicQueriesAndWithoutEventMandatoryAttributesCheckMO(EfficientHashMap<XEventOnPromEfficient> xevtmap, EfficientHashMap<XAtt> xattmap) throws OWLException{
+		
+		//init execution logging message
+		StringBuilder currentExecutionNote = new StringBuilder(
+			"EBDAReasoner:getXTracesUsingAtomicQueriesAndWithEventMandatoryAttributesCheckMO(EfficientHashMap<XEventOnPromNoURI> xevtmap, EfficientHashMap<XAtt> xattmap):\n");
+		int currExecNoteInitLength = currentExecutionNote.length();//to check if there is any additional execution note
+		//END OF init execution logging message
+
+		EfficientHashMap<XTrace> traces = new EfficientHashMap<XTrace>();
+		QuestOWLConnection conn = questReasoner.getConnection();
+        QuestOWLStatement st = conn.createStatement();
+
+        try{
+        	
+			String newTrace, newEvent, newAtt;
+			OWLObject traceObj, eventObj, attObj;
+			XEvent xevt;
+			XEventOnPromEfficient xevtOnProm;
+			        	
+			//====================================================================================================
+			//Handling ALL Traces 
+			//====================================================================================================
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling ALL traces"));
+				
+				QuestOWLResultSet rs3 = st.executeTuple(XESEOConstants.qTrace_Simple);
+				
+				while (rs3.nextRow()) {
+					traceObj = rs3.getOWLObject(XESEOConstants.qTraceAnsVarTrace);
+					newTrace = (traceObj == null? null : traceObj.toString().intern()); 
+					
+					//if the current trace is null, then skip the rest and move on 
+					if(newTrace == null) continue;
+					
+					//System.out.println("------------------------------");
+					//System.out.println("trace: "+ currTrace);
+									
+					XTrace xtrace= this.xfact.createXTraceNaiveImpl();
+					
+					if(xtrace != null)
+						traces.put(newTrace, xtrace);
+					else
+						currentExecutionNote.append(String.format(LEConstants.TRACE_CREATION_FAILURE, newTrace)); 
+				}
+		
+				if(rs3 != null) rs3.close();
+
+			//====================================================================================================
+			//END OF Handling ALL Traces
+			//====================================================================================================
+
+			//====================================================================================================
+			//Handling traces events
+	        //====================================================================================================
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling traces events"));
+
+				QuestOWLResultSet rs = st.executeTuple(XESEOConstants.qTraceEvt_Simple);				
+				
+				while (rs.nextRow()) {
+					
+					//============================================================================
+					//Reading the Query results
+					//============================================================================
+						traceObj = rs.getOWLObject(XESEOConstants.qTraceEvt_SimpleAnsVarTrace); 
+						newTrace = (traceObj == null? null : traceObj.toString().intern()); 
+						
+						//if the current trace is null, then skip the rest and move on 
+						if(newTrace == null) continue;
+												
+						eventObj = rs.getOWLObject(XESEOConstants.qTraceEvt_SimpleAnsVarEvent); 
+						newEvent = (eventObj == null? null : eventObj.toString().intern());
+						
+					//============================================================================
+					//END OF Reading the Query results
+					//============================================================================
+					
+					//============================================================================
+					//Handling the current event that is being read
+					//============================================================================
+						xevt = null;
+						
+						//if the given XEvent map xevtmap doesn't contain the information about event att
+						if(xevtmap.containsKey(newEvent)){
+							xevtOnProm = xevtmap.get(newEvent);
+							//if(xevtOnProm.hasAllMandatoryAttributes())
+								xevt = xevtOnProm;
+							
+						}else{
+							currentExecutionNote.append(String.format(LEConstants.TRACE_MISS_EVENT, newTrace, newEvent)); 
+						}
+					//============================================================================
+					//END OF Handling the current event that is being read
+					//============================================================================
+					
+					//============================================================================
+					//Handling the current trace that is currently being read
+					//============================================================================
+						if(traces.containsKey(newTrace)){//handle the trace that has been read previously
+			
+							if(xevt != null)
+								traces.get(newTrace).insertOrdered(xevt);
+							
+						}
+					//============================================================================
+					//END OF Handling the current trace that is currently being read
+					//============================================================================
+				}
+		
+				if(rs != null) rs.close();
+			//====================================================================================================
+			//END OF Handling Trace's Events
+	        //====================================================================================================
+			
+			//====================================================================================================
+			//Handling Traces Attributes
+	        //====================================================================================================
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling traces attributes"));
+
+				QuestOWLResultSet rs2 = st.executeTuple(XESEOConstants.qTraceAtt_Simple);
+		
+				while (rs2.nextRow()) {
+					
+					//============================================================================
+					//Reading the Query results
+					//============================================================================
+						traceObj = rs2.getOWLObject(XESEOConstants.qTraceAtt_SimpleAnsVarTrace); 
+						newTrace = (traceObj == null? null : traceObj.toString().intern()); 
+						
+						//if the current trace is null, then skip the rest and move on 
+						if(newTrace == null) continue;
+						
+						attObj = rs2.getOWLObject(XESEOConstants.qTraceAtt_SimpleAnsVarAtt); 
+						newAtt = (attObj == null? null : attObj.toString().intern()); 
+
+					//============================================================================
+					//END OF Reading the Query results
+					//============================================================================
+					
+					//============================================================================
+					//Handling the current attribute that is being read
+					//============================================================================
+
+						XAtt xatt = null;
+						
+						if(xattmap.containsKey(newAtt)){
+							xatt = xattmap.get(newAtt);
+							if(!xatt.hasCompleteInfo())
+								xatt = null;
+
+						}else
+							currentExecutionNote.append(String.format(LEConstants.TRACE_MISS_ATT, newTrace, newAtt)); 
+					
+					//============================================================================
+					//END OF Handling current attribute that is being read
+					//============================================================================
+
+					//============================================================================
+					//Handling the current trace that is being read
+					//============================================================================
+						if(traces.containsKey(newTrace)){
+							//handling the traces that are captured in the previous step 
+							if(newAtt != null && xatt != null)
+								traces.get(newTrace).getAttributes().put(xatt.getKey(), xatt);
+						}
+					//============================================================================
+					//END OF Handling the current trace that is being read
+					//============================================================================
+				}
+				
+				if(rs2 != null) rs2.close();
+			//====================================================================================================
+			//END OF Handling Trace's Attributes
+	        //====================================================================================================
+
+		}finally{
+			if(st != null && !st.isClosed()) st.close();
+			if(conn != null && !conn.isClosed()) conn.close();
+			if(this.allowToDisposeQuestReasoner) questReasoner.dispose();
+        }
+        
+		//if there is any additional execution note within this method, 
+        //then send an ExecutionLogEvent to corresponding the ExecutionLogListener
+        if (currentExecutionNote.length() > currExecNoteInitLength)
+        	addNewExecutionMsg(new ExecutionMsgEvent(this, currentExecutionNote));
+        
+        if(verbose)
+        	logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, Print.getStringOfXTraces(traces)));
+        		
+		return traces;	
+	}	
+
 	//////////////////////////////////////////////////////////////////////
 	// END OF XTraces retriever methods
 	//////////////////////////////////////////////////////////////////////
