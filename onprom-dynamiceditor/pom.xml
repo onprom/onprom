@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ onprom-toolkit
+  ~ onprom-annoeditor
   ~
   ~ pom.xml
   ~
@@ -24,16 +24,15 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>onprom-toolkit</artifactId>
-    <name>Integrated onprom Toolkit</name>
+    <artifactId>onprom-dynamiceditor</artifactId>
+    <name>Dynamic Annotation Editor</name>
     <parent>
-        <artifactId>onprom</artifactId>
         <groupId>it.unibz.inf.kaos</groupId>
+        <artifactId>onprom</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -48,32 +47,6 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <!-- Generate large JAR with dependencies-->
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>${maven.assembly.version}</version>
-                <configuration>
-                    <finalName>${project.artifactId}</finalName>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <archive>
-                        <manifest>
-                            <mainClass>it.unibz.inf.kaos.onprom.OnpromToolkit
-                            </mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -81,21 +54,6 @@
             <artifactId>onprom-annoeditor</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>onprom-dynamiceditor</artifactId>
-            <groupId>${project.groupId}</groupId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>onprom-logextractor</artifactId>
-            <groupId>${project.groupId}</groupId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.5.0</version>
         </dependency>
     </dependencies>
 </project>
