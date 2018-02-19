@@ -10,7 +10,7 @@ import java.util.Set;
 public class DynamicAnnotationAttribute {
     private DynamicAnnotation annotation;
     private Set<DiagramShape> path;
-    private boolean partOfIndex;
+    private boolean partOfURI;
 
     DynamicAnnotationAttribute() {
     }
@@ -39,12 +39,12 @@ public class DynamicAnnotationAttribute {
         return annotation;
     }
 
-    public boolean isPartOfIndex() {
-        return partOfIndex;
+    public boolean isPartOfURI() {
+        return partOfURI;
     }
 
-    public void setPartOfIndex(final boolean partOfIndex) {
-        this.partOfIndex = partOfIndex;
+    public void setPartOfURI(final boolean partOfURI) {
+        this.partOfURI = partOfURI;
     }
 
     public String getVarName() {

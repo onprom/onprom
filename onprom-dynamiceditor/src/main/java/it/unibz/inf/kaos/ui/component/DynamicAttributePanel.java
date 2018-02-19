@@ -77,7 +77,7 @@ public class DynamicAttributePanel extends JPanel {
             } else {
                 navigationalAttribute = new DynamicNavigationalAttribute(attributeValue.toString());
             }
-            navigationalAttribute.setPartOfIndex(chkIndex.isSelected());
+            navigationalAttribute.setPartOfURI(chkIndex.isSelected());
             return navigationalAttribute;
         }
         return null;
@@ -87,7 +87,7 @@ public class DynamicAttributePanel extends JPanel {
         if (navigationalAttribute != null) {
             cmbAttributes.setSelectedItem(navigationalAttribute);
             cmbPath.setSelectedItem(navigationalAttribute.getPath());
-            chkIndex.setSelected(navigationalAttribute.isPartOfIndex());
+            chkIndex.setSelected(navigationalAttribute.isPartOfURI());
         }
     }
 }

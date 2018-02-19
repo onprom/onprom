@@ -67,7 +67,7 @@ public class DynamicAssociationPanel extends JPanel {
                 if (cmbPath.getSelectedIndex() > -1) {
                     annotation.setPath(cmbPath.getItemAt(cmbPath.getSelectedIndex()));
                 }
-                annotation.setPartOfIndex(chkIndex.isSelected());
+                annotation.setPartOfURI(chkIndex.isSelected());
             }
             return annotation;
         }
@@ -76,7 +76,7 @@ public class DynamicAssociationPanel extends JPanel {
 
     public void setValue(DynamicAnnotationAttribute dynamicAnnotationAttribute) {
         if (dynamicAnnotationAttribute != null) {
-            chkIndex.setSelected(dynamicAnnotationAttribute.isPartOfIndex());
+            chkIndex.setSelected(dynamicAnnotationAttribute.isPartOfURI());
             cmbAnnotations.setSelectedItem(dynamicAnnotationAttribute);
             cmbPath.setSelectedItem(dynamicAnnotationAttribute.getPath());
         }

@@ -1,7 +1,6 @@
 package it.unibz.inf.kaos.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -12,6 +11,7 @@ import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.interfaces.AnnotationProperties;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
 import it.unibz.inf.kaos.ui.form.DynamicAnnotationForm;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.apache.jena.sparql.core.Var;
 import org.semanticweb.owlapi.model.IRI;
@@ -36,14 +36,14 @@ public class DynamicAnnotation extends Annotation {
     @JsonIgnore
     private final List<AnnotationQuery> queries = Lists.newLinkedList();
     @JsonIgnore
-    private final Map<String, Entry> uriFields = Maps.newLinkedHashMap();
+    private final Map<String, ImmutablePair<String, Object>> uriFields = Maps.newLinkedHashMap();
     private UMLClass annotationClass;
     private boolean isLabelPartOfIndex;
 
     DynamicAnnotation() {
     }
 
-    public DynamicAnnotation(UMLClass _umlClass, UMLClass _annotationClass, AnnotationProperties _properties) {
+    public DynamicAnnotation(UMLClass _annotationClass, UMLClass _umlClass, AnnotationProperties _properties) {
         super(_umlClass);
         annotationClass = _annotationClass;
         properties = _properties;
@@ -90,39 +90,32 @@ public class DynamicAnnotation extends Annotation {
     @Override
     public List<AnnotationQuery> getQuery() {
         //TODO check cyclic access
-        /*
-        //TODO should we or when to check if visited or not?
-        if (visited) {
-            logger.warn("Already visited " + toString());
-            return queries;
-        }
-        visited = true;
-        */
+        //TODO when to check if visited or not?
         logger.info("Generating queries for " + toString());
         queries.clear();
         uriFields.clear();
         uri.clear();
 
-        logger.info("\tprepare URI fields");
+        logger.info("\tpreparing URI fields");
 
         if (isLabelPartOfIndex) {
             String id = "_L_" + hashCode();
-            uriFields.put("__label__", new Entry(id, getLabel()));
+            uriFields.put("__label__", ImmutablePair.of(id, getLabel()));
             uri.add(id);
         }
 
-        attributeValues.forEach((k, v) -> {
-            if (v.isPartOfIndex()) {
+        attributeValues.forEach((key, value) -> {
+            if (value.isPartOfURI()) {
                 String id = "_I" + uriFields.size() + "_" + hashCode();
-                uriFields.put(k, new Entry(id, v));
+                uriFields.put(key, ImmutablePair.of(id, value));
                 uri.add(id);
             }
         });
 
-        relationValues.forEach((k, v) -> {
-            if (v.isPartOfIndex()) {
-                String id = v.getVarName();
-                uriFields.put(k, new Entry(id, v));
+        relationValues.forEach((key, value) -> {
+            if (value.isPartOfURI()) {
+                String id = value.getVarName();
+                uriFields.put(key, ImmutablePair.of(id, value));
                 uri.add(id);
             }
         });
@@ -131,19 +124,13 @@ public class DynamicAnnotation extends Annotation {
         attributeValues.forEach((key, value) -> {
             logger.info("\tgenerating attribute query for " + key);
             SelectBuilder builder;
-            String field;
-            if (uriFields.containsKey(key)) {
-                field = uriFields.get(key).id;
-                builder = SimpleQueryExporter.getStringAttributeQueryBuilder(value, this, null, Var.alloc(field));
-            } else {
-                field = XESConstants.attValue;
-                builder = SimpleQueryExporter.getStringAttributeQueryBuilder(value, this, null);
-            }
-            addURIFields(builder);
+            String field = uriFields.containsKey(key) ? uriFields.get(key).left : XESConstants.attValue;
+            builder = SimpleQueryExporter.getStringAttributeQueryBuilder(value.getAttribute(), this, null, Var.alloc(field));
+            addURIFields(builder, key);
             queries.add(new BinaryAnnotationQuery(
                     builder.toString(), IRI.create(key),
-                    uri.toArray(new String[]{}),
-                    new String[]{field}));
+                    uri.toArray(new String[]{}), new String[]{field})
+            );
         });
 
         relationValues.forEach((key, value) -> {
@@ -158,18 +145,22 @@ public class DynamicAnnotation extends Annotation {
             builder.addVar(classVar);
 
             if (!inheritanceExist && (value.getPath() != null)) {
-                SimpleQueryExporter.addJoin(builder, value.getPath(), ImmutableMap.of(getCleanName(), getVarName(), value.getRelatedClass().getCleanName(), value.getVarName()));
+                SimpleQueryExporter.addJoin(builder, value.getPath()
+                        //, ImmutableMap.of(getCleanName(), getVarName(), value.getRelatedClass().getCleanName(), value.getVarName())
+                );
             } else {
                 builder.addWhere(classVar, "a", "<" + relatedClass.getLongName() + ">");
                 try {
                     builder.addVar(value.getVarName());
-                    builder.addBind("?" + getVarName(), "?" + value.getVarName());
+                    if (!value.getVarName().equalsIgnoreCase(getVarName())) {
+                        builder.addBind("?" + getVarName(), "?" + value.getVarName());
+                    }
                 } catch (Exception e) {
                     logger.error(e.getMessage());
                 }
             }
             builder.addVar(relationVar);
-            addURIFields(builder);
+            addURIFields(builder, key);
             String[] firstComponent = value.getAnnotation().getURI(builder);
             if (firstComponent.length < 1) {
                 firstComponent = new String[]{relationVar.getVarName()};
@@ -179,42 +170,53 @@ public class DynamicAnnotation extends Annotation {
         return queries;
     }
 
-    private void addURIFields(final SelectBuilder builder) {
+    private void addURIFields(final SelectBuilder builder, final String currentKey) {
         uriFields.forEach((key, entry) -> {
-            final Var id = Var.alloc(entry.id);
-            Object value = entry.value;
-            try {
-                if (value instanceof String) {
-                    builder.addVar("\"" + value + "\"", id);
-                } else if (value instanceof DynamicNavigationalAttribute) {
-                    DynamicNavigationalAttribute attribute = (DynamicNavigationalAttribute) value;
-                    if (attribute.getPath() == null) {
-                        builder.addVar("\"" + attribute.getValue() + "\"", id);
-                    } else {
-                        builder.addVar(id);
-                        if (!attribute.getUmlClass().equalsOrInherits(relatedClass)) {
-                            SimpleQueryExporter.addJoin(builder, attribute.getPath(), ImmutableMap.of(getCleanName(), getVarName()));
-                            builder.addWhere("?" + attribute.getUmlClass().getCleanName(), "<" + attribute.getAttribute().getLongName() + ">", id);
+            if (!key.equals(currentKey)) {
+                logger.info("\t\t adding " + key + " to the URI");
+                final Var id = Var.alloc(entry.left);
+                Object value = entry.right;
+                try {
+                    if (value instanceof String) {
+                        builder.addVar("\"" + value + "\"", id);
+                    } else if (value instanceof DynamicNavigationalAttribute) {
+                        NavigationalAttribute attribute = ((DynamicNavigationalAttribute) value).getAttribute();
+                        if (attribute instanceof ClassAttribute) {
+                            if (attribute.getUmlClass().equalsOrInherits(getRelatedClass())) {
+                                builder.addBind("?" + getVarName(), id);
+                            } else {
+                                builder.addBind("?" + attribute.getUmlClass().getCleanName(), id);
+                            }
+                        } else if (attribute instanceof StringAttribute && attribute.getPath() == null) {
+                            builder.addVar("\"" + ((StringAttribute) attribute).getValue() + "\"", id);
                         } else {
-                            builder.addWhere("?" + getVarName(), "<" + attribute.getAttribute().getLongName() + ">", id);
+                            builder.addVar(id);
+                            if (!attribute.getUmlClass().equalsOrInherits(relatedClass)) {
+                                SimpleQueryExporter.addJoin(builder, attribute.getPath()
+                                        //, ImmutableMap.of(getCleanName(), getVarName())
+                                );
+                                builder.addWhere("?" + attribute.getUmlClass().getCleanName(), "<" + attribute.getAttribute().getLongName() + ">", id);
+                            } else {
+                                builder.addWhere("?" + getVarName(), "<" + attribute.getAttribute().getLongName() + ">", id);
+                            }
+                        }
+                    } else if (value instanceof DynamicAnnotationAttribute) {
+                        DynamicAnnotationAttribute attribute = (DynamicAnnotationAttribute) value;
+                        if (!relatedClass.equalsOrInherits(attribute.getRelatedClass()) && attribute.getPath() != null) {
+                            SimpleQueryExporter.addJoin(builder, attribute.getPath()
+                                    //,ImmutableMap.of(getCleanName(), getVarName(), attribute.getCleanName(), attribute.getVarName())
+                            );
+                            builder.addVar(id);
+                        } else {
+                            if (!builder.getVars().contains(Var.alloc(attribute.getVarName()))) {
+                                builder.addVar("?" + attribute.getVarName());
+                                builder.addBind("?" + getVarName(), "?" + attribute.getVarName());
+                            }
                         }
                     }
-                } else if (value instanceof DynamicAnnotationAttribute) {
-                    DynamicAnnotationAttribute attribute = (DynamicAnnotationAttribute) value;
-                    if (!relatedClass.equalsOrInherits(attribute.getRelatedClass()) && attribute.getPath() != null) {
-                        SimpleQueryExporter.addJoin(builder, attribute.getPath(),
-                                ImmutableMap.of(getCleanName(), getVarName(),
-                                        attribute.getCleanName(), attribute.getVarName()));
-                        builder.addVar(id);
-                    } else {
-                        if (!builder.getVars().contains(Var.alloc(attribute.getVarName()))) {
-                            builder.addVar("?" + attribute.getVarName());
-                            builder.addBind("?" + getVarName(), "?" + attribute.getVarName());
-                        }
-                    }
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                logger.error(e.getMessage());
             }
         });
     }
@@ -237,27 +239,17 @@ public class DynamicAnnotation extends Annotation {
 
     private String[] getURI(SelectBuilder builder) {
         getQuery();
-        addURIFields(builder);
+        addURIFields(builder, null);
         return uri.toArray(new String[]{});
     }
 
     @Override
     public String getVarName() {
-        return relatedClass.getCleanName() + hashCode();
+        return relatedClass.getCleanName() /*+ hashCode()*/;
     }
 
     @Override
     public DynamicAnnotationForm getForm(AnnotationDiagram panel) {
         return new DynamicAnnotationForm(panel, this);
-    }
-
-    class Entry {
-        final String id;
-        final Object value;
-
-        Entry(String id, Object value) {
-            this.id = id;
-            this.value = value;
-        }
     }
 }

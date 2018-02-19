@@ -119,13 +119,14 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
     }
 
     public Collection<DynamicAnnotationAttribute> getAnnotations() {
-        Collection<DynamicAnnotationAttribute> annotationAttributes = Sets.newLinkedHashSet();
-        drawingPanel.findAnnotations(annotation.getRelatedClass(), false, DynamicAnnotation.class).forEach(annotation -> annotationAttributes.add(new DynamicAnnotationAttribute(annotation)));
-        return annotationAttributes;
+        return drawingPanel.findAnnotations(annotation.getRelatedClass(), false, DynamicAnnotation.class).stream().map(DynamicAnnotationAttribute::new).collect(Collectors.toCollection(Sets::newLinkedHashSet));
     }
 
     public Collection<DynamicNavigationalAttribute> getAttributes() {
-        return drawingPanel.findAttributes(annotation.getRelatedClass(), false).stream().map(DynamicNavigationalAttribute::new).collect(Collectors.toSet());
+        Collection<DynamicNavigationalAttribute> attributes = drawingPanel.findAttributes(annotation.getRelatedClass(), false).stream().map(DynamicNavigationalAttribute::new).collect(Collectors.toSet());
+        // add class URI as a selectable attribute
+        attributes.add(new DynamicNavigationalAttribute(new ClassAttribute(annotation.getRelatedClass())));
+        return attributes;
     }
 
     public Set<Set<DiagramShape>> getPaths(UMLClass umlClass) {

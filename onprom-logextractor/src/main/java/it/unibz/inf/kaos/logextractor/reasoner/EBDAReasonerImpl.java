@@ -16,47 +16,31 @@
 
 package it.unibz.inf.kaos.logextractor.reasoner;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
-
-import org.deckfour.xes.extension.XExtension;
-import org.deckfour.xes.model.XAttribute;
-import org.deckfour.xes.model.XAttributeMap;
-import org.deckfour.xes.model.XEvent;
-import org.deckfour.xes.model.XTrace;
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
-import it.unibz.inf.kaos.logextractor.constants.XESEOConstants;
 import it.unibz.inf.kaos.logextractor.constants.LEConstants;
+import it.unibz.inf.kaos.logextractor.constants.XESEOConstants;
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
-import it.unibz.inf.kaos.logextractor.model.EBDAMapping;
-import it.unibz.inf.kaos.logextractor.model.EBDAModel;
-import it.unibz.inf.kaos.logextractor.model.XAtt;
-import it.unibz.inf.kaos.logextractor.model.XAttributeOnProm;
-import it.unibz.inf.kaos.logextractor.model.XEventOnProm;
-import it.unibz.inf.kaos.logextractor.model.XEventOnPromEfficient;
-import it.unibz.inf.kaos.logextractor.model.XFactoryOnProm;
+import it.unibz.inf.kaos.logextractor.model.*;
 import it.unibz.inf.kaos.logextractor.util.EfficientHashMap;
 import it.unibz.inf.kaos.logextractor.util.Print;
 import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgEvent;
 import it.unibz.inf.ontop.model.OBDAModel;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestConstants;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestPreferences;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWL;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConnection;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLFactory;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLResultSet;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLStatement;
+import it.unibz.inf.ontop.owlrefplatform.owlapi.*;
 import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration.Builder;
+import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XAttributeMap;
+import org.deckfour.xes.model.XEvent;
+import org.deckfour.xes.model.XTrace;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.*;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
 
 /**
  * This class provide some functionalities to do some particular reasoning over EBDA Model.
@@ -162,11 +146,11 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	}
 
 	public void disableLocalLogging(){
-		((ch.qos.logback.classic.Logger) logger).setLevel(ch.qos.logback.classic.Level.OFF);
+		logger.setLevel(ch.qos.logback.classic.Level.OFF);
 	}
 
 	public void enableLocalLogging(){
-		((ch.qos.logback.classic.Logger) logger).setLevel(ch.qos.logback.classic.Level.ALL);
+		logger.setLevel(ch.qos.logback.classic.Level.ALL);
 	}
 	
 	public void dispose(){
@@ -553,7 +537,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 				if(val == null) continue;//if the attribute type is null, then skip the rest and move on
 
 				if(attributes.containsKey(newAtt))
-					attributes.get(newAtt).setValue(val);;					
+					attributes.get(newAtt).setValue(val);
 			}
 			if(rs3 != null) rs3.close(); rs3 = null;
 
@@ -738,7 +722,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 				if(attributes.containsKey(newAtt)){
 					attributes.get(newAtt).setKey(key);
 					if(xext != null)
-						attributes.get(newAtt).setExtension(xext);;
+						attributes.get(newAtt).setExtension(xext);
 				}
 			}
 			if(rs != null) rs.close(); rs = null;
@@ -4289,10 +4273,18 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 					//Handling the current trace that is currently being read
 					//============================================================================
 						if(traces.containsKey(newTrace)){//handle the trace that has been read previously
-			
-							if(xevt != null)
-								traces.get(newTrace).insertOrdered(xevt);
-							
+
+							if (xevt != null) {
+								try {
+									traces.get(newTrace).insertOrdered(xevt);
+								} catch (Exception e) {
+									XAttribute timestamp = xevt.getAttributes().get("time:timestamp");
+									if (!(timestamp instanceof XAttTimestampEfficient)) {
+										logger.error("Timestamp type mismatch-> Trace: " + newTrace + " Name: " + xevt.getAttributes().get("concept:name") + " TS Value: " + timestamp + " TS Class: " + timestamp.getClass());
+									}
+									logger.error(e.getMessage(), e);
+								}
+							}
 						}
 					//============================================================================
 					//END OF Handling the current trace that is currently being read

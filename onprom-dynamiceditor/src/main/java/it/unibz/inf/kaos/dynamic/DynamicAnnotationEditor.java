@@ -20,6 +20,7 @@ import javax.swing.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,12 +40,12 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
             try {
                 UMLClass annotationClass = annotations.get(currentAction.toString());
                 if (annotationClass != null) {
-                    return new DynamicAnnotation(selectedCls, annotationClass, getAnnotationProperties(annotationClass));
+                    return Optional.of(new DynamicAnnotation(annotationClass, selectedCls, getAnnotationProperties(annotationClass)));
                 }
             } catch (RuntimeException e) {
                 logger.error(String.format("A runtime exception occurred: %s", e.getMessage()));
             }
-            return null;
+            return Optional.empty();
         };
     }
 
