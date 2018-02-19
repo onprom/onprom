@@ -187,8 +187,8 @@ class AttributeForm extends AbstractAnnotationForm {
         if (object instanceof StringAttribute) {
             attributeValue = new StringAttribute(object.toString());
         } else if (object instanceof NavigationalAttribute) {
-            attributeValue = new StringAttribute((NavigationalAttribute) object);
-            attributeValue.setPath(cmbValuePath.getItemAt(cmbValuePath.getSelectedIndex()));
+            NavigationalAttribute attribute = (NavigationalAttribute) object;
+            attributeValue = new StringAttribute(cmbValuePath.getItemAt(cmbValuePath.getSelectedIndex()), attribute.getUmlClass(), attribute.getAttribute());
         } else if (object != null) {
             attributeValue = new StringAttribute(object.toString());
         }

@@ -95,7 +95,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
                 }
             } else if (currentAction == UMLDiagramActions.disjoint || currentAction == UMLDiagramActions.relation
                     || currentAction == UMLDiagramActions.isarelation) {
-                if (selected != null && selected instanceof UMLClass) {
+                if (selected instanceof UMLClass) {
                     UMLClass secondClass = shapes.getFirstClassAt(startX, startY);
                     if (secondClass != null) {
                         addRelation((UMLClass) selected, secondClass);
@@ -109,7 +109,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
                 addAssociationClass(selected, startX, startY);
             }
         }
-        if (isControlDown && selected != null && selected instanceof Relationship) {
+        if (isControlDown && selected instanceof Relationship) {
             RelationAnchor anchor = ((Relationship) selected).addAnchor(startX, startY);
             if (anchor != null) {
                 DiagramUndoManager.addEdit(EditFactory.anchorCreated((Relationship) selected, anchor, true));
@@ -118,7 +118,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
     }
 
     private void addAssociationClass(DiagramShape selected, int x, int y) {
-        if (selected != null && selected instanceof Association) {
+        if (selected instanceof Association) {
             Association association = (Association) selected;
             AssociationClass aClass = new AssociationClass(association, x, y);
             if (gridVisible) {

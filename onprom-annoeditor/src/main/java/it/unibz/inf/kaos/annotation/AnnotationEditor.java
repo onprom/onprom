@@ -39,6 +39,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import javax.swing.*;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Graphical editor for annotating ontologies with XES standard using UML class diagram
@@ -50,12 +51,12 @@ public class AnnotationEditor extends UMLEditor {
     public AnnotationEditor(OWLOntology _ontology, AnnotationEditorListener _listener) {
         this(_ontology, _listener, new AnnotationFactory() {
             @Override
-            public Annotation createAnnotation(AnnotationDiagram panel, ActionType currentAction, UMLClass selectedCls) {
+            public Optional<Annotation> createAnnotation(AnnotationDiagram panel, ActionType currentAction, UMLClass selectedCls) {
                 CaseAnnotation caseAnnotation = panel.findFirst(CaseAnnotation.class);
 
                 if (currentAction.toString().equals(CaseAnnotation.class.getAnnotation(AnnotationProperties.class).title())) {
                     if (caseAnnotation == null || UIUtility.confirm(AnnotationEditorMessages.CHANGE_CASE)) {
-                        return new CaseAnnotation(selectedCls);
+                        return Optional.of(new CaseAnnotation(selectedCls));
                     }
                 } else if (currentAction.toString().equals(EventAnnotation.class.getAnnotation(AnnotationProperties.class).title())) {
                     if (caseAnnotation == null) {
@@ -64,11 +65,11 @@ public class AnnotationEditor extends UMLEditor {
                         if (!NavigationUtility.isConnected(selectedCls, caseAnnotation.getRelatedClass(), false)) {
                             UIUtility.error("Event class is not connected to Trace class!");
                         } else {
-                            return new EventAnnotation("event" + panel.count(EventAnnotation.class), caseAnnotation, selectedCls);
+                            return Optional.of(new EventAnnotation("event" + panel.count(EventAnnotation.class), caseAnnotation, selectedCls));
                         }
                     }
                 }
-                return null;
+                return Optional.empty();
             }
 
             @Override

@@ -25,6 +25,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Optional;
 
 /**
  * Created by T. E. Kalayci on 15-Nov-2017.
@@ -39,8 +40,7 @@ public class ObjectTree {
     public ObjectTree(OnpromToolkit _toolkit) {
         toolkit = _toolkit;
         objects.setDoubleClickAction(() -> {
-            TreeNode selectedNode = objects.getSelectedNode();
-            if (selectedNode != null) {
+            objects.getSelectedNode().ifPresent(selectedNode -> {
                 switch (selectedNode.getType()) {
                     case ONTOLOGY:
                     case UML:
@@ -53,7 +53,7 @@ public class ObjectTree {
                         toolkit.displayLogSummary(selectedNode);
                         break;
                 }
-            }
+            });
             return null;
         });
         objects.setPopMenu(new JPopupMenu() {
@@ -77,7 +77,7 @@ public class ObjectTree {
 
     }
 
-    public TreeNode getSelectedNode() {
+    public Optional<TreeNode<Object>> getSelectedNode() {
         return objects.getSelectedNode();
     }
 
@@ -136,7 +136,6 @@ public class ObjectTree {
         }
         return null;
     }
-
 
     public Void saveAll() {
         File selectedFile = UIUtility.selectFileToSave(FileType.ONTOLOGY);

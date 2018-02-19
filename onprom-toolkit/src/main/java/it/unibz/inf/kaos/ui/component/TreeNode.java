@@ -30,6 +30,7 @@ import it.unibz.inf.kaos.data.FileType;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 /**
  * @author T. E. Kalayci on 26-Apr-2017
@@ -55,6 +56,10 @@ public class TreeNode<T> extends DefaultMutableTreeNode {
     @Override
     public T getUserObject() {
         return (T) super.getUserObject();
+    }
+
+    public Optional<T> getUserObjectProvider() {
+        return Optional.ofNullable(getUserObject());
     }
 
     public String toString() {

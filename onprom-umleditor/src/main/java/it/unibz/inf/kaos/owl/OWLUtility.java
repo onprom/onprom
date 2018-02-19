@@ -167,8 +167,10 @@ public class OWLUtility {
     }
 
     public static String getDocumentIRI(OWLOntology ontology) {
-        final IRI iri = ontology.getOntologyID().getOntologyIRI().orNull();
-        if (iri != null) return iri.toString();
-        return null;
+        try {
+            return ontology.getOntologyID().getOntologyIRI().get().toString();
+        } catch (NullPointerException e) {
+            return "http://www.example.com/example.owl";
+        }
     }
 }

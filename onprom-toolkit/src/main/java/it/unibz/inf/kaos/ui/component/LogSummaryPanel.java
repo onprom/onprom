@@ -30,8 +30,6 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClasses;
 import org.deckfour.xes.info.XLogInfo;
-import org.deckfour.xes.model.XEvent;
-import org.deckfour.xes.model.XTrace;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PlotOrientation;
@@ -101,19 +99,19 @@ public class LogSummaryPanel extends JInternalFrame {
         //gridBagConstraints.gridy++;
         DefaultListModel<String> listModel = new DefaultListModel<>();
         JList<String> list = new JList<>(listModel);
-        for (XTrace trace : info.getLog()) {
+        info.getLog().forEach(trace -> {
             StringBuilder events = new StringBuilder();
             if(!trace.getAttributes().isEmpty() && trace.getAttributes().get("concept:name")!=null) {
                 events.append(trace.getAttributes().get("concept:name").toString());
             }
             events.append(" ⇨");
-            for (XEvent event : trace) {
+            trace.forEach(event -> {
                 if(event.getAttributes()!=null && event.getAttributes().get("concept:name")!=null) {
                     events.append(" ").append(event.getAttributes().get("concept:name").toString()).append(" →");
                 }
-            }
+            });
             listModel.addElement(events.substring(0, events.length()-1));
-        }
+        });
         final JScrollPane jScrollPane = new JScrollPane(list);
         jScrollPane.setPreferredSize(CHART_SIZE);
         panel.add(jScrollPane, gridBagConstraints);

@@ -26,7 +26,6 @@
 
 package it.unibz.inf.kaos.ui.panel;
 
-import com.google.common.collect.Sets;
 import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.interfaces.AnnotationFactory;
@@ -39,9 +38,9 @@ import it.unibz.inf.kaos.ui.utility.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Drawing panel supporting annotations
@@ -98,14 +97,13 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     }
 
     private void createAnnotation(final UMLClass _selected, int x, int y) {
-        Annotation annotation = factory.createAnnotation(AnnotationDiagramPanel.this, currentAction, _selected);
-        if (annotation != null) {
+        factory.createAnnotation(AnnotationDiagramPanel.this, currentAction, _selected).ifPresent(annotation -> {
             annotation.setStartX(x);
             annotation.setStartY(y);
             addAnnotation(annotation);
             DiagramUndoManager.addEdit(new AddDeleteAnnotationEdit(AnnotationDiagramPanel.this, annotation, true));
             loadForm(annotation.getForm(AnnotationDiagramPanel.this));
-        }
+        });
     }
 
     @Override
@@ -118,7 +116,7 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
 
     @Override
     public boolean removeShape(DiagramShape selected) {
-        if (selected != null && selected instanceof Annotation) {
+        if (selected instanceof Annotation) {
             if (UIUtility.confirm(AnnotationEditorMessages.DELETE_CONFIRMATION)) {
                 Annotation annotation = (Annotation) selected;
                 if (factory.checkRemoval(this, annotation)) {
@@ -163,22 +161,24 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
 
     @Override
     public Set<NavigationalAttribute> findAttributes(UMLClass startNode, boolean functional, DataType... types) {
-        return getClasses().map(endNode -> {
-            Set<NavigationalAttribute> attributes = Sets.newLinkedHashSet();
-            for (Attribute attr : endNode.getAttributes()) {
-                if (types == null || types.length < 1 || Arrays.asList(types).contains(attr.getType())) {
-                    if (NavigationUtility.isConnected(startNode, endNode, functional)) {
-                        attributes.add(new NavigationalAttribute(endNode, attr));
-                    }
-                }
-            }
-            return attributes;
-        }).flatMap(Set::stream).collect(Collectors.toSet());
+        return getClasses()
+                .map(endNode -> getNavigationalAttributes(startNode, endNode, functional, types))
+                .flatMap(Set::stream)
+                .collect(Collectors.toSet());
+    }
+
+    private Set<NavigationalAttribute> getNavigationalAttributes(UMLClass startNode, UMLClass endNode, boolean functional, DataType[] types) {
+        return endNode.getAttributes().stream()
+                .filter(attribute -> ((types == null || types.length < 1 || Stream.of(types).anyMatch(type -> type == attribute.getType())) && NavigationUtility.isConnected(startNode, endNode, functional)))
+                .map(attribute -> new NavigationalAttribute(endNode, attribute))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public <T extends Annotation> Set<T> findAnnotations(UMLClass startNode, boolean functional, Class<T> type) {
-        return shapes.getAll(type).filter(annotation -> NavigationUtility.isConnected(startNode, annotation.getRelatedClass(), functional)).collect(Collectors.toSet());
+        return shapes.getAll(type).
+                filter(annotation -> NavigationUtility.isConnected(startNode, annotation.getRelatedClass(), functional))
+                .collect(Collectors.toSet());
     }
 
     private void loadForm(JPanel form) {

@@ -114,7 +114,7 @@ public class Attribute implements Cloneable {
 
   @Override
   public boolean equals(Object object) {
-    if (object != null && object instanceof Attribute) {
+      if (object instanceof Attribute) {
       Attribute attribute = (Attribute) object;
         return attribute.getName().equals(getName()) && attribute.getType() == getType();
     }
