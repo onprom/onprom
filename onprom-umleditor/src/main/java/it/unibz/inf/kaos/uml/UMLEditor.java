@@ -74,12 +74,9 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     this(_ontology);
     listener = _listener;
     supportedFormats = new FileType[]{FileType.ONTOLOGY, FileType.UML};
-    //if ontology is not null, import it and load it as UML diagram
     diagramPanel = new UMLDiagramPanel(this);
     initUI();
-    if (ontology != null) {
       loadOntology(null, ontology);
-    }
     setTitle("UML Editor");
   }
 
@@ -98,7 +95,9 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
   public void loadOntology(String _identifier, OWLOntology _ontology) {
     ontology = _ontology;
     identifier = _identifier;
-    diagramPanel.load(OWLImporter.getShapes(ontology));
+      if (ontology != null) {
+          diagramPanel.load(OWLImporter.getShapes(ontology));
+      }
   }
 
   public void setProgressBar(JProgressBar _bar) {

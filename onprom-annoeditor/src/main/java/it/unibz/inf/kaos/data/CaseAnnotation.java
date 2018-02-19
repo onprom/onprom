@@ -69,7 +69,7 @@ public class CaseAnnotation extends Annotation {
       List<AnnotationQuery> queries = Lists.newLinkedList();
       try {
           //case name attribute query
-          SelectBuilder builder = SimpleQueryExporter.getStringAttributeQueryBuilder(getCaseName(), getRelatedClass(), null);
+          SelectBuilder builder = SimpleQueryExporter.getStringAttributeQueryBuilder(getCaseName(), this, null, XESConstants.attValueVar);
           builder.addVar(XESConstants.literalExpr, XESConstants.attTypeVar);
           builder.addVar(XESConstants.nameExpr, XESConstants.attKeyVar);
           String query = builder.toString();

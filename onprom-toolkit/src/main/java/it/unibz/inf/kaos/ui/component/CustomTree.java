@@ -40,6 +40,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
 /**
@@ -52,7 +53,7 @@ public class CustomTree<T> extends JTree {
     private JPopupMenu menu;
     private Callable action;
 
-    public CustomTree(TreeNode<T> _root) {
+    CustomTree(TreeNode<T> _root) {
         super(new DefaultTreeModel(_root));
         this.setDragEnabled(true);
         this.setTransferHandler(new TransferHandler() {
@@ -101,11 +102,11 @@ public class CustomTree<T> extends JTree {
         });
     }
 
-    public void setDoubleClickAction(Callable _action) {
+    void setDoubleClickAction(Callable _action) {
         action = _action;
     }
 
-    public void setPopMenu(JPopupMenu _menu) {
+    void setPopMenu(JPopupMenu _menu) {
         menu = _menu;
         if (menu != null) {
             addMouseListener(new MouseAdapter() {
@@ -130,24 +131,25 @@ public class CustomTree<T> extends JTree {
         }
     }
 
-    public int getCount() {
+    int getCount() {
         return root.getChildCount();
     }
 
-    public boolean isRootNotSelected() {
+    boolean isRootNotSelected() {
         return !getLastSelectedPathComponent().equals(root);
     }
 
-    public TreeNode<T> getSelectedNode() {
-        return (TreeNode<T>) getLastSelectedPathComponent();
+    @Override
+    public TreeNode<T> getLastSelectedPathComponent() {
+        return (TreeNode<T>) super.getLastSelectedPathComponent();
     }
 
-    public T getSelectedObject() {
-        TreeNode<T> node = getSelectedNode();
-        if (node != null) {
-            return node.getUserObject();
-        }
-        return null;
+    Optional<TreeNode<T>> getSelectedNode() {
+        return Optional.ofNullable(getLastSelectedPathComponent());
+    }
+
+    Optional<T> getSelectedObject() {
+        return getSelectedNode().flatMap(TreeNode::getUserObjectProvider);
     }
 
     private void reload() {
@@ -159,16 +161,16 @@ public class CustomTree<T> extends JTree {
         reload();
     }
 
-    public TreeNode<T> getNode(int i) {
+    TreeNode<T> getNode(int i) {
         return root.getChildAt(i);
     }
 
-    public void add(String title, FileType type, T object) {
+    void add(String title, FileType type, T object) {
         root.add(new TreeNode<>(root.getChildCount(), title, type, object));
         reload();
     }
 
-    public void removeNodeWithObject(Object toRemove) {
+    void removeNodeWithObject(Object toRemove) {
         for (int i = 0; i < getCount(); i++) {
             TreeNode childAt = getNode(i);
             if (childAt.getUserObject().equals(toRemove)) {
@@ -178,14 +180,14 @@ public class CustomTree<T> extends JTree {
         }
     }
 
-    public void removeSelected() {
+    void removeSelected() {
         if (isRootNotSelected()) {
-            root.remove((TreeNode<T>) getLastSelectedPathComponent());
+            root.remove(getLastSelectedPathComponent());
             reload();
         }
     }
 
-    public void removeNode(int i) {
+    void removeNode(int i) {
         root.remove(i);
         reload();
     }

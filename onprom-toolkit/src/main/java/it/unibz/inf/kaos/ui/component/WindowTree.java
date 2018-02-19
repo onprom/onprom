@@ -29,17 +29,12 @@ public class WindowTree {
                 }
             }
         });
-        windows.addTreeSelectionListener(e -> {
-            if (windows.getSelectedNode() != null && windows.getSelectedNode().getUserObject() != null) {
-                windows.getSelectedNode().getUserObject().toFront();
-            }
-        });
-
+        windows.addTreeSelectionListener(e -> windows.getSelectedObject().ifPresent(JInternalFrame::toFront));
     }
 
     private void closeSelectedWindow() {
-        if (windows.isRootNotSelected() && windows.getSelectedObject() != null) {
-            windows.getSelectedObject().dispose();
+        if (windows.isRootNotSelected()) {
+            windows.getSelectedObject().ifPresent(JInternalFrame::dispose);
         }
     }
 

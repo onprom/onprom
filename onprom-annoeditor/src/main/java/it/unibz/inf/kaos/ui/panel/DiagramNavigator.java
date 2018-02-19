@@ -74,10 +74,8 @@ class DiagramNavigator {
 
     void updateAttributesState(UMLClass cls, State state, boolean functional, DataType... dataType) {
         cls.getAttributes().forEach(attr -> {
-            if (!functional || attr.isFunctional()) {
-                if (dataType == null || dataType.length < 1 || Arrays.asList(dataType).contains(attr.getType())) {
+            if ((!functional || attr.isFunctional()) && (dataType == null || dataType.length < 1 || Arrays.asList(dataType).contains(attr.getType()))) {
                     attr.setState(state);
-                }
             }
         });
     }

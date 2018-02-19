@@ -47,10 +47,6 @@ public class StringAttribute extends NavigationalAttribute implements Cloneable 
         value = _value;
     }
 
-    public StringAttribute(NavigationalAttribute navigationalAttribute) {
-        this(navigationalAttribute.getPath(), navigationalAttribute.getUmlClass(), navigationalAttribute.getAttribute());
-    }
-
     public StringAttribute(Set<DiagramShape> _path, UMLClass _cls, Attribute _attr) {
         super(_path, _cls, _attr);
         this.value = null;
@@ -66,7 +62,7 @@ public class StringAttribute extends NavigationalAttribute implements Cloneable 
     }
 
     public String toString() {
-        if (getAttribute() == null) {
+        if (getAttribute() == null && value != null) {
             return value;
         }
         return super.toString();

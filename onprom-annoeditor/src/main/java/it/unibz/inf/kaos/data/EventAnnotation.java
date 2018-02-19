@@ -90,9 +90,9 @@ public class EventAnnotation extends Annotation {
             }
             SelectBuilder builder;
             if (!inheritanceWithCase) {
-                builder = SimpleQueryExporter.getStringAttributeQueryBuilder(getEventName(), relatedClass, getCasePath());
+                builder = SimpleQueryExporter.getStringAttributeQueryBuilder(getEventName(), this, getCasePath(), XESConstants.attValueVar);
             } else {
-                builder = SimpleQueryExporter.getStringAttributeQueryBuilder(getEventName(), relatedClass, null);
+                builder = SimpleQueryExporter.getStringAttributeQueryBuilder(getEventName(), this, null, XESConstants.attValueVar);
             }
             builder.addVar("\"" + getLabel() + "\"", XESConstants.labelVar);
 

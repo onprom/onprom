@@ -78,7 +78,7 @@ public class NavigationalAttribute {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("");
+        StringBuilder stringBuilder = new StringBuilder();
         if (attribute != null)
             stringBuilder.append(attribute.getName()).append(" in ");
         if (umlClass != null)
@@ -96,7 +96,7 @@ public class NavigationalAttribute {
 
     @Override
     public boolean equals(Object object) {
-        if (object != null && object instanceof NavigationalAttribute) {
+        if (object instanceof NavigationalAttribute) {
             NavigationalAttribute other = (NavigationalAttribute) object;
             try {
                 return other.getAttribute().equals(getAttribute()) && other.getUmlClass().equals(getUmlClass());

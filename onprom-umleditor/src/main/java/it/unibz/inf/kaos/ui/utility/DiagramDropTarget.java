@@ -29,12 +29,11 @@ public class DiagramDropTarget extends DropTarget {
                     try {
                         dropEvent.acceptDrop(dropEvent.getDropAction());
                         Object transferData = dropEvent.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                        if (transferData != null && transferData instanceof List) {
-                            List files = (List) transferData;
-                            if (!files.isEmpty()) {
-                                diagramEditor.open((File) files.get(0));
+                        if (transferData instanceof List) {
+                            ((List) transferData).forEach(file -> {
+                                diagramEditor.open((File) file);
                                 dropEvent.dropComplete(true);
-                            }
+                            });
                         }
                     } catch (Exception e) {
                         logger.error(e.getMessage(), e);
@@ -44,6 +43,8 @@ public class DiagramDropTarget extends DropTarget {
                     dropEvent.rejectDrop();
                 }
             }
+
         });
     }
+
 }

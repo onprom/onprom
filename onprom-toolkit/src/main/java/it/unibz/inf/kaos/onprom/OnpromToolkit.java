@@ -83,7 +83,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                     try {
                         dtde.acceptDrop(dtde.getDropAction());
                         Object transferData = dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                        if (transferData != null && transferData instanceof java.util.List) {
+                        if (transferData instanceof java.util.List) {
                             java.util.List<File> files = (java.util.List<File>) transferData;
                             if (!files.isEmpty()) {
                                 UIUtility.executeInBackground(() -> objects.openFiles(files.toArray(new File[]{})), progressBar);
@@ -228,17 +228,15 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     }
 
     private void loadShapes(UMLEditor umlEditor) {
-        TreeNode node = objects.getSelectedNode();
-        if (node != null) {
-            Object selectedObject = node.getUserObject();
-            if (selectedObject != null) {
-                if (selectedObject instanceof OWLOntology) {
-                    umlEditor.loadOntology(node.getIdentifier(), (OWLOntology) selectedObject);
-                } else if (selectedObject instanceof Set) {
-                    umlEditor.load(node.getIdentifier(), (Set<DiagramShape>) selectedObject);
-                }
-            }
-        }
+        objects.getSelectedNode().ifPresent(node ->
+                node.getUserObjectProvider().ifPresent(selectedObject -> {
+                    if (selectedObject instanceof OWLOntology) {
+                        umlEditor.loadOntology(node.getIdentifier(), (OWLOntology) selectedObject);
+                    } else if (selectedObject instanceof Set) {
+                        umlEditor.load(node.getIdentifier(), (Set<DiagramShape>) selectedObject);
+                    }
+                })
+        );
     }
 
     private Void showExportDiagram() {
@@ -295,10 +293,8 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     }
 
     public void displayLogSummary(TreeNode node) {
-        Object selectedObject = node.getUserObject();
-        if (selectedObject != null) {
-            XLog log = (XLog) selectedObject;
-            JInternalFrame infoFrame = new LogSummaryPanel(XLogInfoFactory.createLogInfo(log));
+        node.getUserObjectProvider().ifPresent(selectedObject -> {
+            JInternalFrame infoFrame = new LogSummaryPanel(XLogInfoFactory.createLogInfo((XLog) selectedObject));
             infoFrame.addInternalFrameListener(new InternalFrameAdapter() {
                 @Override
                 public void internalFrameClosed(InternalFrameEvent e) {
@@ -312,7 +308,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                 logError(e);
             }
             windows.add(infoFrame.getTitle(), FileType.OTHER, infoFrame);
-        }
+        });
     }
 
     private Void reset() {
