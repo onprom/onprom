@@ -29,6 +29,7 @@ package it.unibz.inf.kaos.onprom;
 import it.unibz.inf.kaos.annotation.AnnotationEditor;
 import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.dynamic.DynamicAnnotationEditor;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.logextractor.XESLogExtractorWithEBDAMapping;
@@ -173,6 +174,9 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         JMenuItem annoItem = new JMenuItem("Open Annotation Editor", KeyEvent.VK_A);
         annoItem.addActionListener(e -> UIUtility.executeInBackground(this::displayAnnotationEditor, progressBar));
         mnTools.add(annoItem);
+        JMenuItem dynamicItem = new JMenuItem("Open Dynamic Annotation Editor", KeyEvent.VK_D);
+        dynamicItem.addActionListener(e -> UIUtility.executeInBackground(this::displayDynamicAnnotationEditor, progressBar));
+        mnTools.add(dynamicItem);
         JMenuItem exportItem = new JMenuItem("Export Log", KeyEvent.VK_E);
         exportItem.addActionListener(e -> UIUtility.executeInBackground(this::exportLog, progressBar));
         mnTools.add(exportItem);
@@ -206,6 +210,10 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
 
     public Void displayAnnotationEditor() {
         return displayEditor(new AnnotationEditor(null, this));
+    }
+
+    public Void displayDynamicAnnotationEditor() {
+        return displayEditor(new DynamicAnnotationEditor(null, null, this));
     }
 
     private Void displayEditor(UMLEditor editor) {

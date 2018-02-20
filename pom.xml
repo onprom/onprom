@@ -67,6 +67,7 @@
         <module>onprom-data</module>
         <module>onprom-umleditor</module>
         <module>onprom-annoeditor</module>
+        <module>onprom-dynamiceditor</module>
         <module>onprom-obdamapper</module>
         <module>onprom-logextractor</module>
         <module>onprom-toolkit</module>
