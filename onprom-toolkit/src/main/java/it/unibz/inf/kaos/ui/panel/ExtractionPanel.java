@@ -53,15 +53,15 @@ import static it.unibz.inf.kaos.ui.component.CustomTree.INT_ARRAY_FLAVOR;
 public class ExtractionPanel extends UMLDiagramPanel {
     private static final Logger logger = LoggerFactory.getLogger(ExtractionPanel.class.getSimpleName());
 
-    private final ResourceShape ontology = new ResourceShape("data ontology", null);
-    private final ResourceShape event = new ResourceShape("event ontology", null);
-    private final ResourceShape mapping = new ResourceShape("mapping", null);
-    private final ResourceShape queries = new ResourceShape("queries", null);
-    private final ResourceShape extraction = new ResourceShape("extraction", null);
-    private final ResourceShape xesLog = new ResourceShape("XES", null);
-
     public ExtractionPanel(OnpromToolkit toolkit) {
         super(null);
+        final ResourceShape ontology = new ResourceShape("data ontology", null);
+        final ResourceShape event = new ResourceShape("event ontology", null);
+        final ResourceShape mapping = new ResourceShape("mapping", null);
+        final ResourceShape queries = new ResourceShape("queries", null);
+        final ResourceShape extraction = new ResourceShape("extraction", null);
+        final ResourceShape xesLog = new ResourceShape("XES", null);
+
         ontology.setStartX(50);
         ontology.setStartY(100);
 

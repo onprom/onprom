@@ -26,11 +26,14 @@
 
 package it.unibz.inf.kaos.ui.component;
 
+import com.google.common.collect.Sets;
 import it.unibz.inf.kaos.data.FileType;
 
+import javax.annotation.Nonnull;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.time.ZonedDateTime;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author T. E. Kalayci on 26-Apr-2017
@@ -56,6 +59,26 @@ public class TreeNode<T> extends DefaultMutableTreeNode {
     @Override
     public T getUserObject() {
         return (T) super.getUserObject();
+    }
+
+    @Nonnull
+    Set<TreeNode<T>> getChildren() {
+        Set<TreeNode<T>> children = Sets.newLinkedHashSet();
+        for (int i = 0; i < getChildCount(); i++) {
+            children.add(getChildAt(i));
+        }
+        return children;
+    }
+
+    boolean removeChild(T objectToRemove) {
+        for (int i = 0; i < getChildCount(); i++) {
+            TreeNode childAt = getChildAt(i);
+            if (childAt.getUserObject().equals(objectToRemove)) {
+                remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     public Optional<T> getUserObjectProvider() {

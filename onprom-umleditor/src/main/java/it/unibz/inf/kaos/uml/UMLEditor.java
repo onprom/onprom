@@ -177,14 +177,14 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
         if (documentIRI == null)
           documentIRI = "http://www.example.com/example.owl";
         String iri = UIUtility.input("Please enter document IRI", documentIRI);
-        File file = null;
         if (iri != null) {
           if (UIUtility.confirm(UMLEditorMessages.SAVE_FILE)) {
-            file = UIUtility.selectFileToSave(FileType.ONTOLOGY);
+              UIUtility.selectFileToSave(FileType.ONTOLOGY).ifPresent(
+                      file -> {
+                          ontology = OWLExporter.export(iri, diagramPanel.getShapes(false), file);
+                          loadedFile = file;
+                      });
           }
-          ontology = OWLExporter.export(iri, diagramPanel.getShapes(false), file);
-          //loaded file is changed
-          loadedFile = file;
         }
         if (listener != null)
           if (identifier != null && !identifier.isEmpty()) {

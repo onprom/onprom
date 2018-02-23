@@ -19,6 +19,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.awt.event.KeyAdapter;
@@ -26,6 +27,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Created by T. E. Kalayci on 15-Nov-2017.
@@ -85,6 +87,11 @@ public class ObjectTree {
         return objects.getSelectionPaths();
     }
 
+    @Nonnull
+    public Set<TreeNode<Object>> getAllNodes() {
+        return objects.getAllNodes();
+    }
+
     private void logError(Exception e) {
         logger.error(e.getMessage(), e);
         InformationDialog.display(e.getMessage());
@@ -138,14 +145,13 @@ public class ObjectTree {
     }
 
     public Void saveAll() {
-        File selectedFile = UIUtility.selectFileToSave(FileType.ONTOLOGY);
-        if (selectedFile != null) {
+        UIUtility.selectFileToSave(FileType.ONTOLOGY).ifPresent(selectedFile -> {
             String fileName = FilenameUtils.removeExtension(selectedFile.getAbsolutePath());
             for (int i = 0; i < objects.getCount(); i++) {
                 TreeNode node = objects.getNode(i);
                 saveObject(fileName, node.getType(), node.getUserObject());
             }
-        }
+        });
         return null;
     }
 
@@ -155,10 +161,7 @@ public class ObjectTree {
                 try {
                     TreeNode node = (TreeNode) path.getLastPathComponent();
                     if (node.getType() != FileType.OTHER) {
-                        File selectedFile = UIUtility.selectFileToSave(node.getType());
-                        if (selectedFile != null) {
-                            saveObject(FilenameUtils.removeExtension(selectedFile.getAbsolutePath()), node.getType(), node.getUserObject());
-                        }
+                        UIUtility.selectFileToSave(node.getType()).ifPresent(selectedFile -> saveObject(FilenameUtils.removeExtension(selectedFile.getAbsolutePath()), node.getType(), node.getUserObject()));
                     }
                 } catch (Exception e) {
                     logError(e);

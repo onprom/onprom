@@ -45,6 +45,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
@@ -180,9 +181,9 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         JMenuItem exportItem = new JMenuItem("Export Log", KeyEvent.VK_E);
         exportItem.addActionListener(e -> UIUtility.executeInBackground(this::exportLog, progressBar));
         mnTools.add(exportItem);
-        JMenuItem showExportItem = new JMenuItem("Export Diagram", KeyEvent.VK_D);
+        JMenuItem showExportItem = new JMenuItem("Export Log using Custom Event Ontology", KeyEvent.VK_D);
         showExportItem.addActionListener(e -> UIUtility.executeInBackground(this::showExportDiagram, progressBar));
-        //mnTools.add(showExportItem );
+        mnTools.add(showExportItem);
         menuBar.add(mnTools);
 
         JMenu mnHelp = new JMenu("Help");
@@ -203,6 +204,10 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         return objects.getNode(i - 1);
     }
 
+    @Nonnull
+    public Set<TreeNode<Object>> getResourceNodes() {
+        return objects.getAllNodes();
+    }
 
     public Void displayUMLEditor() {
         return displayEditor(new UMLEditor(null, this));
@@ -212,7 +217,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         return displayEditor(new AnnotationEditor(null, this));
     }
 
-    public Void displayDynamicAnnotationEditor() {
+    private Void displayDynamicAnnotationEditor() {
         return displayEditor(new DynamicAnnotationEditor(null, null, this));
     }
 
@@ -249,7 +254,6 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
 
     private Void showExportDiagram() {
         ExtractionFrame editor = new ExtractionFrame(this);
-        editor.setProgressBar(progressBar);
         editor.addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosed(InternalFrameEvent e) {
@@ -289,7 +293,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                     long start = System.currentTimeMillis();
                     XLog xlog = new XESLogExtractorWithEBDAMapping().extractXESLog(ontology, model, queries);
                     logger.error("It took " + (System.currentTimeMillis() - start) + " ms to export log");
-                    displayLogSummary(objects.addObject("Extracted Log", FileType.XLOG, xlog));
+                    displayLogSummary(xlog);
                 } catch (Exception e) {
                     logError(e);
                 }
@@ -300,7 +304,11 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         return null;
     }
 
-    public void displayLogSummary(TreeNode node) {
+    public void displayLogSummary(XLog xlog) {
+        displayLogSummary(objects.addObject("Extracted Log", FileType.XLOG, xlog));
+    }
+
+    public void displayLogSummary(TreeNode<Object> node) {
         node.getUserObjectProvider().ifPresent(selectedObject -> {
             JInternalFrame infoFrame = new LogSummaryPanel(XLogInfoFactory.createLogInfo((XLog) selectedObject));
             infoFrame.addInternalFrameListener(new InternalFrameAdapter() {

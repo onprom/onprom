@@ -31,9 +31,11 @@ import it.unibz.inf.kaos.data.Attribute;
 import it.unibz.inf.kaos.data.Cardinality;
 import it.unibz.inf.kaos.data.DataType;
 
+import javax.annotation.Nonnull;
 import javax.swing.table.AbstractTableModel;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Table model to hold and display attributes in class form
@@ -124,10 +126,11 @@ class AttributeTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    Attribute getAttribute(int i) {
+    @Nonnull
+    Optional<Attribute> getAttribute(int i) {
         if (attributes != null && attributes.size() > i)
-            return attributes.get(i);
-        return null;
+            return Optional.of(attributes.get(i));
+        return Optional.empty();
     }
 
     void removeAttribute(int selectedRow) {

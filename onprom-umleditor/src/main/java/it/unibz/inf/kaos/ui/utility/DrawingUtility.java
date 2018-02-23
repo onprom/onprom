@@ -18,7 +18,6 @@ import java.awt.image.BufferedImage;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
@@ -155,9 +154,8 @@ public class DrawingUtility {
     }
 
     public static void exportImage(UMLDiagramPanel diagramPanel) {
-        try {
-            File selectedFile = UIUtility.selectFileToSave(FileType.IMAGE);
-            if (selectedFile != null) {
+        UIUtility.selectFileToSave(FileType.IMAGE).ifPresent(selectedFile -> {
+            try {
                 String extension = IOUtility.getFileExtension(selectedFile);
                 Rectangle drawingArea = getDrawingArea(diagramPanel.getShapesAndAnchors());
                 if (extension.equals("svg")) {
@@ -172,11 +170,11 @@ public class DrawingUtility {
                     ImageIO.write(bi, extension, selectedFile);
                     g.dispose();
                 }
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+                UIUtility.error(e.getMessage());
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            UIUtility.error(e.getMessage());
-        }
+        });
     }
 
     public static void print(UMLDiagramPanel diagramPanel) {

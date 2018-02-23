@@ -31,6 +31,7 @@ import it.unibz.inf.kaos.ui.utility.IOUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -41,6 +42,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 /**
@@ -78,8 +80,10 @@ public class CustomTree<T> extends JTree {
                     }
 
                     @Override
-                    public Object getTransferData(DataFlavor flavor) {
-                        return getSelectionRows();
+                    @Nonnull
+                    public int[] getTransferData(DataFlavor flavor) {
+                        int[] selectionRows = getSelectionRows();
+                        return (selectionRows != null) ? selectionRows : new int[0];
                     }
                 };
             }
@@ -152,6 +156,11 @@ public class CustomTree<T> extends JTree {
         return getSelectedNode().flatMap(TreeNode::getUserObjectProvider);
     }
 
+    @Nonnull
+    public Set<TreeNode<T>> getAllNodes() {
+        return root.getChildren();
+    }
+
     private void reload() {
         ((DefaultTreeModel) super.getModel()).reload();
     }
@@ -170,13 +179,9 @@ public class CustomTree<T> extends JTree {
         reload();
     }
 
-    void removeNodeWithObject(Object toRemove) {
-        for (int i = 0; i < getCount(); i++) {
-            TreeNode childAt = getNode(i);
-            if (childAt.getUserObject().equals(toRemove)) {
-                removeNode(i);
-                return;
-            }
+    void removeNodeWithObject(T toRemove) {
+        if (root.removeChild(toRemove)) {
+            reload();
         }
     }
 

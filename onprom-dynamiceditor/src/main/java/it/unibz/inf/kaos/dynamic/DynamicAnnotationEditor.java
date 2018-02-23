@@ -97,10 +97,16 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
     @Override
     protected JToolBar createToolbar() {
         JToolBar toolBar = super.createToolbar();
-        toolBar.add(UIUtility.createToolbarButton(new ToolbarAction(new AbstractActionType() {
+        toolBar.add(UIUtility.createToolbarButton(loadXESOntology()), 3);
+        toolBar.add(UIUtility.createToolbarButton(selectCustomEventOntology()), 4);
+        return toolBar;
+    }
+
+    private ToolbarAction selectCustomEventOntology() {
+        return new ToolbarAction(new AbstractActionType() {
             @Override
             public String getTooltip() {
-                return "Change Event Ontology";
+                return "Select Custom Event Ontology";
             }
 
             @Override
@@ -110,10 +116,28 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
         }) {
             @Override
             public void execute() {
-                loadEventOntology(OWLUtility.loadOntologyFromFile(UIUtility.selectFileToOpen(FileType.ONTOLOGY)));
+                UIUtility.selectFileToOpen(FileType.ONTOLOGY).ifPresent(file -> loadEventOntology(OWLUtility.loadOntologyFromFile(file)));
             }
-        }), 3);
-        return toolBar;
+        };
+    }
+
+    private ToolbarAction loadXESOntology() {
+        return new ToolbarAction(new AbstractActionType() {
+            @Override
+            public String getTooltip() {
+                return "Load Default XES Ontology";
+            }
+
+            @Override
+            public String getTitle() {
+                return "xes";
+            }
+        }) {
+            @Override
+            public void execute() {
+                loadEventOntology(null);
+            }
+        };
     }
 
     @Override

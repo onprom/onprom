@@ -143,7 +143,7 @@ public class AttributeTable extends JTable implements MouseListener {
             //check if other attributes have same name
             for (int i = 0; i < model.getRowCount(); i++) {
                 if (i != getEditingRow()) {
-                    if (model.getAttribute(i).getName().equals(textField.getText())) {
+                    if (model.getAttribute(i).filter(a -> a.getName().equals(textField.getText())).isPresent()) {
                         textField.selectAll();
                         UIUtility.error("Name already given to other attribute!");
                         return false;

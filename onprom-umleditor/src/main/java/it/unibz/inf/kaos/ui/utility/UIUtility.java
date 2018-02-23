@@ -38,6 +38,7 @@ import it.unibz.inf.kaos.ui.interfaces.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -46,6 +47,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
@@ -339,18 +341,20 @@ public class UIUtility {
         return null;
     }
 
-    public static File selectFileToOpen(FileType... allowedFileType) {
+    @Nonnull
+    public static Optional<File> selectFileToOpen(FileType... allowedFileType) {
         FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FILE_CHOOSER.setFileFilter(FileTypeFilter.get(allowedFileType));
         FILE_CHOOSER.setMultiSelectionEnabled(false);
         int returnVal = FILE_CHOOSER.showOpenDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            return FILE_CHOOSER.getSelectedFile();
+            return Optional.of(FILE_CHOOSER.getSelectedFile());
         }
-        return null;
+        return Optional.empty();
     }
 
-    public static File selectFileToSave(FileType fileType) {
+    @Nonnull
+    public static Optional<File> selectFileToSave(FileType fileType) {
         FILE_CHOOSER.setFileFilter(FileTypeFilter.get(fileType));
         FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FILE_CHOOSER.setSelectedFile(new File(""));
@@ -361,8 +365,8 @@ public class UIUtility {
                 //set default extension if doesn't exist
                 selectedFile = new File(selectedFile.getAbsolutePath() + "." + fileType.getDefaultExtension());
             }
-            return selectedFile;
+            return Optional.of(selectedFile);
         }
-        return null;
+        return Optional.empty();
     }
 }

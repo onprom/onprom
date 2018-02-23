@@ -29,8 +29,10 @@ package it.unibz.inf.kaos.ui.component;
 import it.unibz.inf.kaos.data.AnnotationAttribute;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Table for displaying and editing annotation attributes in annotation form
@@ -68,7 +70,8 @@ public class AnnotationAttributeTable extends JTable {
         model.addAttribute(annotationAttribute);
     }
 
-    public AnnotationAttribute getSelectedAttribute() {
+    @Nonnull
+    public Optional<AnnotationAttribute> getSelectedAttribute() {
         return model.getAttribute(getSelectedRow());
     }
 }

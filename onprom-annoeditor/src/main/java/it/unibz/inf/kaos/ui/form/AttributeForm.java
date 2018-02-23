@@ -152,16 +152,7 @@ class AttributeForm extends AbstractAnnotationForm {
 
     @Override
     protected void populateForm() {
-        if (tblAttributes.getSelectedRow() > -1) {
-            AnnotationAttribute attribute = tblAttributes.getSelectedAttribute();
-            txtName.setSelectedItem(attribute.getName());
-            cmbValue.setSelectedItem(attribute.getValue());
-            cmbValuePath.setSelectedItem(attribute.getValue().getPath());
-            if (txtValueFilter != null)
-                txtValueFilter.setText(attribute.getValue().getFilterClause());
-            if (txtType != null)
-                txtType.setSelectedItem(attribute.getType());
-        } else {
+        if (tblAttributes.getSelectedRow() < 1) {
             txtName.setSelectedItem("");
             cmbValue.setSelectedItem("");
             cmbValuePath.setSelectedItem("");
@@ -170,6 +161,15 @@ class AttributeForm extends AbstractAnnotationForm {
             if (txtType != null)
                 txtType.setSelectedItem("");
         }
+        tblAttributes.getSelectedAttribute().ifPresent(attribute -> {
+            txtName.setSelectedItem(attribute.getName());
+            cmbValue.setSelectedItem(attribute.getValue());
+            cmbValuePath.setSelectedItem(attribute.getValue().getPath());
+            if (txtValueFilter != null)
+                txtValueFilter.setText(attribute.getValue().getFilterClause());
+            if (txtType != null)
+                txtType.setSelectedItem(attribute.getType());
+        });
     }
 
     private void populateValuePath() {

@@ -46,6 +46,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -74,14 +75,17 @@ public class IOUtility {
     }
 
     public static File exportJSON(FileType fileType, Set<DiagramShape> allShapes) {
-        File file = UIUtility.selectFileToSave(fileType);
-        if (file != null)
+        Optional<File> fileProvider = UIUtility.selectFileToSave(fileType);
+        if (fileProvider.isPresent()) {
+            File file = fileProvider.get();
             exportJSON(file, allShapes);
-        return file;
+            return file;
+        }
+        return null;
     }
 
     public static void exportJSON(FileType fileType, Object object) {
-        exportJSON(UIUtility.selectFileToSave(fileType), object);
+        UIUtility.selectFileToSave(fileType).ifPresent(file -> exportJSON(file, object));
     }
 
     public static void exportJSON(File file, Object object) {
@@ -92,13 +96,13 @@ public class IOUtility {
         }
     }
 
-    public static <T> T readJSON(java.io.InputStream input, Class<T> cls) {
+    public static <T> Optional<T> readJSON(java.io.InputStream input, Class<T> cls) {
         try {
-            return OBJECT_MAPPER.readValue(input, cls);
+            return Optional.of(OBJECT_MAPPER.readValue(input, cls));
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
-        return null;
+        return Optional.empty();
     }
 
     public static <T> T readJSON(java.io.File file, Class<T> cls) {
@@ -129,7 +133,10 @@ public class IOUtility {
 
     public static EditorObjects open(File selectedFile, FileType... allowedFileType) {
         if (selectedFile == null) {
-            selectedFile = UIUtility.selectFileToOpen(allowedFileType);
+            Optional<File> fileProvider = UIUtility.selectFileToOpen(allowedFileType);
+            if (fileProvider.isPresent()) {
+                selectedFile = fileProvider.get();
+            }
         }
         switch (IOUtility.getFileType(selectedFile)) {
             case ONTOLOGY:

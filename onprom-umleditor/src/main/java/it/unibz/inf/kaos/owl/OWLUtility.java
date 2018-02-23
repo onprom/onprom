@@ -26,6 +26,7 @@
 
 package it.unibz.inf.kaos.owl;
 
+import com.google.common.base.Optional;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
 import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
@@ -168,9 +169,13 @@ public class OWLUtility {
 
     public static String getDocumentIRI(OWLOntology ontology) {
         try {
-            return ontology.getOntologyID().getOntologyIRI().get().toString();
+            Optional<IRI> ontologyIRI = ontology.getOntologyID().getOntologyIRI();
+            if (ontologyIRI.isPresent()) {
+                return ontologyIRI.get().toString();
+            }
         } catch (NullPointerException e) {
-            return "http://www.example.com/example.owl";
+            LOGGER.error("An error occurred:" + e.getMessage());
         }
+        return "http://www.example.com/example.owl";
     }
 }

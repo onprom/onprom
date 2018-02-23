@@ -114,6 +114,14 @@ public class DynamicAnnotation extends Annotation {
             uri.add(id);
         }
 
+        uri.add(getVarName());
+        externalURIComponents.forEach(component -> {
+            String id = "_E" + uriFields.size() + "_" + hashCode();
+            uriFields.put(id, ImmutablePair.of(id, component));
+            //TODO shall we keep adding component to the URI or just leave it to be a part of WHERE clause?
+            uri.add(id);
+        });
+
         attributeValues.forEach((key, value) -> {
             if (value.isPartOfURI()) {
                 String id = "_I" + uriFields.size() + "_" + hashCode();
@@ -129,14 +137,6 @@ public class DynamicAnnotation extends Annotation {
                 uri.add(id);
             }
         });
-
-        externalURIComponents.forEach(component -> {
-            String id = "_E" + uriFields.size() + "_" + hashCode();
-            uriFields.put(id, ImmutablePair.of(id, component));
-            //TODO shall we keep adding component to the URI or just leave it to be a part of WHERE clause?
-            uri.add(id);
-        });
-        uri.add(getVarName());
 
         attributeValues.forEach((key, value) -> {
             logger.info("\tgenerating attribute query for " + key);

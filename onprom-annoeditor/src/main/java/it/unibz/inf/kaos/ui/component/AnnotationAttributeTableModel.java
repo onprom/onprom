@@ -32,6 +32,7 @@ import it.unibz.inf.kaos.data.NavigationalAttribute;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Table model to hold and display annotation attributes in annotation forms
@@ -106,10 +107,10 @@ class AnnotationAttributeTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    AnnotationAttribute getAttribute(int i) {
+    Optional<AnnotationAttribute> getAttribute(int i) {
         if (attributes != null && attributes.size() > i)
-            return attributes.get(i);
-        return null;
+            return Optional.of(attributes.get(i));
+        return Optional.empty();
     }
 
     void removeAttribute(int selectedRow) {
