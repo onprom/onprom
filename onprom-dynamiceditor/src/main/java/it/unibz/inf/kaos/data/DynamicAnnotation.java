@@ -18,7 +18,6 @@ import org.semanticweb.owlapi.model.IRI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,8 +28,11 @@ import java.util.Set;
  */
 public class DynamicAnnotation extends Annotation {
     private static final Logger logger = LoggerFactory.getLogger(DynamicAnnotation.class.getName());
-    private final Map<String, DynamicNavigationalAttribute> attributeValues = new LinkedHashMap<>();
-    private final Map<String, DynamicAnnotationAttribute> relationValues = new LinkedHashMap<>();
+    private final Map<String, DynamicNavigationalAttribute> attributeValues = Maps.newLinkedHashMap();
+    private final Map<String, DynamicAnnotationAttribute> relationValues = Maps.newLinkedHashMap();
+
+    private Set<DynamicAttribute> externalURIComponents = Sets.newLinkedHashSet();
+
     @JsonIgnore
     private final Set<String> uri = Sets.newLinkedHashSet();
     @JsonIgnore
@@ -63,6 +65,14 @@ public class DynamicAnnotation extends Annotation {
 
     public DynamicAnnotationAttribute getRelationValue(String name) {
         return relationValues.get(name);
+    }
+
+    public Set<DynamicAttribute> getExternalURIComponents() {
+        return externalURIComponents;
+    }
+
+    public void setExternalURIComponents(Set<DynamicAttribute> _components) {
+        this.externalURIComponents = _components;
     }
 
     public void setAttributeValue(String name, DynamicNavigationalAttribute value) {
@@ -118,6 +128,13 @@ public class DynamicAnnotation extends Annotation {
                 uriFields.put(key, ImmutablePair.of(id, value));
                 uri.add(id);
             }
+        });
+
+        externalURIComponents.forEach(component -> {
+            String id = "_E" + uriFields.size() + "_" + hashCode();
+            uriFields.put(id, ImmutablePair.of(id, component));
+            //TODO shall we keep adding component to the URI or just leave it to be a part of WHERE clause?
+            uri.add(id);
         });
         uri.add(getVarName());
 

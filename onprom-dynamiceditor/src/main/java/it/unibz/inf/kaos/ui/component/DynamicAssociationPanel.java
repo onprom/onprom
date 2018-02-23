@@ -18,7 +18,7 @@ import java.util.Set;
  */
 public class DynamicAssociationPanel extends JPanel {
     private final DynamicAnnotationForm form;
-    private final JComboBox<DynamicAnnotationAttribute> cmbAnnotations;
+    private final JComboBox<DynamicAttribute> cmbAnnotations;
     private final JComboBox<Set<DiagramShape>> cmbPath;
     private final JCheckBox chkIndex;
 
@@ -52,12 +52,7 @@ public class DynamicAssociationPanel extends JPanel {
     }
 
     private void populatePath() {
-        if ((cmbAnnotations != null) && (cmbAnnotations.getItemCount() > 0) && (cmbAnnotations.getSelectedItem() != null)) {
-            DynamicAnnotationAttribute selectedItem = (DynamicAnnotationAttribute) cmbAnnotations.getSelectedItem();
-            if (selectedItem != null) {
-                UIUtility.loadItems(cmbPath, form.getPaths(selectedItem.getRelatedClass()));
-            }
-        }
+        form.populatePath(cmbAnnotations, cmbPath);
     }
 
     public DynamicAnnotationAttribute getValue() {

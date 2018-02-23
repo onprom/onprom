@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Created by T. E. Kalayci on 14-Nov-2017.
  */
-public class DynamicNavigationalAttribute {
+public class DynamicNavigationalAttribute implements DynamicAttribute {
     private boolean partOfURI;
     private NavigationalAttribute attribute;
 
@@ -27,22 +27,27 @@ public class DynamicNavigationalAttribute {
         return attribute;
     }
 
+    @Override
     public Set<DiagramShape> getPath() {
         return attribute.getPath();
     }
 
+    @Override
     public void setPath(Set<DiagramShape> path) {
         attribute.setPath(path);
     }
 
-    public UMLClass getUmlClass() {
+    @Override
+    public UMLClass getRelatedClass() {
         return attribute.getUmlClass();
     }
 
+    @Override
     public boolean isPartOfURI() {
         return partOfURI;
     }
 
+    @Override
     public void setPartOfURI(final boolean partOfURI) {
         this.partOfURI = partOfURI;
     }

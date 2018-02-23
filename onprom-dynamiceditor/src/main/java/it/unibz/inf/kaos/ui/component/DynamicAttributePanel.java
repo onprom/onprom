@@ -1,9 +1,6 @@
 package it.unibz.inf.kaos.ui.component;
 
-import it.unibz.inf.kaos.data.Attribute;
-import it.unibz.inf.kaos.data.DynamicNavigationalAttribute;
-import it.unibz.inf.kaos.data.NavigationalAttribute;
-import it.unibz.inf.kaos.data.UMLClass;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.form.AbstractAnnotationForm;
 import it.unibz.inf.kaos.ui.form.DynamicAnnotationForm;
@@ -21,7 +18,7 @@ import java.util.Set;
  */
 public class DynamicAttributePanel extends JPanel {
     private final DynamicAnnotationForm form;
-    private final JComboBox<DynamicNavigationalAttribute> cmbAttributes;
+    private final JComboBox<DynamicAttribute> cmbAttributes;
     private final JComboBox<Set<DiagramShape>> cmbPath;
     private final JCheckBox chkIndex;
 
@@ -55,14 +52,7 @@ public class DynamicAttributePanel extends JPanel {
     }
 
     private void populatePath() {
-        if ((cmbAttributes != null) && (cmbAttributes.getItemCount() > 0) && (cmbAttributes.getSelectedItem() != null)) {
-            if (cmbAttributes.getSelectedItem() instanceof DynamicNavigationalAttribute) {
-                DynamicNavigationalAttribute selectedItem = (DynamicNavigationalAttribute) cmbAttributes.getSelectedItem();
-                if (selectedItem != null) {
-                    UIUtility.loadItems(cmbPath, form.getPaths(selectedItem.getUmlClass()));
-                }
-            }
-        }
+        form.populatePath(cmbAttributes, cmbPath);
     }
 
     public DynamicNavigationalAttribute getValue() {

@@ -56,7 +56,9 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
 
     private final JTextField txtLabel;
     private final JCheckBox chkLabel;
-    //private final JCheckBox chkURI;
+    private final JComboBox<DynamicAttribute> cmbURIAttributes;
+    private final JComboBox<Set<DiagramShape>> cmbURIPath;
+    private final JComboBox<DynamicAttribute> cmbURISelected;
 
     public DynamicAnnotationForm(AnnotationDiagram drawingPanel, DynamicAnnotation annotation) {
         super(drawingPanel, annotation);
@@ -71,12 +73,12 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
         JPanel pnlLabel = new JPanel(new FlowLayout(FlowLayout.LEADING, 1, 1));
         chkLabel = UIUtility.createCheckBox("part of the URI");
         pnlLabel.add(chkLabel);
-        pnlLabel.add(UIUtility.createLabel("Label: ", BTN_SIZE, new MouseAdapter() {
+        pnlLabel.add(UIUtility.createLabel("Label:", BTN_SIZE, new MouseAdapter() {
             @Override
             public void mouseClicked(final MouseEvent e) {
                 chkLabel.setSelected(!chkLabel.isSelected());
             }
-        }), gridBagConstraints);
+        }));
         txtLabel = UIUtility.createTextField(TXT_SIZE);
         pnlLabel.add(txtLabel);
         add(pnlLabel, gridBagConstraints);
@@ -104,6 +106,19 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
             }
         }
 
+        gridBagConstraints.gridy++;
+        JPanel pnlURI = new JPanel(new FlowLayout(FlowLayout.LEADING, 1, 1));
+        pnlURI.add(UIUtility.createLabel("URI:", BTN_SIZE));
+        cmbURIAttributes = UIUtility.createWideComboBox(getAttributes(), TXT_SIZE, e -> populatePath(), false, true);
+        pnlURI.add(cmbURIAttributes);
+        cmbURIPath = UIUtility.createWideComboBox(TXT_SIZE, null, false, false);
+        pnlURI.add(cmbURIPath);
+        pnlURI.add(UIUtility.createSmallButton(AnnotationEditorButtons.ADD, e -> addSelectedAttribute()));
+        cmbURISelected = UIUtility.createWideComboBox(annotation.getExternalURIComponents(), TXT_SIZE, null, false, false);
+        pnlURI.add(cmbURISelected);
+        pnlURI.add(UIUtility.createSmallButton(AnnotationEditorButtons.REMOVE, e -> removeSelectedAttribute()));
+        add(pnlURI, gridBagConstraints);
+
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         add(UIUtility.createButton(AnnotationEditorButtons.SAVE, e -> {
@@ -111,6 +126,11 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
             associations.forEach((key, value) -> annotation.setRelationValue(key, value.getValue()));
             annotation.setLabel(txtLabel.getText());
             annotation.setLabelPartOfIndex(chkLabel.isSelected());
+            Set<DynamicAttribute> selectedURIComponents = Sets.newLinkedHashSet();
+            for (int i = 0; i < cmbURISelected.getItemCount(); i++) {
+                selectedURIComponents.add(cmbURISelected.getItemAt(i));
+            }
+            annotation.setExternalURIComponents(selectedURIComponents);
             setVisible(false);
         }, AbstractAnnotationForm.BTN_SIZE), gridBagConstraints);
 
@@ -118,19 +138,46 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
         add(UIUtility.createButton(AnnotationEditorButtons.CANCEL, e -> setVisible(false), AbstractAnnotationForm.BTN_SIZE), gridBagConstraints);
     }
 
-    public Collection<DynamicAnnotationAttribute> getAnnotations() {
+    private void populatePath() {
+        populatePath(cmbURIAttributes, cmbURIPath);
+    }
+
+    private void addSelectedAttribute() {
+        if (cmbURIAttributes.getSelectedItem() != null && cmbURIAttributes.getSelectedItem() instanceof DynamicAttribute) {
+            DynamicAttribute selectedItem = (DynamicAttribute) cmbURIAttributes.getSelectedItem();
+            if (cmbURIPath.getSelectedIndex() > -1) {
+                selectedItem.setPath(cmbURIPath.getItemAt(cmbURIPath.getSelectedIndex()));
+            }
+            cmbURISelected.addItem(selectedItem);
+        }
+    }
+
+    private void removeSelectedAttribute() {
+        if (cmbURISelected.getSelectedIndex() > -1) {
+            cmbURISelected.removeItemAt(cmbURISelected.getSelectedIndex());
+        }
+    }
+
+    public void populatePath(JComboBox<DynamicAttribute> items, JComboBox<Set<DiagramShape>> paths) {
+        if ((items != null) && (items.getItemCount() > 0) && (items.getSelectedItem() != null)) {
+            if (items.getSelectedItem() instanceof DynamicAttribute) {
+                DynamicAttribute selectedItem = (DynamicAttribute) items.getSelectedItem();
+                if (selectedItem != null) {
+                    UIUtility.loadItems(paths, NavigationUtility.getAllPaths(annotation.getRelatedClass(), selectedItem.getRelatedClass()));
+                }
+            }
+        }
+    }
+
+    public Collection<DynamicAttribute> getAnnotations() {
         return drawingPanel.findAnnotations(annotation.getRelatedClass(), false, DynamicAnnotation.class).stream().map(DynamicAnnotationAttribute::new).collect(Collectors.toCollection(Sets::newLinkedHashSet));
     }
 
-    public Collection<DynamicNavigationalAttribute> getAttributes() {
-        Collection<DynamicNavigationalAttribute> attributes = drawingPanel.findAttributes(annotation.getRelatedClass(), false).stream().map(DynamicNavigationalAttribute::new).collect(Collectors.toSet());
+    public Collection<DynamicAttribute> getAttributes() {
+        Collection<DynamicAttribute> attributes = drawingPanel.findAttributes(annotation.getRelatedClass(), false).stream().map(DynamicNavigationalAttribute::new).collect(Collectors.toSet());
         // add class URI as a selectable attribute
         attributes.add(new DynamicNavigationalAttribute(new ClassAttribute(annotation.getRelatedClass())));
         return attributes;
-    }
-
-    public Set<Set<DiagramShape>> getPaths(UMLClass umlClass) {
-        return NavigationUtility.getAllPaths(annotation.getRelatedClass(), umlClass);
     }
 
     @Override
