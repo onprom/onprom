@@ -143,7 +143,7 @@ public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
         if (!getDisplayString().isEmpty()) {
             final int[] namePosition = getNamePosition();
             final Rectangle2D nameRectangle = g2d.getFontMetrics().getStringBounds(getDisplayString(), g2d);
-            drawLabel(g2d, getDisplayString(), namePosition[0] - (int) (nameRectangle.getWidth() / 2), namePosition[1] - DrawingUtility.GAP, true);
+            drawLabel(g2d, getDisplayString(), namePosition[0] - (int) (nameRectangle.getWidth() / 2), namePosition[1] - DrawingUtility.MARGIN, true);
         }
         g2d.setColor(oldColor);
         g2d.setStroke(oldStroke);
@@ -271,8 +271,8 @@ public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
         }
         //return middle anchor's position
         int[] position = getAnchors().get(getAnchorCount() / 2).getPosition();
-        position[0] += DrawingUtility.GAP;
-        position[1] -= DrawingUtility.GAP;
+        position[0] += DrawingUtility.MARGIN;
+        position[1] -= DrawingUtility.MARGIN;
         return position;
     }
 

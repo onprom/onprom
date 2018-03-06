@@ -28,14 +28,14 @@ import java.util.Collection;
 public class DrawingUtility {
     private static final Logger logger = LoggerFactory.getLogger(DrawingUtility.class.getName());
     //variables
-    public static final int GAP = 5;
+    public static final int MARGIN = 5;
     public static final int GRID_SIZE = 25;
     public static final float ANCHOR_RADIUS = 12;
     public static final float HALF_ANCHOR_RADIUS = ANCHOR_RADIUS / 2;
     //fonts
-    public static final Font CLASS_NAME_FONT = new Font(Font.DIALOG, Font.BOLD, 15);
-    public static final Font RELATION_FONT = new Font(Font.DIALOG, Font.ITALIC, 12);
-    public static final Font ATTRIBUTE_NAME_FONT = new Font(Font.DIALOG, Font.PLAIN, 13);
+    public static final Font CLASS_NAME_FONT = getFont("Prompt-Regular", Font.BOLD, 15f);
+    public static final Font RELATION_FONT = getFont("Prompt-Regular", Font.ITALIC, 12f);
+    public static final Font ATTRIBUTE_NAME_FONT = getFont("Prompt-Regular", Font.PLAIN, 13f);
     //colors
     public static final Color BACKGROUND = new Color(240, 248, 250);
     //contants
@@ -150,7 +150,7 @@ public class DrawingUtility {
                 maxY = shape.getEndY();
             }
         }
-        return new Rectangle(minX - DrawingUtility.GAP, minY - DrawingUtility.GAP, maxX - minX + 2 * DrawingUtility.GAP, maxY - minY + 2 * DrawingUtility.GAP);
+        return new Rectangle(minX - DrawingUtility.MARGIN, minY - DrawingUtility.MARGIN, maxX - minX + 2 * DrawingUtility.MARGIN, maxY - minY + 2 * DrawingUtility.MARGIN);
     }
 
     public static void exportImage(UMLDiagramPanel diagramPanel) {
@@ -208,6 +208,15 @@ public class DrawingUtility {
             } catch (PrinterException e) {
                 UIUtility.error(e.getMessage());
             }
+        }
+    }
+
+    public static Font getFont(String fontName, Integer style, Float size) {
+        try {
+            return Font.createFont(Font.TRUETYPE_FONT, DrawingUtility.class.getResourceAsStream("/fonts/" + fontName + ".ttf")).deriveFont(size).deriveFont(style);
+        } catch (Exception e) {
+            logger.error("Couldn't create font:" + e.getMessage());
+            return new Font(Font.DIALOG, style, size.intValue());
         }
     }
 

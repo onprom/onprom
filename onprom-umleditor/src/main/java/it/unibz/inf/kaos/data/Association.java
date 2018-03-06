@@ -120,8 +120,8 @@ public class Association extends Relationship {
     g2d.setStroke(DrawingUtility.RELATION_STROKE);
       final int[] m1Position = getM1Position(g2d);
       final int[] m2Position = getM2Position(g2d);
-    drawLabel(g2d, getFirstMultiplicityString(), m1Position[0], m1Position[1] - DrawingUtility.GAP, true);
-    drawLabel(g2d, getSecondMultiplicityString(), m2Position[0], m2Position[1] - DrawingUtility.GAP, true);
+    drawLabel(g2d, getFirstMultiplicityString(), m1Position[0], m1Position[1] - DrawingUtility.MARGIN, true);
+    drawLabel(g2d, getSecondMultiplicityString(), m2Position[0], m2Position[1] - DrawingUtility.MARGIN, true);
     g2d.setColor(oldColor);
     g2d.setStroke(oldStroke);
     g2d.setFont(oldFont);
@@ -180,11 +180,11 @@ public class Association extends Relationship {
     if (angle >= -DrawingUtility.D45 && angle < DrawingUtility.D45) {
       x = startX - g2d.getFontMetrics().stringWidth(getFirstMultiplicityString());
     } else if (angle >= DrawingUtility.D45 && angle < DrawingUtility.D135) {
-      y = startY - DrawingUtility.GAP;
+      y = startY - DrawingUtility.MARGIN;
     } else if (angle <= -DrawingUtility.D45 && angle > -DrawingUtility.D135) {
-      y = firstClass.getEndY() + g2d.getFontMetrics().getHeight() + DrawingUtility.GAP;
+      y = firstClass.getEndY() + g2d.getFontMetrics().getHeight() + DrawingUtility.MARGIN;
     } else {
-      x = firstClass.getEndX() + DrawingUtility.GAP;
+      x = firstClass.getEndX() + DrawingUtility.MARGIN;
     }
     // return calculated position
     return new int[]{x, y};
@@ -231,11 +231,11 @@ public class Association extends Relationship {
     int y = centerY + b;
     //check the angle to find correct position of label
     if (angle > -DrawingUtility.D45 && angle < DrawingUtility.D45) {
-      x = secondClass.getEndX() + DrawingUtility.GAP;
+      x = secondClass.getEndX() + DrawingUtility.MARGIN;
     } else if (angle > DrawingUtility.D45 && angle < DrawingUtility.D135) {
-      y = secondClass.getEndY() + g2d.getFontMetrics().getHeight() + DrawingUtility.GAP;
+      y = secondClass.getEndY() + g2d.getFontMetrics().getHeight() + DrawingUtility.MARGIN;
     } else if (angle < -DrawingUtility.D45 && angle > -DrawingUtility.D135) {
-      y = startY - DrawingUtility.GAP;
+      y = startY - DrawingUtility.MARGIN;
     } else {
       x = startX - g2d.getFontMetrics().stringWidth(getSecondMultiplicityString());
     }

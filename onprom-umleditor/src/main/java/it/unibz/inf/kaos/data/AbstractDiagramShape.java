@@ -196,7 +196,7 @@ public abstract class AbstractDiagramShape<T extends Diagram> implements Diagram
   private boolean contains(int x, int y) {
     Shape shape = getShape();
     if (shape instanceof Line2D) {
-        return shape.intersects(x, y, DrawingUtility.GAP, DrawingUtility.GAP);
+      return shape.intersects(x, y, DrawingUtility.MARGIN, DrawingUtility.MARGIN);
     } else {
       return shape.contains(x, y);
     }

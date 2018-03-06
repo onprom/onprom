@@ -130,7 +130,7 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
 
             @Override
             public String getTitle() {
-                return "xes";
+                return "xes-ontology";
             }
         }) {
             @Override

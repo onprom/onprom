@@ -20,6 +20,10 @@ public class CustomExtractionPanel extends JPanel {
     private static final Logger logger = LoggerFactory.getLogger(CustomExtractionPanel.class.getSimpleName());
 
     public CustomExtractionPanel(OnpromToolkit toolkit) {
+        initUI(toolkit);
+    }
+
+    private void initUI(OnpromToolkit toolkit) {
         Set<TreeNode<Object>> resources = toolkit.getResourceNodes();
         setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
@@ -82,9 +86,12 @@ public class CustomExtractionPanel extends JPanel {
             cmbDomainOntology.setSelectedIndex(-1);
             cmbMappings.setSelectedIndex(-1);
             cmbEventOntology.setSelectedIndex(-1);
-            //cmbXESOntology.setSelectedIndex(-1);
             cmbEventAnnotations.setSelectedIndex(-1);
             cmbXESAnnotations.setSelectedIndex(-1);
+            removeAll();
+            initUI(toolkit);
+            revalidate();
+            repaint();
         }, null), gridBagConstraints);
     }
 }

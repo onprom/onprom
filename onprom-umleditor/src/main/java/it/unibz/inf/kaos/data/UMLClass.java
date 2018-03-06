@@ -151,12 +151,12 @@ public class UMLClass extends AbstractDiagramShape<UMLDiagram> {
     for (Attribute attr : attributes) {
       int attrWidth = g2d.getFontMetrics().stringWidth(attr.toString());
       if (attrWidth > fontWidth) {
-          fontWidth = attrWidth + DrawingUtility.GAP;
+        fontWidth = attrWidth;
       }
     }
     int boxHeight = fontHeight + attrHeight * (attributes.size() + 1);
-        setEndX(getStartX() + fontWidth + DrawingUtility.GAP);
-    setEndY(getStartY() + boxHeight + fontHeight);
+      setEndX(getStartX() + fontWidth + DrawingUtility.MARGIN * 2);
+      setEndY(getStartY() + boxHeight);
     g2d.setFont(oldFont);
   }
 
@@ -183,25 +183,22 @@ public class UMLClass extends AbstractDiagramShape<UMLDiagram> {
       g2d.setFont(DrawingUtility.CLASS_NAME_FONT);
       final int fontHeight = g2d.getFontMetrics().getHeight();
       final int classNameWidth = g2d.getFontMetrics().stringWidth(getName());
-    drawLabel(g2d, getName(), getStartX() + ((width - classNameWidth) / 2), getStartY() + fontHeight, false);
+    drawLabel(g2d, getName(), getStartX() + ((width - classNameWidth) / 2), getStartY() + (fontHeight / 2) + DrawingUtility.MARGIN, false);
     // draw line after class name
-    g2d.draw(new Line2D.Float(getStartX(), getStartY() +
-            fontHeight + DrawingUtility.GAP,
-      getEndX(), getStartY
-            () + fontHeight + DrawingUtility.GAP));
-      int currentY = getStartY() + fontHeight + DrawingUtility.GAP;
+    g2d.draw(new Line2D.Float(getStartX(), getStartY() + fontHeight, getEndX(), getStartY() + fontHeight));
+    int currentY = getStartY() + fontHeight;
     // draw class attributes
       g2d.setFont(DrawingUtility.ATTRIBUTE_NAME_FONT);
       final int attrHeight = g2d.getFontMetrics().getHeight();
     for (Attribute attr : attributes) {
       currentY = currentY + attrHeight;
       g2d.setColor(attr.getState().getColor());
-        drawLabel(g2d, attr.toString(), getStartX() + DrawingUtility.GAP, currentY, false);
-        attr.setBounds(getStringBounds(g2d, attr.toString(), getStartX() + DrawingUtility.GAP, currentY));
+      drawLabel(g2d, attr.toString(), getStartX() + DrawingUtility.MARGIN, currentY, false);
+      attr.setBounds(getStringBounds(g2d, attr.toString(), getStartX() + DrawingUtility.MARGIN, currentY));
     }
     // draw line after attributes
     g2d.setColor(getState().getColor());
-      g2d.draw(new Line2D.Float(getStartX(), currentY + DrawingUtility.GAP, getEndX(), currentY + DrawingUtility.GAP));
+    g2d.draw(new Line2D.Float(getStartX(), currentY + DrawingUtility.MARGIN, getEndX(), currentY + DrawingUtility.MARGIN));
     g2d.setFont(oldFont);
     g2d.setColor(oldColor);
     g2d.setStroke(oldStroke);

@@ -47,7 +47,7 @@ import java.util.List;
  */
 public abstract class Annotation extends AbstractDiagramShape<AnnotationDiagram> {
     @JsonIgnore
-    private static final Font ANNOTATION_FONT = new Font(Font.DIALOG, Font.PLAIN, 14);
+    private static final Font ANNOTATION_FONT = DrawingUtility.getFont("Prompt-Regular", Font.PLAIN, 14f);
     @JsonIgnore
     AnnotationProperties properties = getClass().getAnnotation(AnnotationProperties.class);
 
@@ -87,6 +87,7 @@ public abstract class Annotation extends AbstractDiagramShape<AnnotationDiagram>
         final Color bgColor = Color.decode(getAnnotationProperties().color());
         final String label = getLabel();
         //calculate box height and width
+        g2d.setFont(ANNOTATION_FONT);
         int rectangleHeight = fontHeight * 2;
         int rectangleWidth = g2d.getFontMetrics().stringWidth(type);
         if (label != null && !label.isEmpty()) {
@@ -95,9 +96,8 @@ public abstract class Annotation extends AbstractDiagramShape<AnnotationDiagram>
                 rectangleWidth = g2d.getFontMetrics().stringWidth(label);
             }
         }
-        rectangleWidth += 3 * DrawingUtility.GAP;
+        rectangleWidth += 3 * DrawingUtility.MARGIN;
         //draw a rectangle for the box using font and background color
-        g2d.setFont(ANNOTATION_FONT);
         g2d.setColor(bgColor);
         g2d.fillRect(startX, startY, rectangleWidth, rectangleHeight);
         //draw line between the class and the annotation
@@ -112,12 +112,12 @@ public abstract class Annotation extends AbstractDiagramShape<AnnotationDiagram>
         if (UIUtility.isDark(bgColor)) {
             g2d.setColor(Color.WHITE);
         }
-        g2d.drawString(type, typeCoord, startY + fontHeight + DrawingUtility.GAP);
+        g2d.drawString(type, typeCoord, startY + fontHeight + DrawingUtility.MARGIN);
         if (label != null && !label.isEmpty()) {
             //draw label of the annotation if it exists
             fontWidth = g2d.getFontMetrics().stringWidth(label);
             typeCoord = startX + (rectangleWidth - fontWidth) / 2;
-            g2d.drawString(label, typeCoord, startY + 2 * fontHeight + DrawingUtility.GAP);
+            g2d.drawString(label, typeCoord, startY + 2 * fontHeight + DrawingUtility.MARGIN);
         }
         //set end coordinates of the annotation
         setEndX(startX + rectangleWidth);
