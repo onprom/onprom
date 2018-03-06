@@ -29,8 +29,6 @@ package it.unibz.inf.kaos.data.query;
 import java.util.Arrays;
 import java.util.List;
 
-import org.semanticweb.owlapi.model.IRI;
-
 /**
  * Unary annotation query class
  * <p>
@@ -48,13 +46,13 @@ public class UnaryAnnotationQuery extends AnnotationQuery {
     //
   }
 
-  public UnaryAnnotationQuery(String _name, IRI _targetURI, String[] _firstAnsVariable) {
-    super(_name, _targetURI);
+    public UnaryAnnotationQuery(String _name, String _targetIRI, String[] _firstAnsVariable) {
+        super(_name, _targetIRI);
     this.component = _firstAnsVariable;
   }
 
-  public UnaryAnnotationQuery(String _query, IRI _targetURI, String[] _firstAnsVariable, List<AnnotationQuery> queries) {
-    super(_query,_targetURI,queries);
+    public UnaryAnnotationQuery(String _query, String _targetIRI, String[] _firstAnsVariable, List<AnnotationQuery> queries) {
+        super(_query, _targetIRI, queries);
     this.component = _firstAnsVariable;
   }
 
@@ -67,7 +65,7 @@ public class UnaryAnnotationQuery extends AnnotationQuery {
   }
 
   public String toString() {
-    return String.format("%s %s", getTargetURI(), Arrays.toString(getComponent()));
+      return String.format("%s %s", getTargetIRI(), Arrays.toString(getComponent()));
   }
 
   public void accept(AnnotationQueryVisitor aqv){

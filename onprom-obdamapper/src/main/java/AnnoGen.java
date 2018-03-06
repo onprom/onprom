@@ -1,7 +1,5 @@
 
 
-import org.semanticweb.owlapi.model.IRI;
-
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.data.query.AnnotationQuery;
 import it.unibz.inf.kaos.data.query.BinaryAnnotationQuery;
@@ -48,25 +46,25 @@ public class AnnoGen {
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					qt1, IRI.create("http://onprom.inf.unibz.it/t-has-a"),
+						qt1, "http://onprom.inf.unibz.it/t-has-a",
 					new String[]{"Trace"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					qt1, IRI.create("http://onprom.inf.unibz.it/attType"),
+						qt1, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					qt1, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						qt1, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					qt1, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						qt1, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 
@@ -92,25 +90,25 @@ public class AnnoGen {
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e1name, IRI.create("http://onprom.inf.unibz.it/e-has-a"),
+						e1name, "http://onprom.inf.unibz.it/e-has-a",
 					new String[]{"EventID", "Event"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e1name, IRI.create("http://onprom.inf.unibz.it/attType"),
+						e1name, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e1name, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						e1name, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e1name, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						e1name, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 		
@@ -126,7 +124,7 @@ public class AnnoGen {
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e1trace, IRI.create("http://onprom.inf.unibz.it/t-contains-e"),
+						e1trace, "http://onprom.inf.unibz.it/t-contains-e",
 					new String[]{"Trace"}, new String[]{"EventID", "Event"})
 			);
 		
@@ -144,25 +142,25 @@ public class AnnoGen {
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e1timestamp, IRI.create("http://onprom.inf.unibz.it/e-has-a"),
+						e1timestamp, "http://onprom.inf.unibz.it/e-has-a",
 					new String[]{"EventID", "Event"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e1timestamp, IRI.create("http://onprom.inf.unibz.it/attType"),
+						e1timestamp, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e1timestamp, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						e1timestamp, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e1timestamp, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						e1timestamp, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 		
@@ -178,25 +176,25 @@ public class AnnoGen {
 		
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e1lifecycle, IRI.create("http://onprom.inf.unibz.it/e-has-a"),
+						e1lifecycle, "http://onprom.inf.unibz.it/e-has-a",
 					new String[]{"EventID", "Event"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e1lifecycle, IRI.create("http://onprom.inf.unibz.it/attType"),
+						e1lifecycle, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e1lifecycle, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						e1lifecycle, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e1lifecycle, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						e1lifecycle, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 		
@@ -222,25 +220,25 @@ public class AnnoGen {
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2name, IRI.create("http://onprom.inf.unibz.it/e-has-a"),
+						e2name, "http://onprom.inf.unibz.it/e-has-a",
 					new String[]{"EventID", "Event"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2name, IRI.create("http://onprom.inf.unibz.it/attType"),
+						e2name, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2name, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						e2name, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2name, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						e2name, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 		
@@ -256,7 +254,7 @@ public class AnnoGen {
 		
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2trace, IRI.create("http://onprom.inf.unibz.it/t-contains-e"),
+						e2trace, "http://onprom.inf.unibz.it/t-contains-e",
 					new String[]{"Trace"}, new String[]{"EventID", "Event"})
 			);
 		
@@ -274,25 +272,25 @@ public class AnnoGen {
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2timestamp, IRI.create("http://onprom.inf.unibz.it/e-has-a"),
+						e2timestamp, "http://onprom.inf.unibz.it/e-has-a",
 					new String[]{"EventID", "Event"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2timestamp, IRI.create("http://onprom.inf.unibz.it/attType"),
+						e2timestamp, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2timestamp, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						e2timestamp, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2timestamp, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						e2timestamp, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 		
@@ -308,25 +306,25 @@ public class AnnoGen {
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2lifecycle, IRI.create("http://onprom.inf.unibz.it/e-has-a"),
+						e2lifecycle, "http://onprom.inf.unibz.it/e-has-a",
 					new String[]{"EventID", "Event"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2lifecycle, IRI.create("http://onprom.inf.unibz.it/attType"),
+						e2lifecycle, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2lifecycle, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						e2lifecycle, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-					e2lifecycle, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						e2lifecycle, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 		
@@ -357,25 +355,25 @@ public class AnnoGen {
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3name, IRI.create("http://onprom.inf.unibz.it/e-has-a"),
+						e3name, "http://onprom.inf.unibz.it/e-has-a",
 					new String[]{"EventID", "Event"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3name, IRI.create("http://onprom.inf.unibz.it/attType"),
+						e3name, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3name, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						e3name, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3name, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						e3name, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 		
@@ -396,7 +394,7 @@ public class AnnoGen {
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3trace, IRI.create("http://onprom.inf.unibz.it/t-contains-e"),
+						e3trace, "http://onprom.inf.unibz.it/t-contains-e",
 					new String[]{"Trace"}, new String[]{"EventID", "Event"})
 			);
 
@@ -419,25 +417,25 @@ public class AnnoGen {
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3timestamp, IRI.create("http://onprom.inf.unibz.it/e-has-a"),
+						e3timestamp, "http://onprom.inf.unibz.it/e-has-a",
 					new String[]{"EventID", "Event"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3timestamp, IRI.create("http://onprom.inf.unibz.it/attType"),
+						e3timestamp, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3timestamp, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						e3timestamp, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3timestamp, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						e3timestamp, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 		
@@ -458,25 +456,25 @@ public class AnnoGen {
 		
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3lifecycle, IRI.create("http://onprom.inf.unibz.it/e-has-a"),
+						e3lifecycle, "http://onprom.inf.unibz.it/e-has-a",
 					new String[]{"EventID", "Event"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3lifecycle, IRI.create("http://onprom.inf.unibz.it/attType"),
+						e3lifecycle, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3lifecycle, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						e3lifecycle, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e3lifecycle, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						e3lifecycle, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 		
@@ -501,25 +499,25 @@ public class AnnoGen {
 		
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4name, IRI.create("http://onprom.inf.unibz.it/e-has-a"),
+						e4name, "http://onprom.inf.unibz.it/e-has-a",
 					new String[]{"EventID", "Event"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4name, IRI.create("http://onprom.inf.unibz.it/attType"),
+						e4name, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4name, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						e4name, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4name, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						e4name, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 
@@ -533,7 +531,7 @@ public class AnnoGen {
 		
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4trace, IRI.create("http://onprom.inf.unibz.it/t-contains-e"),
+						e4trace, "http://onprom.inf.unibz.it/t-contains-e",
 					new String[]{"Trace"}, new String[]{"EventID", "Event"})
 			);
 
@@ -550,25 +548,25 @@ public class AnnoGen {
 		
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4timestamp, IRI.create("http://onprom.inf.unibz.it/e-has-a"),
+						e4timestamp, "http://onprom.inf.unibz.it/e-has-a",
 					new String[]{"EventID", "Event"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4timestamp, IRI.create("http://onprom.inf.unibz.it/attType"),
+						e4timestamp, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4timestamp, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						e4timestamp, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4timestamp, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						e4timestamp, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 		
@@ -583,25 +581,25 @@ public class AnnoGen {
 		
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4lifecycle, IRI.create("http://onprom.inf.unibz.it/e-has-a"),
+						e4lifecycle, "http://onprom.inf.unibz.it/e-has-a",
 					new String[]{"EventID", "Event"}, new String[]{"Type", "Key", "Value"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4lifecycle, IRI.create("http://onprom.inf.unibz.it/attType"),
+						e4lifecycle, "http://onprom.inf.unibz.it/attType",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Type"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4lifecycle, IRI.create("http://onprom.inf.unibz.it/attKey"),
+						e4lifecycle, "http://onprom.inf.unibz.it/attKey",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Key"})
 			);
 
 		q.addQuery(
 				new BinaryAnnotationQuery(
-						e4lifecycle, IRI.create("http://onprom.inf.unibz.it/attValue"),
+						e4lifecycle, "http://onprom.inf.unibz.it/attValue",
 					new String[]{"Type", "Key", "Value"}, new String[]{"Value"})
 			);
 		
@@ -631,8 +629,8 @@ public class AnnoGen {
 			if(aq instanceof BinaryAnnotationQuery){
 
 				BinaryAnnotationQuery baq = (BinaryAnnotationQuery) aq;
-				
-				System.out.println("Target Component: \t\t"+baq.getTargetURI());
+
+				System.out.println("Target Component: \t\t" + baq.getTargetIRI());
 				System.out.println("Source Query: \t\t\t"+baq.getQuery());
 				
 				StringBuilder str1 = new StringBuilder("[");
@@ -665,8 +663,8 @@ public class AnnoGen {
 				}
 				str1.delete(str1.length()-2, str1.length());
 				str1.append("]");
-				
-				System.out.println("Target Component: \t\t"+uaq.getTargetURI());
+
+				System.out.println("Target Component: \t\t" + uaq.getTargetIRI());
 				System.out.println("Source Query: \t\t\t"+uaq.getQuery());
 				System.out.println("AnsVar Component: \t"+str1);
 			}

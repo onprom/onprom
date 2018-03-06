@@ -50,8 +50,6 @@
             </plugin>
         </plugins>
     </build>
-    
-    
     <dependencies>
         <dependency>
             <groupId>net.sourceforge.owlapi</groupId>
@@ -59,5 +57,4 @@
             <version>${owlapi.version}</version>
         </dependency>
 	</dependencies>
-    
 </project>

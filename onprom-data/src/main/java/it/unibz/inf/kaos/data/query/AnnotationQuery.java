@@ -26,9 +26,9 @@
 
 package it.unibz.inf.kaos.data.query;
 
-import java.util.List;
-
 import org.semanticweb.owlapi.model.IRI;
+
+import java.util.List;
 
 /**
  * Super class for annotation queries
@@ -42,31 +42,23 @@ import org.semanticweb.owlapi.model.IRI;
 public abstract class AnnotationQuery {
   private List<AnnotationQuery> attributeQueries;
   private String query;
-  private String targetURI;
+  private String targetIRI;
   
   public AnnotationQuery(){}
 
-  public AnnotationQuery(String query, IRI targetURI, List<AnnotationQuery> attributeQueries) {
+  public AnnotationQuery(String query, String targetIRI, List<AnnotationQuery> attributeQueries) {
     this.query = query;
-    this.targetURI = targetURI.toString();
+    this.targetIRI = targetIRI;
     this.attributeQueries = attributeQueries;
   }
 
-  public AnnotationQuery(String query, IRI targetURI) {
-    this.query = query;
-    this.targetURI = targetURI.toString();
+  public AnnotationQuery(String _query, String _targetIRI) {
+    this.query = _query;
+    this.targetIRI = _targetIRI;
   }
 
-  public AnnotationQuery(String query) {
-    this.query = query;
-  }
-
-  public IRI getTargetURI() {
-    return IRI.create(targetURI);
-  }
-
-  public void setTargetURI(IRI targetURI) {
-    this.targetURI = targetURI.toString();
+  public IRI getTargetIRI() {
+    return IRI.create(targetIRI);
   }
 
   public String getQuery() {

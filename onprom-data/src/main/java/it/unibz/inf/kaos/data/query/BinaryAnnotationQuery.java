@@ -29,8 +29,6 @@ package it.unibz.inf.kaos.data.query;
 import java.util.Arrays;
 import java.util.List;
 
-import org.semanticweb.owlapi.model.IRI;
-
 /**
  * Binary annotation query class
  * <p>
@@ -49,17 +47,13 @@ public class BinaryAnnotationQuery extends AnnotationQuery {
     //
   }
 
-  public BinaryAnnotationQuery(String _query, IRI _targetURI) {
-    super(_query, _targetURI);
-  }
-
-  public BinaryAnnotationQuery(String _query, IRI _targetURI, String[] _firstAnsVariable, String[] _secondAnsVariable) {
+    public BinaryAnnotationQuery(String _query, String _targetURI, String[] _firstAnsVariable, String[] _secondAnsVariable) {
     super(_query,_targetURI);
     this.firstComponent = _firstAnsVariable;
     this.secondComponent = _secondAnsVariable;
   }
 
-  public BinaryAnnotationQuery(String _query, IRI _targetURI, String[] _firstAnsVariable, String[] _secondAnsVariable, List<AnnotationQuery> queries) {
+    public BinaryAnnotationQuery(String _query, String _targetURI, String[] _firstAnsVariable, String[] _secondAnsVariable, List<AnnotationQuery> queries) {
     this(_query,_targetURI, _firstAnsVariable, _secondAnsVariable);
     setAttributeQueries(queries);
   }
@@ -81,7 +75,7 @@ public class BinaryAnnotationQuery extends AnnotationQuery {
   }
 
   public String toString() {
-    return String.format("%s %s %s", getTargetURI(), Arrays.toString(getFirstComponent()), Arrays.toString(getSecondComponent()));
+      return String.format("%s %s %s", getTargetIRI(), Arrays.toString(getFirstComponent()), Arrays.toString(getSecondComponent()));
   }
 
   public void accept(AnnotationQueryVisitor aqv){

@@ -14,7 +14,6 @@ import it.unibz.inf.kaos.ui.form.DynamicAnnotationForm;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.apache.jena.sparql.core.Var;
-import org.semanticweb.owlapi.model.IRI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,7 +144,7 @@ public class DynamicAnnotation extends Annotation {
             builder = SimpleQueryExporter.getStringAttributeQueryBuilder(value.getAttribute(), this, null, Var.alloc(field));
             addURIFields(builder, key);
             queries.add(new BinaryAnnotationQuery(
-                    builder.toString(), IRI.create(key),
+                    builder.toString(), key,
                     uri.toArray(new String[]{}), new String[]{field})
             );
         });
@@ -182,7 +181,7 @@ public class DynamicAnnotation extends Annotation {
             if (firstComponent.length < 1) {
                 firstComponent = new String[]{relationVar.getVarName()};
             }
-            queries.add(new BinaryAnnotationQuery(builder.toString(), IRI.create(key), firstComponent, uri.toArray(new String[]{})));
+            queries.add(new BinaryAnnotationQuery(builder.toString(), key, firstComponent, uri.toArray(new String[]{})));
         });
         return queries;
     }

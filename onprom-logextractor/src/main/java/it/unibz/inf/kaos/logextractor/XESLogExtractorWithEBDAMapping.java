@@ -16,51 +16,22 @@
 
 package it.unibz.inf.kaos.logextractor;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.List;
-
-import org.deckfour.xes.classification.XEventLifeTransClassifier;
-import org.deckfour.xes.classification.XEventNameClassifier;
-import org.deckfour.xes.model.XAttribute;
-import org.deckfour.xes.model.XEvent;
-import org.deckfour.xes.model.XLog;
-import org.deckfour.xes.model.XTrace;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.parser.QueryParserRegistry;
-import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.rdf.rdfxml.parser.TripleLogger;
-import org.slf4j.LoggerFactory;
-
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.logextractor.constants.LEConstants;
+import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
+import it.unibz.inf.kaos.logextractor.exception.XESLogExtractionFailureException;
+import it.unibz.inf.kaos.logextractor.model.*;
+import it.unibz.inf.kaos.logextractor.reasoner.EBDAReasonerImpl;
+import it.unibz.inf.kaos.logextractor.util.EfficientHashMap;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
-import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
 import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
 import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
 import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgEvent;
 import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgListener;
-import it.unibz.inf.kaos.logextractor.exception.XESLogExtractionFailureException;
-import it.unibz.inf.kaos.logextractor.model.EBDAMapping;
-import it.unibz.inf.kaos.logextractor.model.EBDAModel;
-import it.unibz.inf.kaos.logextractor.model.LEObjectFactory;
-import it.unibz.inf.kaos.logextractor.model.XAtt;
-import it.unibz.inf.kaos.logextractor.model.XAttributeOnProm;
-import it.unibz.inf.kaos.logextractor.model.XEventOnProm;
-import it.unibz.inf.kaos.logextractor.model.XEventOnPromEfficient;
-import it.unibz.inf.kaos.logextractor.model.XEventTimeStampClassifier;
-import it.unibz.inf.kaos.logextractor.model.XFactoryOnProm;
-import it.unibz.inf.kaos.logextractor.model.XLogOnProm;
-import it.unibz.inf.kaos.logextractor.reasoner.EBDAReasonerImpl;
-import it.unibz.inf.kaos.logextractor.util.EfficientHashMap;
 import it.unibz.inf.ontop.model.OBDADataSource;
-import it.unibz.inf.ontop.model.OBDAException;
 import it.unibz.inf.ontop.model.OBDAModel;
 import it.unibz.inf.ontop.model.impl.OBDAModelImpl;
 import it.unibz.inf.ontop.owlapi.OWLAPITranslatorOWL2QL;
@@ -75,6 +46,23 @@ import it.unibz.inf.ontop.owlrefplatform.core.unfolding.DatalogUnfolder;
 import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWL;
 import it.unibz.inf.ontop.parser.SQLQueryDeepParser;
 import it.unibz.inf.ontop.parser.TableNameVisitor;
+import org.deckfour.xes.classification.XEventLifeTransClassifier;
+import org.deckfour.xes.classification.XEventNameClassifier;
+import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XEvent;
+import org.deckfour.xes.model.XLog;
+import org.deckfour.xes.model.XTrace;
+import org.openrdf.query.parser.QueryParserRegistry;
+import org.semanticweb.owlapi.model.OWLException;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.rdf.rdfxml.parser.TripleLogger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.List;
 
 /*
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -656,7 +644,7 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 	
 		public void setVerboseMode(Level level){
 			logger.setLevel(level);
-			((Logger) LoggerFactory.getLogger(EBDAReasonerImpl.class)).setLevel(level);;
+			((Logger) LoggerFactory.getLogger(EBDAReasonerImpl.class)).setLevel(level);
 		}
 	
 		public void printExecutionNote(){

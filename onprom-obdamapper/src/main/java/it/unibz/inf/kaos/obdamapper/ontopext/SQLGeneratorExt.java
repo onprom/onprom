@@ -16,7 +16,6 @@
 
 package it.unibz.inf.kaos.obdamapper.ontopext;
 
-import it.unibz.inf.ontop.sql.*;
 import it.unibz.inf.ontop.model.*;
 import it.unibz.inf.ontop.model.impl.OBDADataFactoryImpl;
 import it.unibz.inf.ontop.model.impl.OBDAVocabulary;
@@ -26,12 +25,12 @@ import it.unibz.inf.ontop.owlrefplatform.core.basicoperations.EQNormalizer;
 import it.unibz.inf.ontop.owlrefplatform.core.queryevaluation.SQLDialectAdapter;
 import it.unibz.inf.ontop.owlrefplatform.core.sql.SQLGenerator;
 import it.unibz.inf.ontop.owlrefplatform.core.srcquerygeneration.SQLQueryGenerator;
+import it.unibz.inf.ontop.sql.DBMetadata;
 import org.openrdf.model.Literal;
+
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import it.unibz.inf.kaos.obdamapper.ontopext.SQLWithVarMap;
 
 /**
  * This class is based on "it.unibz.inf.ontop.owlrefplatform.core.srcquerygeneration.SQLQueryGenerator"
@@ -171,7 +170,7 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 //			log.debug("Normalized CQ: \n{}", cq);
 
 			Predicate headPredicate = cq.getHead().getFunctionSymbol();
-			if (!headPredicate.getName().toString().equals(OBDAVocabulary.QUEST_QUERY)) {
+			if (!headPredicate.getName().equals(OBDAVocabulary.QUEST_QUERY)) {
 				// not a target query, skip it.
 				continue;
 			}
@@ -723,10 +722,10 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 //				//arsa: END OF remove CAST
 //			}
 //		}
-		
-		StringBuffer URITemplate = new StringBuffer("");
+
+		StringBuffer URITemplate = new StringBuffer();
 		HashMap<String,String> ansVarSet = new HashMap<String,String>();// just to check whether it already contains a particular answer variable
-		StringBuffer ansVar = new StringBuffer("");
+		StringBuffer ansVar = new StringBuffer();
 		boolean addComma = false;
 		
 		for(int ii = 0; ii < params.length; ii++){
@@ -837,7 +836,7 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 		public Y getSecondComponent() {
 			return y;
 		}
-	};
+	}
 
 	///////////////////////////////////////////////////////////////////////////////////
 	// LOGGER RELATED STUFF

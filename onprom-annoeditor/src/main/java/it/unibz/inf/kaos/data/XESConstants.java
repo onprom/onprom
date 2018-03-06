@@ -27,7 +27,6 @@
 package it.unibz.inf.kaos.data;
 
 import org.apache.jena.sparql.core.Var;
-import org.semanticweb.owlapi.model.IRI;
 
 /**
  * String constants used in query generation
@@ -50,12 +49,12 @@ public class XESConstants {
     static final Var attTypeVar = Var.alloc(attType);
     static final String attKey = "_key";
     static final Var attKeyVar = Var.alloc(attKey);
-    static final IRI traceAttributeURI = IRI.create("http://onprom.inf.unibz.it/t-has-a");
-    static final IRI eventAttributeURI = IRI.create("http://onprom.inf.unibz.it/e-has-a");
-    static final IRI traceEventURI = IRI.create("http://onprom.inf.unibz.it/t-contains-e");
-    static final IRI attTypeURI = IRI.create("http://onprom.inf.unibz.it/attType");
-    static final IRI attKeyURI = IRI.create("http://onprom.inf.unibz.it/attKey");
-    static final IRI attValueURI = IRI.create("http://onprom.inf.unibz.it/attValue");
+    static final String traceAttributeURI = "http://onprom.inf.unibz.it/t-has-a";
+    static final String eventAttributeURI = "http://onprom.inf.unibz.it/e-has-a";
+    static final String traceEventURI = "http://onprom.inf.unibz.it/t-contains-e";
+    static final String attTypeURI = "http://onprom.inf.unibz.it/attType";
+    static final String attKeyURI = "http://onprom.inf.unibz.it/attKey";
+    static final String attValueURI = "http://onprom.inf.unibz.it/attValue";
     static final String[] attArray = {attType, attKey, attValue};
     static final String[] attTypeArr = {attType};
     static final String[] attKeyArr = {attKey};

@@ -6,44 +6,23 @@
 
 package it.unibz.inf.kaos.obdamapper.model;
 
-import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
-import org.openrdf.query.MalformedQueryException;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAnnotationProperty;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDataPropertyRangeAxiom;
-import org.semanticweb.owlapi.model.OWLDatatype;
-import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLEntityVisitor;
-import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.vocab.OWL2Datatype;
-import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.classic.Logger;
-import it.unibz.inf.kaos.obdamapper.ontopext.SQLWithVarMap;
-
-import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
+import it.unibz.inf.kaos.data.query.*;
+import it.unibz.inf.kaos.obdamapper.constants.OMConstants;
 import it.unibz.inf.kaos.obdamapper.exception.InvalidDataSourcesNumberException;
+import it.unibz.inf.kaos.obdamapper.ontopext.SQLWithVarMap;
 import it.unibz.inf.kaos.obdamapper.reasoner.QuestOWLReasonerExt;
 import it.unibz.inf.ontop.model.OBDADataSource;
 import it.unibz.inf.ontop.model.OBDAException;
 import it.unibz.inf.ontop.model.OBDAModel;
 import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration;
+import org.openrdf.query.MalformedQueryException;
+import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl;
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.data.query.AnnotationQuery;
-import it.unibz.inf.kaos.data.query.AnnotationQueryVisitor;
-import it.unibz.inf.kaos.data.query.BinaryAnnotationQuery;
-import it.unibz.inf.kaos.data.query.UnaryAnnotationQuery;
-import it.unibz.inf.kaos.obdamapper.constants.OMConstants;
+
+import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
 
 /*
  * Note (2017.07 - ario): the reason of making a separation among OBDAMapping interface, 
@@ -77,8 +56,8 @@ public class OBDAMappingImpl extends OBDAMappingAbstractImpl implements OBDAMapp
 	}
 
 	protected OBDAMappingImpl(
-			OWLOntology sourceOntology, OWLOntology targetOntology, OBDAModel sourceObdaModel, AnnotationQueries annoQ) 
-					throws InvalidAnnotationException, InvalidDataSourcesNumberException{
+			OWLOntology sourceOntology, OWLOntology targetOntology, OBDAModel sourceObdaModel, AnnotationQueries annoQ)
+			throws InvalidDataSourcesNumberException {
 		
 		super(sourceObdaModel.getSources(), targetOntology);
 		this.addMapping(sourceOntology, sourceObdaModel, annoQ);
@@ -92,13 +71,11 @@ public class OBDAMappingImpl extends OBDAMappingAbstractImpl implements OBDAMapp
 	 * @param sourceOntology - the ontology of the annotated OBDA System
 	 * @param sourceObdaModel - the OBDA Model/Mappings of the annotated OBDA System
 	 * @param annoQ - the annotations
-	 * @throws InvalidAnnotationException
-	 * 
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
 	 */
 	@Override
-	public void addMapping(OWLOntology sourceOntology, OBDAModel sourceObdaModel, AnnotationQueries annoQ) 
-			throws InvalidAnnotationException, InvalidDataSourcesNumberException{
+	public void addMapping(OWLOntology sourceOntology, OBDAModel sourceObdaModel, AnnotationQueries annoQ)
+			throws InvalidDataSourcesNumberException {
 		
     	//Create an instance of Extended Quest OWL Reasoner.
 			QuestOWLConfiguration config = createDefaultQuestOWLConfiguration(sourceObdaModel);
@@ -165,7 +142,7 @@ public class OBDAMappingImpl extends OBDAMappingAbstractImpl implements OBDAMapp
 
 		String[] firstComponent = annoQ.getFirstComponent();
 		String[] secondComponent = annoQ.getSecondComponent();
-		IRI targetURI = annoQ.getTargetURI();
+		IRI targetURI = annoQ.getTargetIRI();
 		String sourceSQLQuery = annoQ.getQuery();
 		
 		if(firstComponent == null || secondComponent == null || targetURI == null || sourceSQLQuery == null){
@@ -278,8 +255,8 @@ public class OBDAMappingImpl extends OBDAMappingAbstractImpl implements OBDAMapp
 		HashMap<String, String> varMap = null;
 		String firstComp;
 		String secondComp;
-		StringBuilder firstURITemplate = new StringBuilder("");
-		StringBuilder secondURITemplate = new StringBuilder("");
+		StringBuilder firstURITemplate = new StringBuilder();
+		StringBuilder secondURITemplate = new StringBuilder();
 		int idx = 0;
 		int smallestNumOfAnsVars = 0 ;
 
@@ -481,7 +458,7 @@ public class OBDAMappingImpl extends OBDAMappingAbstractImpl implements OBDAMapp
 	private void addMapping(UnaryAnnotationQuery annoQ, QuestOWLReasonerExt reasoner, URI obdaDataSourceID) {
 		
 		String[] uriComponent = annoQ.getComponent();
-		IRI targetURI = annoQ.getTargetURI();
+		IRI targetURI = annoQ.getTargetIRI();
 		String sourceSQLQuery = annoQ.getQuery();
 		
 		if(uriComponent == null || targetURI == null || sourceSQLQuery == null){
@@ -543,7 +520,7 @@ public class OBDAMappingImpl extends OBDAMappingAbstractImpl implements OBDAMapp
 		String targetQuery = "";
 		HashMap<String, String> varMap = null;
 		String uriComp;
-		StringBuilder uriTemplate = new StringBuilder("");
+		StringBuilder uriTemplate = new StringBuilder();
 
 		/*
 		 * The following loop processes each reformulated query. Note that the target query 
