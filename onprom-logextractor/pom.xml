@@ -39,7 +39,7 @@
     </parent>
 
     <properties>
-        <openxes.version>2.19</openxes.version>
+        <openxes.version>2.23</openxes.version>
         <ontop.version>1.18.1-OnProm</ontop.version>
     </properties>
 
@@ -106,17 +106,17 @@
     	<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.4.190</version>
+            <version>1.4.196</version>
 		</dependency>
     	<dependency>
     		<groupId>mysql</groupId>
     		<artifactId>mysql-connector-java</artifactId>
-    		<version>5.1.30</version>
+            <version>5.1.45</version>
     	</dependency>
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
-			<version>9.4.1212</version>
+            <version>42.2.1</version>
 		</dependency>
 		<!-- =============================================================== -->
 		<!-- END OF JDBC Drivers -->
@@ -163,18 +163,18 @@
         <!-- =============================================================== -->        
         
         <!-- https://mvnrepository.com/artifact/net.sf.trove4j/trove4j -->
-		<dependency>
-		    <groupId>net.sf.trove4j</groupId>
-		    <artifactId>trove4j</artifactId>
-		    <version>3.0.3</version>
-		</dependency>
+        <!--<dependency>
+            <groupId>net.sf.trove4j</groupId>
+            <artifactId>trove4j</artifactId>
+            <version>3.0.3</version>
+        </dependency>-->
 
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-		<dependency>
-		    <groupId>com.google.guava</groupId>
-		    <artifactId>guava</artifactId>
-		    <version>22.0</version>
-		</dependency>
+        <!--<dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>22.0</version>
+        </dependency>-->
         <!-- =============================================================== -->
 		<!-- END OF External libraries -->
         <!-- =============================================================== -->
