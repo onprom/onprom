@@ -28,7 +28,7 @@ import java.util.List;
  * Note (2017.07 - ario): the reason of making a separation among OBDAMapping interface, 
  * OBDAMapping abstract class and OBDAMappingImpl class is to allow different kind of 
  * OBDAMapping implementation. This implementation is just one possible implementation. 
- * Another possible implementation would be the implementation that utilize paralel 
+ * Another possible implementation would be the implementation that utilizes paralel 
  * processing.
  */
 //Note: we only support 1 data source
@@ -125,8 +125,10 @@ public class OBDAMappingImpl extends OBDAMappingAbstractImpl implements OBDAMapp
 			AnnotationQueriesProcessor mappingAdder = 
 				new AnnotationQueriesProcessor(questReasoner, this.getSources().get(0).getSourceID());
 			
-			for(AnnotationQuery aq : annoQ.getAllQueries())				
-				aq.accept(mappingAdder);
+			for(AnnotationQuery aq : annoQ.getAllQueries()){
+				if(aq != null)
+					aq.accept(mappingAdder);
+			}
 			
 		}finally{
 				try {
@@ -170,7 +172,7 @@ public class OBDAMappingImpl extends OBDAMappingAbstractImpl implements OBDAMapp
 			
 		} catch (Exception e) {
 			//TODO: generate a better message 
-			System.out.println("TODO: generate a message - "+ e.getMessage());
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 		

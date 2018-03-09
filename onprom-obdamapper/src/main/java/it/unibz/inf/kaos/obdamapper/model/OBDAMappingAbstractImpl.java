@@ -250,11 +250,11 @@ public abstract class OBDAMappingAbstractImpl extends OBDAModelImpl implements O
 			
 			//TODO: generate a better message - ambiguous target entity - too much matching target entity
 			if(numOfOWLEntities > 1)
-				throw new Exception("TODO: generate message ambiguous target entity - too much matching target entity");
+				throw new Exception("ambiguous target entity - too much matching target entity for "+targetIRI.toString());
 	
 			//TODO: generate a better message - unknown target entity (possibly wrong target ontology entity) - no matching target entity
 			if(numOfOWLEntities < 1)
-				throw new Exception("TODO: generate message unknown target entity (possibly wrong target ontology entity) - no matching target entity");
+				throw new Exception("unknown target entity (possibly wrong target ontology entity) - no matching target entity for "+targetIRI.toString());
 
 			return null;
 		}
@@ -263,7 +263,7 @@ public abstract class OBDAMappingAbstractImpl extends OBDAModelImpl implements O
 		
 		//TODO: generate a better message - unknown target entity (possibly wrong target ontology entity) - no matching target entity
 		if(targetEntity == null)
-			throw new Exception("TODO: generate a message - unknown target entity");
+			throw new Exception("unknown target entity");
 		
 		return targetEntity;
 	}
