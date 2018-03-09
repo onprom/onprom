@@ -4279,9 +4279,9 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 									traces.get(newTrace).insertOrdered(xevt);
 								} catch (Exception e) {
 									
-									logger.error("Error while inserting an event into the associated trace. "
-											+ "One possible reason: there is a mismatch between the XES attribute type and some reserve XES attribute key. "
-											+ "E.g., if the AnnotationQueries says that a certain attribute with the key='time:timestamp' has the type literal ");
+									logger.error("Error while inserting an event into a trace. "
+											+ "One possible reason: there is a mismatch between the XES attribute type and some reserved XES attribute key. "
+											+ "E.g., if the AnnotationQueries says that a certain attribute with the key='time:timestamp' has the type literal, then an exception might be thrown here ");
 									
 									/*
 									XAttribute timestamp = xevt.getAttributes().get("time:timestamp");
