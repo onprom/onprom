@@ -1,0 +1,89 @@
+[PrefixDeclaration]
+:		http://www.example.com/
+owl:		http://www.w3.org/2002/07/owl#
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+xml:		http://www.w3.org/XML/1998/namespace
+xsd:		http://www.w3.org/2001/XMLSchema#
+rdfs:		http://www.w3.org/2000/01/rdf-schema#
+
+[SourceDeclaration]
+sourceUri	datasource1
+connectionUrl	jdbc:postgresql://localhost:5432/conf-10c-100u-43330
+username	userpg
+password	userpg
+driverClass	org.postgresql.Driver
+
+[MappingDeclaration] @collection [[
+mappingId	ASSIGNMENT
+target		:assignment/id={id} a :Assignment ; :invTime {invitationtime}^^xsd:dateTime . 
+source		SELECT "id", "invitationtime" FROM ReviewRequest
+
+mappingId	CONFERENCE
+target		:conference/id={id} a :Conference ; :cName {name}^^xsd:string ; :crTime {time}^^xsd:dateTime . 
+source		SELECT "id", "name", "time" FROM Conference
+
+mappingId	DECIDEDPAPER
+target		:paper/id={id} a :DecidedPaper ; :decTime {decisiontime}^^xsd:dateTime ; :accepted {outcome}^^xsd:boolean . 
+source		SELECT "id", "decisiontime", "outcome" FROM Decision
+
+mappingId	PAPER
+target		:paper/id={id} a :Paper ; :title {title}^^xsd:string ; :type {type}^^xsd:string . 
+source		SELECT "id", "title", "type" FROM Paper
+
+mappingId	REVIEW
+target		:review/id={id} a :Review ; :subTime {submissiontime}^^xsd:dateTime . 
+source		SELECT "id", "submissiontime" FROM Review
+
+mappingId	PERSON
+target		:person/id={id} a :Person ; :pName {user}^^xsd:string ; :regTime {ct}^^xsd:dateTime . 
+source		SELECT "id", "user", "ct" FROM Login
+
+mappingId	SUBMISSION
+target		:submission/id={id} a :Submission ; :uploadTime {uploadtime}^^xsd:dateTime . 
+source		SELECT "id", "uploadtime" FROM Submission
+
+mappingId	CREATION
+target		:submission/id={ID} a :Creation . 
+source		SELECT DISTINCT Submission."id" as ID FROM Submission, Paper WHERE Submission."paper" = Paper."id" AND Submission."uploadtime" = Paper."ct"
+
+mappingId	CRUPLOAD
+target		:crupload/id={ID} a :CRUpload ; :uploadTime {UploadTime}^^xsd:dateTime . 
+source		SELECT DISTINCT Acceptance."id" AS ID, Acceptance."uploadtime" AS UploadTime FROM Acceptance 
+
+mappingId	CHAIRS
+target		:person/id={organizer} :chairs :conference/id={id} . 
+source		SELECT "id", "organizer" FROM Conference
+
+mappingId	LEADSTO
+target		:assignment/id={ASSIGNMENT_ID} :leadsTo :review/id={REVIEW_ID} . 
+source		SELECT ReviewRequest."id" AS ASSIGNMENT_ID, Review."id" AS REVIEW_ID FROM Review, ReviewRequest WHERE Review."idrr" = ReviewRequest."id"
+
+mappingId	NOTIFIEDBY
+target		:paper/id={Paper} :notifiedBy :person/id={Chair} . 
+source		select decision."id" as Paper, decision."chair" as Chair FROM decision
+
+mappingId	SUBMITTEDTO
+target		:paper/id={id} :submittedTo :conference/id={conf} . 
+source		SELECT "id", "conf" FROM Paper
+
+mappingId	Assignment_2_Paper
+target		:assignment/id={id} :Assignment_2_Paper :paper/id={paper} . 
+source		SELECT "id", "paper" FROM ReviewRequest
+
+mappingId	Assignment_2_Person
+target		:assignment/id={id} :Assignment_2_Person :person/id={reviewer} . 
+source		SELECT "id", "reviewer" FROM ReviewRequest
+
+mappingId	Submission_2_Paper
+target		:submission/id={id} :Submission_2_Paper :paper/id={paper} . 
+source		SELECT "id", "paper" FROM Submission
+
+mappingId	Submission_2_Paper2
+target		:crupload/id={ID} :Submission_2_Paper :paper/id={Paper} . 
+source		SELECT DISTINCT Acceptance."id" AS ID, Acceptance."paper" AS Paper FROM Acceptance 
+
+mappingId	Submission_2_Person
+target		:submission/id={id} :Submission_2_Person :person/id={user} . 
+source		SELECT "id", "user" FROM Submission
+]]
+
