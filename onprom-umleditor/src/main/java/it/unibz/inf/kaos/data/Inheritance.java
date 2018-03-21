@@ -37,7 +37,7 @@ import java.awt.geom.Path2D;
  */
 public class Inheritance extends Relationship {
     @JsonIgnore
-    private Position trianglePosition;
+    private Position trianglePosition = Position.LEFT;
 
   private static final double d30 = 0.53;// 30°
   private static final int lineSize = 25;

@@ -168,17 +168,21 @@ public class OWLImporter extends OWLUtility {
         messages.add("Multiple domains are found for for <em>" + attrName + "</em> " + domains.toString());
       }
       domains.forEach(owlClassExpression -> {
-        UMLClass domainClass = umlClasses.get(owlClassExpression.asOWLClass());
-        if (domainClass != null) {
-          OWLDataRange range = EntitySearcher.getRanges(dataProperty, ontology).stream().findFirst().orElse(null);
-          if (range != null) {
-            attr.setType(DataType.get(range.toString()));
+          if (owlClassExpression instanceof OWLClass) {
+              UMLClass domainClass = umlClasses.get(owlClassExpression.asOWLClass());
+              if (domainClass != null) {
+                  OWLDataRange range = EntitySearcher.getRanges(dataProperty, ontology).stream().findFirst().orElse(null);
+                  if (range != null) {
+                      attr.setType(DataType.get(range.toString()));
+                  } else {
+                      messages.add("No range is found for " + dataProperty + " setting its data type as String");
+                      attr.setType(DataType.STRING);
+                  }
+                  attr.setMultiplicity(Cardinality.get(existentialDataProperties.contains(dataProperty), EntitySearcher.isFunctional(dataProperty, ontology) || functionalDataProperties.contains(dataProperty)));
+                  domainClass.addAttribute(attr);
+              }
           } else {
-            messages.add("No range is found for " + dataProperty + " setting its data type as String");
-            attr.setType(DataType.STRING);
-          }
-          attr.setMultiplicity(Cardinality.get(existentialDataProperties.contains(dataProperty), EntitySearcher.isFunctional(dataProperty, ontology) || functionalDataProperties.contains(dataProperty)));
-          domainClass.addAttribute(attr);
+              messages.add("Class expression " + owlClassExpression + " is not available as OWL Class");
         }
       });
       if (domains.size() < 1) {
@@ -196,21 +200,21 @@ public class OWLImporter extends OWLUtility {
       final IRI objectPropertyIRI = objectProperty.getIRI();
 
       OWLClassExpression domainClassExpression = EntitySearcher.getDomains(objectProperty, ontology).stream().findFirst().orElse(null);
-      if (domainClassExpression != null) {
-        domainClass = umlClasses.get(domainClassExpression.asOWLClass());
+        if (domainClassExpression instanceof OWLClass) {
+            domainClass = umlClasses.get(domainClassExpression.asOWLClass());
       } else {
         domainClass = thingClass;
         thingAdded = true;
-        messages.add("No domain is found for " + objectPropertyIRI + " setting Thing as domain class");
+            messages.add("No domain is found for " + objectPropertyIRI + " setting Thing as domain class (" + domainClassExpression + ")");
       }
 
       OWLClassExpression rangeClassExpression = EntitySearcher.getRanges(objectProperty, ontology).stream().findFirst().orElse(null);
-      if (rangeClassExpression != null) {
+        if (rangeClassExpression instanceof OWLClass) {
         rangeClass = umlClasses.get(rangeClassExpression.asOWLClass());
       } else {
         rangeClass = thingClass;
         thingAdded = true;
-        messages.add("No range is found for " + objectPropertyIRI + " setting Thing as range class");
+            messages.add("No range is found for " + objectPropertyIRI + " setting Thing as range class (" + rangeClassExpression + ")");
       }
       String assocString = getAssociation(ontology, objectPropertyIRI);
       if (assocString != null) {

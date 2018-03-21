@@ -13,8 +13,8 @@ import java.util.List;
  */
 public class EditFactory {
 
-    public static UndoableEdit anchorCreated(Relationship relation, RelationAnchor anchor, boolean adding) {
-        return new AddDeleteAnchorEdit(relation, anchor, adding);
+    public static UndoableEdit anchorCreated(Relationship relation, List<RelationAnchor> anchors, boolean adding) {
+        return new AddDeleteAnchorEdit(relation, anchors, adding);
     }
 
     public static UndoableEdit classCreated(UMLDiagram panel, UMLClass umlClass, boolean adding) {

@@ -27,9 +27,8 @@
 package it.unibz.inf.kaos.data;
 
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import org.semanticweb.owlapi.vocab.XSDVocabulary;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Supported data types
@@ -38,11 +37,11 @@ import org.slf4j.LoggerFactory;
  * 11-Oct-16
  */
 public enum DataType {
-    //RDF_PLAIN_LITERAL, RDF_XML_LITERAL, RDFS_LITERAL, OWL_RATIONAL, OWL_REAL,
+    //RDF_PLAIN_LITERAL, RDF_XML_LITERAL, OWL_RATIONAL, OWL_REAL,
     //XSD_NORMALIZED_STRING, XSD_TOKEN, XSD_NAME, XSD_NCNAME, XSD_NMTOKEN,
+    BOOLEAN(XSDVocabulary.BOOLEAN),
     DECIMAL(XSDVocabulary.DECIMAL),
     INTEGER(XSDVocabulary.INTEGER),
-    BOOLEAN(XSDVocabulary.BOOLEAN),
     NON_NEGATIVE_INTEGER(XSDVocabulary.NON_NEGATIVE_INTEGER),
     STRING(XSDVocabulary.STRING),
     HEX_BINARY(XSDVocabulary.HEX_BINARY),
@@ -52,26 +51,29 @@ public enum DataType {
     TIME(XSDVocabulary.TIME),
     GYEAR(XSDVocabulary.G_YEAR),
     DATE_TIME(XSDVocabulary.DATE_TIME),
-    DATE_TIME_STAMP(XSDVocabulary.DATE_TIME_STAMP);
+    DATE_TIME_STAMP(XSDVocabulary.DATE_TIME_STAMP),
+    FLOAT(XSDVocabulary.FLOAT),
+    DOUBLE(XSDVocabulary.DOUBLE),
+    RDFS_LITERAL(OWLRDFVocabulary.RDFS_LITERAL);
 
-    private static final Logger logger = LoggerFactory.getLogger(DataType.class.getName());
+    private final IRI iri;
+    private final String prefixedName;
 
-    private final XSDVocabulary vocabulary;
+    DataType(final XSDVocabulary vocabulary) {
+        this.prefixedName = vocabulary.getPrefixedName();
+        this.iri = vocabulary.getIRI();
+    }
 
-    DataType(final XSDVocabulary _vocabulary) {
-        this.vocabulary = _vocabulary;
+    DataType(final OWLRDFVocabulary vocabulary) {
+        this.prefixedName = vocabulary.getPrefixedName();
+        this.iri = vocabulary.getIRI();
     }
 
     public static DataType get(String value) {
-        try {
-            XSDVocabulary vocabulary = XSDVocabulary.parseShortName(value);
-            for (DataType dataType : values()) {
-                if (dataType.vocabulary == vocabulary) {
-                    return dataType;
-                }
+        for (DataType dataType : values()) {
+            if (dataType.prefixedName.equalsIgnoreCase(value)) {
+                return dataType;
             }
-        } catch (IllegalArgumentException e) {
-            logger.error(e.getMessage(), e);
         }
         return STRING;
     }
@@ -82,6 +84,6 @@ public enum DataType {
     }
 
     public IRI getIRI() {
-        return vocabulary.getIRI();
+        return iri;
     }
 }

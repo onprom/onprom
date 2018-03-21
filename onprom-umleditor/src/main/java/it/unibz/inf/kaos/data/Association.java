@@ -178,7 +178,7 @@ public class Association extends Relationship {
     // arrange coordinates according size of string
     //check the angle to find correct position of label
     if (angle >= -DrawingUtility.D45 && angle < DrawingUtility.D45) {
-      x = startX - g2d.getFontMetrics().stringWidth(getFirstMultiplicityString());
+        x = startX - g2d.getFontMetrics().stringWidth(getFirstMultiplicityString()) - DrawingUtility.MARGIN;
     } else if (angle >= DrawingUtility.D45 && angle < DrawingUtility.D135) {
       y = startY - DrawingUtility.MARGIN;
     } else if (angle <= -DrawingUtility.D45 && angle > -DrawingUtility.D135) {
@@ -237,7 +237,7 @@ public class Association extends Relationship {
     } else if (angle < -DrawingUtility.D45 && angle > -DrawingUtility.D135) {
       y = startY - DrawingUtility.MARGIN;
     } else {
-      x = startX - g2d.getFontMetrics().stringWidth(getSecondMultiplicityString());
+        x = startX - g2d.getFontMetrics().stringWidth(getSecondMultiplicityString()) - DrawingUtility.MARGIN;
     }
     //return calculated position
     return new int[]{x, y};

@@ -36,6 +36,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Relationship class
@@ -49,7 +50,7 @@ public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
     private List<RelationAnchor> anchors;
 
     @JsonIgnore
-    private RelationAnchor selectedAnchor;
+    private List<RelationAnchor> selectedAnchors;
 
     public Relationship() {
     }
@@ -105,8 +106,8 @@ public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
     }
 
     public void translate(int diffX, int diffY) {
-        if (selectedAnchor != null) {
-            selectedAnchor.translate(diffX, diffY);
+        if (selectedAnchors != null && !selectedAnchors.isEmpty()) {
+            selectedAnchors.forEach(anchor -> anchor.translate(diffX, diffY));
         } else {
             if (anchors != null && !anchors.isEmpty()) {
                 anchors.forEach(anchor -> anchor.translate(diffX, diffY));
@@ -174,11 +175,11 @@ public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
             this.secondClass.addRelation(this);
     }
 
-    public RelationAnchor deleteAnchor() {
-        if (selectedAnchor != null) {
-            selectedAnchor.setState(State.NORMAL);
-            anchors.remove(selectedAnchor);
-            return selectedAnchor;
+    public List<RelationAnchor> deleteAnchor() {
+        if (selectedAnchors != null) {
+            selectedAnchors.forEach(anchor -> anchor.setState(State.NORMAL));
+            anchors.removeAll(selectedAnchors);
+            return selectedAnchors;
         }
         return null;
     }
@@ -192,10 +193,10 @@ public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
 
     public void selectAnchor(int x, int y) {
         if (anchors != null) {
-            selectedAnchor = anchors.stream().filter(anchor -> anchor.over(x, y)).findFirst().orElse(null);
+            selectedAnchors = anchors.stream().filter(anchor -> anchor.over(x, y)).collect(Collectors.toList());
             anchors.forEach(anchor -> anchor.setState(State.NORMAL));
-            if (selectedAnchor != null)
-                selectedAnchor.setState(State.SELECTED);
+            if (selectedAnchors != null && !selectedAnchors.isEmpty())
+                selectedAnchors.forEach(anchor -> anchor.setState(State.SELECTED));
         }
     }
 
@@ -208,12 +209,12 @@ public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
     }
 
     public RelationAnchor addAnchor(int x, int y) {
-        return addAnchor(new RelationAnchor(x, y));
+        return addAnchor((new RelationAnchor(x, y)));
     }
 
-    public void removeAnchor(RelationAnchor anchor) {
+    public void removeAnchor(List<RelationAnchor> anchor) {
         if (anchors != null) {
-            anchors.remove(anchor);
+            anchors.removeAll(anchor);
         }
     }
 

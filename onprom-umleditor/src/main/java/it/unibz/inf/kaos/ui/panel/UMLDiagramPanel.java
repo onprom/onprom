@@ -43,6 +43,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -112,7 +113,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         if (isControlDown && selected instanceof Relationship) {
             RelationAnchor anchor = ((Relationship) selected).addAnchor(startX, startY);
             if (anchor != null) {
-                DiagramUndoManager.addEdit(EditFactory.anchorCreated((Relationship) selected, anchor, true));
+                DiagramUndoManager.addEdit(EditFactory.anchorCreated((Relationship) selected, Arrays.asList(anchor), true));
             }
         }
     }
@@ -258,8 +259,8 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
             }
             if (selected instanceof Relationship) {
                 Relationship rel = (Relationship) selected;
-                RelationAnchor deleted = rel.deleteAnchor();
-                if (deleted == null) {
+                List<RelationAnchor> deleted = rel.deleteAnchor();
+                if (deleted == null || deleted.isEmpty()) {
                     if (rel instanceof Association) {
                         Association association = (Association) rel;
                         DiagramUndoManager.addEdit(EditFactory.relationCreated(this, association, association.getAssociationClass(), false));
