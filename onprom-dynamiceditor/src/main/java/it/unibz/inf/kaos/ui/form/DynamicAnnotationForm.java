@@ -1,15 +1,15 @@
 /*
- * onprom-annoeditor
+ * onprom-dynamiceditor
  *
- * EventForm.java
+ * DynamicAnnotationForm.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,6 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -71,14 +69,8 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
         gridBagConstraints.gridy = 0;
 
         JPanel pnlLabel = new JPanel(new FlowLayout(FlowLayout.LEADING, 1, 1));
-        chkLabel = UIUtility.createCheckBox("part of the URI");
+        chkLabel = UIUtility.createCheckBox("Label", "Check the checkbox if label is part of the URI");
         pnlLabel.add(chkLabel);
-        pnlLabel.add(UIUtility.createLabel("Label:", BTN_SIZE, new MouseAdapter() {
-            @Override
-            public void mouseClicked(final MouseEvent e) {
-                chkLabel.setSelected(!chkLabel.isSelected());
-            }
-        }));
         txtLabel = UIUtility.createTextField(TXT_SIZE);
         pnlLabel.add(txtLabel);
         add(pnlLabel, gridBagConstraints);

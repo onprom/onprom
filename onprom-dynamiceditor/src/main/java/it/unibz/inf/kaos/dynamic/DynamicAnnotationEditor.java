@@ -1,3 +1,29 @@
+/*
+ * onprom-dynamiceditor
+ *
+ * DynamicAnnotationEditor.java
+ *
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.unibz.inf.kaos.dynamic;
 
 import it.unibz.inf.kaos.annotation.AnnotationEditor;
@@ -11,6 +37,7 @@ import it.unibz.inf.kaos.interfaces.AnnotationProperties;
 import it.unibz.inf.kaos.owl.OWLImporter;
 import it.unibz.inf.kaos.owl.OWLUtility;
 import it.unibz.inf.kaos.ui.action.ToolbarAction;
+import it.unibz.inf.kaos.ui.form.AnnotationSelectionDialog;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
@@ -30,9 +57,9 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
     private static final Logger logger = LoggerFactory.getLogger(DynamicAnnotationEditor.class.getName());
     private static final Map<String, UMLClass> annotations = new HashMap<>();
 
-    public DynamicAnnotationEditor(OWLOntology eventOntology, OWLOntology _ontology, AnnotationEditorListener _listener) {
-        super(_ontology, _listener, getAnnotationFactory());
-        loadEventOntology(eventOntology);
+    public DynamicAnnotationEditor(OWLOntology upperOntology, OWLOntology domainOntology, AnnotationEditorListener _listener) {
+        super(domainOntology, _listener, getAnnotationFactory());
+        loadAnnotationTypes(upperOntology);
     }
 
     private static AnnotationFactory getAnnotationFactory() {
@@ -82,31 +109,31 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
         };
     }
 
-    private void loadEventOntology(OWLOntology eventOntology) {
+    private void loadAnnotationTypes(OWLOntology upperOntology) {
         annotations.clear();
-        if (eventOntology == null) {
-            eventOntology = OWLUtility.loadOntologyFromStream(DynamicAnnotationEditor.class.getResourceAsStream("/default-eo.owl"));
+        if (upperOntology == null) {
+            upperOntology = OWLUtility.loadOntologyFromStream(DynamicAnnotationEditor.class.getResourceAsStream("/default-eo.owl"));
         }
-        OWLImporter.getShapes(eventOntology).stream().filter(UMLClass.class::isInstance).map(UMLClass.class::cast).forEach(
+        new AnnotationSelectionDialog(OWLImporter.getShapes(upperOntology).stream().filter(UMLClass.class::isInstance).map(UMLClass.class::cast)).getSelectedClasses().forEach(
                 umlClass -> annotations.put(umlClass.getName(), umlClass)
         );
         initUI();
-        setTitle("Annotation Editor for " + eventOntology.toString());
+        setTitle("Annotation Editor for " + upperOntology.toString());
     }
 
     @Override
     protected JToolBar createToolbar() {
         JToolBar toolBar = super.createToolbar();
         toolBar.add(UIUtility.createToolbarButton(loadXESOntology()), 3);
-        toolBar.add(UIUtility.createToolbarButton(selectCustomEventOntology()), 4);
+        toolBar.add(UIUtility.createToolbarButton(selectCustomUpperOntology()), 4);
         return toolBar;
     }
 
-    private ToolbarAction selectCustomEventOntology() {
+    private ToolbarAction selectCustomUpperOntology() {
         return new ToolbarAction(new AbstractActionType() {
             @Override
             public String getTooltip() {
-                return "Select Custom Event Ontology";
+                return "Select Custom Upper Ontology";
             }
 
             @Override
@@ -116,7 +143,7 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
         }) {
             @Override
             public void execute() {
-                UIUtility.selectFileToOpen(FileType.ONTOLOGY).ifPresent(file -> loadEventOntology(OWLUtility.loadOntologyFromFile(file)));
+                UIUtility.selectFileToOpen(FileType.ONTOLOGY).ifPresent(file -> loadAnnotationTypes(OWLUtility.loadOntologyFromFile(file)));
             }
         };
     }
@@ -135,7 +162,7 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
         }) {
             @Override
             public void execute() {
-                loadEventOntology(null);
+                loadAnnotationTypes(null);
             }
         };
     }

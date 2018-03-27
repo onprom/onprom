@@ -3,13 +3,13 @@
  *
  * UIUtility.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -215,8 +215,20 @@ public class UIUtility {
     }
 
     public static JCheckBox createCheckBox(String text, String tooltip) {
+        return createCheckBox(text, tooltip, false, null);
+    }
+
+    public static JCheckBox createCheckBox(String text, String tooltip, boolean selected) {
+        return createCheckBox(text, tooltip, selected, null);
+    }
+
+    public static JCheckBox createCheckBox(String text, String tooltip, boolean selected, ItemListener listener) {
         JCheckBox checkBox = new JCheckBox(text);
-        checkBox.setToolTipText(tooltip);
+        checkBox.setToolTipText(String.format(HTML_STRING, tooltip));
+        checkBox.setSelected(selected);
+        if (listener != null) {
+            checkBox.addItemListener(listener);
+        }
         return checkBox;
     }
 
