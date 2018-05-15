@@ -55,7 +55,7 @@ import java.util.Set;
  * @author T. E. Kalayci
  */
 public class UMLEditor extends JInternalFrame implements DiagramEditor {
-  protected JProgressBar progressBar;
+  protected JProgressBar progressBar = new JProgressBar();
   protected UMLDiagramPanel diagramPanel;
   protected OWLOntology ontology;
   protected File loadedFile;
@@ -84,11 +84,11 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     new UMLEditor(null, null).display();
   }
 
-  protected JToolBar getMainToolbar(UMLDiagramPanel panel) {
+  protected JToolBar createMainToolbar() {
     JToolBar toolBar = new JToolBar("mainToolBar", JToolBar.VERTICAL);
-    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.select, panel)));
-    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.objects, panel)));
-    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.delete, panel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.select, this, diagramPanel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.objects, this, diagramPanel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.delete, this, diagramPanel)));
     return toolBar;
   }
 
@@ -102,6 +102,10 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
 
   public void setProgressBar(JProgressBar _bar) {
     progressBar = _bar;
+  }
+
+  public JProgressBar getProgressBar() {
+    return progressBar;
   }
 
   public void load(String _identifier, Set<DiagramShape> shapes) {
@@ -124,9 +128,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     final JFrame frame = new JFrame();
     frame.getContentPane().setLayout(new BorderLayout());
     frame.getContentPane().add(this, BorderLayout.CENTER);
-    JProgressBar pgBar = new JProgressBar();
-    setProgressBar(pgBar);
-    frame.getContentPane().add(pgBar, BorderLayout.SOUTH);
+    frame.getContentPane().add(progressBar, BorderLayout.SOUTH);
     frame.setDefaultCloseOperation(howToClose);
     frame.pack();
     frame.setVisible(true);
@@ -135,7 +137,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
 
   protected void initUI() {
     this.getContentPane().removeAll();
-    this.setJMenuBar(getMenuBar(diagramPanel));
+    this.setJMenuBar(createMenuBar());
     this.getContentPane().setLayout(new BorderLayout());
     this.getContentPane().add(createToolbar(), BorderLayout.WEST);
     scrollPane = new JScrollPane(diagramPanel);
@@ -224,7 +226,6 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
           listener.store(identifier, FileType.UML, diagramPanel.getShapes(true));
         }
       }
-
       return null;
     }, progressBar);
   }
@@ -256,43 +257,43 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
 
   protected JToolBar createToolbar() {
     //Get default toolbar
-    JToolBar toolBar = getMainToolbar(diagramPanel);
+    JToolBar toolBar = createMainToolbar();
     //add additional buttons for this editor
-    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.umlclass, diagramPanel)));
-    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.association, diagramPanel)));
-    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.isarelation, diagramPanel)));
-    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.relation, diagramPanel)));
-    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.disjoint, diagramPanel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.umlclass, this, diagramPanel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.association, this, diagramPanel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.isarelation, this, diagramPanel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.relation, this, diagramPanel)));
+    toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.disjoint, this, diagramPanel)));
     return toolBar;
   }
 
-  private JMenuBar getMenuBar(UMLDiagramPanel panel) {
+  private JMenuBar createMenuBar() {
     JMenuBar menuBar = new JMenuBar();
     JMenu mnFile = new JMenu("File");
     mnFile.setMnemonic('f');
-    mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.newdiagram, panel)));
+    mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.newdiagram, this, diagramPanel)));
     mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.open, this)));
     mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.save, this)));
     mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.saveas, this)));
     mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.export, this)));
-    mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.image, panel)));
-    mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.print, panel)));
+    mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.image, this, diagramPanel)));
+    mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.print, this, diagramPanel)));
     mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.close, this)));
     menuBar.add(mnFile);
 
     JMenu mnEdit = new JMenu("Edit");
     mnEdit.setMnemonic('e');
-    mnEdit.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.undo, panel)));
-    mnEdit.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.redo, panel)));
+    mnEdit.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.undo, this, diagramPanel)));
+    mnEdit.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.redo, this, diagramPanel)));
     menuBar.add(mnEdit);
 
     JMenu mnDiagram = new JMenu("Diagram");
     mnDiagram.setMnemonic('d');
-    mnDiagram.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.layout, panel)));
-    mnDiagram.add(UIUtility.createMenuItem(new ZoomAction(panel, UMLDiagramActions.zoomin)));
-    mnDiagram.add(UIUtility.createMenuItem(new ZoomAction(panel, UMLDiagramActions.zoomout)));
-    mnDiagram.add(UIUtility.createMenuItem(new ZoomAction(panel, UMLDiagramActions.resetzoom)));
-    mnDiagram.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.grid, panel)));
+    mnDiagram.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.layout, this, diagramPanel)));
+    mnDiagram.add(UIUtility.createMenuItem(new ZoomAction(diagramPanel, UMLDiagramActions.zoomin)));
+    mnDiagram.add(UIUtility.createMenuItem(new ZoomAction(diagramPanel, UMLDiagramActions.zoomout)));
+    mnDiagram.add(UIUtility.createMenuItem(new ZoomAction(diagramPanel, UMLDiagramActions.resetzoom)));
+    mnDiagram.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.grid, this, diagramPanel)));
     menuBar.add(mnDiagram);
     return menuBar;
   }

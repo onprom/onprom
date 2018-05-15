@@ -1,15 +1,15 @@
 /*
  * onprom-umleditor
  *
- * DrawingPanelAction.java
+ * DiagramPanelAction.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,8 @@ import it.unibz.inf.kaos.interfaces.ActionType;
 import it.unibz.inf.kaos.ui.panel.UMLDiagramPanel;
 import it.unibz.inf.kaos.ui.utility.DiagramUndoManager;
 import it.unibz.inf.kaos.ui.utility.DrawingUtility;
+import it.unibz.inf.kaos.ui.utility.UIUtility;
+import it.unibz.inf.kaos.uml.UMLEditor;
 
 /**
  * Default drawing action class to transfer action to the drawing panel
@@ -39,11 +41,13 @@ import it.unibz.inf.kaos.ui.utility.DrawingUtility;
  * Date: 27-Oct-16
  */
 public class DiagramPanelAction extends ToolbarAction {
+    private final UMLEditor diagramEditor;
     private final UMLDiagramPanel diagramPanel;
 
-    public DiagramPanelAction(ActionType _action, UMLDiagramPanel _panel) {
+    public DiagramPanelAction(ActionType _action, UMLEditor _editor, UMLDiagramPanel _diagramPanel) {
         super(_action);
-        diagramPanel = _panel;
+        diagramEditor = _editor;
+        diagramPanel = _diagramPanel;
   }
 
   public void execute() {
@@ -57,7 +61,7 @@ public class DiagramPanelAction extends ToolbarAction {
       diagramPanel.displayObjectList();
       } else if (actionType.equals(UMLDiagramActions.layout)) {
           DrawingUtility.relayout(diagramPanel.getClasses()::iterator, diagramPanel.getGraphics());
-        diagramPanel.repaint();
+          diagramPanel.repaint();
       } else if (actionType.equals(UMLDiagramActions.undo)) {
         DiagramUndoManager.undo();
         diagramPanel.repaint();
@@ -65,10 +69,16 @@ public class DiagramPanelAction extends ToolbarAction {
         DiagramUndoManager.redo();
         diagramPanel.repaint();
       } else if (actionType.equals(UMLDiagramActions.image)) {
-        DrawingUtility.exportImage(diagramPanel);
+          UIUtility.executeInBackground(() -> {
+              DrawingUtility.exportImage(diagramPanel);
+              return null;
+          }, diagramEditor.getProgressBar());
       } else if (actionType.equals(UMLDiagramActions.print)) {
-        DrawingUtility.print(diagramPanel);
-    }
+          UIUtility.executeInBackground(() -> {
+              DrawingUtility.print(diagramPanel);
+              return null;
+          }, diagramEditor.getProgressBar());
+      }
     diagramPanel.setCurrentAction(actionType);
   }
 }

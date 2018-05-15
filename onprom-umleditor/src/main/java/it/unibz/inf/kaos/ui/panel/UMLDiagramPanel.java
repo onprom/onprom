@@ -43,10 +43,11 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
+
+import static java.util.Collections.singletonList;
 
 /**
  * Operations related with visualisation of the UML diagram
@@ -113,7 +114,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         if (isControlDown && selected instanceof Relationship) {
             RelationAnchor anchor = ((Relationship) selected).addAnchor(startX, startY);
             if (anchor != null) {
-                DiagramUndoManager.addEdit(EditFactory.anchorCreated((Relationship) selected, Arrays.asList(anchor), true));
+                DiagramUndoManager.addEdit(EditFactory.anchorCreated((Relationship) selected, singletonList(anchor), true));
             }
         }
     }
@@ -321,6 +322,8 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         if (logoStatus) {
             logoVisible = !logoVisible;
         }
+        // remove selected shapes
+        shapes.clearSelection();
         //translate to find drawing area
         g2d.translate(-x, -y);
         //paint diagram to the graphics object
@@ -382,8 +385,30 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         diagramEditor.loadForm(new ObjectList(this));
     }
 
-    public Set<DiagramShape> getShapesAndAnchors() {
+    private Set<DiagramShape> getShapesToDraw() {
+        if (shapes.isShapeSelected())
+            return shapes.getSelectedShapes();
         return shapes.getShapesAndAnchors();
+    }
+
+    public Rectangle getDrawingArea() {
+        int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
+        int maxX = 0, maxY = 0;
+        for (DiagramShape shape : getShapesToDraw()) {
+            if (shape.getStartX() < minX) {
+                minX = shape.getStartX();
+            }
+            if (shape.getStartY() < minY) {
+                minY = shape.getStartY();
+            }
+            if (shape.getEndX() > maxX) {
+                maxX = shape.getEndX();
+            }
+            if (shape.getEndY() > maxY) {
+                maxY = shape.getEndY();
+            }
+        }
+        return new Rectangle(minX, minY, maxX - minX, maxY - minY);
     }
 
     @Override
@@ -473,7 +498,6 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
                 repaint();
             }
         }
-
 
         @Override
         public void mouseMoved(MouseEvent e) {

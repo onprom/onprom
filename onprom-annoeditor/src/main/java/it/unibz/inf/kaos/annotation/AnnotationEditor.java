@@ -3,7 +3,7 @@
  *
  * AnnotationEditor.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -148,7 +148,7 @@ public class AnnotationEditor extends UMLEditor {
 
     @Override
     protected JToolBar createToolbar() {
-        JToolBar toolBar = getMainToolbar(diagramPanel);
+        JToolBar toolBar = createMainToolbar();
         getAnnotationProperties().forEach(annotationProperties -> toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(new AbstractActionType() {
             @Override
             public char getMnemonic() {
@@ -164,7 +164,7 @@ public class AnnotationEditor extends UMLEditor {
             public String getTitle() {
                 return annotationProperties.title();
             }
-        }, diagramPanel))));
+        }, this, diagramPanel))));
         return toolBar;
     }
 

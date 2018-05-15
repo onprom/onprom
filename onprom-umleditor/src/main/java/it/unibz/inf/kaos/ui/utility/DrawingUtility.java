@@ -29,7 +29,6 @@ package it.unibz.inf.kaos.ui.utility;
 import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.data.State;
 import it.unibz.inf.kaos.data.UMLClass;
-import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.panel.UMLDiagramPanel;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
@@ -48,7 +47,6 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.*;
-import java.util.Collection;
 
 /**
  * Created by T. E. Kalayci on 17-Nov-2017.
@@ -161,44 +159,22 @@ public class DrawingUtility {
         return svgGenerator;
     }
 
-    private static Rectangle getDrawingArea(Collection<DiagramShape> shapes) {
-        int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
-        int maxX = 0, maxY = 0;
-        for (DiagramShape shape : shapes) {
-            if (shape.getStartX() < minX) {
-                minX = shape.getStartX();
-            }
-            if (shape.getStartY() < minY) {
-                minY = shape.getStartY();
-            }
-            if (shape.getEndX() > maxX) {
-                maxX = shape.getEndX();
-            }
-            if (shape.getEndY() > maxY) {
-                maxY = shape.getEndY();
-            }
-        }
-        return new Rectangle(minX - DrawingUtility.MARGIN, minY - DrawingUtility.MARGIN,
-                maxX - minX + 2 * DrawingUtility.MARGIN, maxY - minY + 2 * DrawingUtility.MARGIN);
-    }
-
     public static void exportImage(UMLDiagramPanel diagramPanel) {
         if (!diagramPanel.isEmpty()) {
             UIUtility.selectFileToSave(FileType.IMAGE).ifPresent(selectedFile -> {
                 try {
                     String extension = IOUtility.getFileExtension(selectedFile);
-                    Rectangle drawingArea = getDrawingArea(diagramPanel.getShapesAndAnchors());
+                    Rectangle drawingArea = diagramPanel.getDrawingArea();
                     switch (extension) {
                         case "pdf": {
                             SVGGraphics2D svgGenerator = getSVGGraphics(drawingArea.getSize());
                             diagramPanel.paintDiagram(svgGenerator, drawingArea.x, drawingArea.y);
-                            File tempFile = File.createTempFile("svg-to-pdf", ".tmp");
-                            svgGenerator.stream(new FileWriter(tempFile));
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                            svgGenerator.stream(new PrintWriter(bos));
                             new PDFTranscoder().transcode(
-                                    new TranscoderInput(new FileInputStream(tempFile)),
+                                    new TranscoderInput(new ByteArrayInputStream(bos.toByteArray())),
                                     new TranscoderOutput(new FileOutputStream(selectedFile))
                             );
-                            tempFile.delete();
                             svgGenerator.dispose();
                             break;
                         }
@@ -210,10 +186,10 @@ public class DrawingUtility {
                             break;
                         }
                         default:
-                            BufferedImage bi = new BufferedImage(drawingArea.width, drawingArea.height, BufferedImage.TYPE_INT_RGB);
-                            Graphics g = bi.createGraphics();
+                            BufferedImage bufferedImage = new BufferedImage(drawingArea.width, drawingArea.height, BufferedImage.TYPE_INT_RGB);
+                            Graphics g = bufferedImage.createGraphics();
                             diagramPanel.paintDiagram(g, drawingArea.x, drawingArea.y);
-                            ImageIO.write(bi, extension, selectedFile);
+                            ImageIO.write(bufferedImage, extension, selectedFile);
                             g.dispose();
                             break;
                     }
@@ -234,7 +210,7 @@ public class DrawingUtility {
                 return Printable.NO_SUCH_PAGE;
             }
             // get the bounds of the component
-            Rectangle drawingArea = getDrawingArea(diagramPanel.getShapesAndAnchors());
+            Rectangle drawingArea = diagramPanel.getDrawingArea();
             double cHeight = drawingArea.getSize().getHeight();
             double cWidth = drawingArea.getSize().getWidth();
             // get the bounds of the printable area
@@ -269,6 +245,4 @@ public class DrawingUtility {
             return new Font(Font.DIALOG, style, size.intValue());
         }
     }
-
-
 }

@@ -46,4 +46,10 @@
         <appender-ref ref="stdout"/>
     </logger>
 
+    <logger name="org.apache.xmlgraphics">
+        <level value="error"/>
+        <appender-ref ref="logfile"/>
+        <appender-ref ref="stdout"/>
+    </logger>
+
 </configuration>

@@ -116,7 +116,7 @@ public class Shapes implements Iterable<DiagramShape> {
     }
 
     public boolean isEmpty() {
-        return shapes.size() == 0;
+        return shapes.isEmpty();
     }
 
     public int size() {
