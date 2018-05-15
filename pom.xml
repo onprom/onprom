@@ -3,13 +3,13 @@
   ~
   ~ pom.xml
   ~
-  ~ Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+  ~ Copyright (C) 2016-2018 Free University of Bozen-Bolzano
   ~
   ~ This product includes software developed under
-  ~  KAOS: Knowledge-Aware Operational Support project
-  ~  (https://kaos.inf.unibz.it).
+  ~ KAOS: Knowledge-Aware Operational Support project
+  ~ (https://kaos.inf.unibz.it).
   ~
-  ~  Please visit https://onprom.inf.unibz.it for more information.
+  ~ Please visit https://onprom.inf.unibz.it for more information.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@
         <maven.compiler.version>3.7.0</maven.compiler.version>
         <maven.assembly.version>3.1.0</maven.assembly.version>
         <owlapi.version>4.2.5</owlapi.version>
-        <jackson.version>2.9.4</jackson.version>
+        <jackson.version>2.9.5</jackson.version>
         <local.repository>file://${basedir}/../onprom-maven</local.repository>
     </properties>
     <modules>
@@ -96,7 +96,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>24.1-jre</version>
+            <version>25.0-jre</version>
         </dependency>
     </dependencies>
 </project>

@@ -3,13 +3,13 @@
  *
  * UMLEditor.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,8 +128,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     setProgressBar(pgBar);
     frame.getContentPane().add(pgBar, BorderLayout.SOUTH);
     frame.setDefaultCloseOperation(howToClose);
-    frame.setSize(this.getSize());
-    frame.setLocationRelativeTo(null);
+    frame.pack();
     frame.setVisible(true);
     return frame;
   }
@@ -143,7 +142,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     scrollPane.getVerticalScrollBar().setUnitIncrement(16);
     splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, null);
     this.getContentPane().add(splitPane, BorderLayout.CENTER);
-    this.setSize(new Dimension(1024, 768));
+    this.pack();
     this.setVisible(true);
       diagramPanel.clear(true);
   }

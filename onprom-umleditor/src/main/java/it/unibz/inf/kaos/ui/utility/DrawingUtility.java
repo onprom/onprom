@@ -1,3 +1,29 @@
+/*
+ * onprom-umleditor
+ *
+ * DrawingUtility.java
+ *
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.unibz.inf.kaos.ui.utility;
 
 import it.unibz.inf.kaos.data.FileType;
@@ -7,6 +33,9 @@ import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.panel.UMLDiagramPanel;
 import org.apache.batik.dom.GenericDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.fop.svg.PDFTranscoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +47,7 @@ import java.awt.image.BufferedImage;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Collection;
 
 /**
@@ -150,31 +178,53 @@ public class DrawingUtility {
                 maxY = shape.getEndY();
             }
         }
-        return new Rectangle(minX - DrawingUtility.MARGIN, minY - DrawingUtility.MARGIN, maxX - minX + 2 * DrawingUtility.MARGIN, maxY - minY + 2 * DrawingUtility.MARGIN);
+        return new Rectangle(minX - DrawingUtility.MARGIN, minY - DrawingUtility.MARGIN,
+                maxX - minX + 2 * DrawingUtility.MARGIN, maxY - minY + 2 * DrawingUtility.MARGIN);
     }
 
     public static void exportImage(UMLDiagramPanel diagramPanel) {
-        UIUtility.selectFileToSave(FileType.IMAGE).ifPresent(selectedFile -> {
-            try {
-                String extension = IOUtility.getFileExtension(selectedFile);
-                Rectangle drawingArea = getDrawingArea(diagramPanel.getShapesAndAnchors());
-                if (extension.equals("svg")) {
-                    SVGGraphics2D svgGenerator = getSVGGraphics(drawingArea.getSize());
-                    diagramPanel.paintDiagram(svgGenerator, drawingArea.x, drawingArea.y);
-                    svgGenerator.stream(new FileWriter(selectedFile));
-                    svgGenerator.dispose();
-                } else {
-                    BufferedImage bi = new BufferedImage(drawingArea.width, drawingArea.height, BufferedImage.TYPE_INT_RGB);
-                    Graphics g = bi.createGraphics();
-                    diagramPanel.paintDiagram(g, drawingArea.x, drawingArea.y);
-                    ImageIO.write(bi, extension, selectedFile);
-                    g.dispose();
+        if (!diagramPanel.isEmpty()) {
+            UIUtility.selectFileToSave(FileType.IMAGE).ifPresent(selectedFile -> {
+                try {
+                    String extension = IOUtility.getFileExtension(selectedFile);
+                    Rectangle drawingArea = getDrawingArea(diagramPanel.getShapesAndAnchors());
+                    switch (extension) {
+                        case "pdf": {
+                            SVGGraphics2D svgGenerator = getSVGGraphics(drawingArea.getSize());
+                            diagramPanel.paintDiagram(svgGenerator, drawingArea.x, drawingArea.y);
+                            File tempFile = File.createTempFile("svg-to-pdf", ".tmp");
+                            svgGenerator.stream(new FileWriter(tempFile));
+                            new PDFTranscoder().transcode(
+                                    new TranscoderInput(new FileInputStream(tempFile)),
+                                    new TranscoderOutput(new FileOutputStream(selectedFile))
+                            );
+                            tempFile.delete();
+                            svgGenerator.dispose();
+                            break;
+                        }
+                        case "svg": {
+                            SVGGraphics2D svgGenerator = getSVGGraphics(drawingArea.getSize());
+                            diagramPanel.paintDiagram(svgGenerator, drawingArea.x, drawingArea.y);
+                            svgGenerator.stream(new FileWriter(selectedFile));
+                            svgGenerator.dispose();
+                            break;
+                        }
+                        default:
+                            BufferedImage bi = new BufferedImage(drawingArea.width, drawingArea.height, BufferedImage.TYPE_INT_RGB);
+                            Graphics g = bi.createGraphics();
+                            diagramPanel.paintDiagram(g, drawingArea.x, drawingArea.y);
+                            ImageIO.write(bi, extension, selectedFile);
+                            g.dispose();
+                            break;
+                    }
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                    UIUtility.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                UIUtility.error(e.getMessage());
-            }
-        });
+            });
+        } else {
+            UIUtility.warning("Diagram is empty!");
+        }
     }
 
     public static void print(UMLDiagramPanel diagramPanel) {

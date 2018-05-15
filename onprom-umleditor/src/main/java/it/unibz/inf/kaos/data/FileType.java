@@ -3,13 +3,13 @@
  *
  * FileType.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,9 +41,9 @@ public enum FileType {
     MAPPING("Ontop Mappings (*.obda)", "obda"),
     QUERIES("Annotation Queries (*.aqr)", "aqr"),
     JSON("JSON files (*.json)", "json"),
-    IMAGE("Supported Image Files (*.png, *.jpg, *.jpeg, *.gif, *.svg)", "png", "jpg", "jpeg", "gif", "svg"),
+    IMAGE("Supported Image Files (*.png, *.jpg, *.jpeg, *.gif, *.svg)", "png", "jpg", "jpeg", "gif", "svg", "pdf"),
     XLOG("XES Log File (*.xes)", "xes"),
-    OTHER("Nonsupported Files");
+    OTHER("Unsupported Files");
 
     private final String[] extensions;
     private final String description;

@@ -163,6 +163,14 @@ public class UIUtility {
         JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), title, JOptionPane.ERROR_MESSAGE);
     }
 
+    public static void warning(String message) {
+        warning(message, "Warning");
+    }
+
+    public static void warning(String message, String title) {
+        JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), title, JOptionPane.WARNING_MESSAGE);
+    }
+
     public static <E> WidePopupComboBox<E> createWideComboBox(Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
         return createWideComboBox(Collections.emptyList(), dimension, listener, editable, withEmpty);
     }
