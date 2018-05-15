@@ -31,6 +31,7 @@ import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.form.AbstractAnnotationForm;
 import it.unibz.inf.kaos.ui.form.DynamicAnnotationForm;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorButtons;
+import it.unibz.inf.kaos.ui.utility.AnnotationEditorLabels;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
 import javax.swing.*;
@@ -44,6 +45,7 @@ public class DynamicAttributePanel extends JPanel {
     private final DynamicAnnotationForm form;
     private final JComboBox<DynamicAttribute> cmbAttributes;
     private final JComboBox<Set<DiagramShape>> cmbPath;
+    private final JTextField txtFilter;
     private final JCheckBox chkIndex;
 
     public DynamicAttributePanel(DynamicAnnotationForm _form, Attribute attribute) {
@@ -58,6 +60,9 @@ public class DynamicAttributePanel extends JPanel {
 
         cmbPath = UIUtility.createWideComboBox(AbstractAnnotationForm.TXT_SIZE, null, false, true);
         add(cmbPath);
+
+        txtFilter = UIUtility.createTextField(AnnotationEditorLabels.FILTER.getTooltip(), AbstractAnnotationForm.TXT_SIZE);
+        add(txtFilter);
 
         JButton btnTraceAdd = UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> form.startNavigation(new UpdateListener() {
             @Override
@@ -80,6 +85,11 @@ public class DynamicAttributePanel extends JPanel {
                 navigationalAttribute = (DynamicNavigationalAttribute) attributeValue;
                 if (cmbPath.getSelectedIndex() > -1) {
                     navigationalAttribute.setPath(cmbPath.getItemAt(cmbPath.getSelectedIndex()));
+                }
+                if (!txtFilter.getText().isEmpty()) {
+                    //TODO shall we support all filter expressions or only string matching like below?
+                    // "regex(str(%1),\"" + txtFilter.getText() + "\",\"i\")"
+                    navigationalAttribute.getAttribute().setFilterClause(txtFilter.getText());
                 }
             } else {
                 navigationalAttribute = new DynamicNavigationalAttribute(attributeValue.toString());

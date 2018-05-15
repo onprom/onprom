@@ -45,11 +45,10 @@ public class AnnotationSelectionDialog extends JDialog {
         setModal(true);
         setTitle("Select concepts to use as an annotation type");
         setLayout(new BorderLayout());
-        setSize(400, 400);
-        setLocationRelativeTo(null);
 
         JPanel pnlConcepts = new JPanel(null);
         pnlConcepts.setLayout(new BoxLayout(pnlConcepts, BoxLayout.Y_AXIS));
+        pnlConcepts.setPreferredSize(new Dimension(500, 250));
 
         classStream.forEach(umlClass -> {
             pnlConcepts.add(UIUtility.createCheckBox(umlClass.getLongName(), "Use <u>" + umlClass.getName() + "</u> as an annotation type", true, e -> {
@@ -82,6 +81,8 @@ public class AnnotationSelectionDialog extends JDialog {
         }, AbstractAnnotationForm.BTN_SIZE));
 
         add(pnlButtons, BorderLayout.SOUTH);
+        pack();
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
