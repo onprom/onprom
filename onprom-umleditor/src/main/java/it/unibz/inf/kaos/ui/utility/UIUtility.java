@@ -128,10 +128,7 @@ public class UIUtility {
     }
 
     public static String strToHexColor(String str) {
-        Integer i = str.hashCode();
-        return Integer.toHexString(((i >> 16) & 0xFF)) +
-                Integer.toHexString(((i >> 8) & 0xFF)) +
-                Integer.toHexString(((i >> 4) & 0xFF));
+        return String.format("#%06X", (0xFFFFFF & str.hashCode()));
     }
 
     public static void stopWorkers() {

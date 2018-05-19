@@ -3,13 +3,13 @@
  *
  * OntologyEditorPlugin.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ public class OntologyEditorPlugin implements UMLEditorListener {
     )
     @PluginVariant(requiredParameterLabels = {})
     public void displayEditor(final UIPluginContext _context) {
-        loadUMLEditor(_context, null);
+        loadEditor(_context, null);
     }
 
     @UITopiaVariant(
@@ -67,7 +67,7 @@ public class OntologyEditorPlugin implements UMLEditorListener {
     )
     @PluginVariant(requiredParameterLabels = {0})
     public void displayEditor(final UIPluginContext _context, OWLOntology ontology) {
-        loadUMLEditor(_context, ontology);
+        loadEditor(_context, ontology);
     }
 
     public void store(String name, OWLOntology ontology) {
@@ -79,7 +79,7 @@ public class OntologyEditorPlugin implements UMLEditorListener {
         }
     }
 
-    private void loadUMLEditor(final UIPluginContext _context, OWLOntology ontology) {
+    private void loadEditor(final UIPluginContext _context, OWLOntology ontology) {
         //set context to use with listener method
         context = _context;
         context.getProgress().setIndeterminate(true);

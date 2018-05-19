@@ -84,7 +84,7 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
         return new AnnotationProperties() {
             @Override
             public String color() {
-                return '#' + UIUtility.strToHexColor(annotationClass.getName());
+                return UIUtility.strToHexColor(annotationClass.getName());
             }
 
             @Override
