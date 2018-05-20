@@ -3,13 +3,13 @@
  *
  * UMLDiagram.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,8 @@ public interface UMLDiagram extends Diagram {
     void addRelation(Relationship relationship);
     void removeClass(UMLClass cls);
     void removeRelation(Relationship relationship);
+
+    boolean removeShape(DiagramShape shape);
 
     Stream<Association> getAssociations();
 

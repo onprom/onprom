@@ -40,7 +40,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.print.Printable;
@@ -116,17 +115,14 @@ public class DrawingUtility {
         g2d.setColor(oldColor);
     }
 
-    public static void drawLogo(Graphics2D g2d, JViewport viewport) {
-        if (viewport != null) {
-            Rectangle viewportRectangle = viewport.getViewRect();
-            BufferedImage logo = getLogo();
-            if (logo != null) {
-                Composite oldComposite = g2d.getComposite();
-                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.05f));
-                g2d.drawImage(logo, (int) viewportRectangle.getX() + 150, (int)
-                        viewportRectangle.getY() + 300, logo.getWidth(), logo.getHeight(), null);
-                g2d.setComposite(oldComposite);
-            }
+    public static void drawLogo(Graphics2D g2d, Rectangle viewportRectangle) {
+        BufferedImage logo = getLogo();
+        if (logo != null) {
+            Composite oldComposite = g2d.getComposite();
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.05f));
+            g2d.drawImage(logo, (int) viewportRectangle.getX() + 100, (int)
+                    viewportRectangle.getY() + 100, logo.getWidth(), logo.getHeight(), null);
+            g2d.setComposite(oldComposite);
         }
     }
 

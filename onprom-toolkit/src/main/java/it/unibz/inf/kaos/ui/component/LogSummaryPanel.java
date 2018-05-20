@@ -34,8 +34,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,7 +45,6 @@ import java.awt.*;
  * @author T. E. Kalayci on 04-Jul-2017
  */
 public class LogSummaryPanel extends JInternalFrame {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LogSummaryPanel.class.getSimpleName());
     private static final Dimension TXT_SIZE = new Dimension(375, 25);
     private final XLogInfo info;
     private static final Dimension CHART_SIZE = new Dimension(800, 300);

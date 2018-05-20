@@ -3,13 +3,13 @@
  *
  * Relationship.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -191,7 +191,7 @@ public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
         return anchors.size();
     }
 
-    public void selectAnchor(int x, int y) {
+    void selectAnchor(int x, int y) {
         if (anchors != null) {
             selectedAnchors = anchors.stream().filter(anchor -> anchor.over(x, y)).collect(Collectors.toList());
             anchors.forEach(anchor -> anchor.setState(State.NORMAL));
@@ -218,7 +218,7 @@ public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
         }
     }
 
-    public RelationAnchor addAnchor(RelationAnchor anchor) {
+    private RelationAnchor addAnchor(RelationAnchor anchor) {
         if (anchors == null) {
             anchors = Lists.newArrayList();
         }
@@ -235,7 +235,7 @@ public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
         }
     }
 
-    public List<RelationAnchor> getAnchors() {
+    List<RelationAnchor> getAnchors() {
         return anchors;
     }
 

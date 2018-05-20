@@ -3,13 +3,13 @@
  *
  * UMLEditorLabels.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,20 +35,20 @@ import it.unibz.inf.kaos.ui.interfaces.Labels;
  * Date: 16-Feb-17
  */
 public enum UMLEditorLabels implements Labels {
-    CLASS_NAME("Class Name", "Please enter name of the class", false),
-    RELATION_NAME("Name", "Please enter name of the relation", false),
-    FROM_TO("From → To", "Please select classes for the relation", false),
-    CARDINALITY("Cardinalities", "Please select cardinalities of the relation", false),
-    RELATION("Association", "Please select relation", false),;
+    CLASS_NAME("Class Name", "Please enter name of the class"),
+    RELATION_NAME("Name", "Please enter name of the relation"),
+    FROM_TO("From → To", "Please select classes for the relation"),
+    CARDINALITY("Cardinalities", "Please select cardinalities of the relation"),
+    RELATION("Association", "Please select relation"),;
 
     private final String label;
     private final String tooltip;
     private final boolean clickable;
 
-    UMLEditorLabels(String _label, String _tooltip, boolean _clickable) {
+    UMLEditorLabels(String _label, String _tooltip) {
         this.label = _label;
         this.tooltip = _tooltip;
-        this.clickable = _clickable;
+        this.clickable = false;
     }
 
     @Override

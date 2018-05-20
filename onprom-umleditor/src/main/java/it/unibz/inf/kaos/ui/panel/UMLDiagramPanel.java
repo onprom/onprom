@@ -32,7 +32,6 @@ import it.unibz.inf.kaos.interfaces.ActionType;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.interfaces.UMLDiagram;
 import it.unibz.inf.kaos.ui.edit.EditFactory;
-import it.unibz.inf.kaos.ui.form.ObjectList;
 import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
 import it.unibz.inf.kaos.ui.utility.*;
 import org.slf4j.Logger;
@@ -55,7 +54,7 @@ import static java.util.Collections.singletonList;
  * @author T. E. Kalayci
  */
 public class UMLDiagramPanel extends JPanel implements UMLDiagram {
-    private static final Logger logger = LoggerFactory.getLogger(UMLDiagramPanel.class.getSimpleName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(UMLDiagramPanel.class.getSimpleName());
     final DiagramEditor diagramEditor;
     private final List<RelationAnchor> tempAnchors = Lists.newArrayList();
     private final boolean isOpenGLEnabled;
@@ -71,7 +70,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         diagramEditor = _editorLoader;
         isOpenGLEnabled = Boolean.parseBoolean(System.getProperty("sun.java2d.opengl"));
         if (!isOpenGLEnabled) {
-            logger.warn("OpenGL is not enabled, there could be some performance and quality issues. It can be enabled using -Dsun.java2d.opengl=true runtime argument.");
+            LOGGER.warn("OpenGL is not enabled, there could be some performance and quality issues. It can be enabled using -Dsun.java2d.opengl=true runtime argument.");
         }
         diagramMouseListener = new DiagramMouseListener();
         this.setDropTarget(new DiagramDropTarget(diagramEditor, this));
@@ -132,20 +131,6 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         }
     }
 
-    private void selectArea(int x, int y, int width, int height) {
-        if (width < 0) {
-            width = -width;
-            x = x - width;
-        }
-        if (height < 0) {
-            height = -height;
-            y = y - height;
-        }
-        selectionArea = new Rectangle(x, y, width, height);
-        shapes.selectShapes(selectionArea);
-        repaint();
-    }
-
     private void addRelation(final UMLClass firstClass, final UMLClass secondClass) {
         Relationship relationship;
         if (currentAction == UMLDiagramActions.disjoint) {
@@ -195,6 +180,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
 
     @Override
     public void addClass(UMLClass cls) {
+        UIUtility.addName(cls.getName());
         shapes.add(cls);
         repaint();
     }
@@ -247,11 +233,9 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         return shapes.getShapes(forJSON);
     }
 
+    @Override
     public boolean removeShape(DiagramShape selected) {
-        int choice = JOptionPane.showConfirmDialog(null,
-                "Are you sure you want to delete selected object?",
-                "Delete Confirmation", JOptionPane.YES_NO_OPTION);
-        if (choice == JOptionPane.YES_OPTION) {
+        if (UIUtility.deleteConfirm()) {
             if (selected instanceof UMLClass) {
                 UMLClass cls = (UMLClass) selected;
                 DiagramUndoManager.addEdit(EditFactory.classCreated(this, cls, false));
@@ -286,10 +270,6 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         tempAnchors.clear();
         this.setCursor(Cursor.getDefaultCursor());
         this.currentAction = newAction;
-    }
-
-    public void clear() {
-        clear(UIUtility.confirm(UMLEditorMessages.CLEAR_DIAGRAM));
     }
 
     public void clear(boolean confirmed) {
@@ -347,7 +327,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
             g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
             g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
             if (logoVisible) {
-                DrawingUtility.drawLogo(g2d, (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, this));
+                DrawingUtility.drawLogo(g2d, getVisibleRect());
             }
         }
         g2d.scale(ZoomUtility.ZOOMING_SCALE, ZoomUtility.ZOOMING_SCALE);
@@ -379,10 +359,6 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
             diagramEditor.loadForm(null);
         }
         repaint();
-    }
-
-    public void displayObjectList() {
-        diagramEditor.loadForm(new ObjectList(this));
     }
 
     private Set<DiagramShape> getShapesToDraw() {
@@ -480,20 +456,31 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
             int diffX = ZoomUtility.get(e.getX()) - prevX;
             int diffY = ZoomUtility.get(e.getY()) - prevY;
             if (SwingUtilities.isRightMouseButton(e)) {
-                JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, UMLDiagramPanel.this);
-                if (viewPort != null) {
-                    Rectangle view = viewPort.getViewRect();
-                    view.x -= diffX;
-                    view.y -= diffY;
-                    scrollRectToVisible(view);
-                }
+                Rectangle view = getVisibleRect();
+                view.x -= diffX;
+                view.y -= diffY;
+                scrollRectToVisible(view);
             } else {
                 if (selectionArea == null && shapes.isShapeSelected()) {
                     shapeMoved = shapes.moveSelectedShapes(diffX, diffY);
                     prevX = ZoomUtility.get(e.getX());
                     prevY = ZoomUtility.get(e.getY());
                 } else {
-                    selectArea(startX, startY, diffX, diffY);
+                    int x = startX;
+                    int y = startY;
+                    int width = diffX;
+                    int height = diffY;
+                    if (width < 0) {
+                        width = -width;
+                        x = x - width;
+                    }
+                    if (height < 0) {
+                        height = -height;
+                        y = y - height;
+                    }
+                    selectionArea = new Rectangle(x, y, width, height);
+                    shapes.selectShapes(selectionArea);
+                    repaint();
                 }
                 repaint();
             }
@@ -517,15 +504,11 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         public void mouseWheelMoved(MouseWheelEvent e) {
             if (e.isControlDown()) {
                 ZoomUtility.changeZoom(e.getPreciseWheelRotation());
-                //TODO position according mouse location
-                JViewport viewPort = (JViewport) SwingUtilities
-                        .getAncestorOfClass(JViewport.class, UMLDiagramPanel.this);
-                if (viewPort != null) {
-                    Rectangle view = viewPort.getViewRect();
-                    view.x = ZoomUtility.get(e.getX());
-                    view.y = ZoomUtility.get(e.getY());
-                    scrollRectToVisible(view);
-                }
+                Rectangle view = getVisibleRect();
+                view.x = ZoomUtility.get(e.getX());
+                view.y = ZoomUtility.get(e.getY());
+                scrollRectToVisible(view);
+                revalidate();
             } else if (getParent() != null) {
                 getParent().dispatchEvent(e);
             }

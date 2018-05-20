@@ -39,7 +39,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public class AnnotationSelectionDialog extends JDialog {
-    private Set<UMLClass> classes = Sets.newLinkedHashSet();
+    private final Set<UMLClass> classes = Sets.newLinkedHashSet();
 
     public AnnotationSelectionDialog(Stream<UMLClass> classStream) {
         setModal(true);

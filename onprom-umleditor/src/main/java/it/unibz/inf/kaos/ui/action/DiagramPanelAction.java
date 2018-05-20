@@ -28,10 +28,12 @@ package it.unibz.inf.kaos.ui.action;
 
 import it.unibz.inf.kaos.data.UMLDiagramActions;
 import it.unibz.inf.kaos.interfaces.ActionType;
+import it.unibz.inf.kaos.ui.form.ObjectList;
 import it.unibz.inf.kaos.ui.panel.UMLDiagramPanel;
 import it.unibz.inf.kaos.ui.utility.DiagramUndoManager;
 import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
+import it.unibz.inf.kaos.ui.utility.UMLEditorMessages;
 import it.unibz.inf.kaos.uml.UMLEditor;
 
 /**
@@ -52,13 +54,13 @@ public class DiagramPanelAction extends ToolbarAction {
 
   public void execute() {
       if (actionType.equals(UMLDiagramActions.grid)) {
-      diagramPanel.toggleGrid();
+          diagramPanel.toggleGrid();
       } else if (actionType.equals(UMLDiagramActions.delete)) {
-      diagramPanel.removeSelected();
+          diagramPanel.removeSelected();
       } else if (actionType.equals(UMLDiagramActions.newdiagram)) {
-      diagramPanel.clear();
+          diagramPanel.clear(UIUtility.confirm(UMLEditorMessages.CLEAR_DIAGRAM));
       } else if (actionType.equals(UMLDiagramActions.objects)) {
-      diagramPanel.displayObjectList();
+          diagramEditor.loadForm(new ObjectList(diagramPanel));
       } else if (actionType.equals(UMLDiagramActions.layout)) {
           DrawingUtility.relayout(diagramPanel.getClasses()::iterator, diagramPanel.getGraphics());
           diagramPanel.repaint();

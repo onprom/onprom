@@ -41,7 +41,10 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -160,12 +163,8 @@ public class UIUtility {
         JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), title, JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void warning(String message) {
-        warning(message, "Warning");
-    }
-
-    public static void warning(String message, String title) {
-        JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), title, JOptionPane.WARNING_MESSAGE);
+    static void warning(String message) {
+        JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), "Warning", JOptionPane.WARNING_MESSAGE);
     }
 
     public static <E> WidePopupComboBox<E> createWideComboBox(Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
@@ -261,24 +260,12 @@ public class UIUtility {
         return lbl;
     }
 
-    public static JLabel createLabel(String text, Dimension preferredSize, final boolean isHTML) {
-        if (isHTML) {
-            text = String.format(HTML_STRING, text);
-        }
+    public static JLabel createLabel(String text, Dimension preferredSize) {
+        text = String.format(HTML_STRING, text);
         JLabel lbl = new JLabel(text);
         lbl.setToolTipText(text);
         lbl.setPreferredSize(preferredSize);
         return lbl;
-    }
-
-    public static JLabel createLabel(String text, Dimension preferredSize, MouseListener mouseListener) {
-        JLabel lbl = createLabel(text, preferredSize);
-        lbl.addMouseListener(mouseListener);
-        return lbl;
-    }
-
-    public static JLabel createLabel(String text, Dimension preferredSize) {
-        return createLabel(text, preferredSize, true);
     }
 
     public static JTextField createTextField(Dimension preferredSize) {
@@ -375,14 +362,17 @@ public class UIUtility {
         FILE_CHOOSER.setFileFilter(FileTypeFilter.get(fileType));
         FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FILE_CHOOSER.setSelectedFile(new File(""));
-        int returnVal = FILE_CHOOSER.showSaveDialog(null);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        if (FILE_CHOOSER.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = FILE_CHOOSER.getSelectedFile();
-            if (IOUtility.getFileExtension(selectedFile).isEmpty()) {
-                //set default extension if doesn't exist
-                selectedFile = new File(selectedFile.getAbsolutePath() + "." + fileType.getDefaultExtension());
+            if (!selectedFile.exists() || UIUtility.confirm(UMLEditorMessages.FILE_EXISTS)) {
+                if (IOUtility.getFileExtension(selectedFile).isEmpty()) {
+                    //set default extension if doesn't exist
+                    selectedFile = new File(selectedFile.getAbsolutePath() + "." + fileType.getDefaultExtension());
+                }
+                return Optional.of(selectedFile);
+            } else {
+                return selectFileToSave(fileType);
             }
-            return Optional.of(selectedFile);
         }
         return Optional.empty();
     }
