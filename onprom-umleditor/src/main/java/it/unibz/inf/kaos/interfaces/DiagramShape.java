@@ -3,13 +3,13 @@
  *
  * DiagramShape.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,9 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import it.unibz.inf.kaos.data.State;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 /**
  * Interface of diagram shapes
@@ -64,6 +65,6 @@ public interface DiagramShape<T extends Diagram> {
 
     void draw(Graphics2D g2d);
 
-    JPanel getForm(T panel);
+    java.util.Optional<? extends JPanel> getForm(T panel);
 
 }

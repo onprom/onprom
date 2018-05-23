@@ -3,13 +3,13 @@
  *
  * RelationForm.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,14 +36,17 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorButtons;
 import it.unibz.inf.kaos.ui.utility.UMLEditorLabels;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 /**
  * Relation form
  * <p>
  * @author T. E. Kalayci
- * Date: 10-Nov-16
  */
 public class RelationForm extends JPanel {
     private final JComboBox<Cardinality> cmbFirstCardinality;
@@ -53,8 +56,9 @@ public class RelationForm extends JPanel {
     private final Association association;
     private final JTextField txtRelationName;
 
-    public RelationForm(UMLDiagram drawingPanel, Association _association, boolean isUpdateAllowed) {
+    public RelationForm(UMLDiagram drawingPanel, Association _association) {
         association = _association;
+        final boolean isUpdateAllowed = drawingPanel.isUpdateAllowed();
         setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
 
@@ -121,6 +125,5 @@ public class RelationForm extends JPanel {
         cmbSecondCardinality.setSelectedItem(association.getSecondMultiplicity());
         cmbFirstClass.setSelectedItem(association.getFirstClass());
         cmbSecondClass.setSelectedItem(association.getSecondClass());
-        this.setVisible(true);
     }
 }

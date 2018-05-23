@@ -88,8 +88,8 @@ public class CaseAnnotation extends Annotation {
   }
 
   @Override
-  public CaseForm getForm(AnnotationDiagram panel) {
-    return new CaseForm(panel, this);
+  public java.util.Optional<CaseForm> getForm(AnnotationDiagram panel) {
+      return java.util.Optional.of(new CaseForm(panel, this));
   }
 
     public NavigationalAttribute getCaseName() {

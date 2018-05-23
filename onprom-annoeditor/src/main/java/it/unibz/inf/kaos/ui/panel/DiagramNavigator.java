@@ -1,7 +1,36 @@
+/*
+ * onprom-annoeditor
+ *
+ * DiagramNavigator.java
+ *
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.unibz.inf.kaos.ui.panel;
 
 import com.google.common.collect.Sets;
-import it.unibz.inf.kaos.data.*;
+import it.unibz.inf.kaos.data.Association;
+import it.unibz.inf.kaos.data.DataType;
+import it.unibz.inf.kaos.data.State;
+import it.unibz.inf.kaos.data.UMLClass;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.interfaces.NavigationListener;
 import it.unibz.inf.kaos.ui.utility.NavigationUtility;
@@ -28,12 +57,10 @@ class DiagramNavigator {
         tempNavigation.add(node);
         if (doubleClick) {
             if (node instanceof UMLClass) {
-                UMLClass cls = (UMLClass) node;
-                Attribute selectedAttribute = cls.getClickedAttribute(x, y);
-                if (selectedAttribute != null) {
+                ((UMLClass) node).getClickedAttribute(x, y).ifPresent(selectedAttribute -> {
                     selectedAttribute.setState(State.SELECTED);
-                }
-                navigationListener.navigationComplete(tempNavigation, (UMLClass) node, selectedAttribute);
+                    navigationListener.navigationComplete(tempNavigation, (UMLClass) node, selectedAttribute);
+                });
                 annotationDiagramPanel.resetNavigation();
             } else {
                 UIUtility.error("Please double click on a class to finish tempNavigation");
@@ -46,7 +73,7 @@ class DiagramNavigator {
         tempNavigation.clear();
     }
 
-    public void setNavigationListener(NavigationListener _navigationListener) {
+    void setNavigationListener(NavigationListener _navigationListener) {
         navigationListener = _navigationListener;
     }
 

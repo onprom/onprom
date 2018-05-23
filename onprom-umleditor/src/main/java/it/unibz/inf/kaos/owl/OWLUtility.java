@@ -3,13 +3,13 @@
  *
  * OWLUtility.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@
 
 package it.unibz.inf.kaos.owl;
 
-import com.google.common.base.Optional;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.OWLXMLDocumentFormat;
 import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
@@ -36,15 +35,16 @@ import org.semanticweb.owlapi.profiles.OWL2QLProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Optional;
 
 /**
  * Utility class to use with OWL ontologies
  * <p>
  * @author T. E. Kalayci
- * 17-Oct-16
  */
 public class OWLUtility {
     static final OWLOntologyManager ONTOLOGY_MANAGER = OWLManager.createOWLOntologyManager();
@@ -141,40 +141,36 @@ public class OWLUtility {
         }
     }
 
-    public static OWLOntology loadOntologyFromStream(InputStream stream) {
-        if (stream == null)
-            return null;
-        try {
-            OWLOntology ontology = ONTOLOGY_MANAGER.loadOntologyFromOntologyDocument(stream);
-            ONTOLOGY_MANAGER.removeOntology(ontology);
-            return ontology;
-        } catch (Exception e) {
-            LOGGER.error("An error is occurred during loading: " + e.getMessage(), e);
-        }
-        return null;
-    }
-
-    public static OWLOntology loadOntologyFromFile(File file) {
-        if (file == null)
-            return null;
-        try {
-            OWLOntology ontology = ONTOLOGY_MANAGER.loadOntologyFromOntologyDocument(file);
-            ONTOLOGY_MANAGER.removeOntology(ontology);
-            return ontology;
-        } catch (Exception e) {
-            LOGGER.error("An error is occurred during loading " + file.getName() + ": " + e.getMessage(), e);
-        }
-        return null;
-    }
-
-    public static String getDocumentIRI(OWLOntology ontology) {
-        try {
-            Optional<IRI> ontologyIRI = ontology.getOntologyID().getOntologyIRI();
-            if (ontologyIRI.isPresent()) {
-                return ontologyIRI.get().toString();
+    public static Optional<OWLOntology> loadOntologyFromStream(InputStream stream) {
+        if (stream != null) {
+            try {
+                OWLOntology ontology = ONTOLOGY_MANAGER.loadOntologyFromOntologyDocument(stream);
+                ONTOLOGY_MANAGER.removeOntology(ontology);
+                return Optional.of(ontology);
+            } catch (Exception e) {
+                LOGGER.error("An error is occurred during loading: " + e.getMessage(), e);
             }
-        } catch (NullPointerException e) {
-            LOGGER.error("An error occurred:" + e.getMessage());
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<OWLOntology> loadOntologyFromFile(File file) {
+        if (file != null) {
+            try {
+                OWLOntology ontology = ONTOLOGY_MANAGER.loadOntologyFromOntologyDocument(file);
+                ONTOLOGY_MANAGER.removeOntology(ontology);
+                return Optional.of(ontology);
+            } catch (Exception e) {
+                LOGGER.error("An error is occurred during loading " + file.getName() + ": " + e.getMessage(), e);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static String getDocumentIRI(@Nonnull OWLOntology ontology) {
+        com.google.common.base.Optional<IRI> ontologyIRI = ontology.getOntologyID().getOntologyIRI();
+        if (ontologyIRI.isPresent()) {
+            return ontologyIRI.get().toString();
         }
         return "http://www.example.com/example.owl";
     }

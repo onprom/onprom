@@ -39,6 +39,7 @@ public enum UMLEditorMessages implements Messages {
     CLASS_NAME_DUPLICATE_ERROR("Class Name is Not Unique", "Please change <em>name</em> of the class, it is already <em>used</em> in the diagram"),
     DELETE_CONFIRM("Deleting Item", "Are you sure you want to delete selected item?"),
     CLEAR_DIAGRAM("Clearing Diagram", "Are you sure you want to clear diagram? You can't take back it."),
+    EMPTY_DIAGRAM("Empty Diagram", "Diagram is empty!"),
     LAYOUT_DIAGRAM("Diagram Layout", "Are you sure you want to layout the diagram, you'll lose the current layout?"),
     SAVE_FILE("Save File", "Would you like to save as file also?"),
     FILE_EXISTS("File Exists", "Are you sure you want to overwrite existing file?"),

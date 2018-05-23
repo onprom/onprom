@@ -35,7 +35,7 @@ import it.unibz.inf.kaos.ui.utility.AnnotationEditorLabels;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.FlowLayout;
 import java.util.Set;
 
 /**
@@ -52,7 +52,7 @@ public class DynamicAttributePanel extends JPanel {
         form = _form;
         setLayout(new FlowLayout(FlowLayout.LEADING, 1, 1));
 
-        chkIndex = UIUtility.createCheckBox(attribute.getName(), "Check the checkbox if " + attribute.getName() + " is a part of the URI");
+        chkIndex = UIUtility.createCheckBox(attribute.getName(), "Check the checkbox if " + attribute.getName() + " is a part of the URI", AbstractAnnotationForm.CHK_SIZE);
         add(chkIndex);
 
         cmbAttributes = UIUtility.createWideComboBox(form.getAttributes(), AbstractAnnotationForm.TXT_SIZE, e -> populatePath(), true, true);

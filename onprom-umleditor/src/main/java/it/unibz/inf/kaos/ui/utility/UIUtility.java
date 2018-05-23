@@ -51,7 +51,6 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
 /**
@@ -62,11 +61,11 @@ import java.util.stream.Stream;
 public class UIUtility {
     private static final Logger logger = LoggerFactory.getLogger(UIUtility.class.getName());
     private static final JFileChooser FILE_CHOOSER = new JFileChooser();
-    //set for storing class and relation names
-    private static final HashSet<String> names = Sets.newHashSet();
     private static final String HTML_STRING = "<html>%s</html>";
     private static final Dimension SMALL_BUTTON_DIMENSION = new Dimension(45, 25);
     private static final HashSet<SwingWorker> BACKGROUND_WORKERS = Sets.newHashSet();
+    //set for storing class and relation names
+    private static final HashSet<String> names = Sets.newHashSet();
 
     public static boolean isNameExist(String name) {
         return names.contains(name.trim());
@@ -95,7 +94,7 @@ public class UIUtility {
         return LocalDateTime.now().toString();
     }
 
-    public static void executeInBackground(Callable method, JProgressBar progressBar) {
+    public static void executeInBackground(Runnable method, JProgressBar progressBar) {
         SwingWorker worker = new SwingWorker() {
             public Void doInBackground() {
                 if (progressBar != null) {
@@ -105,7 +104,7 @@ public class UIUtility {
                     glassPane.setVisible(true);
                 }
                 try {
-                    method.call();
+                    method.run();
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
                     UIUtility.error(e.getMessage());
@@ -163,8 +162,12 @@ public class UIUtility {
         JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), title, JOptionPane.ERROR_MESSAGE);
     }
 
-    static void warning(String message) {
-        JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), "Warning", JOptionPane.WARNING_MESSAGE);
+    static void warning(Messages message) {
+        warning(message.getMessage(), message.getTitle());
+    }
+
+    private static void warning(String message, String title) {
+        JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), title, JOptionPane.WARNING_MESSAGE);
     }
 
     public static <E> WidePopupComboBox<E> createWideComboBox(Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
@@ -214,25 +217,18 @@ public class UIUtility {
         return createButton(button.getText(), button.getMnemonic(), button.getTooltip(), actionListener, SMALL_BUTTON_DIMENSION);
     }
 
-    public static JCheckBox createCheckBox(String tooltip) {
-        return createCheckBox("", tooltip);
+    public static JCheckBox createCheckBox(String text, String tooltip, Dimension preferredSize) {
+        return createCheckBox(text, tooltip, false, null, preferredSize);
     }
 
-    public static JCheckBox createCheckBox(String text, String tooltip) {
-        return createCheckBox(text, tooltip, false, null);
-    }
-
-    public static JCheckBox createCheckBox(String text, String tooltip, boolean selected) {
-        return createCheckBox(text, tooltip, selected, null);
-    }
-
-    public static JCheckBox createCheckBox(String text, String tooltip, boolean selected, ItemListener listener) {
+    public static JCheckBox createCheckBox(String text, String tooltip, boolean selected, ItemListener listener, Dimension preferredSize) {
         JCheckBox checkBox = new JCheckBox(text);
         checkBox.setToolTipText(String.format(HTML_STRING, tooltip));
         checkBox.setSelected(selected);
         if (listener != null) {
             checkBox.addItemListener(listener);
         }
+        checkBox.setPreferredSize(preferredSize);
         return checkBox;
     }
 
@@ -302,10 +298,9 @@ public class UIUtility {
         button.setToolTipText(String.format(HTML_STRING, action.getTooltip()));
         button.addActionListener(e -> action.execute());
         button.setMnemonic(action.getMnemonic());
-        URL imageURL = IOUtility.getImageURL(action.getActionName().toLowerCase());
-        if (imageURL != null) {
-            ImageIcon imageIcon = new ImageIcon(imageURL, action.getTitle());
-            button.setIcon(imageIcon);
+        Optional<URL> imageUrlProvider = IOUtility.getImageURL(action.getActionName().toLowerCase());
+        if (imageUrlProvider.isPresent()) {
+            button.setIcon(new ImageIcon(imageUrlProvider.get(), action.getTitle()));
         } else {
             button.setText(String.format(HTML_STRING, Character.toUpperCase(action.getMnemonic())));
             button.setFont(new Font("Monospaced", Font.PLAIN, 30));
@@ -317,9 +312,7 @@ public class UIUtility {
         JMenuItem menuItem = new JMenuItem(action.getTitle(), action.getMnemonic());
         menuItem.getAccessibleContext().setAccessibleDescription(action.getTooltip());
         menuItem.addActionListener(e -> action.execute());
-        URL imageURL = IOUtility.getImageURL(action.getActionName());
-        if (imageURL != null)
-            menuItem.setIcon(new ImageIcon(imageURL));
+        IOUtility.getImageURL(action.getActionName()).ifPresent(imageUrl -> menuItem.setIcon(new ImageIcon(imageUrl)));
         return menuItem;
     }
 
@@ -334,6 +327,7 @@ public class UIUtility {
         return color != null && ((30 * color.getRed() + 59 * color.getGreen() + 11 * color.getBlue()) / 100) < 128;
     }
 
+    @Nonnull
     public static File[] selectFiles(FileType... allowedFileType) {
         FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FILE_CHOOSER.setMultiSelectionEnabled(true);
@@ -342,7 +336,7 @@ public class UIUtility {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             return FILE_CHOOSER.getSelectedFiles();
         }
-        return null;
+        return new File[]{};
     }
 
     @Nonnull

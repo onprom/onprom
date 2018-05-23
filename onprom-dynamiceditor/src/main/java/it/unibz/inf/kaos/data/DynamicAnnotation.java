@@ -291,7 +291,7 @@ public class DynamicAnnotation extends Annotation {
     }
 
     @Override
-    public DynamicAnnotationForm getForm(AnnotationDiagram panel) {
-        return new DynamicAnnotationForm(panel, this);
+    public java.util.Optional<DynamicAnnotationForm> getForm(AnnotationDiagram panel) {
+        return java.util.Optional.of(new DynamicAnnotationForm(panel, this));
     }
 }

@@ -3,13 +3,13 @@
  *
  * AnnotationDiagramPanel.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,9 @@ import it.unibz.inf.kaos.ui.edit.AddDeleteAnnotationEdit;
 import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
 import it.unibz.inf.kaos.ui.utility.*;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -81,7 +82,8 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
                         if (_selected instanceof UMLClass) {
                             createAnnotation((UMLClass) _selected, x, y);
                         } else if (e.getClickCount() == 2 && _selected instanceof Annotation) {
-                            loadForm(_selected.getForm(AnnotationDiagramPanel.this));
+                            _selected.getForm(AnnotationDiagramPanel.this).ifPresent(form ->
+                                    diagramEditor.loadForm((JPanel) form));
                             return;
                         }
                     }
@@ -102,7 +104,7 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
             annotation.setStartY(y);
             addAnnotation(annotation);
             DiagramUndoManager.addEdit(new AddDeleteAnnotationEdit(AnnotationDiagramPanel.this, annotation, true));
-            loadForm(annotation.getForm(AnnotationDiagramPanel.this));
+            annotation.getForm(AnnotationDiagramPanel.this).ifPresent(diagramEditor::loadForm);
         });
     }
 
@@ -122,13 +124,12 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
                 if (factory.checkRemoval(this, annotation)) {
                     removeAnnotation(annotation);
                     DiagramUndoManager.addEdit(new AddDeleteAnnotationEdit(this, annotation, false));
-                    loadForm(null);
+                    diagramEditor.unloadForm();
                     repaint();
                     return true;
                 }
             }
         }
-        //TODO should we also allow removal of relation anchors?
         return false;
     }
 
@@ -141,13 +142,13 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     @Override
     public void addAnnotation(Annotation annotation) {
         shapes.add(annotation);
-        loadForm(null);
+        diagramEditor.unloadForm();
     }
 
     @Override
     public void removeAnnotation(Annotation annotation) {
         shapes.remove(annotation);
-        loadForm(null);
+        diagramEditor.unloadForm();
     }
 
     public void resetAttributeStates() {
@@ -179,12 +180,5 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
         return shapes.getAll(type).
                 filter(annotation -> NavigationUtility.isConnected(startNode, annotation.getRelatedClass(), functional))
                 .collect(Collectors.toSet());
-    }
-
-    private void loadForm(JPanel form) {
-        if (form != null) {
-            form.setVisible(true);
-        }
-        diagramEditor.loadForm(form);
     }
 }

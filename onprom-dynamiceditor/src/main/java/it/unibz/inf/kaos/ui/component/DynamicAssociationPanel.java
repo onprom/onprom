@@ -33,8 +33,11 @@ import it.unibz.inf.kaos.ui.form.DynamicAnnotationForm;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorButtons;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import java.awt.FlowLayout;
 import java.util.Set;
 
 /**
@@ -50,7 +53,7 @@ public class DynamicAssociationPanel extends JPanel {
         form = _form;
         setLayout(new FlowLayout(FlowLayout.LEADING, 1, 1));
 
-        chkIndex = UIUtility.createCheckBox(association.getName(), "Check the checkbox if " + association.getName() + " is a part of the URI");
+        chkIndex = UIUtility.createCheckBox(association.getName(), "Check the checkbox if " + association.getName() + " is a part of the URI", AbstractAnnotationForm.CHK_SIZE);
         add(chkIndex);
 
         cmbAnnotations = UIUtility.createWideComboBox(form.getAnnotations(), AbstractAnnotationForm.TXT_SIZE, e -> populatePath(), true, true);

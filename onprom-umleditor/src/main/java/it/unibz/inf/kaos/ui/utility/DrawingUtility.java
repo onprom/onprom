@@ -128,11 +128,13 @@ public class DrawingUtility {
 
     private static BufferedImage getLogo() {
         if (LOGO == null) {
-            try {
-                LOGO = ImageIO.read(IOUtility.getImageURL("onprom"));
-            } catch (IOException e) {
-                logger.error("Couldn't load logo:" + e.getMessage(), e);
-            }
+            IOUtility.getImageURL("onprom").ifPresent(url -> {
+                try {
+                    LOGO = ImageIO.read(url);
+                } catch (IOException e) {
+                    logger.error("Couldn't load logo:" + e.getMessage(), e);
+                }
+            });
         }
         return LOGO;
     }
@@ -149,7 +151,6 @@ public class DrawingUtility {
 
     private static SVGGraphics2D getSVGGraphics(Dimension dimension) {
         SVGGraphics2D svgGenerator = new SVGGraphics2D(GenericDOMImplementation.getDOMImplementation().createDocument("http://www.w3.org/2000/svg", "svg", null));
-        //set drawing canvas as the drawing area
         svgGenerator.setSVGCanvasSize(dimension);
         svgGenerator.setClip(0, 0, dimension.width, dimension.height);
         return svgGenerator;
@@ -195,7 +196,7 @@ public class DrawingUtility {
                 }
             });
         } else {
-            UIUtility.warning("Diagram is empty!");
+            UIUtility.warning(UMLEditorMessages.EMPTY_DIAGRAM);
         }
     }
 

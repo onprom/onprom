@@ -3,13 +3,13 @@
  *
  * AbstractAnnotationForm.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,9 @@ import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.interfaces.NavigationListener;
 import it.unibz.inf.kaos.ui.component.UpdateListener;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.Set;
 
@@ -47,7 +48,9 @@ import java.util.Set;
  */
 public abstract class AbstractAnnotationForm extends JPanel implements NavigationListener {
     public static final Dimension BTN_SIZE = new Dimension(85, 25);
-    public static final Dimension TXT_SIZE = new Dimension(125, 25);
+    public static final Dimension CHK_SIZE = new Dimension(125, 25);
+    public static final Dimension TXT_SIZE = new Dimension(175, 25);
+    public static final Dimension DOUBLE_TXT_SIZE = new Dimension(350, 25);
   final AnnotationDiagram drawingPanel;
   final Annotation annotation;
   private UpdateListener updateListener;

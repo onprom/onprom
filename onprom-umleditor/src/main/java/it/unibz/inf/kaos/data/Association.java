@@ -3,13 +3,13 @@
  *
  * Association.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,10 @@ import it.unibz.inf.kaos.interfaces.UMLDiagram;
 import it.unibz.inf.kaos.ui.form.RelationForm;
 import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 
 /**
  * @author T. E. Kalayci
@@ -72,7 +75,7 @@ public class Association extends Relationship {
   }
 
   public boolean hasAssociation(UMLClass aClass) {
-    return (aClass instanceof AssociationClass) && ((associationClass != null) && associationClass.equals(aClass));
+      return (aClass instanceof AssociationClass) && aClass.equals(associationClass);
   }
 
   public boolean hasAssociation() {
@@ -104,9 +107,11 @@ public class Association extends Relationship {
   }
 
   public String getDisplayString() {
-    if (associationClass != null)
+      if (associationClass == null) {
+          return getName() + getDirectionTriangle();
+      } else {
       return "";
-    return getName() + getDirectionTriangle();
+      }
   }
 
   @Override
@@ -266,8 +271,8 @@ public class Association extends Relationship {
   }
 
   @Override
-  public RelationForm getForm(UMLDiagram panel) {
-    return new RelationForm(panel, this, panel.isUpdateAllowed());
+  public java.util.Optional<RelationForm> getForm(UMLDiagram panel) {
+      return java.util.Optional.of(new RelationForm(panel, this));
   }
 
 }

@@ -36,7 +36,7 @@ import it.unibz.inf.kaos.ui.utility.*;
 import it.unibz.inf.kaos.uml.UMLEditor;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import javax.swing.*;
+import javax.swing.JToolBar;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
@@ -107,7 +107,7 @@ public class AnnotationEditor extends UMLEditor {
                     new QueryEditor(annotationsQueries);
                     if (listener != null) {
                         String title = getOntologyName();
-                        if (title == null || title.isEmpty()) {
+                        if (title.isEmpty()) {
                             title = "Exported Queries";
                         }
                         ((AnnotationEditorListener) listener).store(title, annotationsQueries);
@@ -117,7 +117,6 @@ public class AnnotationEditor extends UMLEditor {
                     }
                 }
             }
-            return null;
         }, progressBar);
     }
 
@@ -135,7 +134,6 @@ public class AnnotationEditor extends UMLEditor {
             if (listener != null) {
                 listener.store(identifier, FileType.ANNOTATION, diagramPanel.getShapes(true));
             }
-            return null;
         }, progressBar);
     }
 

@@ -3,13 +3,13 @@
  *
  * OWLExporter.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@
 
 package it.unibz.inf.kaos.owl;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
@@ -36,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -45,36 +45,38 @@ import java.util.Set;
  * <p>
  *
  * @author T. E. Kalayci
- * 05-Oct-16
+ *
  */
 public class OWLExporter extends OWLUtility {
     public static final String REIFICATION_SEPARATOR = "_2_";
     private static final Logger LOGGER = LoggerFactory.getLogger(OWLExporter.class.getName());
 
-    public static OWLOntology export(String documentIRI, Collection<DiagramShape> shapes, File file) {
-        try {
-            OWLOntology ontology = createOWLOntology(documentIRI, shapes);
-            if (ontology != null) {
-                checkOWL2QLCompliance(ontology);
-                if (file != null) {
+    public static Optional<OWLOntology> export(String documentIRI, Collection<DiagramShape> shapes, File file) {
+        Optional<OWLOntology> ontologyProvider = createOWLOntology(documentIRI, shapes);
+        if (ontologyProvider.isPresent()) {
+            OWLOntology ontology = ontologyProvider.get();
+            checkOWL2QLCompliance(ontology);
+            if (file != null) {
+                try {
                     saveOntology(ontology, file);
+                } catch (Exception e) {
+                    LOGGER.error(e.getMessage(), e);
+                    return Optional.empty();
                 }
-                ONTOLOGY_MANAGER.removeOntology(ontology);
-                return ontology;
             }
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            ONTOLOGY_MANAGER.removeOntology(ontology);
+            return Optional.of(ontology);
         }
-        return null;
+        return Optional.empty();
     }
 
-    private static OWLOntology createOWLOntology(String documentIRI, Collection<DiagramShape> shapes) {
+    private static Optional<OWLOntology> createOWLOntology(String documentIRI, Collection<DiagramShape> shapes) {
         try {
             if (!documentIRI.endsWith("/")) {
                 documentIRI = documentIRI + "/";
             }
             final IRI defaultIRI = IRI.create(documentIRI);
-            final OWLOntology ontology = ONTOLOGY_MANAGER.createOntology(new OWLOntologyID(Optional.of(defaultIRI), Optional.absent()));
+            final OWLOntology ontology = ONTOLOGY_MANAGER.createOntology(new OWLOntologyID(defaultIRI));
             shapes.forEach(shape -> {
                 if (shape instanceof UMLClass) {
                     ONTOLOGY_MANAGER.addAxioms(ontology, getClassAxioms(defaultIRI, (UMLClass) shape));
@@ -83,10 +85,10 @@ public class OWLExporter extends OWLUtility {
                     ONTOLOGY_MANAGER.addAxioms(ontology, getRelationAxioms(defaultIRI, (Relationship) shape));
                 }
             });
-            return ontology;
+            return Optional.of(ontology);
         } catch (OWLOntologyCreationException e) {
             LOGGER.error(e.getMessage(), e);
-            return null;
+            return Optional.empty();
         }
 
     }

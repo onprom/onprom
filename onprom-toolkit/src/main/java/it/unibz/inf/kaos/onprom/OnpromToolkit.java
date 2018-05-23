@@ -50,7 +50,9 @@ import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.tree.TreePath;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -151,7 +153,8 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         menuBar.add(mnFile);
 
         JMenuItem openItem = new JMenuItem("Load...", KeyEvent.VK_O);
-        openItem.addActionListener(e -> UIUtility.executeInBackground(this::openFile, progressBar));
+        openItem.addActionListener(e -> UIUtility.executeInBackground(() ->
+                objects.openFiles(UIUtility.selectFiles(supportedFormats)), progressBar));
         mnFile.add(openItem);
         JMenuItem saveItem = new JMenuItem("Save Selected...", KeyEvent.VK_S);
         saveItem.addActionListener(e -> UIUtility.executeInBackground(objects::saveSelected, progressBar));
@@ -195,32 +198,24 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         return menuBar;
     }
 
-    private Void openFile() {
-        return objects.openFiles(UIUtility.selectFiles(supportedFormats));
-    }
-
-    public TreeNode<Object> getResourceNode(int i) {
-        return objects.getNode(i - 1);
-    }
-
     @Nonnull
     public Set<TreeNode<Object>> getResourceNodes() {
         return objects.getAllNodes();
     }
 
-    public Void displayUMLEditor() {
-        return displayEditor(new UMLEditor(null, this));
+    public void displayUMLEditor() {
+        displayEditor(new UMLEditor(null, this));
     }
 
-    public Void displayAnnotationEditor() {
-        return displayEditor(new AnnotationEditor(null, this));
+    public void displayAnnotationEditor() {
+        displayEditor(new AnnotationEditor(null, this));
     }
 
-    private Void displayDynamicAnnotationEditor() {
-        return displayEditor(new DynamicAnnotationEditor(null, null, this));
+    public void displayDynamicAnnotationEditor() {
+        displayEditor(new DynamicAnnotationEditor(null, null, this));
     }
 
-    private Void displayEditor(UMLEditor editor) {
+    private void displayEditor(UMLEditor editor) {
         editor.setProgressBar(progressBar);
         editor.addInternalFrameListener(new InternalFrameAdapter() {
             @Override
@@ -236,7 +231,6 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         }
         windows.add(editor.getTitle(), FileType.OTHER, editor);
         loadShapes(editor);
-        return null;
     }
 
     private void loadShapes(UMLEditor umlEditor) {
@@ -251,7 +245,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         );
     }
 
-    private Void showExportDiagram() {
+    private void showExportDiagram() {
         ExtractionFrame editor = new ExtractionFrame(this);
         editor.addInternalFrameListener(new InternalFrameAdapter() {
             @Override
@@ -266,10 +260,9 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
             logError(e);
         }
         windows.add(editor.getTitle(), FileType.OTHER, editor);
-        return null;
     }
 
-    private Void exportLog() {
+    private void exportLog() {
         TreePath[] paths = objects.getSelectionPaths();
         if (paths != null) {
             OWLOntology ontology = null;
@@ -300,7 +293,6 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                 InformationDialog.display("Please select Ontology, Mapping and Queries to start log exporting!");
             }
         }
-        return null;
     }
 
     public void displayLogSummary(XLog xlog) {
@@ -326,12 +318,11 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         });
     }
 
-    private Void reset() {
+    private void reset() {
         objects.removeAll();
         for (JInternalFrame internalFrame : desktop.getAllFrames()) {
             internalFrame.dispose();
         }
-        return null;
     }
 
     private void logError(Exception e) {

@@ -71,15 +71,9 @@ public class DiagramPanelAction extends ToolbarAction {
         DiagramUndoManager.redo();
         diagramPanel.repaint();
       } else if (actionType.equals(UMLDiagramActions.image)) {
-          UIUtility.executeInBackground(() -> {
-              DrawingUtility.exportImage(diagramPanel);
-              return null;
-          }, diagramEditor.getProgressBar());
+          UIUtility.executeInBackground(() -> DrawingUtility.exportImage(diagramPanel), diagramEditor.getProgressBar());
       } else if (actionType.equals(UMLDiagramActions.print)) {
-          UIUtility.executeInBackground(() -> {
-              DrawingUtility.print(diagramPanel);
-              return null;
-          }, diagramEditor.getProgressBar());
+          UIUtility.executeInBackground(() -> DrawingUtility.print(diagramPanel), diagramEditor.getProgressBar());
       }
     diagramPanel.setCurrentAction(actionType);
   }

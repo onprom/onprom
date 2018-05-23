@@ -43,7 +43,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
+import javax.swing.JToolBar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -111,18 +111,23 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
 
     private void loadAnnotationTypes(OWLOntology upperOntology) {
         annotations.clear();
-        if (upperOntology == null) {
-            upperOntology = OWLUtility.loadOntologyFromStream(DynamicAnnotationEditor.class.getResourceAsStream("/default-eo.owl"));
-            OWLImporter.getShapes(upperOntology).stream().filter(UMLClass.class::isInstance).map(UMLClass.class::cast).forEach(
+        if (upperOntology != null) {
+            new AnnotationSelectionDialog(OWLImporter.getShapes(upperOntology).stream()
+                    .filter(UMLClass.class::isInstance).map(UMLClass.class::cast)).getSelectedClasses().forEach(
                     umlClass -> annotations.put(umlClass.getName(), umlClass)
             );
+            setTitle("Annotation Editor for " + upperOntology.toString());
         } else {
-            new AnnotationSelectionDialog(OWLImporter.getShapes(upperOntology).stream().filter(UMLClass.class::isInstance).map(UMLClass.class::cast)).getSelectedClasses().forEach(
-                    umlClass -> annotations.put(umlClass.getName(), umlClass)
-            );
+            OWLUtility.loadOntologyFromStream(DynamicAnnotationEditor.class.getResourceAsStream("/default-eo.owl"))
+                    .ifPresent(defaultOntology -> OWLImporter.getShapes(defaultOntology).stream()
+                            .filter(UMLClass.class::isInstance)
+                            .map(UMLClass.class::cast)
+                            .forEach(
+                                    umlClass -> annotations.put(umlClass.getName(), umlClass)
+                            ));
+            setTitle("Default XES Annotation Editor");
         }
         initUI();
-        setTitle("Annotation Editor for " + upperOntology.toString());
     }
 
     @Override
@@ -147,7 +152,10 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
         }) {
             @Override
             public void execute() {
-                UIUtility.selectFileToOpen(FileType.ONTOLOGY).ifPresent(file -> loadAnnotationTypes(OWLUtility.loadOntologyFromFile(file)));
+                UIUtility.selectFileToOpen(FileType.ONTOLOGY)
+                        .ifPresent(file -> OWLUtility.loadOntologyFromFile(file)
+                                .ifPresent(ontology -> loadAnnotationTypes(ontology))
+                        );
             }
         };
     }
@@ -173,7 +181,8 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
 
     @Override
     protected Collection<AnnotationProperties> getAnnotationProperties() {
-        return annotations.values().stream().map(DynamicAnnotationEditor::getAnnotationProperties).collect(Collectors.toList());
+        return annotations.values().stream().map(DynamicAnnotationEditor::getAnnotationProperties)
+                .collect(Collectors.toList());
     }
 
 }

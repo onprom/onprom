@@ -37,7 +37,8 @@ import it.unibz.inf.kaos.ui.utility.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -92,7 +93,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
                     }
                     shapes.add(newClass);
                     DiagramUndoManager.addEdit(EditFactory.classCreated(this, newClass, true));
-                    diagramEditor.loadForm(newClass.getForm(this));
+                    newClass.getForm(this).ifPresent(diagramEditor::loadForm);
                 }
             } else if (currentAction == UMLDiagramActions.disjoint || currentAction == UMLDiagramActions.relation
                     || currentAction == UMLDiagramActions.isarelation) {
@@ -169,7 +170,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         shapes.add(relationship);
         if (relationship instanceof Association) {
             UIUtility.addName(relationship.getName());
-            diagramEditor.loadForm(relationship.getForm(this));
+            relationship.getForm(this).ifPresent(diagramEditor::loadForm);
         }
         relationship.getFirstClass().addRelation(relationship);
         relationship.getSecondClass().addRelation(relationship);
@@ -245,7 +246,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
             if (selected instanceof Relationship) {
                 Relationship rel = (Relationship) selected;
                 List<RelationAnchor> deleted = rel.deleteAnchor();
-                if (deleted == null || deleted.isEmpty()) {
+                if (deleted.isEmpty()) {
                     if (rel instanceof Association) {
                         Association association = (Association) rel;
                         DiagramUndoManager.addEdit(EditFactory.relationCreated(this, association, association.getAssociationClass(), false));
@@ -277,7 +278,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
             shapes.clear();
             DiagramUndoManager.discardAllEdits();
             UIUtility.clearNames();
-            diagramEditor.loadForm(null);
+            diagramEditor.unloadForm();
         }
     }
 
@@ -356,7 +357,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
             this.shapes.forEach(shape -> UIUtility.addName(shape.getName()));
         }
         if (diagramEditor != null) {
-            diagramEditor.loadForm(null);
+            diagramEditor.unloadForm();
         }
         repaint();
     }
@@ -429,7 +430,9 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
                     removeSelected();
                     return;
                 } else if (shapes.getSelected() != null) {
-                    diagramEditor.loadForm(shapes.getSelected().getForm(UMLDiagramPanel.this));
+                    shapes.getSelected().getForm(UMLDiagramPanel.this).ifPresent(form ->
+                            diagramEditor.loadForm((JPanel) form)
+                    );
                 }
             }
             shapes.updateSelection(e.isControlDown(), startX, startY);

@@ -31,6 +31,7 @@ import com.google.common.collect.Lists;
 import it.unibz.inf.kaos.interfaces.UMLDiagram;
 import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
@@ -42,7 +43,6 @@ import java.util.stream.Collectors;
  * Relationship class
  * <p>
  * @author T. E. Kalayci
- * 17-Mar-17
  */
 public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
     private UMLClass firstClass;
@@ -175,13 +175,14 @@ public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
             this.secondClass.addRelation(this);
     }
 
+    @Nonnull
     public List<RelationAnchor> deleteAnchor() {
         if (selectedAnchors != null) {
             selectedAnchors.forEach(anchor -> anchor.setState(State.NORMAL));
             anchors.removeAll(selectedAnchors);
             return selectedAnchors;
         }
-        return null;
+        return Lists.newArrayList();
     }
 
     public int getAnchorCount() {

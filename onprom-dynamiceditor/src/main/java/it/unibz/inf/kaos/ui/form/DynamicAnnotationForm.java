@@ -37,8 +37,13 @@ import it.unibz.inf.kaos.ui.utility.AnnotationEditorButtons;
 import it.unibz.inf.kaos.ui.utility.NavigationUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +74,7 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
         gridBagConstraints.gridy = 0;
 
         JPanel pnlLabel = new JPanel(new FlowLayout(FlowLayout.LEADING, 1, 1));
-        chkLabel = UIUtility.createCheckBox("Label", "Check the checkbox if label is part of the URI");
+        chkLabel = UIUtility.createCheckBox("Label", "Check the checkbox if label is part of the URI", CHK_SIZE);
         pnlLabel.add(chkLabel);
         txtLabel = UIUtility.createTextField(TXT_SIZE);
         pnlLabel.add(txtLabel);
@@ -100,7 +105,7 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
 
         gridBagConstraints.gridy++;
         JPanel pnlURI = new JPanel(new FlowLayout(FlowLayout.LEADING, 1, 1));
-        pnlURI.add(UIUtility.createLabel("URI:", BTN_SIZE));
+        pnlURI.add(UIUtility.createLabel("URI:", CHK_SIZE));
         cmbURIAttributes = UIUtility.createWideComboBox(getAttributes(), TXT_SIZE, e -> populatePath(), false, true);
         pnlURI.add(cmbURIAttributes);
         cmbURIPath = UIUtility.createWideComboBox(TXT_SIZE, null, false, false);
@@ -124,7 +129,7 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
             }
             annotation.setExternalURIComponents(selectedURIComponents);
             setVisible(false);
-        }, AbstractAnnotationForm.BTN_SIZE), gridBagConstraints);
+        }, BTN_SIZE), gridBagConstraints);
 
         gridBagConstraints.gridy = 1;
         add(UIUtility.createButton(AnnotationEditorButtons.CANCEL, e -> setVisible(false), AbstractAnnotationForm.BTN_SIZE), gridBagConstraints);

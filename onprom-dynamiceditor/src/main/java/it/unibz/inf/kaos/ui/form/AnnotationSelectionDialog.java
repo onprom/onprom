@@ -33,7 +33,9 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorButtons;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -57,7 +59,7 @@ public class AnnotationSelectionDialog extends JDialog {
                 } else if (e.getStateChange() == ItemEvent.DESELECTED) {
                     classes.remove(umlClass);
                 }
-            }));
+            }, null));
             classes.add(umlClass);
         });
         add(new JScrollPane(pnlConcepts), BorderLayout.CENTER);

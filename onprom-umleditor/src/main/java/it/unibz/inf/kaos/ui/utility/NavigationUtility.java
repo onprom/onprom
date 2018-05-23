@@ -3,13 +3,13 @@
  *
  * NavigationUtility.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import it.unibz.inf.kaos.interfaces.DiagramShape;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 
@@ -168,13 +169,13 @@ public class NavigationUtility {
         return false;
     }
 
-    public static Relationship isAdjacent(UMLClass startNode, UMLClass endNode) {
+    public static Optional<Relationship> isAdjacent(UMLClass startNode, UMLClass endNode) {
         for (Relationship relation : startNode.getRelations()) {
             if (relation.getFirstClass().equals(endNode) || relation.getSecondClass().equals(endNode)) {
-                return relation;
+                return Optional.of(relation);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     static boolean checkPath(UMLClass startingNode, Set<DiagramShape> path) {

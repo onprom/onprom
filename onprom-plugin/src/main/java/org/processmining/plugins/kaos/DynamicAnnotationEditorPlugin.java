@@ -116,7 +116,7 @@ public class DynamicAnnotationEditorPlugin implements AnnotationEditorListener {
         DynamicAnnotationEditor editor = new DynamicAnnotationEditor(eventOntology, domainOntology, this);
         if (editorObjects != null) {
             editor.load("", editorObjects.getShapes());
-            editor.display(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         }
+        editor.display(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 }

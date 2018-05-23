@@ -3,13 +3,13 @@
  *
  * UMLClass.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,10 +32,12 @@ import it.unibz.inf.kaos.interfaces.UMLDiagram;
 import it.unibz.inf.kaos.ui.form.ClassForm;
 import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -131,15 +133,17 @@ public class UMLClass extends AbstractDiagramShape<UMLDiagram> {
     setStartY(Integer.parseInt(results[1]));
   }
 
-  public Attribute getClickedAttribute(int x, int y) {
-    return attributes.stream().filter(attribute -> attribute.contains(x, y)).findFirst().orElse(null);
+    @Nonnull
+    public Optional<Attribute> getClickedAttribute(int x, int y) {
+        return attributes.stream().filter(attribute -> attribute.contains(x, y)).findFirst();
   }
 
+    @Nonnull
     public List<Attribute> cloneAttributes() {
         List<Attribute> newList = Lists.newLinkedList();
-    attributes.forEach(attribute -> newList.add(attribute.getClone()));
-    return newList;
-  }
+        attributes.forEach(attribute -> newList.add(attribute.getClone()));
+        return newList;
+    }
 
     public void calculateEndCoordinates(Graphics g2d) {
     Font oldFont = g2d.getFont();
@@ -205,7 +209,7 @@ public class UMLClass extends AbstractDiagramShape<UMLDiagram> {
   }
 
     @Override
-    public ClassForm getForm(UMLDiagram panel) {
-        return new ClassForm(panel, this, panel.isUpdateAllowed());
+    public Optional<ClassForm> getForm(UMLDiagram panel) {
+        return Optional.of(new ClassForm(panel, this));
     }
 }

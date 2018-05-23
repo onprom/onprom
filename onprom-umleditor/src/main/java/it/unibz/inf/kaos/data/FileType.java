@@ -68,6 +68,6 @@ public enum FileType {
     public String getDefaultExtension() {
         if (extensions != null && extensions.length > 0)
             return extensions[0];
-        return null;
+        return "";
     }
 }

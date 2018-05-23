@@ -26,7 +26,6 @@
 
 package it.unibz.inf.kaos.uml;
 
-import it.unibz.inf.kaos.data.EditorObjects;
 import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.data.UMLDiagramActions;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
@@ -44,8 +43,11 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorMessages;
 import org.semanticweb.owlapi.model.OWLOntology;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -63,7 +65,6 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
   protected UMLEditorListener listener;
   protected String identifier;
   private JSplitPane splitPane;
-  private JScrollPane scrollPane;
 
     protected UMLEditor(OWLOntology _ontology) {
     super("", true, true, true, true);
@@ -140,7 +141,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     this.setJMenuBar(createMenuBar());
     this.getContentPane().setLayout(new BorderLayout());
     this.getContentPane().add(createToolbar(), BorderLayout.WEST);
-    scrollPane = new JScrollPane(diagramPanel);
+    JScrollPane scrollPane = new JScrollPane(diagramPanel);
     scrollPane.getVerticalScrollBar().setUnitIncrement(16);
     splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, null);
     this.getContentPane().add(splitPane, BorderLayout.CENTER);
@@ -152,15 +153,13 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
   @Override
   public void open(File file) {
     UIUtility.executeInBackground(() -> {
-      EditorObjects editorObjects = IOUtility.open(file, supportedFormats);
-      if (editorObjects != null) {
-        identifier = null;
+      IOUtility.open(file, supportedFormats).ifPresent(editorObjects -> {
+        identifier = "";
         loadedFile = editorObjects.getFile();
         ontology = editorObjects.getOntology();
         diagramPanel.load(editorObjects.getShapes());
-      }
-        loadForm(null);
-      return null;
+      });
+      unloadForm();
     }, progressBar);
   }
 
@@ -180,21 +179,20 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
         String iri = UIUtility.input("Please enter document IRI", documentIRI);
         if (iri != null) {
           if (UIUtility.confirm(UMLEditorMessages.SAVE_FILE)) {
-              UIUtility.selectFileToSave(FileType.ONTOLOGY).ifPresent(
-                      file -> {
-                          ontology = OWLExporter.export(iri, diagramPanel.getShapes(false), file);
-                          loadedFile = file;
-                      });
+              UIUtility.selectFileToSave(FileType.ONTOLOGY).ifPresent(f ->
+                      OWLExporter.export(iri, diagramPanel.getShapes(false), f).ifPresent(o -> {
+                          ontology = o;
+                          loadedFile = f;
+                      }));
           }
         }
         if (listener != null)
-          if (identifier != null && !identifier.isEmpty()) {
+          if (!identifier.isEmpty()) {
             listener.store(identifier, ontology);
           } else {
             listener.store(getOntologyName(), ontology);
           }
       }
-      return null;
     }, progressBar);
   }
 
@@ -212,7 +210,8 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
         FileType fileType = IOUtility.getFileType(loadedFile);
           if (fileType == FileType.ONTOLOGY) {
           if (ontology != null) {
-            ontology = OWLExporter.export(OWLUtility.getDocumentIRI(ontology), diagramPanel.getShapes(false), loadedFile);
+              OWLExporter.export(OWLUtility.getDocumentIRI(ontology), diagramPanel.getShapes(false), loadedFile)
+                      .ifPresent(o -> ontology = o);
           }
         }
           if (fileType == FileType.JSON | fileType == FileType.UML) {
@@ -221,38 +220,42 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
       }
       if (listener != null) {
         if (ontology != null) {
-          listener.store(identifier, OWLExporter.export(OWLUtility.getDocumentIRI(ontology), diagramPanel.getShapes(false), loadedFile));
+            OWLExporter.export(OWLUtility.getDocumentIRI(ontology), diagramPanel.getShapes(false), loadedFile).ifPresent(o ->
+                    listener.store(identifier, o));
         } else {
           listener.store(identifier, FileType.UML, diagramPanel.getShapes(true));
         }
       }
-      return null;
     }, progressBar);
   }
 
-    public void loadForm(JPanel panel) {
-    splitPane.setDividerLocation(0.75);
-    splitPane.setTopComponent(scrollPane);
-    if (panel != null) {
-      splitPane.setBottomComponent(new JScrollPane(panel));
-      panel.addComponentListener(new java.awt.event.ComponentAdapter() {
-        @Override
-        public void componentHidden(java.awt.event.ComponentEvent e) {
-          splitPane.setBottomComponent(null);
-          super.componentHidden(e);
-        }
-      });
-    } else {
-      splitPane.setBottomComponent(null);
-    }
-      diagramPanel.setCurrentAction(UMLDiagramActions.select);
+  @Override
+  public void unloadForm() {
+    splitPane.setBottomComponent(null);
+    diagramPanel.setCurrentAction(UMLDiagramActions.select);
   }
 
+  @Override
+  public void loadForm(@Nonnull JPanel form) {
+    splitPane.setDividerLocation(0.75);
+    splitPane.setBottomComponent(new JScrollPane(form));
+    form.addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentHidden(ComponentEvent e) {
+        unloadForm();
+        super.componentHidden(e);
+        }
+      });
+    form.setVisible(true);
+    diagramPanel.setCurrentAction(UMLDiagramActions.select);
+  }
+
+  @Nonnull
   protected String getOntologyName() {
     if (ontology != null) {
       return ontology.getOntologyID().getOntologyIRI().toString();
     }
-    return null;
+    return "";
   }
 
   protected JToolBar createToolbar() {

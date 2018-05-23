@@ -3,13 +3,13 @@
  *
  * IOUtility.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,33 +105,36 @@ public class IOUtility {
         return Optional.empty();
     }
 
-    public static <T> T readJSON(java.io.File file, Class<T> cls) {
+    public static <T> Optional<T> readJSON(java.io.File file, Class<T> cls) {
         try {
-            return OBJECT_MAPPER.readValue(file, cls);
+            return Optional.of(OBJECT_MAPPER.readValue(file, cls));
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
-        return null;
+        return Optional.empty();
     }
 
-    public static EditorObjects open(InputStream fileStream, FileType fileType) {
+    @Nonnull
+    public static Optional<EditorObjects> open(InputStream fileStream, FileType fileType) {
         switch (fileType) {
             case ONTOLOGY:
-                OWLOntology ontology = OWLImporter.loadOntologyFromStream(fileStream);
-                if (ontology != null) {
-                    return new EditorObjects(null, ontology, OWLImporter.getShapes(ontology));
+                Optional<OWLOntology> ontologyProvider = OWLImporter.loadOntologyFromStream(fileStream);
+                if (ontologyProvider.isPresent()) {
+                    OWLOntology ontology = ontologyProvider.get();
+                    return Optional.of(new EditorObjects(null, ontology, OWLImporter.getShapes(ontology)));
                 }
                 break;
             case ANNOTATION:
             case UML:
             case QUERIES:
             case JSON:
-                return new EditorObjects(null, null, importJSON(fileStream));
+                return Optional.of(new EditorObjects(null, null, importJSON(fileStream)));
         }
-        return null;
+        return Optional.empty();
     }
 
-    public static EditorObjects open(File selectedFile, FileType... allowedFileType) {
+    @Nonnull
+    public static Optional<EditorObjects> open(File selectedFile, FileType... allowedFileType) {
         if (selectedFile == null) {
             Optional<File> fileProvider = UIUtility.selectFileToOpen(allowedFileType);
             if (fileProvider.isPresent()) {
@@ -140,18 +143,19 @@ public class IOUtility {
         }
         switch (IOUtility.getFileType(selectedFile)) {
             case ONTOLOGY:
-                OWLOntology ontology = OWLImporter.loadOntologyFromFile(selectedFile);
-                if (ontology != null) {
-                    return new EditorObjects(selectedFile, ontology, OWLImporter.getShapes(ontology));
+                Optional<OWLOntology> ontologyProvider = OWLImporter.loadOntologyFromFile(selectedFile);
+                if (ontologyProvider.isPresent()) {
+                    OWLOntology ontology = ontologyProvider.get();
+                    return Optional.of(new EditorObjects(selectedFile, ontology, OWLImporter.getShapes(ontology)));
                 }
                 break;
             case ANNOTATION:
             case UML:
             case QUERIES:
             case JSON:
-                return new EditorObjects(selectedFile, null, importJSON(selectedFile));
+                return Optional.of(new EditorObjects(selectedFile, null, importJSON(selectedFile)));
         }
-        return null;
+        return Optional.empty();
     }
 
     public static Set<DiagramShape> importJSON(File file) {
@@ -176,6 +180,7 @@ public class IOUtility {
         return OBJECT_MAPPER.getTypeFactory().constructCollectionType(Set.class, DiagramShape.class);
     }
 
+    @Nonnull
     public static FileType getFileType(File file) {
         if (file != null) {
             return FileType.which(getFileExtension(file));
@@ -187,14 +192,16 @@ public class IOUtility {
         return FilenameUtils.getExtension(file.getName());
     }
 
-    public static URL getImageURL(String imageName) {
-        // Look for the image.
-        String imgLocation = "/images/" + imageName + ".png";
-        URL imageURL = IOUtility.class.getResource(imgLocation);
-        if (imageURL == null) {
+    public static Optional<URL> getImageURL(String imageName) {
+        if (!imageName.isEmpty()) {
+            String imgLocation = "/images/" + imageName + ".png";
+            URL imageURL = IOUtility.class.getResource(imgLocation);
+            if (imageURL != null) {
+                return Optional.of(imageURL);
+            }
             LOGGER.warn("Resource not found: " + imgLocation);
         }
-        return imageURL;
+        return Optional.empty();
     }
 
 

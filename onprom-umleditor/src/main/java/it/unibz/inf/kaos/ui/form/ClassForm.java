@@ -3,13 +3,13 @@
  *
  * ClassForm.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,13 @@ import it.unibz.inf.kaos.ui.component.AttributeTable;
 import it.unibz.inf.kaos.ui.edit.EditFactory;
 import it.unibz.inf.kaos.ui.utility.*;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,8 +60,9 @@ public class ClassForm extends JPanel {
     private final String prevName;
     private final List<Attribute> prevAttributes;
 
-    public ClassForm(UMLDiagram drawingPanel, UMLClass _newClass, boolean isUpdateAllowed) {
+    public ClassForm(UMLDiagram drawingPanel, UMLClass _newClass) {
         newClass = _newClass;
+        final boolean isUpdateAllowed = drawingPanel.isUpdateAllowed();
         tblAttributes = new AttributeTable(isUpdateAllowed);
 
         setLayout(new GridBagLayout());
@@ -100,13 +106,13 @@ public class ClassForm extends JPanel {
 
             gridBagConstraints.gridx = 3;
             gridBagConstraints.gridy = 0;
-            add(UIUtility.createSmallButton(UMLEditorButtons.ADD, e3 -> tblAttributes.addEmptyAttribute()), gridBagConstraints);
+            add(UIUtility.createSmallButton(UMLEditorButtons.ADD, e -> tblAttributes.addEmptyAttribute()), gridBagConstraints);
 
             gridBagConstraints.gridy = 1;
-            add(UIUtility.createSmallButton(UMLEditorButtons.REMOVE, e2 -> tblAttributes.removeSelectedAttribute()), gridBagConstraints);
+            add(UIUtility.createSmallButton(UMLEditorButtons.REMOVE, e -> tblAttributes.removeSelectedAttribute()), gridBagConstraints);
 
             gridBagConstraints.gridy = 2;
-            add(UIUtility.createSmallButton(UMLEditorButtons.UP, e1 -> tblAttributes.moveUp()), gridBagConstraints);
+            add(UIUtility.createSmallButton(UMLEditorButtons.UP, e -> tblAttributes.moveUp()), gridBagConstraints);
 
             gridBagConstraints.gridy = 3;
             add(UIUtility.createSmallButton(UMLEditorButtons.DOWN, e -> tblAttributes.moveDown()), gridBagConstraints);
@@ -133,7 +139,6 @@ public class ClassForm extends JPanel {
         }
         txtName.setText(newClass.getName());
         tblAttributes.setAttributes(newClass.getAttributes().stream().map(Attribute::getClone).collect(Collectors.toList()));
-        setVisible(true);
     }
 
     private void ok() {

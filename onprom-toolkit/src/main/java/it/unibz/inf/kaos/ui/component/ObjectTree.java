@@ -46,7 +46,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import javax.swing.*;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.tree.TreePath;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -90,7 +91,14 @@ public class ObjectTree {
                 menuItem.addActionListener(e -> objects.removeSelected());
                 add(menuItem);
                 menuItem = new JMenuItem("Save as file", KeyEvent.VK_S);
-                menuItem.addActionListener(e -> UIUtility.executeInBackground(ObjectTree.this::saveSelected, toolkit.getProgressBar()));
+                menuItem.addActionListener(e -> UIUtility.executeInBackground(ObjectTree.this::saveSelected,
+                        toolkit.getProgressBar()));
+                add(menuItem);
+                menuItem = new JMenuItem("Open with Default Annotation Editor", KeyEvent.VK_A);
+                menuItem.addActionListener(e -> toolkit.displayAnnotationEditor());
+                add(menuItem);
+                menuItem = new JMenuItem("Open with Dynamic Annotation Editor", KeyEvent.VK_E);
+                menuItem.addActionListener(e -> toolkit.displayDynamicAnnotationEditor());
                 add(menuItem);
             }
         });
@@ -123,54 +131,53 @@ public class ObjectTree {
         InformationDialog.display(e.getMessage());
     }
 
-    public Void openFiles(File[] files) {
-        if (files != null) {
-            for (File selectedFile : files) {
-                switch (IOUtility.getFileType(selectedFile)) {
-                    case ONTOLOGY:
-                        try {
-                            addObject(selectedFile.getName(), FileType.ONTOLOGY, OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(selectedFile));
-                        } catch (Exception e) {
-                            logError(e);
+    public void openFiles(@Nonnull File[] files) {
+        for (File selectedFile : files) {
+            switch (IOUtility.getFileType(selectedFile)) {
+                case ONTOLOGY:
+                    try {
+                        addObject(selectedFile.getName(), FileType.ONTOLOGY,
+                                OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(selectedFile));
+                    } catch (Exception e) {
+                        logError(e);
+                    }
+                    break;
+                case MAPPING:
+                    try {
+                        OBDAModel obdaModel = OBDADataFactoryImpl.getInstance().getOBDAModel();
+                        new ModelIOManager(obdaModel).load(selectedFile);
+                        addObject(selectedFile.getName(), FileType.MAPPING, obdaModel);
+                    } catch (Exception e) {
+                        logError(e);
+                    }
+                    break;
+                case QUERIES:
+                    IOUtility.readJSON(selectedFile, AnnotationQueries.class).ifPresent(
+                            q -> addObject(selectedFile.getName(), FileType.QUERIES, q));
+                    break;
+                case ANNOTATION:
+                    addObject(selectedFile.getName(), FileType.ANNOTATION, IOUtility.importJSON(selectedFile));
+                    break;
+                case UML:
+                    addObject(selectedFile.getName(), FileType.UML, IOUtility.importJSON(selectedFile));
+                    break;
+                case JSON:
+                    addObject(selectedFile.getName(), FileType.JSON, IOUtility.importJSON(selectedFile));
+                    break;
+                case XLOG:
+                    try {
+                        for (XLog xlog : XES_PARSER.parse(selectedFile)) {
+                            addObject(selectedFile.getName(), FileType.XLOG, xlog);
                         }
-                        break;
-                    case MAPPING:
-                        try {
-                            OBDAModel obdaModel = OBDADataFactoryImpl.getInstance().getOBDAModel();
-                            new ModelIOManager(obdaModel).load(selectedFile);
-                            addObject(selectedFile.getName(), FileType.MAPPING, obdaModel);
-                        } catch (Exception e) {
-                            logError(e);
-                        }
-                        break;
-                    case QUERIES:
-                        addObject(selectedFile.getName(), FileType.QUERIES, IOUtility.readJSON(selectedFile, AnnotationQueries.class));
-                        break;
-                    case ANNOTATION:
-                        addObject(selectedFile.getName(), FileType.ANNOTATION, IOUtility.importJSON(selectedFile));
-                        break;
-                    case UML:
-                        addObject(selectedFile.getName(), FileType.UML, IOUtility.importJSON(selectedFile));
-                        break;
-                    case JSON:
-                        addObject(selectedFile.getName(), FileType.JSON, IOUtility.importJSON(selectedFile));
-                        break;
-                    case XLOG:
-                        try {
-                            for (XLog xlog : XES_PARSER.parse(selectedFile)) {
-                                addObject(selectedFile.getName(), FileType.XLOG, xlog);
-                            }
-                        } catch (Exception e) {
-                            logError(e);
-                        }
-                        break;
-                }
+                    } catch (Exception e) {
+                        logError(e);
+                    }
+                    break;
             }
         }
-        return null;
     }
 
-    public Void saveAll() {
+    public void saveAll() {
         UIUtility.selectFileToSave(FileType.ONTOLOGY).ifPresent(selectedFile -> {
             String fileName = FilenameUtils.removeExtension(selectedFile.getAbsolutePath());
             for (int i = 0; i < objects.getCount(); i++) {
@@ -178,23 +185,24 @@ public class ObjectTree {
                 saveObject(fileName, node.getType(), node.getUserObject());
             }
         });
-        return null;
     }
 
-    public Void saveSelected() {
+    public void saveSelected() {
         if (objects.getSelectionPaths() != null) {
             for (TreePath path : objects.getSelectionPaths()) {
                 try {
                     TreeNode node = (TreeNode) path.getLastPathComponent();
                     if (node.getType() != FileType.OTHER) {
-                        UIUtility.selectFileToSave(node.getType()).ifPresent(selectedFile -> saveObject(FilenameUtils.removeExtension(selectedFile.getAbsolutePath()), node.getType(), node.getUserObject()));
+                        UIUtility.selectFileToSave(node.getType()).ifPresent(selectedFile ->
+                                saveObject(FilenameUtils.removeExtension(selectedFile.getAbsolutePath()),
+                                        node.getType(), node.getUserObject())
+                        );
                     }
                 } catch (Exception e) {
                     logError(e);
                 }
             }
         }
-        return null;
     }
 
     private void saveObject(String fileName, FileType type, Object object) {
@@ -217,7 +225,7 @@ public class ObjectTree {
             case ANNOTATION:
             case QUERIES:
             case UML:
-                it.unibz.inf.kaos.ui.utility.IOUtility.exportJSON(new File(filePath), object);
+                IOUtility.exportJSON(new File(filePath), object);
                 break;
             case XLOG:
                 try {

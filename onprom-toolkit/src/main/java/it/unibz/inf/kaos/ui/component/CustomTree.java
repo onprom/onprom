@@ -3,13 +3,13 @@
  *
  * CustomTree.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,12 +35,11 @@ import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import java.awt.*;
+import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URL;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -91,16 +90,9 @@ public class CustomTree<T> extends JTree {
         root = _root;
         setCellRenderer(new DefaultTreeCellRenderer() {
             @Override
-            public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
-                                                          boolean leaf, int row, boolean hasFocus) {
+            public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
                 Component component = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-                TreeNode node = (TreeNode) value;
-                if (node.getIcon() != null) {
-                    URL imageUrl = IOUtility.getImageURL(node.getIcon());
-                    if (imageUrl != null) {
-                        setIcon(new ImageIcon(imageUrl));
-                    }
-                }
+                IOUtility.getImageURL(((TreeNode) value).getIcon()).ifPresent(iconUrl -> setIcon(new ImageIcon(iconUrl)));
                 return component;
             }
         });
@@ -157,7 +149,7 @@ public class CustomTree<T> extends JTree {
     }
 
     @Nonnull
-    public Set<TreeNode<T>> getAllNodes() {
+    Set<TreeNode<T>> getAllNodes() {
         return root.getChildren();
     }
 
