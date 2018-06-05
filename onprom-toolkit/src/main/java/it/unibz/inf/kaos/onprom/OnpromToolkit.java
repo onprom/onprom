@@ -284,7 +284,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                 try {
                     long start = System.currentTimeMillis();
                     XLog xlog = new XESLogExtractorWithEBDAMapping().extractXESLog(ontology, model, queries);
-                    logger.error("It took " + (System.currentTimeMillis() - start) + " ms to export log");
+                    logger.debug(String.format("EXTRACTION TOOK %s SECONDS", (System.currentTimeMillis() - start) / 1000));
                     displayLogSummary(xlog);
                 } catch (Exception e) {
                     logError(e);

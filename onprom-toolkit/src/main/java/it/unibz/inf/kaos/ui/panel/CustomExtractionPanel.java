@@ -101,7 +101,7 @@ public class CustomExtractionPanel extends JPanel {
         add(UIUtility.createButton(UMLEditorButtons.EXPORT, event -> UIUtility.executeInBackground(() -> {
             try {
                 XLog xlog = null;
-
+                long start = System.currentTimeMillis();
                 if (cmbEventOntology.getSelectedIndex() > -1) {
                     if (cmbXESAnnotations.getSelectedIndex() < 0) {
                         UIUtility.error("Please select all required inputs!");
@@ -121,8 +121,10 @@ public class CustomExtractionPanel extends JPanel {
                             (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject()
                     );
                 }
-                if (xlog != null)
+                if (xlog != null) {
+                    logger.debug(String.format("EXTRACTION TOOK %s SECONDS", (System.currentTimeMillis() - start) / 1000));
                     toolkit.displayLogSummary(xlog);
+                }
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 UIUtility.error(e.getMessage());

@@ -3,13 +3,13 @@
  *
  * ExtractionFrame.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,10 @@ package it.unibz.inf.kaos.ui.component;
 import it.unibz.inf.kaos.onprom.OnpromToolkit;
 import it.unibz.inf.kaos.ui.panel.CustomExtractionPanel;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JInternalFrame;
+import javax.swing.JScrollPane;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 /**
  * @author T. E. Kalayci on 10-Jul-2017.
@@ -38,7 +40,7 @@ import java.awt.*;
 public class ExtractionFrame extends JInternalFrame {
 
     public ExtractionFrame(OnpromToolkit toolkit) {
-        super("Log Extraction Diagram", true, true, true, true);
+        super("Log Extraction Panel", true, true, true, true);
         this.getContentPane().setLayout(new BorderLayout());
         this.getContentPane().add(new JScrollPane(new CustomExtractionPanel(toolkit)), BorderLayout.CENTER);
         this.setSize(new Dimension(1024, 768));

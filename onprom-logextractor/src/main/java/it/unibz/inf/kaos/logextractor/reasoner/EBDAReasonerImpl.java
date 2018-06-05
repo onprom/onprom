@@ -1,12 +1,22 @@
 /*
- * Copyright (C) 2017 Free University of Bozen-Bolzano
- * 
+ * onprom-logextractor
+ *
+ * EBDAReasonerImpl.java
+ *
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -75,7 +85,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * Initializes EBDA Reasoner based on the given EBDA Mapping.
 	 * 
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
-	 * @param ebdaModel
+	 * @param ebdaMapping
 	 */
 	public EBDAReasonerImpl(EBDAMapping ebdaMapping){
 		
@@ -752,8 +762,14 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 				val = (valObj == null? null: valObj.getLiteral()); 
 				if(val == null) continue;//if the attribute type is null, then skip the rest and move on
 
-				if(attributes.containsKey(newAtt))
-					attributes.get(newAtt).setVal(val);					
+				try {
+					if (attributes.containsKey(newAtt)) {
+						attributes.get(newAtt).setVal(val);
+					}
+				} catch (Exception e) {
+					logger.error(e.getMessage());
+					logger.error("\tAttribute: " + newAtt + "\n\tValue:" + val);
+				}
 			}
 			if(rs3 != null) rs3.close(); rs3 = null;
 
@@ -1475,7 +1491,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param HashMap<String,XAttributeOnProm> xattmap - a hashMap between an attribute URI and the corresponding XAttributeOnProm object
 	 * @return HashMap<String,XEventOnProm> - A hashMap between an event URI and the corresponding XEventOnProm object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
@@ -1694,7 +1709,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param HashMap<String,XAttribute> xattmap - a hashMap between an attribute URI and the corresponding XAttribute object
 	 * @return HashMap<String,XEventOnProm> - A hashMap between an event URI and the corresponding XEventOnProm object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
@@ -1863,7 +1877,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param EfficientHashMap<XAtt> xattmap - a hashMap between an attribute URI and the corresponding XAtt
 	 * @return EfficientHashMap<XEventOnPromNoURI> - A hashMap between an event URI and the corresponding XEventOnPromNoURI object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
@@ -3236,8 +3249,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param HashMap<String,XEventOnProm> xevtmap - A hashMap between an event URI and the corresponding XEvent object
-	 * @param HashMap<String,XAttributeOnProm> xattmap - A hashMap between an attribute URI and the corresponding XAttribute object
 	 * @return HashMap<String,XTrace> - A hashMap between a trace URI and the corresponding XTrace object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
@@ -3569,8 +3580,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param HashMap<String,XEventOnProm> xevtmap - A hashMap between an event URI and the corresponding XEvent object
-	 * @param HashMap<String,XAttribute> xattmap - A hashMap between an attribute URI and the corresponding XAttribute object
 	 * @return HashMap<String,XTrace> - A hashMap between a trace URI and the corresponding XTrace object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
@@ -3903,8 +3912,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param EfficientHashMap<XEventOnPromNoURI> xevtmap - A hashMap between an event URI and the corresponding XEventOnPromNoURI object
-	 * @param EfficientHashMap<XAtt> xattmap - A hashMap between an attribute URI and the corresponding XAtt
 	 * @return EfficientHashMap<XTrace> - A hashMap between a trace URI and the corresponding XTrace object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
@@ -4169,8 +4176,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param EfficientHashMap<XEventOnPromNoURI> xevtmap - A hashMap between an event URI and the corresponding XEventOnPromNoURI object
-	 * @param EfficientHashMap<XAtt> xattmap - A hashMap between an attribute URI and the corresponding XAtt
 	 * @return EfficientHashMap<XTrace> - A hashMap between a trace URI and the corresponding XTrace object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)

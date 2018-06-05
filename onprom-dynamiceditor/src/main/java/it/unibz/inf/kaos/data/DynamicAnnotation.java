@@ -133,13 +133,14 @@ public class DynamicAnnotation extends Annotation {
 
         logger.info("\tpreparing URI fields");
 
+        uri.add(getVarName());
+
         if (isLabelPartOfIndex) {
             String id = "_L_" + hashCode();
             uriFields.put("__label__", ImmutablePair.of(id, getLabel()));
             uri.add(id);
         }
 
-        uri.add(getVarName());
         externalURIComponents.forEach(component -> {
             String id = "_E" + uriFields.size() + "_" + hashCode();
             uriFields.put(id, ImmutablePair.of(id, component));
