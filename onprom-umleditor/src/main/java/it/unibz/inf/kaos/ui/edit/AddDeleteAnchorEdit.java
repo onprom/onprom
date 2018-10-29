@@ -30,25 +30,27 @@ import it.unibz.inf.kaos.data.RelationAnchor;
 import it.unibz.inf.kaos.data.Relationship;
 
 import javax.swing.undo.AbstractUndoableEdit;
+import java.util.List;
 
 /**
  * Anchor addition and removal undo-redo edit
  * <p>
+ *
  * @author T. E. Kalayci
  * Date: 29-Sep-16
  */
-public class AddDeleteAnchorEdit extends AbstractUndoableEdit {
+class AddDeleteAnchorEdit extends AbstractUndoableEdit {
     private static final long serialVersionUID = 1L;
 
     private final Relationship relation;
-    private final RelationAnchor anchor;
+    private final List<RelationAnchor> anchors;
     // true for adding, false for deletion
     private final boolean adding;
 
-    public AddDeleteAnchorEdit(Relationship _rel, RelationAnchor _anchor, boolean
+    AddDeleteAnchorEdit(Relationship _rel, List<RelationAnchor> _anchors, boolean
             _adding) {
         relation = _rel;
-        anchor = _anchor;
+        anchors = _anchors;
         adding = _adding;
     }
 
@@ -74,14 +76,14 @@ public class AddDeleteAnchorEdit extends AbstractUndoableEdit {
 
     @Override
     public String getPresentationName() {
-        return String.format("AddDeleteAnchorEdit_%s_%s", relation.toString(), anchor.toString());
+        return String.format("AddDeleteAnchorEdit_%s_%s", relation.toString(), anchors.toString());
     }
 
     private void delete() {
-        relation.removeAnchor(anchor);
+        relation.removeAnchor(anchors);
     }
 
     private void add() {
-        relation.addAnchor(anchor);
+        relation.addAnchors(anchors);
     }
 }

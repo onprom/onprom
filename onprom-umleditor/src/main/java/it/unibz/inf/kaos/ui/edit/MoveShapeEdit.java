@@ -29,20 +29,21 @@ package it.unibz.inf.kaos.ui.edit;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 
 import javax.swing.undo.AbstractUndoableEdit;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * Shape movement undo-redo action
  * <p>
+ *
  * @author T. E. Kalayci
  * Date: 29-Sep-16
  */
-public class MoveShapeEdit extends AbstractUndoableEdit {
+class MoveShapeEdit extends AbstractUndoableEdit {
     private final int moveX;
     private final int moveY;
-    private final Set<DiagramShape> shapes;
+    private final Collection<DiagramShape> shapes;
 
-    public MoveShapeEdit(Set<DiagramShape> _cls, int _moveX, int _moveY) {
+    MoveShapeEdit(Collection<DiagramShape> _cls, int _moveX, int _moveY) {
         shapes = _cls;
         moveX = _moveX;
         moveY = _moveY;

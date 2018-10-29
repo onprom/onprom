@@ -3,13 +3,13 @@
  *
  * Relationship.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,27 +27,30 @@
 package it.unibz.inf.kaos.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import it.unibz.inf.kaos.ui.utility.DrawingConstants;
+import com.google.common.collect.Lists;
+import it.unibz.inf.kaos.interfaces.UMLDiagram;
+import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Relationship class
  * <p>
  * @author T. E. Kalayci
- * 17-Mar-17
  */
-public abstract class Relationship extends AbstractDiagramShape {
+public abstract class Relationship extends AbstractDiagramShape<UMLDiagram> {
     private UMLClass firstClass;
     private UMLClass secondClass;
-    private ArrayList<RelationAnchor> anchors;
+    private List<RelationAnchor> anchors;
 
     @JsonIgnore
-    private RelationAnchor selectedAnchor;
+    private List<RelationAnchor> selectedAnchors;
 
     public Relationship() {
     }
@@ -73,7 +76,7 @@ public abstract class Relationship extends AbstractDiagramShape {
     protected abstract String getDisplayString();
 
     Stroke getStroke() {
-        return DrawingConstants.RELATION_STROKE;
+        return DrawingUtility.RELATION_STROKE;
     }
 
     public int getStartX() {
@@ -102,12 +105,12 @@ public abstract class Relationship extends AbstractDiagramShape {
         return getSecondClass().getCenterY();
     }
 
-    public void translate(int xdiff, int ydiff) {
-        if (selectedAnchor != null) {
-            selectedAnchor.translate(xdiff, ydiff);
+    public void translate(int diffX, int diffY) {
+        if (selectedAnchors != null && !selectedAnchors.isEmpty()) {
+            selectedAnchors.forEach(anchor -> anchor.translate(diffX, diffY));
         } else {
-            if (anchors != null && anchors.size() > 0) {
-                anchors.forEach(anchor -> anchor.translate(xdiff, ydiff));
+            if (anchors != null && !anchors.isEmpty()) {
+                anchors.forEach(anchor -> anchor.translate(diffX, diffY));
             }
         }
     }
@@ -129,19 +132,19 @@ public abstract class Relationship extends AbstractDiagramShape {
 
     public void draw(Graphics2D g2d) {
         // store current stroke and color
-        Font oldFont = g2d.getFont();
-        Stroke oldStroke = g2d.getStroke();
-        Color oldColor = g2d.getColor();
-        g2d.setFont(DrawingConstants.RELATION_FONT);
+        final Font oldFont = g2d.getFont();
+        final Stroke oldStroke = g2d.getStroke();
+        final Color oldColor = g2d.getColor();
+        g2d.setFont(DrawingUtility.RELATION_FONT);
         // color according to state
         g2d.setColor(getState().getColor());
         g2d.setStroke(getStroke());
         g2d.draw(getShape());
         drawAnchors(g2d);
         if (!getDisplayString().isEmpty()) {
-            int[] namePosition = getNamePosition();
-            Rectangle2D nameRectangle = g2d.getFontMetrics().getStringBounds(getDisplayString(), g2d);
-            drawLabel(g2d, getDisplayString(), namePosition[0] - (int) (nameRectangle.getWidth() / 2), namePosition[1] - DrawingConstants.GAP, true);
+            final int[] namePosition = getNamePosition();
+            final Rectangle2D nameRectangle = g2d.getFontMetrics().getStringBounds(getDisplayString(), g2d);
+            drawLabel(g2d, getDisplayString(), namePosition[0] - (int) (nameRectangle.getWidth() / 2), namePosition[1] - DrawingUtility.MARGIN, true);
         }
         g2d.setColor(oldColor);
         g2d.setStroke(oldStroke);
@@ -172,13 +175,14 @@ public abstract class Relationship extends AbstractDiagramShape {
             this.secondClass.addRelation(this);
     }
 
-    public RelationAnchor deleteAnchor() {
-        if (selectedAnchor != null) {
-            selectedAnchor.setState(State.NORMAL);
-            anchors.remove(selectedAnchor);
-            return selectedAnchor;
+    @Nonnull
+    public List<RelationAnchor> deleteAnchor() {
+        if (selectedAnchors != null) {
+            selectedAnchors.forEach(anchor -> anchor.setState(State.NORMAL));
+            anchors.removeAll(selectedAnchors);
+            return selectedAnchors;
         }
-        return null;
+        return Lists.newArrayList();
     }
 
     public int getAnchorCount() {
@@ -188,12 +192,12 @@ public abstract class Relationship extends AbstractDiagramShape {
         return anchors.size();
     }
 
-    public void selectAnchor(int x, int y) {
+    void selectAnchor(int x, int y) {
         if (anchors != null) {
-            selectedAnchor = anchors.stream().filter(anchor -> anchor.over(x, y)).findFirst().orElse(null);
+            selectedAnchors = anchors.stream().filter(anchor -> anchor.over(x, y)).collect(Collectors.toList());
             anchors.forEach(anchor -> anchor.setState(State.NORMAL));
-            if (selectedAnchor != null)
-                selectedAnchor.setState(State.SELECTED);
+            if (selectedAnchors != null && !selectedAnchors.isEmpty())
+                selectedAnchors.forEach(anchor -> anchor.setState(State.SELECTED));
         }
     }
 
@@ -206,18 +210,18 @@ public abstract class Relationship extends AbstractDiagramShape {
     }
 
     public RelationAnchor addAnchor(int x, int y) {
-        return addAnchor(new RelationAnchor(x, y));
+        return addAnchor((new RelationAnchor(x, y)));
     }
 
-    public void removeAnchor(RelationAnchor anchor) {
+    public void removeAnchor(List<RelationAnchor> anchor) {
         if (anchors != null) {
-            anchors.remove(anchor);
+            anchors.removeAll(anchor);
         }
     }
 
-    public RelationAnchor addAnchor(RelationAnchor anchor) {
+    private RelationAnchor addAnchor(RelationAnchor anchor) {
         if (anchors == null) {
-            anchors = new ArrayList<>();
+            anchors = Lists.newArrayList();
         }
         if (!anchors.contains(anchor)) {
             anchors.add(anchor);
@@ -226,13 +230,13 @@ public abstract class Relationship extends AbstractDiagramShape {
         return null;
     }
 
-    public void addAnchors(ArrayList<RelationAnchor> _anchors) {
+    public void addAnchors(Iterable<RelationAnchor> _anchors) {
         for (RelationAnchor anchor : _anchors) {
             addAnchor(new RelationAnchor(anchor.getX(), anchor.getY()));
         }
     }
 
-    public ArrayList<RelationAnchor> getAnchors() {
+    List<RelationAnchor> getAnchors() {
         return anchors;
     }
 
@@ -269,8 +273,8 @@ public abstract class Relationship extends AbstractDiagramShape {
         }
         //return middle anchor's position
         int[] position = getAnchors().get(getAnchorCount() / 2).getPosition();
-        position[0] += DrawingConstants.GAP;
-        position[1] -= DrawingConstants.GAP;
+        position[0] += DrawingUtility.MARGIN;
+        position[1] -= DrawingUtility.MARGIN;
         return position;
     }
 

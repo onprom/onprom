@@ -26,7 +26,6 @@
 
 package it.unibz.inf.kaos.data;
 
-import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 
 import java.util.Set;
@@ -37,78 +36,82 @@ import java.util.Set;
  * @author T. E. Kalayci on 17/11/16.
  */
 public class NavigationalAttribute {
-  private Set<DiagramShape> path;
-  private UMLClass umlClass;
-  private Attribute attribute;
-  private String filterClause;
-  private Annotation annotation;
+    private Set<DiagramShape> path;
+    private UMLClass umlClass;
+    private Attribute attribute;
+    private String filterClause;
 
-  NavigationalAttribute() {
-  }
-
-  public NavigationalAttribute(Annotation _annotation) {
-    this(null, _annotation.getRelatedClass(), null);
-    annotation = _annotation;
-  }
-
-  public NavigationalAttribute(UMLClass _cls, Attribute _attr) {
-    this(null, _cls, _attr);
-  }
-
-  public NavigationalAttribute(Set<DiagramShape> _path, UMLClass _cls, Attribute _attr) {
-    path = _path;
-    umlClass = _cls;
-    attribute = _attr;
-  }
-
-  void reset() {
-    path = null;
-    umlClass = null;
-    attribute = null;
-  }
-
-  public Set<DiagramShape> getPath() {
-    return path;
-  }
-
-  public void setPath(Set<DiagramShape> path) {
-    this.path = path;
-  }
-
-  public UMLClass getUmlClass() {
-    return umlClass;
-  }
-
-  public Attribute getAttribute() {
-    return attribute;
-  }
-
-  public Annotation getAnnotation() {
-    return annotation;
-  }
-
-  public String toString() {
-    StringBuilder stringBuilder = new StringBuilder("");
-    if (attribute != null)
-      stringBuilder.append(attribute.getName()).append(" in ");
-    if (umlClass != null)
-      stringBuilder.append(umlClass.toString());
-    if (path != null && path.size() > 0) {
-      stringBuilder.append(" [ ");
-      for (DiagramShape node : path) {
-        stringBuilder.append(node).append("\u25b7");
-      }
-      //remove last character
-      stringBuilder.deleteCharAt(stringBuilder.length() - 1).append("]");
+    NavigationalAttribute() {
     }
-    return stringBuilder.toString();
-  }
 
-  public String getFilterClause() {
-    return filterClause;
-  }
+    public NavigationalAttribute(UMLClass _cls, Attribute _attr) {
+        this(null, _cls, _attr);
+    }
 
-  public void setFilterClause(String _regex) {
-    filterClause = _regex;
-  }
+    public NavigationalAttribute(Set<DiagramShape> _path, UMLClass _cls, Attribute _attr) {
+        path = _path;
+        umlClass = _cls;
+        attribute = _attr;
+    }
+
+    void reset() {
+        path = null;
+        umlClass = null;
+        attribute = null;
+    }
+
+    public Set<DiagramShape> getPath() {
+        return path;
+    }
+
+    public void setPath(Set<DiagramShape> path) {
+        this.path = path;
+    }
+
+    public UMLClass getUmlClass() {
+        return umlClass;
+    }
+
+    public Attribute getAttribute() {
+        return attribute;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (attribute != null)
+            stringBuilder.append(attribute.getName()).append(" in ");
+        if (umlClass != null)
+            stringBuilder.append(umlClass.toString());
+        if (path != null && !path.isEmpty()) {
+            stringBuilder.append(" [ ");
+            for (DiagramShape node : path) {
+                stringBuilder.append(node).append("\u25b7");
+            }
+            //remove last character
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1).append("]");
+        }
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof NavigationalAttribute) {
+            NavigationalAttribute other = (NavigationalAttribute) object;
+            try {
+                return other.getAttribute().equals(getAttribute()) && other.getUmlClass().equals(getUmlClass());
+            } catch (NullPointerException e) {
+                //
+            }
+        }
+        return super.equals(object);
+    }
+
+    public String getFilterClause() {
+        return filterClause;
+    }
+
+    public void setFilterClause(String _regex) {
+        filterClause = _regex;
+    }
 }

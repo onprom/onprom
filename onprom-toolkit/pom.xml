@@ -4,13 +4,13 @@
   ~
   ~ pom.xml
   ~
-  ~ Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+  ~ Copyright (C) 2016-2018 Free University of Bozen-Bolzano
   ~
   ~ This product includes software developed under
-  ~  KAOS: Knowledge-Aware Operational Support project
-  ~  (https://kaos.inf.unibz.it).
+  ~ KAOS: Knowledge-Aware Operational Support project
+  ~ (https://kaos.inf.unibz.it).
   ~
-  ~  Please visit https://onprom.inf.unibz.it for more information.
+  ~ Please visit https://onprom.inf.unibz.it for more information.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -25,8 +25,7 @@
   ~ limitations under the License.
   -->
 
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>onprom-toolkit</artifactId>
@@ -34,7 +33,7 @@
     <parent>
         <artifactId>onprom</artifactId>
         <groupId>it.unibz.inf.kaos</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>2.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <build>
@@ -51,8 +50,9 @@
             <!-- Generate large JAR with dependencies-->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>${maven.assembly.version}</version>
                 <configuration>
-                    <finalName>${project.artifactId}</finalName>
+                    <finalName>${project.artifactId}-${project.version}</finalName>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
@@ -73,43 +73,16 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/lib
-                            </outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>it.inf.unibz.kaos.onprom.OnpromToolkit
-                            </mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>-->
         </plugins>
     </build>
     <dependencies>
         <dependency>
             <artifactId>onprom-annoeditor</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>onprom-dynamiceditor</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
         </dependency>
@@ -121,7 +94,7 @@
         <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
-            <version>1.0.19</version>
+            <version>1.5.0</version>
         </dependency>
     </dependencies>
 </project>

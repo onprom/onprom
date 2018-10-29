@@ -26,7 +26,7 @@
 
 package it.unibz.inf.kaos.data;
 
-import it.unibz.inf.kaos.ui.utility.DrawingConstants;
+import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
 import java.awt.*;
 
@@ -34,7 +34,7 @@ import java.awt.*;
  * @author T. E. Kalayci
  */
 public class Disjoint extends Relationship {
-  private final static String DISJOINT = "{disjoint}";
+    private static final String DISJOINT = "{disjoint}";
 
   public Disjoint() {
   }
@@ -50,7 +50,7 @@ public class Disjoint extends Relationship {
 
   @Override
   public Stroke getStroke() {
-    return DrawingConstants.DISJOINT_STROKE;
+      return DrawingUtility.DISJOINT_STROKE;
   }
 
   @Override
@@ -62,10 +62,7 @@ public class Disjoint extends Relationship {
   public boolean equals(Object obj) {
     if (obj instanceof Disjoint) {
       Disjoint other = (Disjoint) obj;
-      if (other.getFirstClass().equals(getFirstClass()) && other.getSecondClass().equals(getSecondClass()))
-        return true;
-      if (other.getFirstClass().equals(getSecondClass()) && other.getSecondClass().equals(getFirstClass()))
-        return true;
+        return other.getFirstClass().equals(getFirstClass()) && other.getSecondClass().equals(getSecondClass()) || other.getFirstClass().equals(getSecondClass()) && other.getSecondClass().equals(getFirstClass());
     }
     return false;
   }

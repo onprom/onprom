@@ -3,13 +3,13 @@
  *
  * RelationForm.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,20 +30,23 @@ import it.unibz.inf.kaos.data.Association;
 import it.unibz.inf.kaos.data.Cardinality;
 import it.unibz.inf.kaos.data.UMLClass;
 import it.unibz.inf.kaos.interfaces.UMLDiagram;
-import it.unibz.inf.kaos.ui.edit.UpdateRelationEdit;
+import it.unibz.inf.kaos.ui.edit.EditFactory;
+import it.unibz.inf.kaos.ui.utility.DiagramUndoManager;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorButtons;
 import it.unibz.inf.kaos.ui.utility.UMLEditorLabels;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.Set;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 /**
  * Relation form
  * <p>
  * @author T. E. Kalayci
- * Date: 10-Nov-16
  */
 public class RelationForm extends JPanel {
     private final JComboBox<Cardinality> cmbFirstCardinality;
@@ -53,9 +56,9 @@ public class RelationForm extends JPanel {
     private final Association association;
     private final JTextField txtRelationName;
 
-    public RelationForm(UMLDiagram drawingPanel, Association _association, boolean editable) {
+    public RelationForm(UMLDiagram drawingPanel, Association _association) {
         association = _association;
-
+        final boolean isUpdateAllowed = drawingPanel.isUpdateAllowed();
         setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
 
@@ -67,12 +70,11 @@ public class RelationForm extends JPanel {
         add(UIUtility.createLabel(UMLEditorLabels.FROM_TO, lblDimension), gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        final Set<UMLClass> classes = drawingPanel.getClasses();
-        cmbFirstClass = UIUtility.createWideComboBox(classes, txtDimension, null, editable, true);
+        cmbFirstClass = UIUtility.createWideComboBox(drawingPanel.getClasses(), txtDimension, null, isUpdateAllowed, true);
         add(cmbFirstClass, gridBagConstraints);
 
         gridBagConstraints.gridx = 2;
-        cmbSecondClass = UIUtility.createWideComboBox(classes, txtDimension, null, editable, true);
+        cmbSecondClass = UIUtility.createWideComboBox(drawingPanel.getClasses(), txtDimension, null, isUpdateAllowed, true);
         add(cmbSecondClass, gridBagConstraints);
 
 
@@ -81,11 +83,11 @@ public class RelationForm extends JPanel {
         add(UIUtility.createLabel(UMLEditorLabels.CARDINALITY, lblDimension), gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
-        cmbFirstCardinality = UIUtility.createWideComboBoxArray(Cardinality.values(), txtDimension, editable);
+        cmbFirstCardinality = UIUtility.createWideComboBox(Cardinality.values(), txtDimension, null, isUpdateAllowed, false);
         add(cmbFirstCardinality, gridBagConstraints);
 
         gridBagConstraints.gridx = 2;
-        cmbSecondCardinality = UIUtility.createWideComboBoxArray(Cardinality.values(), txtDimension, editable);
+        cmbSecondCardinality = UIUtility.createWideComboBox(Cardinality.values(), txtDimension, null, isUpdateAllowed, false);
         add(cmbSecondCardinality, gridBagConstraints);
 
 
@@ -95,15 +97,14 @@ public class RelationForm extends JPanel {
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridwidth = 2;
-      txtRelationName = UIUtility.createTextField(UMLEditorLabels.RELATION_NAME.getTooltip(), new Dimension(400, 25), e -> {
-      }, editable);
+        txtRelationName = UIUtility.createTextField(UMLEditorLabels.RELATION_NAME.getTooltip(), new Dimension(400, 25), isUpdateAllowed);
         add(txtRelationName, gridBagConstraints);
         txtRelationName.setText(association.getName());
 
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridx = 3;
         add(UIUtility.createButton(UMLEditorButtons.CANCEL, e -> setVisible(false), lblDimension), gridBagConstraints);
-        if (editable) {
+        if (isUpdateAllowed) {
             gridBagConstraints.gridy = 0;
             add(UIUtility.createButton(UMLEditorButtons.SAVE, e -> {
                 String prevName = association.getName();
@@ -116,7 +117,7 @@ public class RelationForm extends JPanel {
                 association.setSecondClass((UMLClass) cmbSecondClass.getSelectedItem());
                 setVisible(false);
                 //undo operation
-                drawingPanel.addEdit(new UpdateRelationEdit(association, prevName, prevFirst, prevSecond));
+                DiagramUndoManager.addEdit(EditFactory.relationUpdated(association, prevName, prevFirst, prevSecond));
             }, lblDimension), gridBagConstraints);
         }
 
@@ -124,6 +125,5 @@ public class RelationForm extends JPanel {
         cmbSecondCardinality.setSelectedItem(association.getSecondMultiplicity());
         cmbFirstClass.setSelectedItem(association.getFirstClass());
         cmbSecondClass.setSelectedItem(association.getSecondClass());
-        this.setVisible(true);
     }
 }

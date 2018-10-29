@@ -3,13 +3,13 @@
  *
  * AbstractAnnotationForm.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,28 +26,31 @@
 
 package it.unibz.inf.kaos.ui.form;
 
+import it.unibz.inf.kaos.data.Annotation;
 import it.unibz.inf.kaos.data.Attribute;
 import it.unibz.inf.kaos.data.UMLClass;
-import it.unibz.inf.kaos.interfaces.Annotation;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
-import it.unibz.inf.kaos.interfaces.AnnotationForm;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.interfaces.NavigationListener;
 import it.unibz.inf.kaos.ui.component.UpdateListener;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.Set;
 
 /**
- * Super class for annotation forms
+ * This class provides a skeletal implementation of the AnnotationForm interface,
+ * to minimize the effort required to implement this interface.
  * <p>
  * @author T. E. Kalayci on 13/12/16.
  */
-public abstract class AbstractAnnotationForm extends JPanel implements AnnotationForm, NavigationListener {
-  static final Dimension BTN_SIZE = new Dimension(85, 25);
-  static final Dimension TXT_SIZE = new Dimension(200, 25);
+public abstract class AbstractAnnotationForm extends JPanel implements NavigationListener {
+    public static final Dimension BTN_SIZE = new Dimension(85, 25);
+    public static final Dimension CHK_SIZE = new Dimension(125, 25);
+    public static final Dimension TXT_SIZE = new Dimension(175, 25);
+    public static final Dimension DOUBLE_TXT_SIZE = new Dimension(350, 25);
   final AnnotationDiagram drawingPanel;
   final Annotation annotation;
   private UpdateListener updateListener;
@@ -69,10 +72,7 @@ public abstract class AbstractAnnotationForm extends JPanel implements Annotatio
     updateListener.updateAttribute(path, selectedClass, selectedAttribute);
   }
 
-  /**
-   * This method populates the form empty of with an information
-   */
-  public abstract void populateForm();
+  protected abstract void populateForm();
 
   void addTabbedPane(JPanel mainPanel, JPanel attributeForm) {
     JTabbedPane tabbedPane = new JTabbedPane();
@@ -90,6 +90,7 @@ public abstract class AbstractAnnotationForm extends JPanel implements Annotatio
       populateForm();
     } else {
       drawingPanel.resetAttributeStates();
+      drawingPanel.resetNavigation();
     }
   }
 }

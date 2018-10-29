@@ -3,13 +3,13 @@
  *
  * DiagramEditor.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,8 @@
 
 package it.unibz.inf.kaos.ui.interfaces;
 
-import javax.swing.*;
+import javax.annotation.Nonnull;
+import javax.swing.JPanel;
 import java.io.File;
 
 /**
@@ -44,5 +45,7 @@ public interface DiagramEditor {
 
     void save();
 
-    void loadEditor(JPanel panel);
+    void loadForm(@Nonnull JPanel panel);
+
+    void unloadForm();
 }

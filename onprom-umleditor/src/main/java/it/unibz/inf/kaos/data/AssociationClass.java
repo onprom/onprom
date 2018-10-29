@@ -26,7 +26,7 @@
 
 package it.unibz.inf.kaos.data;
 
-import it.unibz.inf.kaos.ui.utility.DrawingConstants;
+import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
 import java.awt.*;
 
@@ -41,6 +41,12 @@ public class AssociationClass extends UMLClass {
 
   public AssociationClass() {
   }
+
+    public AssociationClass(Association association, int x, int y) {
+        this(association);
+        setStartX(x);
+        setStartY(y);
+    }
 
   public AssociationClass(Association association) {
     this.association = association;
@@ -70,9 +76,9 @@ public class AssociationClass extends UMLClass {
   }
 
   public void draw(Graphics2D g2d) {
-    Stroke oldStroke = g2d.getStroke();
-    int[] coordinates = association.getNamePosition();
-    g2d.setStroke(DrawingConstants.DISJOINT_STROKE);
+      final Stroke oldStroke = g2d.getStroke();
+      final int[] coordinates = association.getNamePosition();
+      g2d.setStroke(DrawingUtility.DISJOINT_STROKE);
     g2d.drawLine(getCenterX(), getCenterY(), coordinates[0], coordinates[1]);
     g2d.setStroke(oldStroke);
     super.draw(g2d);

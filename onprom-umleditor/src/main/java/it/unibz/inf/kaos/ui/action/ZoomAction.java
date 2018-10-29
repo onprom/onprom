@@ -26,10 +26,11 @@
 
 package it.unibz.inf.kaos.ui.action;
 
-import it.unibz.inf.kaos.data.ActionType;
-import it.unibz.inf.kaos.data.UMLActionType;
-import it.unibz.inf.kaos.ui.panel.UMLDiagramPanel;
+import it.unibz.inf.kaos.data.UMLDiagramActions;
+import it.unibz.inf.kaos.interfaces.ActionType;
 import it.unibz.inf.kaos.ui.utility.ZoomUtility;
+
+import javax.swing.*;
 
 /**
  * Zoom actions of toolbar buttons
@@ -38,20 +39,23 @@ import it.unibz.inf.kaos.ui.utility.ZoomUtility;
  * Date: 27-Oct-16
  */
 public class ZoomAction extends ToolbarAction {
+    private final JPanel diagram;
 
-    public ZoomAction(UMLDiagramPanel _panel, ActionType _action) {
-        super(_panel, _action);
+    public ZoomAction(JPanel _panel, ActionType _action) {
+        super(_action);
+        diagram = _panel;
+
     }
 
     @Override
     public void execute() {
-      if (actionType.equals(UMLActionType.zoomin)) {
+        if (actionType.equals(UMLDiagramActions.zoomin)) {
         ZoomUtility.increaseZoom();
-      } else if (actionType.equals(UMLActionType.zoomout)) {
+        } else if (actionType.equals(UMLDiagramActions.zoomout)) {
         ZoomUtility.decreaseZoom();
-      } else if (actionType.equals(UMLActionType.resetzoom)) {
+        } else if (actionType.equals(UMLDiagramActions.resetzoom)) {
         ZoomUtility.resetZoom();
       }
-        diagramPanel.repaint();
+        diagram.repaint();
     }
 }

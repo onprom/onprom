@@ -26,6 +26,7 @@
 
 package org.processmining.plugins.kaos;
 
+import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.ontop.io.ModelIOManager;
 import it.unibz.inf.ontop.model.OBDAModel;
 import it.unibz.inf.ontop.model.impl.OBDADataFactoryImpl;
@@ -38,26 +39,29 @@ import org.processmining.framework.plugin.events.Logger;
 
 import java.io.InputStream;
 
+/**
+ * @author T. E. Kalayci
+ */
 @Plugin(name = "OBDA Mapping File", parameterLabels = {"Filename"}, returnLabels = {"OBDA mapping imported from file"}, returnTypes = {OBDAModel.class})
 @UIImportPlugin(description = "Mapping (OBDA)", extensions = {"obda"})
 public class OBDAMappingImportPlugin extends AbstractImportPlugin {
-  @UITopiaVariant(
-    author = "onprom team",
-    affiliation = "Free University of Bozen-Bolzano",
-    email = "onprom@inf.unibz.it",
-    website = "http://onprom.inf.unibz.it"
-  )
-  @Override
-  protected OBDAModel importFromStream(final PluginContext context, final InputStream input, final String filename, final long fileSizeInBytes) {
-    try {
-      OBDAModel obdaModel = OBDADataFactoryImpl.getInstance().getOBDAModel();
-      ModelIOManager ioManager = new ModelIOManager(obdaModel);
-      ioManager.load(input);
-      context.getFutureResult(0).setLabel("OBDA mapping imported from " + filename);
-      return obdaModel;
-    } catch (Exception e) {
-      context.log("Couldn't load OBDA model: " + e.getMessage(), Logger.MessageLevel.ERROR);
+    @UITopiaVariant(
+            author = "onprom team",
+            affiliation = "Free University of Bozen-Bolzano",
+            email = "onprom@inf.unibz.it",
+            website = "http://onprom.inf.unibz.it"
+    )
+    @Override
+    protected OBDAModel importFromStream(final PluginContext context, final InputStream input, final String filename, final long fileSizeInBytes) {
+        try {
+            OBDAModel obdaModel = OBDADataFactoryImpl.getInstance().getOBDAModel();
+            ModelIOManager ioManager = new ModelIOManager(obdaModel);
+            ioManager.load(input);
+            context.getFutureResult(0).setLabel("OBDA Mapping (" + filename + " ) " + UIUtility.getCurrentDateTime());
+            return obdaModel;
+        } catch (Exception e) {
+            context.log("Couldn't load OBDA model: " + e.getMessage(), Logger.MessageLevel.ERROR);
+        }
+        return null;
     }
-    return null;
-  }
 }

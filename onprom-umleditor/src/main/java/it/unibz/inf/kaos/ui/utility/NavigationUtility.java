@@ -3,13 +3,13 @@
  *
  * NavigationUtility.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,17 +26,13 @@
 
 package it.unibz.inf.kaos.ui.utility;
 
-import it.unibz.inf.kaos.data.Association;
-import it.unibz.inf.kaos.data.AssociationClass;
-import it.unibz.inf.kaos.data.Inheritance;
-import it.unibz.inf.kaos.data.Relationship;
-import it.unibz.inf.kaos.data.UMLClass;
+import com.google.common.collect.Sets;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 
@@ -52,13 +48,13 @@ public class NavigationUtility {
     private NavigationUtility() {
     }
 
-    private synchronized static void traverse(Stack<DiagramShape> path, Set<DiagramShape> onPath, Set<Set<DiagramShape>> paths, UMLClass startNode, UMLClass endNode, boolean functionalCheck) {
+    private static synchronized void traverse(Stack<DiagramShape> path, Set<DiagramShape> onPath, Set<Set<DiagramShape>> paths, UMLClass startNode, UMLClass endNode, boolean functionalCheck) {
         onPath.add(startNode);
         //logger.info("currentNode:"+startNode);
         if (startNode.equals(endNode)) {
             path.push(endNode);
             //logger.info("found:"+path);
-            paths.add(new LinkedHashSet<>(path));
+            paths.add(Sets.newLinkedHashSet(path));
             path.pop();
         } else {
             for (Relationship relation : startNode.getRelations()) {
@@ -109,9 +105,8 @@ public class NavigationUtility {
     }
 
     private static Set<Set<DiagramShape>> findAllPaths(UMLClass startNode, UMLClass endNode, boolean functionalCheck) {
-        //logger.info("start:"+startNode+" end:"+endNode+" functional:"+functionalCheck);
-        Set<Set<DiagramShape>> paths = new LinkedHashSet<>();
-        traverse(new Stack<>(), new LinkedHashSet<>(), paths, startNode, endNode, functionalCheck);
+        Set<Set<DiagramShape>> paths = Sets.newLinkedHashSet();
+        traverse(new Stack<>(), Sets.newLinkedHashSet(), paths, startNode, endNode, functionalCheck);
         return paths;
     }
 
@@ -128,7 +123,7 @@ public class NavigationUtility {
         if (startNode.equals(endNode))
             return true;
         Stack<UMLClass> stack = new Stack<>();
-        Set<UMLClass> visited = new HashSet<>();
+        Set<UMLClass> visited = Sets.newHashSet();
         stack.push(startNode);
         while (!stack.empty()) {
             UMLClass node = stack.pop();
@@ -174,13 +169,13 @@ public class NavigationUtility {
         return false;
     }
 
-    public static Relationship isAdjacent(UMLClass startNode, UMLClass endNode) {
+    public static Optional<Relationship> isAdjacent(UMLClass startNode, UMLClass endNode) {
         for (Relationship relation : startNode.getRelations()) {
             if (relation.getFirstClass().equals(endNode) || relation.getSecondClass().equals(endNode)) {
-                return relation;
+                return Optional.of(relation);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     static boolean checkPath(UMLClass startingNode, Set<DiagramShape> path) {

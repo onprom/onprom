@@ -33,6 +33,7 @@ import it.unibz.inf.kaos.data.query.AnnotationQueries;
  * <p>
  * @author T. E. Kalayci on 25/10/16.
  */
+@FunctionalInterface
 public interface AnnotationEditorListener extends UMLEditorListener {
-  void store(String name, AnnotationQueries annotationQueries);
+    void store(String name, AnnotationQueries annotationQueries);
 }

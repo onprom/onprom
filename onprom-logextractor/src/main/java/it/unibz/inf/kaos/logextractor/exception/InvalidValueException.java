@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package it.unibz.inf.kaos.logextractor.exception;
 
 /**

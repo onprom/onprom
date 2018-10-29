@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package it.unibz.inf.kaos.logextractor.util;
 
 import java.util.ArrayList;
@@ -29,8 +28,8 @@ import org.deckfour.xes.model.XTrace;
 import it.unibz.inf.kaos.logextractor.constants.LEConstants;
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
 import it.unibz.inf.kaos.logextractor.model.XAtt;
-import it.unibz.inf.kaos.logextractor.model.impl.XAttributeOnProm;
-import it.unibz.inf.kaos.logextractor.model.impl.XEventOnPromEfficient;
+import it.unibz.inf.kaos.logextractor.model.XAttributeOnProm;
+import it.unibz.inf.kaos.logextractor.model.XEventOnPromEfficient;
 
 /**
  * 

@@ -28,34 +28,32 @@ package it.unibz.inf.kaos.ui.component;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Set;
 
 /**
  * @author T. E. Kalayci
  * Date: 03-Feb-17
  */
 public class WidePopupComboBox<E> extends JComboBox<E> {
-    private boolean layingOut = false;
+    private boolean layouting;
 
-    public WidePopupComboBox(Set<E> objs) {
+    public WidePopupComboBox(java.util.stream.Stream<E> items) {
+        this(items::iterator);
+    }
+
+    public WidePopupComboBox(Iterable<E> items) {
         super();
-        if (objs != null && objs.size() > 0) {
-            objs.forEach(this::addItem);
+        if (items != null) {
+            items.forEach(this::addItem);
         }
     }
 
-    public WidePopupComboBox(E[] objs) {
-        super();
-        if (objs != null && objs.length > 0) {
-            for (E e : objs) {
-                super.addItem(e);
-            }
-        }
+    public WidePopupComboBox(E[] items) {
+        super(items);
     }
 
     public Dimension getSize() {
         Dimension dim = super.getSize();
-        if (!layingOut)
+        if (!layouting)
             dim.width = Math.max(getWidestItemWidth(), dim.width);
         return dim;
     }
@@ -81,10 +79,10 @@ public class WidePopupComboBox<E> extends JComboBox<E> {
 
     public void doLayout() {
         try {
-            layingOut = true;
+            layouting = true;
             super.doLayout();
         } finally {
-            layingOut = false;
+            layouting = false;
         }
     }
 }

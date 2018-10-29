@@ -26,8 +26,7 @@
 
 package it.unibz.inf.kaos.ui.action;
 
-import it.unibz.inf.kaos.data.ActionType;
-import it.unibz.inf.kaos.ui.panel.UMLDiagramPanel;
+import it.unibz.inf.kaos.interfaces.ActionType;
 
 /**
  * Abstract class for toolbar actions
@@ -36,12 +35,9 @@ import it.unibz.inf.kaos.ui.panel.UMLDiagramPanel;
  * Date: 28-Oct-16
  */
 public abstract class ToolbarAction {
-
-    final UMLDiagramPanel diagramPanel;
     final ActionType actionType;
 
-    ToolbarAction(UMLDiagramPanel _panel, ActionType _action) {
-        diagramPanel = _panel;
+    protected ToolbarAction(ActionType _action) {
         actionType = _action;
     }
 

@@ -26,6 +26,7 @@
 
 package it.unibz.inf.kaos.interfaces;
 
+import it.unibz.inf.kaos.data.Annotation;
 import it.unibz.inf.kaos.data.DataType;
 import it.unibz.inf.kaos.data.NavigationalAttribute;
 import it.unibz.inf.kaos.data.UMLClass;
@@ -35,22 +36,23 @@ import java.util.Set;
 /**
  * Interface to provide classes to use annotation diagram panel
  * <p>
+ *
  * @author T. E. Kalayci on 04-Apr-2017.
  */
-public interface AnnotationDiagram {
-  void removeAnnotation(Annotation annotation);
+public interface AnnotationDiagram extends Diagram {
+    void addAnnotation(Annotation annotation);
 
-  void addAnnotation(Annotation annotation);
+    void removeAnnotation(Annotation annotation);
 
-  void resetAttributeStates();
+    void startNavigation(NavigationListener _navigationListener);
 
-  void resetNavigation();
+    void resetNavigation();
 
-  void highlightAttribute(UMLClass relatedClass, boolean functional, DataType... dataType);
+    void highlightAttribute(UMLClass relatedClass, boolean functional, DataType... dataType);
 
-  void startNavigation(NavigationListener _navigationListener);
+    void resetAttributeStates();
 
-  Set<NavigationalAttribute> getAttributes(UMLClass startNode, boolean functional, DataType... types);
+    Set<NavigationalAttribute> findAttributes(UMLClass startNode, boolean functional, DataType... types);
 
-  <T extends Annotation> Set<NavigationalAttribute> getAnnotations(UMLClass startNode, boolean functional, Class<T> type);
+    <T extends Annotation> Set<T> findAnnotations(UMLClass startNode, boolean functional, Class<T> type);
 }

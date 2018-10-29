@@ -3,13 +3,13 @@
  *
  * UIUtility.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,11 @@
 
 package it.unibz.inf.kaos.ui.utility;
 
+import com.google.common.collect.Sets;
+import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.ui.action.ToolbarAction;
 import it.unibz.inf.kaos.ui.component.WidePopupComboBox;
+import it.unibz.inf.kaos.ui.filter.FileTypeFilter;
 import it.unibz.inf.kaos.ui.form.InformationDialog;
 import it.unibz.inf.kaos.ui.interfaces.Buttons;
 import it.unibz.inf.kaos.ui.interfaces.Labels;
@@ -35,21 +38,20 @@ import it.unibz.inf.kaos.ui.interfaces.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.File;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.concurrent.Callable;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * This class contains static variables and methods which are used by UI classes
@@ -58,12 +60,12 @@ import java.util.concurrent.Callable;
  */
 public class UIUtility {
     private static final Logger logger = LoggerFactory.getLogger(UIUtility.class.getName());
-    //set for storing class and relation names
-    private static final Set<String> names = new HashSet<>();
+    private static final JFileChooser FILE_CHOOSER = new JFileChooser();
     private static final String HTML_STRING = "<html>%s</html>";
     private static final Dimension SMALL_BUTTON_DIMENSION = new Dimension(45, 25);
-    private static final Set<SwingWorker> BACKGROUND_WORKERS = new LinkedHashSet<>();
-    private static BufferedImage LOGO = null;
+    private static final HashSet<SwingWorker> BACKGROUND_WORKERS = Sets.newHashSet();
+    //set for storing class and relation names
+    private static final HashSet<String> names = Sets.newHashSet();
 
     public static boolean isNameExist(String name) {
         return names.contains(name.trim());
@@ -83,12 +85,16 @@ public class UIUtility {
 
     public static GridBagConstraints getGridBagConstraints() {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(2, 2, 2, 2);
+        gridBagConstraints.insets = new Insets(1, 1, 1, 1);
         gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
         return gridBagConstraints;
     }
 
-    public static void executeInBackground(Callable method, JProgressBar progressBar) {
+    public static String getCurrentDateTime() {
+        return LocalDateTime.now().toString();
+    }
+
+    public static void executeInBackground(Runnable method, JProgressBar progressBar) {
         SwingWorker worker = new SwingWorker() {
             public Void doInBackground() {
                 if (progressBar != null) {
@@ -98,7 +104,7 @@ public class UIUtility {
                     glassPane.setVisible(true);
                 }
                 try {
-                    method.call();
+                    method.run();
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
                     UIUtility.error(e.getMessage());
@@ -121,6 +127,10 @@ public class UIUtility {
         };
         worker.execute();
         BACKGROUND_WORKERS.add(worker);
+    }
+
+    public static String strToHexColor(String str) {
+        return String.format("#%06X", (0xFFFFFF & str.hashCode()));
     }
 
     public static void stopWorkers() {
@@ -152,44 +162,46 @@ public class UIUtility {
         JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), title, JOptionPane.ERROR_MESSAGE);
     }
 
-    public static BufferedImage getLogo() {
-        if (LOGO == null) {
-            try {
-                LOGO = ImageIO.read(IOUtility.getImageURL("onprom"));
-            } catch (IOException e) {
-                logger.error("Couldn't load logo", e);
-            }
-        }
-        return LOGO;
+    static void warning(Messages message) {
+        warning(message.getMessage(), message.getTitle());
     }
 
-    public static Cursor getCursorImage(String imageName) {
-        return Toolkit.getDefaultToolkit().createCustomCursor(Toolkit.getDefaultToolkit().getImage(IOUtility.getImageURL(imageName)),
-                new Point(0, 0), "img");
+    private static void warning(String message, String title) {
+        JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), title, JOptionPane.WARNING_MESSAGE);
     }
 
-    public static <E> WidePopupComboBox<E> createWideComboBox(Set<E> values, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
+    public static <E> WidePopupComboBox<E> createWideComboBox(Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
+        return createWideComboBox(Collections.emptyList(), dimension, listener, editable, withEmpty);
+    }
+
+    public static <E> WidePopupComboBox<E> createWideComboBox(Iterable<E> values, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
         WidePopupComboBox<E> cmb = new WidePopupComboBox<>(values);
         setupWidePopupComboBox(cmb, dimension, listener, editable, withEmpty);
         return cmb;
     }
 
-    public static <E> WidePopupComboBox<E> createWideComboBoxArray(E[] values, Dimension dimension, boolean editable) {
+    public static <E> WidePopupComboBox<E> createWideComboBox(Stream<E> values, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
         WidePopupComboBox<E> cmb = new WidePopupComboBox<>(values);
-        setupWidePopupComboBox(cmb, dimension, null, editable, true);
+        setupWidePopupComboBox(cmb, dimension, listener, editable, withEmpty);
+        return cmb;
+    }
+
+    public static <E> WidePopupComboBox<E> createWideComboBox(E[] values, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
+        WidePopupComboBox<E> cmb = new WidePopupComboBox<>(values);
+        setupWidePopupComboBox(cmb, dimension, listener, editable, withEmpty);
         return cmb;
     }
 
     private static <E> void setupWidePopupComboBox(WidePopupComboBox<E> cmb, Dimension dimension, ItemListener listener, boolean editable, boolean withEmpty) {
-        if (withEmpty) {
-            cmb.insertItemAt(null, 0);
-        }
         cmb.setPreferredSize(dimension);
         cmb.setEditable(editable);
-        cmb.setEnabled(editable);
         if (listener != null) {
             cmb.addItemListener(listener);
         }
+        if (withEmpty) {
+            cmb.insertItemAt(null, 0);
+        }
+        if (cmb.getItemCount() > 0) cmb.setSelectedIndex(0);
     }
 
     private static JButton createButton(String text, char mnemonic, String tooltip, ActionListener actionListener, Dimension preferredSize) {
@@ -203,6 +215,21 @@ public class UIUtility {
 
     public static JButton createSmallButton(Buttons button, ActionListener actionListener) {
         return createButton(button.getText(), button.getMnemonic(), button.getTooltip(), actionListener, SMALL_BUTTON_DIMENSION);
+    }
+
+    public static JCheckBox createCheckBox(String text, String tooltip, Dimension preferredSize) {
+        return createCheckBox(text, tooltip, false, null, preferredSize);
+    }
+
+    public static JCheckBox createCheckBox(String text, String tooltip, boolean selected, ItemListener listener, Dimension preferredSize) {
+        JCheckBox checkBox = new JCheckBox(text);
+        checkBox.setToolTipText(String.format(HTML_STRING, tooltip));
+        checkBox.setSelected(selected);
+        if (listener != null) {
+            checkBox.addItemListener(listener);
+        }
+        checkBox.setPreferredSize(preferredSize);
+        return checkBox;
     }
 
     public static JButton createButton(Buttons button, ActionListener actionListener) {
@@ -230,7 +257,9 @@ public class UIUtility {
     }
 
     public static JLabel createLabel(String text, Dimension preferredSize) {
-        JLabel lbl = new JLabel(String.format(HTML_STRING, text));
+        text = String.format(HTML_STRING, text);
+        JLabel lbl = new JLabel(text);
+        lbl.setToolTipText(text);
         lbl.setPreferredSize(preferredSize);
         return lbl;
     }
@@ -247,6 +276,11 @@ public class UIUtility {
         return createTextField(tooltip, preferredSize, listener, true);
     }
 
+    public static JTextField createTextField(String tooltip, Dimension preferredSize, boolean editable) {
+        return createTextField(tooltip, preferredSize, e -> {
+        }, editable);
+    }
+
     public static JTextField createTextField(String tooltip, Dimension preferredSize, ActionListener actionListener, boolean editable) {
         JTextField txt = new JTextField();
         if (tooltip != null && !tooltip.isEmpty()) {
@@ -259,21 +293,17 @@ public class UIUtility {
         return txt;
     }
 
-    public static boolean isCTRLPressed(ActionEvent e) {
-        return (e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK;
-    }
-
     public static JButton createToolbarButton(ToolbarAction action) {
         JButton button = new JButton();
         button.setToolTipText(String.format(HTML_STRING, action.getTooltip()));
         button.addActionListener(e -> action.execute());
         button.setMnemonic(action.getMnemonic());
-      URL imageURL = IOUtility.getImageURL(action.getActionName().toLowerCase());
-        if (imageURL != null) {
-            ImageIcon imageIcon = new ImageIcon(imageURL, action.getTitle());
-            button.setIcon(imageIcon);
+        Optional<URL> imageUrlProvider = IOUtility.getImageURL(action.getActionName().toLowerCase());
+        if (imageUrlProvider.isPresent()) {
+            button.setIcon(new ImageIcon(imageUrlProvider.get(), action.getTitle()));
         } else {
-            button.setText(String.format(HTML_STRING, action.getTitle()));
+            button.setText(String.format(HTML_STRING, Character.toUpperCase(action.getMnemonic())));
+            button.setFont(new Font("Monospaced", Font.PLAIN, 30));
         }
         return button;
     }
@@ -282,16 +312,62 @@ public class UIUtility {
         JMenuItem menuItem = new JMenuItem(action.getTitle(), action.getMnemonic());
         menuItem.getAccessibleContext().setAccessibleDescription(action.getTooltip());
         menuItem.addActionListener(e -> action.execute());
-        URL imageURL = IOUtility.getImageURL(action.getActionName());
-        if (imageURL != null)
-            menuItem.setIcon(new ImageIcon(imageURL));
+        IOUtility.getImageURL(action.getActionName()).ifPresent(imageUrl -> menuItem.setIcon(new ImageIcon(imageUrl)));
         return menuItem;
     }
 
-    public static <T> void loadItems(JComboBox<T> comboBox, Set<T> items) {
+    public static <T> void loadItems(JComboBox<T> comboBox, Iterable<T> items) {
         comboBox.removeAllItems();
         for (T item : items) {
             comboBox.addItem(item);
         }
+    }
+
+    public static boolean isDark(Color color) {
+        return color != null && ((30 * color.getRed() + 59 * color.getGreen() + 11 * color.getBlue()) / 100) < 128;
+    }
+
+    @Nonnull
+    public static File[] selectFiles(FileType... allowedFileType) {
+        FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FILE_CHOOSER.setMultiSelectionEnabled(true);
+        FILE_CHOOSER.setFileFilter(FileTypeFilter.get(allowedFileType));
+        int returnVal = FILE_CHOOSER.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            return FILE_CHOOSER.getSelectedFiles();
+        }
+        return new File[]{};
+    }
+
+    @Nonnull
+    public static Optional<File> selectFileToOpen(FileType... allowedFileType) {
+        FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FILE_CHOOSER.setFileFilter(FileTypeFilter.get(allowedFileType));
+        FILE_CHOOSER.setMultiSelectionEnabled(false);
+        int returnVal = FILE_CHOOSER.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            return Optional.of(FILE_CHOOSER.getSelectedFile());
+        }
+        return Optional.empty();
+    }
+
+    @Nonnull
+    public static Optional<File> selectFileToSave(FileType fileType) {
+        FILE_CHOOSER.setFileFilter(FileTypeFilter.get(fileType));
+        FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FILE_CHOOSER.setSelectedFile(new File(""));
+        if (FILE_CHOOSER.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = FILE_CHOOSER.getSelectedFile();
+            if (!selectedFile.exists() || UIUtility.confirm(UMLEditorMessages.FILE_EXISTS)) {
+                if (IOUtility.getFileExtension(selectedFile).isEmpty()) {
+                    //set default extension if doesn't exist
+                    selectedFile = new File(selectedFile.getAbsolutePath() + "." + fileType.getDefaultExtension());
+                }
+                return Optional.of(selectedFile);
+            } else {
+                return selectFileToSave(fileType);
+            }
+        }
+        return Optional.empty();
     }
 }

@@ -37,7 +37,7 @@ import java.awt.geom.Path2D;
  */
 public class Inheritance extends Relationship {
     @JsonIgnore
-    private Position trianglePosition;
+    private Position trianglePosition = Position.LEFT;
 
   private static final double d30 = 0.53;// 30°
   private static final int lineSize = 25;
@@ -57,7 +57,7 @@ public class Inheritance extends Relationship {
         return getSecondClass();
     }
 
-  private UMLClass getSuperclass() {
+    public UMLClass getSuperclass() {
         return getFirstClass();
     }
 
@@ -67,11 +67,10 @@ public class Inheritance extends Relationship {
     }
 
     public int getStartX() {
-        switch (trianglePosition) {
-            case LEFT:
-              return getSuperclass().getStartX() - cos30;
-            case RIGHT:
-              return getSuperclass().getEndX() + cos30;
+        if (trianglePosition == Position.LEFT) {
+            return getSuperclass().getStartX() - cos30;
+        } else if (trianglePosition == Position.RIGHT) {
+            return getSuperclass().getEndX() + cos30;
         }
         return getSuperclass().getCenterX();
     }

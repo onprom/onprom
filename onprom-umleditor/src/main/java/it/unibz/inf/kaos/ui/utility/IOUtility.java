@@ -3,13 +3,13 @@
  *
  * IOUtility.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,24 +32,21 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import it.unibz.inf.kaos.data.EditorObjects;
 import it.unibz.inf.kaos.data.FileType;
-import it.unibz.inf.kaos.data.LoadedObjects;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.owl.OWLImporter;
-import it.unibz.inf.kaos.ui.filter.FileTypeFilter;
-import org.apache.batik.dom.GenericDOMImplementation;
-import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.commons.io.FilenameUtils;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -59,175 +56,153 @@ import java.util.Set;
  * Date: 24-Nov-16
  */
 public class IOUtility {
-    private static final Logger logger = LoggerFactory.getLogger(IOUtility.class.getName());
-    //file chooser object to use with dialogs
-    private final static JFileChooser FILE_CHOOSER = new JFileChooser();
-    //Mapper
-    private static final ObjectMapper mapper;
+    private static final Logger LOGGER = LoggerFactory.getLogger(IOUtility.class.getName());
+    private static final ObjectMapper OBJECT_MAPPER;
 
     static {
-        //initialize JSON-Object mapper
-        mapper = new ObjectMapper();
-        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+        OBJECT_MAPPER = new ObjectMapper();
+        OBJECT_MAPPER.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
         //use all fields
-        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        OBJECT_MAPPER.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         //only include not null & non empty fields
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        //store type of classess also
-        mapper.enableDefaultTypingAsProperty(ObjectMapper.DefaultTyping.NON_FINAL, "@class");
+        OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        //store type of classess
+        OBJECT_MAPPER.enableDefaultTypingAsProperty(ObjectMapper.DefaultTyping.NON_FINAL, "@class");
         //ignore unknown properties
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNRESOLVED_OBJECT_IDS, false);
-        mapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
+        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNRESOLVED_OBJECT_IDS, false);
+        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
     }
 
     public static File exportJSON(FileType fileType, Set<DiagramShape> allShapes) {
-        File file = selectFileToSave(fileType);
-        if (file != null)
+        Optional<File> fileProvider = UIUtility.selectFileToSave(fileType);
+        if (fileProvider.isPresent()) {
+            File file = fileProvider.get();
             exportJSON(file, allShapes);
-        return file;
+            return file;
+        }
+        return null;
     }
 
     public static void exportJSON(FileType fileType, Object object) {
-        exportJSON(selectFileToSave(fileType), object);
+        UIUtility.selectFileToSave(fileType).ifPresent(file -> exportJSON(file, object));
     }
 
     public static void exportJSON(File file, Object object) {
         try {
-            getWriter().writeValue(file, object);
+            OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValue(file, object);
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
-    private static ObjectWriter getWriter() {
-        return mapper.writerWithDefaultPrettyPrinter();
-    }
-
-    public static void exportJSON(File file, Set<DiagramShape> allShapes) {
+    public static <T> Optional<T> readJSON(java.io.InputStream input, Class<T> cls) {
         try {
-            getWriter().forType(getType()).writeValue(file, allShapes);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    public static <T> T readJSON(java.io.InputStream input, Class<T> cls) {
-        try {
-            return mapper.readValue(input, cls);
+            return Optional.of(OBJECT_MAPPER.readValue(input, cls));
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
-        return null;
+        return Optional.empty();
     }
 
-    public static <T> T readJSON(java.io.File file, Class<T> cls) {
+    public static <T> Optional<T> readJSON(java.io.File file, Class<T> cls) {
         try {
-            return mapper.readValue(file, cls);
+            return Optional.of(OBJECT_MAPPER.readValue(file, cls));
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
-        return null;
+        return Optional.empty();
     }
 
-    public static LoadedObjects open(File selectedFile, FileType... allowedFileType) {
-        if (selectedFile == null) {
-            selectedFile = IOUtility.selectFileToOpen(allowedFileType);
-        }
-        switch (IOUtility.getFileType(selectedFile)) {
+    @Nonnull
+    public static Optional<EditorObjects> open(InputStream fileStream, FileType fileType) {
+        switch (fileType) {
             case ONTOLOGY:
-                OWLOntology ontology = OWLImporter.loadOntologyFromFile(selectedFile);
-                if (ontology != null) {
-                    return new LoadedObjects(selectedFile, ontology, OWLImporter.getShapes(ontology));
+                Optional<OWLOntology> ontologyProvider = OWLImporter.loadOntologyFromStream(fileStream);
+                if (ontologyProvider.isPresent()) {
+                    OWLOntology ontology = ontologyProvider.get();
+                    return Optional.of(new EditorObjects(null, ontology, OWLImporter.getShapes(ontology)));
                 }
                 break;
             case ANNOTATION:
             case UML:
             case QUERIES:
             case JSON:
-                return new LoadedObjects(selectedFile, null, IOUtility.importJSON(selectedFile));
+                return Optional.of(new EditorObjects(null, null, importJSON(fileStream)));
         }
-        return null;
+        return Optional.empty();
+    }
+
+    @Nonnull
+    public static Optional<EditorObjects> open(File selectedFile, FileType... allowedFileType) {
+        if (selectedFile == null) {
+            Optional<File> fileProvider = UIUtility.selectFileToOpen(allowedFileType);
+            if (fileProvider.isPresent()) {
+                selectedFile = fileProvider.get();
+            }
+        }
+        switch (IOUtility.getFileType(selectedFile)) {
+            case ONTOLOGY:
+                Optional<OWLOntology> ontologyProvider = OWLImporter.loadOntologyFromFile(selectedFile);
+                if (ontologyProvider.isPresent()) {
+                    OWLOntology ontology = ontologyProvider.get();
+                    return Optional.of(new EditorObjects(selectedFile, ontology, OWLImporter.getShapes(ontology)));
+                }
+                break;
+            case ANNOTATION:
+            case UML:
+            case QUERIES:
+            case JSON:
+                return Optional.of(new EditorObjects(selectedFile, null, importJSON(selectedFile)));
+        }
+        return Optional.empty();
     }
 
     public static Set<DiagramShape> importJSON(File file) {
         try {
-            return mapper.readValue(file, getType());
+            return OBJECT_MAPPER.readValue(file, getType());
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    private static Set<DiagramShape> importJSON(InputStream stream) {
+        try {
+            return OBJECT_MAPPER.readValue(stream, getType());
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
         }
         return null;
     }
 
     private static JavaType getType() {
-        return mapper.getTypeFactory().constructCollectionType(Set.class, DiagramShape.class);
+        return OBJECT_MAPPER.getTypeFactory().constructCollectionType(Set.class, DiagramShape.class);
     }
 
+    @Nonnull
     public static FileType getFileType(File file) {
         if (file != null) {
-            return FileType.which(FilenameUtils.getExtension(file.getName()));
+            return FileType.which(getFileExtension(file));
         }
         return FileType.OTHER;
     }
 
-    public static File selectOntologyFileToSave() {
-        return selectFileToSave(FileType.ONTOLOGY);
+    public static String getFileExtension(@Nonnull File file) {
+        return FilenameUtils.getExtension(file.getName());
     }
 
-    public static File[] selectFiles(FileType... allowedFileType) {
-        FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        FILE_CHOOSER.setMultiSelectionEnabled(true);
-        FILE_CHOOSER.setFileFilter(FileTypeFilter.get(allowedFileType));
-        int returnVal = FILE_CHOOSER.showOpenDialog(null);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            return FILE_CHOOSER.getSelectedFiles();
-        }
-        return null;
-    }
-
-    private static File selectFileToOpen(FileType... allowedFileType) {
-        FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        FILE_CHOOSER.setFileFilter(FileTypeFilter.get(allowedFileType));
-        FILE_CHOOSER.setMultiSelectionEnabled(false);
-        int returnVal = FILE_CHOOSER.showOpenDialog(null);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            return FILE_CHOOSER.getSelectedFile();
-        }
-        return null;
-    }
-
-    public static File selectFileToSave(FileType fileType) {
-        FILE_CHOOSER.setFileFilter(FileTypeFilter.get(fileType));
-        FILE_CHOOSER.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        FILE_CHOOSER.setSelectedFile(new File(""));
-        int returnVal = FILE_CHOOSER.showSaveDialog(null);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = FILE_CHOOSER.getSelectedFile();
-            if (FilenameUtils.getExtension(selectedFile.getName()).isEmpty()) {
-                //set default extension if doesn't exist
-                selectedFile = new File(selectedFile.getAbsolutePath() + "." + fileType.getDefaultExtension());
+    public static Optional<URL> getImageURL(String imageName) {
+        if (!imageName.isEmpty()) {
+            String imgLocation = "/images/" + imageName + ".png";
+            URL imageURL = IOUtility.class.getResource(imgLocation);
+            if (imageURL != null) {
+                return Optional.of(imageURL);
             }
-            return selectedFile;
+            LOGGER.warn("Resource not found: " + imgLocation);
         }
-        return null;
+        return Optional.empty();
     }
 
-    public static URL getImageURL(String imageName) {
-        // Look for the image.
-        String imgLocation = "/images/" + imageName + ".png";
-        URL imageURL = IOUtility.class.getResource(imgLocation);
-        if (imageURL == null) {
-            logger.error("Resource not found: " + imgLocation);
-        }
-        return imageURL;
-    }
-
-    public static SVGGraphics2D getSVGGraphics(Dimension dimension) {
-        SVGGraphics2D svgGenerator = new SVGGraphics2D(GenericDOMImplementation.getDOMImplementation().createDocument("http://www.w3.org/2000/svg", "svg", null));
-        //set drawing canvas as the drawing area
-        svgGenerator.setSVGCanvasSize(dimension);
-        svgGenerator.setClip(0, 0, dimension.width, dimension.height);
-        return svgGenerator;
-    }
 
 }

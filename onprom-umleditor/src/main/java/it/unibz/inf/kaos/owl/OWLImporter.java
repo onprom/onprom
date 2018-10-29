@@ -26,27 +26,16 @@
 
 package it.unibz.inf.kaos.owl;
 
-import it.unibz.inf.kaos.data.Association;
-import it.unibz.inf.kaos.data.AssociationClass;
-import it.unibz.inf.kaos.data.Attribute;
-import it.unibz.inf.kaos.data.Cardinality;
-import it.unibz.inf.kaos.data.DataType;
-import it.unibz.inf.kaos.data.Disjoint;
-import it.unibz.inf.kaos.data.Inheritance;
-import it.unibz.inf.kaos.data.UMLClass;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.search.EntitySearcher;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Class used to import OWL ontologies to the tool.
@@ -56,21 +45,21 @@ import java.util.Set;
  */
 public class OWLImporter extends OWLUtility {
   public static Set<DiagramShape> getShapes(OWLOntology ontology) {
-    LinkedList<String> messages = new LinkedList<>();
+      LinkedList<String> messages = Lists.newLinkedList();
 
-    HashMap<OWLClass, UMLClass> umlClasses = new HashMap<>();
-    HashMap<String, AssociationClass> associationClasses = new HashMap<>();
+      HashMap<OWLClass, UMLClass> umlClasses = Maps.newHashMap();
+      HashMap<String, AssociationClass> associationClasses = Maps.newHashMap();
 
-    HashSet<OWLDataPropertyExpression> existentialDataProperties = new HashSet<>();
-    HashSet<OWLDataPropertyExpression> functionalDataProperties = new HashSet<>();
+      HashSet<OWLDataPropertyExpression> existentialDataProperties = Sets.newHashSet();
+      HashSet<OWLDataPropertyExpression> functionalDataProperties = Sets.newHashSet();
 
-    HashSet<OWLObjectPropertyExpression> existentialObjectProperties = new HashSet<>();
-    HashSet<OWLObjectPropertyExpression> inverseExistentialObjectProperties = new HashSet<>();
+      HashSet<OWLObjectPropertyExpression> existentialObjectProperties = Sets.newHashSet();
+      HashSet<OWLObjectPropertyExpression> inverseExistentialObjectProperties = Sets.newHashSet();
 
-    HashSet<OWLObjectPropertyExpression> functionalObjectProperties = new HashSet<>();
-    HashSet<OWLObjectPropertyExpression> inverserFunctionalObjectProperties = new HashSet<>();
+      HashSet<OWLObjectPropertyExpression> functionalObjectProperties = Sets.newHashSet();
+      HashSet<OWLObjectPropertyExpression> inverserFunctionalObjectProperties = Sets.newHashSet();
 
-    Set<DiagramShape> shapes = new LinkedHashSet<>();
+      Set<DiagramShape> shapes = Sets.newLinkedHashSet();
 
     UMLClass thingClass = new UMLClass("Thing");
     boolean thingAdded = false;
@@ -178,20 +167,24 @@ public class OWLImporter extends OWLUtility {
       if (domains.size() > 1) {
         messages.add("Multiple domains are found for for <em>" + attrName + "</em> " + domains.toString());
       }
-      for (OWLClassExpression owlClassExpression : domains) {
-        UMLClass domainClass = umlClasses.get(owlClassExpression.asOWLClass());
-        if (domainClass != null) {
-          OWLDataRange range = EntitySearcher.getRanges(dataProperty, ontology).stream().findFirst().orElse(null);
-          if (range != null) {
-            attr.setType(DataType.get(range.toString()));
+      domains.forEach(owlClassExpression -> {
+          if (owlClassExpression instanceof OWLClass) {
+              UMLClass domainClass = umlClasses.get(owlClassExpression.asOWLClass());
+              if (domainClass != null) {
+                  OWLDataRange range = EntitySearcher.getRanges(dataProperty, ontology).stream().findFirst().orElse(null);
+                  if (range != null) {
+                      attr.setType(DataType.get(range.toString()));
+                  } else {
+                      messages.add("No range is found for " + dataProperty + " setting its data type as String");
+                      attr.setType(DataType.STRING);
+                  }
+                  attr.setMultiplicity(Cardinality.get(existentialDataProperties.contains(dataProperty), EntitySearcher.isFunctional(dataProperty, ontology) || functionalDataProperties.contains(dataProperty)));
+                  domainClass.addAttribute(attr);
+              }
           } else {
-            messages.add("No range is found for " + dataProperty + " setting its data type as String");
-            attr.setType(DataType.STRING);
-          }
-          attr.setMultiplicity(Cardinality.get(existentialDataProperties.contains(dataProperty), EntitySearcher.isFunctional(dataProperty, ontology) || functionalDataProperties.contains(dataProperty)));
-          domainClass.addAttribute(attr);
+              messages.add("Class expression " + owlClassExpression + " is not available as OWL Class");
         }
-      }
+      });
       if (domains.size() < 1) {
         messages.add("No domain is found for " + dataProperty.getIRI() + " adding it to the Thing class");
         thingClass.addAttribute(attr);
@@ -207,21 +200,21 @@ public class OWLImporter extends OWLUtility {
       final IRI objectPropertyIRI = objectProperty.getIRI();
 
       OWLClassExpression domainClassExpression = EntitySearcher.getDomains(objectProperty, ontology).stream().findFirst().orElse(null);
-      if (domainClassExpression != null) {
-        domainClass = umlClasses.get(domainClassExpression.asOWLClass());
+        if (domainClassExpression instanceof OWLClass) {
+            domainClass = umlClasses.get(domainClassExpression.asOWLClass());
       } else {
         domainClass = thingClass;
         thingAdded = true;
-        messages.add("No domain is found for " + objectPropertyIRI + " setting Thing as domain class");
+            messages.add("No domain is found for " + objectPropertyIRI + " setting Thing as domain class (" + domainClassExpression + ")");
       }
 
       OWLClassExpression rangeClassExpression = EntitySearcher.getRanges(objectProperty, ontology).stream().findFirst().orElse(null);
-      if (rangeClassExpression != null) {
+        if (rangeClassExpression instanceof OWLClass) {
         rangeClass = umlClasses.get(rangeClassExpression.asOWLClass());
       } else {
         rangeClass = thingClass;
         thingAdded = true;
-        messages.add("No range is found for " + objectPropertyIRI + " setting Thing as range class");
+            messages.add("No range is found for " + objectPropertyIRI + " setting Thing as range class (" + rangeClassExpression + ")");
       }
       String assocString = getAssociation(ontology, objectPropertyIRI);
       if (assocString != null) {
@@ -247,11 +240,11 @@ public class OWLImporter extends OWLUtility {
       shapes.add(association);
     }
 
-    shapes.addAll(new ArrayList<>(umlClasses.values()));
+      shapes.addAll(Lists.newArrayList(umlClasses.values()));
     if (thingAdded) {
       shapes.add(thingClass);
     }
-    if (messages.size() > 0) {
+      if (!messages.isEmpty()) {
       StringBuilder messageBuilder = new StringBuilder();
       messages.forEach(message -> messageBuilder.append(message).append("<br/>"));
       UIUtility.error(messageBuilder.toString());

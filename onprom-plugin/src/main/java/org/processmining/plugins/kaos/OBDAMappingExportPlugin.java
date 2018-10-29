@@ -37,22 +37,25 @@ import org.processmining.framework.plugin.events.Logger;
 
 import java.io.File;
 
+/**
+ * @author T. E. Kalayci
+ */
 @Plugin(name = "OBDA Mapping", parameterLabels = {"OBDA Mapping", "File"}, returnLabels = {}, returnTypes = {})
 @UIExportPlugin(description = "OBDA Mapping", extension = "obda")
 public class OBDAMappingExportPlugin {
-  @UITopiaVariant(
-    author = "onprom team",
-    affiliation = "Free University of Bozen-Bolzano",
-    email = "onprom@inf.unibz.it",
-    website = "http://onprom.inf.unibz.it"
-  )
-  @PluginVariant(requiredParameterLabels = {0, 1})
-  public void export(PluginContext context, OBDAModel model, File file) {
-    try {
-      new ModelIOManager(model).save(file);
-      context.log("Succesfully exported mapping to the file:" + file.getName());
-    } catch (Exception e) {
-      context.log("Couldn't export mapping:" + e.getMessage(), Logger.MessageLevel.ERROR);
+    @UITopiaVariant(
+            author = "onprom team",
+            affiliation = "Free University of Bozen-Bolzano",
+            email = "onprom@inf.unibz.it",
+            website = "http://onprom.inf.unibz.it"
+    )
+    @PluginVariant(requiredParameterLabels = {0, 1})
+    public void export(PluginContext context, OBDAModel model, File file) {
+        try {
+            new ModelIOManager(model).save(file);
+            context.log("Succesfully exported mapping to the file:" + file.getName());
+        } catch (Exception e) {
+            context.log("Couldn't export mapping:" + e.getMessage(), Logger.MessageLevel.ERROR);
+        }
     }
-  }
 }

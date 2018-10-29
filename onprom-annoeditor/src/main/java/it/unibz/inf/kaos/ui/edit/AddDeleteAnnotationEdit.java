@@ -26,7 +26,7 @@
 
 package it.unibz.inf.kaos.ui.edit;
 
-import it.unibz.inf.kaos.interfaces.Annotation;
+import it.unibz.inf.kaos.data.Annotation;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 
 import javax.swing.undo.AbstractUndoableEdit;

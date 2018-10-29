@@ -3,13 +3,13 @@
  *
  * ObjectList.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public class ObjectList extends JPanel {
     public ObjectList(final UMLDiagram drawingPanel) {
 
         final DefaultListModel<DiagramShape> mdlObjects = new DefaultListModel<>();
-        drawingPanel.getAllShapes(false).forEach(mdlObjects::addElement);
+        drawingPanel.getShapes(false).forEach(mdlObjects::addElement);
         JList lstObjects = new JList<>(mdlObjects);
         lstObjects.addListSelectionListener(e -> {
             int selectedIndex = lstObjects.getSelectedIndex();

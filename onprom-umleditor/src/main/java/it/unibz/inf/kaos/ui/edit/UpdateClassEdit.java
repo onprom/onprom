@@ -30,21 +30,22 @@ import it.unibz.inf.kaos.data.Attribute;
 import it.unibz.inf.kaos.data.UMLClass;
 
 import javax.swing.undo.AbstractUndoableEdit;
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class stores undo-redo information for class update operations
  * <p>
+ *
  * @author T. E. Kalayci
  * Date: 27-Oct-16
  */
-public class UpdateClassEdit extends AbstractUndoableEdit {
+class UpdateClassEdit extends AbstractUndoableEdit {
     private final UMLClass cls;
     private String oldName;
-    private LinkedList<Attribute> oldAttributes;
+    private List<Attribute> oldAttributes;
 
-    public UpdateClassEdit(UMLClass _cls, String _name,
-                           LinkedList<Attribute> _attributes) {
+    UpdateClassEdit(UMLClass _cls, String _name,
+                    List<Attribute> _attributes) {
         cls = _cls;
         oldName = _name;
         oldAttributes = _attributes;
@@ -54,7 +55,7 @@ public class UpdateClassEdit extends AbstractUndoableEdit {
         String name = cls.getName();
         cls.setName(oldName);
         oldName = name;
-        LinkedList<Attribute> attributes = cls.cloneAttributes();
+        List<Attribute> attributes = cls.cloneAttributes();
         cls.setAttributes(oldAttributes);
         oldAttributes = attributes;
     }

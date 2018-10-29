@@ -27,7 +27,7 @@
 package it.unibz.inf.kaos.ui.filter;
 
 import it.unibz.inf.kaos.data.FileType;
-import org.apache.commons.io.FilenameUtils;
+import it.unibz.inf.kaos.ui.utility.IOUtility;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
@@ -39,7 +39,7 @@ import java.io.File;
  * Date: 23-Nov-16
  */
 public class FileTypeFilter extends FileFilter {
-    private final static FileTypeFilter instance = new FileTypeFilter();
+    private static final FileTypeFilter instance = new FileTypeFilter();
     private FileType[] fileType;
 
     public static FileTypeFilter get(FileType... _type) {
@@ -51,7 +51,7 @@ public class FileTypeFilter extends FileFilter {
         if (file.isDirectory()) {
             return true;
         }
-        String extension = FilenameUtils.getExtension(file.getName());
+        String extension = IOUtility.getFileExtension(file);
         if (!extension.isEmpty()) {
             for (FileType ft : fileType) {
                 if (ft.contains(extension))

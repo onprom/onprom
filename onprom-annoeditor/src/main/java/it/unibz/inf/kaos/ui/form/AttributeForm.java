@@ -26,153 +26,193 @@
 
 package it.unibz.inf.kaos.ui.form;
 
-import it.unibz.inf.kaos.data.AnnotationAttribute;
-import it.unibz.inf.kaos.data.Attribute;
-import it.unibz.inf.kaos.data.StringAttribute;
-import it.unibz.inf.kaos.data.UMLClass;
-import it.unibz.inf.kaos.interfaces.Annotation;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.component.AnnotationAttributeTable;
-import it.unibz.inf.kaos.ui.component.StringDocumentListener;
 import it.unibz.inf.kaos.ui.component.UpdateListener;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorButtons;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorLabels;
+import it.unibz.inf.kaos.ui.utility.NavigationUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
- * Form to add additional attributes
- * <p>
- * @author T. E. Kalayci on 08/02/17.
+ * @author T. E. Kalayci on 8-Feb-17.
  */
 class AttributeForm extends AbstractAnnotationForm {
+    static final String[] NAMES = {"concept:name", "time:timestamp", "lifecycle:transition", "org:resource"};
+    static final String[] TYPES = {"literal", "timestamp"};
+    private final JComboBox<String> txtName;
+    private final JComboBox<NavigationalAttribute> cmbValue;
+    private final JComboBox<Set<DiagramShape>> cmbValuePath;
+    private final AnnotationAttributeTable tblAttributes;
+    private JComboBox<String> txtType;
+    private JTextField txtValueFilter;
 
-  final private JTextField txtName;
-  final private JTextField txtValue;
-  final private JTextField txtValueFilter;
+    AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation) {
+        this(_drawingPanel, _annotation, true, false, NAMES, TYPES, null);
+    }
 
-  private final AnnotationAttributeTable tblAttributes;
-  private final StringDocumentListener valueListener;
-  private StringAttribute value = new StringAttribute();
+    AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation, boolean withFilter, boolean withType, Set<NavigationalAttribute> values) {
+        this(_drawingPanel, _annotation, withFilter, withType, NAMES, TYPES, values);
+    }
 
-  AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation) {
-    super(_drawingPanel, _annotation);
+    private AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation, boolean withFilter, boolean withType, String[] names, String[] types, Set<NavigationalAttribute> values) {
 
-    tblAttributes = new AnnotationAttributeTable();
+        super(_drawingPanel, _annotation);
 
-    setLayout(new GridBagLayout());
-    GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
+        tblAttributes = new AnnotationAttributeTable(withType);
 
-    final Dimension txtDimension = new Dimension(200, 25);
+        setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
 
-    //components in the first row
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.gridx = 0;
-    add(UIUtility.createLabel(AnnotationEditorLabels.NAME, BTN_SIZE), gridBagConstraints);
+        //components in the first row
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        add(UIUtility.createLabel(AnnotationEditorLabels.NAME, BTN_SIZE), gridBagConstraints);
 
-    gridBagConstraints.gridx = 1;
-    txtName = UIUtility.createTextField("", txtDimension);
-    add(txtName, gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        txtName = UIUtility.createWideComboBox(names, TXT_SIZE, null, true, true);
+        add(txtName, gridBagConstraints);
 
-    //components in the second row
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.gridx = 0;
-    add(UIUtility.createLabel(AnnotationEditorLabels.VALUE, BTN_SIZE), gridBagConstraints);
+        //components in the second row
+        gridBagConstraints.gridy += 1;
+        gridBagConstraints.gridx = 0;
+        add(UIUtility.createLabel(AnnotationEditorLabels.VALUE, BTN_SIZE), gridBagConstraints);
 
-    gridBagConstraints.gridx = 1;
-    txtValue = UIUtility.createTextField("Please enter name of the attribute", txtDimension);
-    valueListener = new StringDocumentListener(value, txtValue);
-    txtValue.getDocument().addDocumentListener(valueListener);
-    add(txtValue, gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        cmbValue = UIUtility.createWideComboBox(values, TXT_SIZE, e -> populateValuePath(), true, true);
+        add(cmbValue, gridBagConstraints);
 
-    gridBagConstraints.gridx = 2;
-    add(UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM,
-      e -> startNavigation(new UpdateListener() {
-        @Override
-        public void updateAttribute(Set<DiagramShape> navigation, UMLClass selectedClass, Attribute selectedAttribute) {
-          valueListener.updateAttribute(null);
-          value = new StringAttribute(navigation, selectedClass, selectedAttribute);
-          txtValue.setText(value.toString());
-          valueListener.updateAttribute(value);
+        gridBagConstraints.gridx = 2;
+        cmbValuePath = UIUtility.createWideComboBox(TXT_SIZE, null, false, true);
+        add(cmbValuePath, gridBagConstraints);
+
+        gridBagConstraints.gridx = 3;
+        add(UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM,
+                e -> startNavigation(new UpdateListener() {
+                    @Override
+                    public void updateAttribute(Set<DiagramShape> navigation, UMLClass selectedClass, Attribute selectedAttribute) {
+                        cmbValue.setSelectedItem(new StringAttribute(navigation, selectedClass, selectedAttribute));
+                    }
+                }, false)), gridBagConstraints);
+
+        if (withFilter) {
+            gridBagConstraints.gridy += 1;
+            gridBagConstraints.gridx = 0;
+            add(UIUtility.createLabel(AnnotationEditorLabels.FILTER, BTN_SIZE), gridBagConstraints);
+
+            gridBagConstraints.gridx = 1;
+            txtValueFilter = UIUtility.createTextField(AnnotationEditorLabels.FILTER.getTooltip(), TXT_SIZE);
+            add(txtValueFilter, gridBagConstraints);
         }
-      }, false)), gridBagConstraints);
 
-    gridBagConstraints.gridy = 3;
-    gridBagConstraints.gridx = 0;
-    add(UIUtility.createLabel(AnnotationEditorLabels.FILTER, BTN_SIZE), gridBagConstraints);
+        if (withType) {
+            gridBagConstraints.gridy += 1;
+            gridBagConstraints.gridx = 0;
+            add(UIUtility.createLabel(AnnotationEditorLabels.TYPE, BTN_SIZE), gridBagConstraints);
 
-    gridBagConstraints.gridx = 1;
-    txtValueFilter = UIUtility.createTextField(AnnotationEditorLabels.FILTER.getTooltip(), txtDimension);
-    add(txtValueFilter, gridBagConstraints);
+            gridBagConstraints.gridx = 1;
+            txtType = UIUtility.createWideComboBox(types, TXT_SIZE, null, true, true);
+            add(txtType, gridBagConstraints);
+        }
 
-    //attribute buttons
-    gridBagConstraints.gridx = 3;
-    gridBagConstraints.gridy = 0;
-    JButton btnAdd = UIUtility.createSmallButton(AnnotationEditorButtons.ADD, e -> ok());
-    add(btnAdd, gridBagConstraints);
+        //attribute buttons
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        JButton btnAdd = UIUtility.createSmallButton(AnnotationEditorButtons.ADD, e -> ok());
+        add(btnAdd, gridBagConstraints);
 
-    gridBagConstraints.gridx = 3;
-    gridBagConstraints.gridy = 1;
-    JButton btnRemove = UIUtility.createSmallButton(AnnotationEditorButtons.REMOVE, e -> tblAttributes.removeSelectedAttribute());
-    add(btnRemove, gridBagConstraints);
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        JButton btnRemove = UIUtility.createSmallButton(AnnotationEditorButtons.REMOVE, e -> tblAttributes.removeSelectedAttribute());
+        add(btnRemove, gridBagConstraints);
 
-    gridBagConstraints.gridx = 4;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.gridheight = 4;
-    tblAttributes.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 4;
+        tblAttributes.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                populateForm();
+            }
+        });
+        JScrollPane tblScroll = new JScrollPane();
+        tblScroll.setPreferredSize(new Dimension(400, 100));
+        tblScroll.setViewportView(tblAttributes);
+        add(tblScroll, gridBagConstraints);
+    }
+
+    @Override
+    protected void populateForm() {
+        if (tblAttributes.getSelectedRow() < 1) {
+            txtName.setSelectedItem("");
+            cmbValue.setSelectedItem("");
+            cmbValuePath.setSelectedItem("");
+            if (txtValueFilter != null)
+                txtValueFilter.setText("");
+            if (txtType != null)
+                txtType.setSelectedItem("");
+        }
+        tblAttributes.getSelectedAttribute().ifPresent(attribute -> {
+            txtName.setSelectedItem(attribute.getName());
+            cmbValue.setSelectedItem(attribute.getValue());
+            cmbValuePath.setSelectedItem(attribute.getValue().getPath());
+            if (txtValueFilter != null)
+                txtValueFilter.setText(attribute.getValue().getFilterClause());
+            if (txtType != null)
+                txtType.setSelectedItem(attribute.getType());
+        });
+    }
+
+    private void populateValuePath() {
+        if (cmbValue != null && cmbValue.getItemCount() > 0 && cmbValue.getSelectedItem() != null) {
+            if (cmbValue.getSelectedItem() instanceof NavigationalAttribute) {
+                NavigationalAttribute attribute = (NavigationalAttribute) cmbValue.getSelectedItem();
+                UIUtility.loadItems(cmbValuePath, NavigationUtility.getFunctionalPaths(annotation.getRelatedClass(), attribute.getUmlClass()));
+            }
+        }
+    }
+
+    private void ok() {
+        Object object = cmbValue.getSelectedItem();
+        StringAttribute attributeValue = new StringAttribute();
+        if (object instanceof StringAttribute) {
+            attributeValue = new StringAttribute(object.toString());
+        } else if (object instanceof NavigationalAttribute) {
+            NavigationalAttribute attribute = (NavigationalAttribute) object;
+            attributeValue = new StringAttribute(cmbValuePath.getItemAt(cmbValuePath.getSelectedIndex()), attribute.getUmlClass(), attribute.getAttribute());
+        } else if (object != null) {
+            attributeValue = new StringAttribute(object.toString());
+        }
+        if (txtValueFilter != null) attributeValue.setFilterClause(txtValueFilter.getText());
+        if (txtName.getSelectedItem() != null) {
+            AnnotationAttribute attribute = new AnnotationAttribute(txtName.getSelectedItem().toString(), attributeValue);
+            if (txtType != null && txtType.getSelectedItem() != null) {
+                attribute.setType(txtType.getSelectedItem().toString());
+            }
+            if (tblAttributes.getSelectedRow() > -1) {
+                tblAttributes.updateAttributeAt(tblAttributes.getSelectedRow(), attribute);
+            } else {
+                tblAttributes.addAttribute(attribute);
+            }
+            tblAttributes.clearSelection();
+        }
         populateForm();
-      }
-    });
-    JScrollPane tblScroll = new JScrollPane();
-    tblScroll.setPreferredSize(new Dimension(500, 100));
-    tblScroll.setViewportView(tblAttributes);
-    add(tblScroll, gridBagConstraints);
-  }
-
-  public void populateForm() {
-    valueListener.updateAttribute(null);
-    if (tblAttributes.getSelectedRow() > -1) {
-      AnnotationAttribute attribute = tblAttributes.getSelectedAttribute();
-      txtName.setText(attribute.getName());
-      value = attribute.getValue();
-      txtValue.setText(value.toString());
-      txtValueFilter.setText(value.getFilterClause());
-    } else {
-      //clean the form
-      txtName.setText("");
-      value = new StringAttribute();
-      txtValue.setText("");
-      txtValueFilter.setText("");
     }
-    valueListener.updateAttribute(value);
-  }
 
-  private void ok() {
-    value.setFilterClause(txtValueFilter.getText());
-    AnnotationAttribute attribute = new AnnotationAttribute(txtName.getText(), value.getClone());
-    if (tblAttributes.getSelectedRow() > -1) {
-      tblAttributes.updateAttributeAt(tblAttributes.getSelectedRow(), attribute);
-    } else {
-      tblAttributes.addAttribute(attribute);
+    List<AnnotationAttribute> getAttributes() {
+        return tblAttributes.getAttributes();
     }
-    tblAttributes.clearSelection();
-    populateForm();
-  }
 
-  LinkedList<AnnotationAttribute> getAttributes() {
-    return tblAttributes.getAttributes();
-  }
-
-  void setAttributes(LinkedList<AnnotationAttribute> attributes) {
-    tblAttributes.setAttributes(attributes);
-  }
+    void setAttributes(List<AnnotationAttribute> attributes) {
+        tblAttributes.setAttributes(attributes);
+    }
 }

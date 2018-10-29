@@ -16,8 +16,8 @@
 
 package it.unibz.inf.kaos.logextractor.reasoner;
 
-import it.unibz.inf.kaos.logextractor.util.ExecutionMsgEvent;
-import it.unibz.inf.kaos.logextractor.util.ExecutionMsgListener;
+import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgEvent;
+import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgListener;
 
 /**
  * 

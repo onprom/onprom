@@ -1,1 +1,1 @@
-Annotation editor of onprom tool in KAOS project.
+Default annotation editor of onprom tool in KAOS project. It is used to annotate domain ontologies, which will use default event ontology for XES log extraction.

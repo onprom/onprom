@@ -29,16 +29,20 @@ package it.unibz.inf.kaos.interfaces;
 import it.unibz.inf.kaos.data.FileType;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * To be invoked by UMLEditor in case of user stores ontology
  * <p>
- * @author T. E. Kalayci
- * 11-Oct-16
+ *
+ * @author T. E. Kalayci on 11-Oct-16
  */
 public interface UMLEditorListener {
-    void store(String ontologyName, OWLOntology ontology);
+    default void store(String ontologyName, OWLOntology ontology) {
 
-  void store(String identifier, FileType type, Set<DiagramShape> shapes);
+    }
+
+    default void store(String identifier, FileType type, Collection<DiagramShape> shapes) {
+
+    }
 }

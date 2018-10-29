@@ -38,6 +38,8 @@ public enum UMLEditorButtons implements Buttons {
     OK("OK", "Close the dialog", 'o'),
     CANCEL("Cancel", "Cancel the operation", 'c'),
     SAVE("Save", "<u>S</u>ave the changes", 's'),
+    EXPORT("Export", "Start <u>e</u>xport operation", 'e'),
+    RESET("Reset", "<u>R</u>eset the form", 'r'),
     ADD("+", "<u>A</u>dd new attribute to the Class", 'a'),
     REMOVE("-", "<u>R</u>emove selected attribute from Class", 'r'),
     UP("↑", "Move selected attribute <u>u</u>p", 'u'),

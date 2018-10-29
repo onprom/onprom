@@ -43,9 +43,9 @@ public class XESEOConstants {
 		public static String ATTRIBUTE_CONCEPT = eo.getAttributeConcept();
 	
 		//some vocabularies for role names/object properties
-		public static String T_CONTAINS_E_ROLE = eo.getTContainsERole();
-		public static String T_CONTAINS_A_ROLE = eo.getTContainsARole();
-		public static String E_CONTAINS_A_ROLE = eo.getEContainsARole();
+		public static String T_CONTAINS_E_ROLE = eo.getTraceContainsEventRole();
+		public static String T_CONTAINS_A_ROLE = eo.getTraceContainsAttributeRole();
+		public static String E_CONTAINS_A_ROLE = eo.getEventContainsAttributeRole();
 	
 		//some vocabularies for attribute/data properties
 		public static String ATT_TYPE_ATT = eo.getAttTypeAtt();
@@ -72,9 +72,9 @@ public class XESEOConstants {
 			XESEOConstants.ATTRIBUTE_CONCEPT = eo.getAttributeConcept();
 		
 			//some vocabularies for role names/object properties
-			XESEOConstants.T_CONTAINS_E_ROLE = eo.getTContainsERole();
-			XESEOConstants.T_CONTAINS_A_ROLE = eo.getTContainsARole();
-			XESEOConstants.E_CONTAINS_A_ROLE = eo.getEContainsARole();
+			XESEOConstants.T_CONTAINS_E_ROLE = eo.getTraceContainsEventRole();
+			XESEOConstants.T_CONTAINS_A_ROLE = eo.getTraceContainsAttributeRole();
+			XESEOConstants.E_CONTAINS_A_ROLE = eo.getEventContainsAttributeRole();
 		
 			//some vocabularies for attribute/data properties
 			XESEOConstants.ATT_TYPE_ATT = eo.getAttTypeAtt();

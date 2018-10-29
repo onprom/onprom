@@ -1,12 +1,22 @@
 /*
- * Copyright (C) 2017 Free University of Bozen-Bolzano
- * 
+ * onprom-logextractor
+ *
+ * EBDAReasonerImpl.java
+ *
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,45 +26,31 @@
 
 package it.unibz.inf.kaos.logextractor.reasoner;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
-
+import ch.qos.logback.classic.Logger;
+import it.unibz.inf.kaos.logextractor.constants.LEConstants;
+import it.unibz.inf.kaos.logextractor.constants.XESEOConstants;
+import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
+import it.unibz.inf.kaos.logextractor.model.*;
+import it.unibz.inf.kaos.logextractor.util.EfficientHashMap;
+import it.unibz.inf.kaos.logextractor.util.Print;
+import it.unibz.inf.kaos.obdamapper.util.ExecutionMsgEvent;
+import it.unibz.inf.ontop.model.OBDAModel;
+import it.unibz.inf.ontop.owlrefplatform.core.QuestConstants;
+import it.unibz.inf.ontop.owlrefplatform.core.QuestPreferences;
+import it.unibz.inf.ontop.owlrefplatform.owlapi.*;
+import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration.Builder;
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XTrace;
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.*;
 import org.slf4j.LoggerFactory;
-import ch.qos.logback.classic.Logger;
-import it.unibz.inf.kaos.logextractor.constants.XESEOConstants;
-import it.unibz.inf.kaos.logextractor.constants.LEConstants;
-import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
-import it.unibz.inf.kaos.logextractor.model.EBDAModel;
-import it.unibz.inf.kaos.logextractor.model.XAtt;
-import it.unibz.inf.kaos.logextractor.model.impl.XAttributeOnProm;
-import it.unibz.inf.kaos.logextractor.model.impl.XEventOnProm;
-import it.unibz.inf.kaos.logextractor.model.impl.XEventOnPromEfficient;
-import it.unibz.inf.kaos.logextractor.model.impl.XFactoryOnProm;
-import it.unibz.inf.kaos.logextractor.util.EfficientHashMap;
-import it.unibz.inf.kaos.logextractor.util.ExecutionMsgEvent;
-import it.unibz.inf.kaos.logextractor.util.Print;
-import it.unibz.inf.ontop.owlrefplatform.core.QuestConstants;
-import it.unibz.inf.ontop.owlrefplatform.core.QuestPreferences;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWL;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConnection;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLFactory;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLResultSet;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLStatement;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration.Builder;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
 
 /**
  * This class provide some functionalities to do some particular reasoning over EBDA Model.
@@ -64,6 +60,9 @@ import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration.Builder;
  */
 public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 
+//	private static final Logger logger = Logger.getLogger(LEConstants.LOGGER_NAME);
+//	private static final Logger logger = (Logger) LoggerFactory.getLogger(LEConstants.LOGGER_NAME);
+//	private static final Logger logger = (Logger) LoggerFactory.getLogger(EBDAReasonerImpl.class);
 	private static final Logger logger = (Logger) LoggerFactory.getLogger("EBDAReasoner");
 
 	private QuestOWL questReasoner;
@@ -71,7 +70,35 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	private boolean verbose = false;
 	private boolean allowToDisposeQuestReasoner = true;
 
+	/**
+	 * Initializes EBDA Reasoner based on the given EBDA Model.
+	 * 
+	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
+	 * @param ebdaModel
+	 */
 	public EBDAReasonerImpl(EBDAModel ebdaModel){
+		
+		init(ebdaModel);
+	}
+
+	/**
+	 * Initializes EBDA Reasoner based on the given EBDA Mapping.
+	 * 
+	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
+	 * @param ebdaMapping
+	 */
+	public EBDAReasonerImpl(EBDAMapping ebdaMapping){
+		
+		init(ebdaMapping);
+	}
+
+	/**
+	 * Initializes EBDA Reasoner based on the given OBDA Model.
+	 * 
+	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
+	 * @param ebdaModel
+	 */
+	private void init(OBDAModel ebdaModel){
 		
 		this.xfact = XFactoryOnProm.getInstance();
 		super.setExecutionLogListener(null);
@@ -129,11 +156,11 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	}
 
 	public void disableLocalLogging(){
-		((ch.qos.logback.classic.Logger) logger).setLevel(ch.qos.logback.classic.Level.OFF);
+		logger.setLevel(ch.qos.logback.classic.Level.OFF);
 	}
 
 	public void enableLocalLogging(){
-		((ch.qos.logback.classic.Logger) logger).setLevel(ch.qos.logback.classic.Level.ALL);
+		logger.setLevel(ch.qos.logback.classic.Level.ALL);
 	}
 	
 	public void dispose(){
@@ -153,8 +180,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	// END OF Some utility methods
 	//////////////////////////////////////////////////////////////////////
 
-
-	
 	//////////////////////////////////////////////////////////////////////
 	// XAttributes retriever methods
 	//////////////////////////////////////////////////////////////////////
@@ -522,7 +547,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 				if(val == null) continue;//if the attribute type is null, then skip the rest and move on
 
 				if(attributes.containsKey(newAtt))
-					attributes.get(newAtt).setValue(val);;					
+					attributes.get(newAtt).setValue(val);
 			}
 			if(rs3 != null) rs3.close(); rs3 = null;
 
@@ -707,7 +732,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 				if(attributes.containsKey(newAtt)){
 					attributes.get(newAtt).setKey(key);
 					if(xext != null)
-						attributes.get(newAtt).setExtension(xext);;
+						attributes.get(newAtt).setExtension(xext);
 				}
 			}
 			if(rs != null) rs.close(); rs = null;
@@ -737,8 +762,14 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 				val = (valObj == null? null: valObj.getLiteral()); 
 				if(val == null) continue;//if the attribute type is null, then skip the rest and move on
 
-				if(attributes.containsKey(newAtt))
-					attributes.get(newAtt).setVal(val);					
+				try {
+					if (attributes.containsKey(newAtt)) {
+						attributes.get(newAtt).setVal(val);
+					}
+				} catch (Exception e) {
+					logger.error(e.getMessage());
+					logger.error("\tAttribute: " + newAtt + "\n\tValue:" + val);
+				}
 			}
 			if(rs3 != null) rs3.close(); rs3 = null;
 
@@ -1460,7 +1491,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param HashMap<String,XAttributeOnProm> xattmap - a hashMap between an attribute URI and the corresponding XAttributeOnProm object
 	 * @return HashMap<String,XEventOnProm> - A hashMap between an event URI and the corresponding XEventOnProm object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
@@ -1679,7 +1709,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param HashMap<String,XAttribute> xattmap - a hashMap between an attribute URI and the corresponding XAttribute object
 	 * @return HashMap<String,XEventOnProm> - A hashMap between an event URI and the corresponding XEventOnProm object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
@@ -1848,7 +1877,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param EfficientHashMap<XAtt> xattmap - a hashMap between an attribute URI and the corresponding XAtt
 	 * @return EfficientHashMap<XEventOnPromNoURI> - A hashMap between an event URI and the corresponding XEventOnPromNoURI object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
@@ -3221,8 +3249,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param HashMap<String,XEventOnProm> xevtmap - A hashMap between an event URI and the corresponding XEvent object
-	 * @param HashMap<String,XAttributeOnProm> xattmap - A hashMap between an attribute URI and the corresponding XAttribute object
 	 * @return HashMap<String,XTrace> - A hashMap between a trace URI and the corresponding XTrace object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
@@ -3554,8 +3580,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param HashMap<String,XEventOnProm> xevtmap - A hashMap between an event URI and the corresponding XEvent object
-	 * @param HashMap<String,XAttribute> xattmap - A hashMap between an attribute URI and the corresponding XAttribute object
 	 * @return HashMap<String,XTrace> - A hashMap between a trace URI and the corresponding XTrace object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
@@ -3888,8 +3912,6 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * 		</li>
 	 * </ul>
 	 * 
-	 * @param EfficientHashMap<XEventOnPromNoURI> xevtmap - A hashMap between an event URI and the corresponding XEventOnPromNoURI object
-	 * @param EfficientHashMap<XAtt> xattmap - A hashMap between an attribute URI and the corresponding XAtt
 	 * @return EfficientHashMap<XTrace> - A hashMap between a trace URI and the corresponding XTrace object
 	 * @throws OWLException
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
@@ -4084,9 +4106,291 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
         		
 		return traces;	
 	}	
-	
+
+	/**
+	 * It retrieves all association between traces and their events, as well as 
+	 * the association between traces and their attributes. 
+	 * Then it creates a hashmap of XTrace where the keys are the Trace URIs.
+	 * Each XTrace within the created hashmap of XTraces is filled with the corresponding 
+	 * XEvent objects (resp. XAttribute objects) that are taken from the given hashmap of 
+	 * XEvents (resp. XAttributes)
+	 * 
+	 * It uses the following query for retrieving the association between traces and events:
+	 * 
+	 * <pre>
+	 * <code>
+	 * PREFIX : <http://www.example.org/>
+	 * SELECT Distinct ?trace ?event 
+	 * WHERE {
+	 * 		?trace :TcontainsE ?event . 
+	 * } 
+	 * </code>
+	 * </pre>
+	 * 
+	 * It uses the following query for retrieving the association between traces and attributes:
+	 * 
+	 * <pre>
+	 * <code>
+	 * PREFIX : <http://www.example.org/>
+	 * SELECT distinct ?trace ?att 
+	 * WHERE {
+	 * 		?trace :TcontainsA ?att .  
+	 * }
+	 * </code>
+	 * </pre>
+	 * 
+	 * It uses the following query for retrieving all traces:
+	 * 
+	 * <pre>
+	 * <code>
+	 * PREFIX : <http://www.example.org/>
+	 * SELECT distinct ?trace 
+	 * WHERE {
+	 * 		?trace a :Trace . 
+	 * }
+	 * </code>
+	 * </pre>
+	 * 
+	 * <br/><br/>
+	 * Main feature:
+	 * <ul>
+	 * 		<li>
+	 * 			It is optimized for minimizing the memory usage 
+	 * 		</li>
+	 * </ul>
+	 * 
+	 * <br/><br/>
+	 * Notes:
+	 * <ul>
+	 * 		<li>
+	 * 			It checks event's mandatory attributes (name, lifecycle, timestamp) and 
+	 * 			only retrieves the events that has the mandatory attributes. The checks are performed
+	 * 			within the program.
+	 * 		</li>
+	 * 		<li> 
+	 * 			It retrieves all traces, even if they have neither events nor attributes.
+	 * 		</li>
+	 * 		<li> 
+	 * 			It accesses the query result using the name of the answer 
+	 * 			variables.
+	 * 		</li>
+	 * </ul>
+	 * 
+	 * @return EfficientHashMap<XTrace> - A hashMap between a trace URI and the corresponding XTrace object
+	 * @throws OWLException
+	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
+	 * @since June 2017
+	 */
+	public EfficientHashMap<XTrace> getXTracesUsingAtomicQueriesAndWithoutEventMandatoryAttributesCheckMO(EfficientHashMap<XEventOnPromEfficient> xevtmap, EfficientHashMap<XAtt> xattmap) throws OWLException{
+		
+		//init execution logging message
+		StringBuilder currentExecutionNote = new StringBuilder(
+			"EBDAReasoner:getXTracesUsingAtomicQueriesAndWithEventMandatoryAttributesCheckMO(EfficientHashMap<XEventOnPromNoURI> xevtmap, EfficientHashMap<XAtt> xattmap):\n");
+		int currExecNoteInitLength = currentExecutionNote.length();//to check if there is any additional execution note
+		//END OF init execution logging message
+
+		EfficientHashMap<XTrace> traces = new EfficientHashMap<XTrace>();
+		QuestOWLConnection conn = questReasoner.getConnection();
+        QuestOWLStatement st = conn.createStatement();
+
+        try{
+        	
+			String newTrace, newEvent, newAtt;
+			OWLObject traceObj, eventObj, attObj;
+			XEvent xevt;
+			XEventOnPromEfficient xevtOnProm;
+			        	
+			//====================================================================================================
+			//Handling ALL Traces 
+			//====================================================================================================
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling ALL traces"));
+				
+				QuestOWLResultSet rs3 = st.executeTuple(XESEOConstants.qTrace_Simple);
+				
+				while (rs3.nextRow()) {
+					traceObj = rs3.getOWLObject(XESEOConstants.qTraceAnsVarTrace);
+					newTrace = (traceObj == null? null : traceObj.toString().intern()); 
+					
+					//if the current trace is null, then skip the rest and move on 
+					if(newTrace == null) continue;
+					
+					//System.out.println("------------------------------");
+					//System.out.println("trace: "+ currTrace);
+									
+					XTrace xtrace= this.xfact.createXTraceNaiveImpl();
+					
+					if(xtrace != null)
+						traces.put(newTrace, xtrace);
+					else
+						currentExecutionNote.append(String.format(LEConstants.TRACE_CREATION_FAILURE, newTrace)); 
+				}
+		
+				if(rs3 != null) rs3.close();
+
+			//====================================================================================================
+			//END OF Handling ALL Traces
+			//====================================================================================================
+
+			//====================================================================================================
+			//Handling traces events
+	        //====================================================================================================
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling traces events"));
+
+				QuestOWLResultSet rs = st.executeTuple(XESEOConstants.qTraceEvt_Simple);				
+				
+				while (rs.nextRow()) {
+					
+					//============================================================================
+					//Reading the Query results
+					//============================================================================
+						traceObj = rs.getOWLObject(XESEOConstants.qTraceEvt_SimpleAnsVarTrace); 
+						newTrace = (traceObj == null? null : traceObj.toString().intern()); 
+						
+						//if the current trace is null, then skip the rest and move on 
+						if(newTrace == null) continue;
+												
+						eventObj = rs.getOWLObject(XESEOConstants.qTraceEvt_SimpleAnsVarEvent); 
+						newEvent = (eventObj == null? null : eventObj.toString().intern());
+						
+					//============================================================================
+					//END OF Reading the Query results
+					//============================================================================
+					
+					//============================================================================
+					//Handling the current event that is being read
+					//============================================================================
+						xevt = null;
+						
+						//if the given XEvent map xevtmap doesn't contain the information about event att
+						if(xevtmap.containsKey(newEvent)){
+							xevtOnProm = xevtmap.get(newEvent);
+							//if(xevtOnProm.hasAllMandatoryAttributes())
+								xevt = xevtOnProm;
+							
+						}else{
+							currentExecutionNote.append(String.format(LEConstants.TRACE_MISS_EVENT, newTrace, newEvent)); 
+						}
+					//============================================================================
+					//END OF Handling the current event that is being read
+					//============================================================================
+					
+					//============================================================================
+					//Handling the current trace that is currently being read
+					//============================================================================
+						if(traces.containsKey(newTrace)){//handle the trace that has been read previously
+
+							if (xevt != null) {
+								try {
+									traces.get(newTrace).insertOrdered(xevt);
+								} catch (Exception e) {
+									
+									logger.error("Error while inserting an event into a trace. "
+											+ "One possible reason: there is a mismatch between the XES attribute type and some reserved XES attribute key. "
+											+ "E.g., if the AnnotationQueries says that a certain attribute with the key='time:timestamp' has the type literal, then an exception might be thrown here ");
+									
+									/*
+									XAttribute timestamp = xevt.getAttributes().get("time:timestamp");
+									if (!(timestamp instanceof XAttTimestampEfficient)) {
+										logger.error(
+												"Timestamp type mismatch-> Trace: " + newTrace + 
+												" Name: " + xevt.getAttributes().get("concept:name") + 
+												" TS Value: " + timestamp + " TS Class: " + timestamp.getClass());
+									}
+									logger.error(e.getMessage(), e);
+									*/
+								}
+							}
+						}
+					//============================================================================
+					//END OF Handling the current trace that is currently being read
+					//============================================================================
+				}
+		
+				if(rs != null) rs.close();
+			//====================================================================================================
+			//END OF Handling Trace's Events
+	        //====================================================================================================
+			
+			//====================================================================================================
+			//Handling Traces Attributes
+	        //====================================================================================================
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling traces attributes"));
+
+				QuestOWLResultSet rs2 = st.executeTuple(XESEOConstants.qTraceAtt_Simple);
+		
+				while (rs2.nextRow()) {
+					
+					//============================================================================
+					//Reading the Query results
+					//============================================================================
+						traceObj = rs2.getOWLObject(XESEOConstants.qTraceAtt_SimpleAnsVarTrace); 
+						newTrace = (traceObj == null? null : traceObj.toString().intern()); 
+						
+						//if the current trace is null, then skip the rest and move on 
+						if(newTrace == null) continue;
+						
+						attObj = rs2.getOWLObject(XESEOConstants.qTraceAtt_SimpleAnsVarAtt); 
+						newAtt = (attObj == null? null : attObj.toString().intern()); 
+
+					//============================================================================
+					//END OF Reading the Query results
+					//============================================================================
+					
+					//============================================================================
+					//Handling the current attribute that is being read
+					//============================================================================
+
+						XAtt xatt = null;
+						
+						if(xattmap.containsKey(newAtt)){
+							xatt = xattmap.get(newAtt);
+							if(!xatt.hasCompleteInfo())
+								xatt = null;
+
+						}else
+							currentExecutionNote.append(String.format(LEConstants.TRACE_MISS_ATT, newTrace, newAtt)); 
+					
+					//============================================================================
+					//END OF Handling current attribute that is being read
+					//============================================================================
+
+					//============================================================================
+					//Handling the current trace that is being read
+					//============================================================================
+						if(traces.containsKey(newTrace)){
+							//handling the traces that are captured in the previous step 
+							if(newAtt != null && xatt != null)
+								traces.get(newTrace).getAttributes().put(xatt.getKey(), xatt);
+						}
+					//============================================================================
+					//END OF Handling the current trace that is being read
+					//============================================================================
+				}
+				
+				if(rs2 != null) rs2.close();
+			//====================================================================================================
+			//END OF Handling Trace's Attributes
+	        //====================================================================================================
+
+		}finally{
+			if(st != null && !st.isClosed()) st.close();
+			if(conn != null && !conn.isClosed()) conn.close();
+			if(this.allowToDisposeQuestReasoner) questReasoner.dispose();
+        }
+        
+		//if there is any additional execution note within this method, 
+        //then send an ExecutionLogEvent to corresponding the ExecutionLogListener
+        if (currentExecutionNote.length() > currExecNoteInitLength)
+        	addNewExecutionMsg(new ExecutionMsgEvent(this, currentExecutionNote));
+        
+        if(verbose)
+        	logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, Print.getStringOfXTraces(traces)));
+        		
+		return traces;	
+	}	
+
 	//////////////////////////////////////////////////////////////////////
 	// END OF XTraces retriever methods
 	//////////////////////////////////////////////////////////////////////
-		
+	
 }

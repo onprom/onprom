@@ -28,12 +28,12 @@ package it.unibz.inf.kaos.ui.form;
 
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.data.query.AnnotationQuery;
-import it.unibz.inf.kaos.data.query.EventAnnotationQuery;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
 import it.unibz.inf.kaos.ui.utility.AnnotationEditorButtons;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -42,69 +42,78 @@ import java.util.List;
  * @author T. E. Kalayci on 27/02/17.
  */
 public class QueryEditor extends JDialog {
+    private static final Dimension BOX_SIZE = new Dimension(550, 150);
 
-  public QueryEditor(AnnotationQueries _queries) {
+    public QueryEditor(AnnotationQueries _queries) {
     setModal(true);
-    setLayout(null);
+    setLayout(new GridBagLayout());
+    GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
+
+    //components in the first row
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridwidth = 4;
+    gridBagConstraints.fill = GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+
     //list to display all queries
-    DefaultListModel<AnnotationQuery> mdlQueries = new DefaultListModel<>();
+        DefaultListModel<AnnotationQuery> mdlQueries = new DefaultListModel<>();
     //add all the queries to allow editing
     _queries.getAllQueries().forEach(q -> {
       if (q != null) {
         mdlQueries.addElement(q);
-        List<AnnotationQuery> attributeQueries = q.getAttributeQueries();
-        if (attributeQueries != null && attributeQueries.size() > 0) {
+          List<AnnotationQuery> attributeQueries = q.getAttributeQueries();
+          if (attributeQueries != null && !attributeQueries.isEmpty()) {
           attributeQueries.forEach(aq -> {
             if (aq != null) {
               mdlQueries.addElement(aq);
             }
           });
         }
-        if (q instanceof EventAnnotationQuery) {
-          EventAnnotationQuery eaq = (EventAnnotationQuery) q;
-          mdlQueries.addElement(eaq.getEventTrace());
-          mdlQueries.addElement(eaq.getEventTimestamp());
-          mdlQueries.addElement(eaq.getEventLifecycle());
-          mdlQueries.addElement(eaq.getEventResource());
-        }
       }
     });
-    JList<AnnotationQuery> lstQueries = new JList<>(mdlQueries);
+
+        JList<AnnotationQuery> lstQueries = new JList<>(mdlQueries);
     lstQueries.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
     lstQueries.setLayoutOrientation(JList.VERTICAL);
     JScrollPane listScroller = new JScrollPane(lstQueries);
-    listScroller.setBounds(5, 5, 790, 130);
-    add(listScroller);
+        listScroller.setPreferredSize(BOX_SIZE);
+        add(listScroller, gridBagConstraints);
 
+    gridBagConstraints.gridy++;
     //editor to display the query selected from the list
     JEditorPane edtQuery = new JEditorPane();
     JScrollPane scrollPane = new JScrollPane(edtQuery);
-    scrollPane.setBounds(5, 140, 790, 400);
-    add(scrollPane);
+        scrollPane.setPreferredSize(BOX_SIZE);
+    add(scrollPane, gridBagConstraints);
 
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.fill = GridBagConstraints.NONE;
+        gridBagConstraints.gridy++;
+        gridBagConstraints.gridx = 1;
     //button to save the changes over the selected query
     JButton btn = UIUtility.createButton(AnnotationEditorButtons.SAVE, e -> {
       String query = edtQuery.getText();
       //first validate it using Jena
-      query = new SimpleQueryExporter().checkQuery(query);
+        query = SimpleQueryExporter.checkQuery(query);
       lstQueries.getSelectedValue().setQuery(query);
-    });
-    btn.setBounds(300, 540, 100, 25);
-    add(btn);
+    }, AttributeForm.TXT_SIZE);
+    add(btn, gridBagConstraints);
 
-    btn = UIUtility.createButton(AnnotationEditorButtons.CONTINUE, e -> setVisible(false));
-    btn.setBounds(405, 540, 100, 25);
-    add(btn);
+    gridBagConstraints.gridx = 2;
+    btn = UIUtility.createButton(AnnotationEditorButtons.CONTINUE, e -> setVisible(false), AttributeForm.TXT_SIZE);
+    add(btn, gridBagConstraints);
 
     //display selected query
     lstQueries.addListSelectionListener(e -> {
-      AnnotationQuery _selected = lstQueries.getSelectedValue();
+        AnnotationQuery _selected = lstQueries.getSelectedValue();
       if (_selected != null) {
         edtQuery.setText(_selected.getQuery());
       }
     });
 
-    setSize(800, 600);
+    setMinimumSize(new Dimension(800, 600));
     setLocationRelativeTo(null);
     setVisible(true);
   }

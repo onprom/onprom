@@ -3,13 +3,13 @@
  *
  * UMLDiagram.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,7 @@ import it.unibz.inf.kaos.data.Association;
 import it.unibz.inf.kaos.data.Relationship;
 import it.unibz.inf.kaos.data.UMLClass;
 
-import javax.swing.undo.UndoableEdit;
-import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Interface for classes to use UML Diagram Panel
@@ -39,24 +38,15 @@ import java.util.Set;
  * @author T. E. Kalayci
  * 04-Apr-2017
  */
-public interface UMLDiagram {
+public interface UMLDiagram extends Diagram {
     void addClass(UMLClass cls);
-
     void addRelation(Relationship relationship);
-
     void removeClass(UMLClass cls);
-
     void removeRelation(Relationship relationship);
 
-    void addEdit(UndoableEdit edit);
+    boolean removeShape(DiagramShape shape);
 
-    void createClass(UMLClass cls);
+    Stream<Association> getAssociations();
 
-    Set<Association> getRelations();
-
-    Set<DiagramShape> getAllShapes(boolean forJSON);
-
-    boolean removeShape(DiagramShape _selected);
-
-    Set<UMLClass> getClasses();
+    Stream<UMLClass> getClasses();
 }

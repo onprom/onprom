@@ -29,8 +29,10 @@ package it.unibz.inf.kaos.ui.component;
 import it.unibz.inf.kaos.data.AnnotationAttribute;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
-import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Table for displaying and editing annotation attributes in annotation form
@@ -38,36 +40,38 @@ import java.util.LinkedList;
  * @author T. E. Kalayci
  */
 public class AnnotationAttributeTable extends JTable {
-  private final AnnotationAttributeTableModel model = new AnnotationAttributeTableModel(new LinkedList<>());
+    private final AnnotationAttributeTableModel model;
 
-  public AnnotationAttributeTable() {
-    super();
-    setModel(model);
-  }
-
-  public LinkedList<AnnotationAttribute> getAttributes() {
-    return model.getAttributes();
-  }
-
-  public void setAttributes(LinkedList<AnnotationAttribute> attributes) {
-    model.setAttributes(attributes);
-  }
-
-  public void removeSelectedAttribute() {
-    if (UIUtility.deleteConfirm()) {
-      model.removeAttribute(getSelectedRow());
+    public AnnotationAttributeTable(boolean showType) {
+        super();
+        model = new AnnotationAttributeTableModel(showType);
+        setModel(model);
     }
-  }
 
-  public void updateAttributeAt(int index, AnnotationAttribute annotationAttribute) {
-    model.updateAttributeAt(index, annotationAttribute);
-  }
+    public List<AnnotationAttribute> getAttributes() {
+        return model.getAttributes();
+    }
 
-  public void addAttribute(AnnotationAttribute annotationAttribute) {
-    model.addAttribute(annotationAttribute);
-  }
+    public void setAttributes(List<AnnotationAttribute> attributes) {
+        model.setAttributes(attributes);
+    }
 
-  public AnnotationAttribute getSelectedAttribute() {
-    return model.getAttribute(getSelectedRow());
-  }
+    public void removeSelectedAttribute() {
+        if (UIUtility.deleteConfirm()) {
+            model.removeAttribute(getSelectedRow());
+        }
+    }
+
+    public void updateAttributeAt(int index, AnnotationAttribute annotationAttribute) {
+        model.updateAttributeAt(index, annotationAttribute);
+    }
+
+    public void addAttribute(AnnotationAttribute annotationAttribute) {
+        model.addAttribute(annotationAttribute);
+    }
+
+    @Nonnull
+    public Optional<AnnotationAttribute> getSelectedAttribute() {
+        return model.getAttribute(getSelectedRow());
+    }
 }

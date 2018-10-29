@@ -26,6 +26,7 @@
 
 package org.processmining.plugins.kaos;
 
+import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.processmining.contexts.uitopia.annotations.UIImportPlugin;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.abstractplugins.AbstractImportPlugin;
@@ -37,29 +38,32 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import java.io.InputStream;
 
+/**
+ * @author T. E. Kalayci
+ */
 @Plugin(
-  name = "Ontology File",
-  parameterLabels = {"Filename"},
-  returnLabels = {"Imported OWL Ontology"},
-  returnTypes = {OWLOntology.class}
+        name = "Ontology File",
+        parameterLabels = {"Filename"},
+        returnLabels = {"Imported OWL Ontology"},
+        returnTypes = {OWLOntology.class}
 )
 @UIImportPlugin(description = "OWL Ontology", extensions = {"owl", "ttl", "rdf"})
 public class OWLOntologyImportPlugin extends AbstractImportPlugin {
-  @UITopiaVariant(
-    author = "onprom team",
-    affiliation = "Free University of Bozen-Bolzano",
-    email = "onprom@inf.unibz.it",
-    website = "http://onprom.inf.unibz.it"
-  )
-  @Override
-  protected OWLOntology importFromStream(final PluginContext context, final InputStream input, final String filename,
-                                         final long fileSizeInBytes) {
-    try {
-      context.getFutureResult(0).setLabel("OWL ontology imported from " + filename);
-      return OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(input);
-    } catch (final Throwable e) {
-      context.log("Couldn't import ontology:" + e.getMessage(), Logger.MessageLevel.ERROR);
+    @UITopiaVariant(
+            author = "onprom team",
+            affiliation = "Free University of Bozen-Bolzano",
+            email = "onprom@inf.unibz.it",
+            website = "http://onprom.inf.unibz.it"
+    )
+    @Override
+    protected OWLOntology importFromStream(final PluginContext context, final InputStream input, final String filename,
+                                           final long fileSizeInBytes) {
+        try {
+            context.getFutureResult(0).setLabel("OWL Ontology (" + filename + " ) " + UIUtility.getCurrentDateTime());
+            return OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(input);
+        } catch (final Throwable e) {
+            context.log("Couldn't import ontology:" + e.getMessage(), Logger.MessageLevel.ERROR);
+        }
+        return null;
     }
-    return null;
-  }
 }

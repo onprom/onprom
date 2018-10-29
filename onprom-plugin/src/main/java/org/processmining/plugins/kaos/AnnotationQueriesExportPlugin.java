@@ -36,22 +36,25 @@ import org.processmining.framework.plugin.annotations.PluginVariant;
 
 import java.io.File;
 
+/**
+ * @author T. E. Kalayci
+ */
 @Plugin(name = "Export Queries to JSON", parameterLabels = {"Queries", "File"}, returnLabels = {}, returnTypes = {})
 @UIExportPlugin(description = "Annotation Queries", extension = "aqr")
 public class AnnotationQueriesExportPlugin {
-  @UITopiaVariant(
-    affiliation = "Free University of Bozen-Bolzano",
-    author = "onprom team",
-    email = "onprom@inf.unibz.it",
-    website = "http://onprom.inf.unibz.it"
-  )
-  @PluginVariant(requiredParameterLabels = {0, 1})
-  public void export(PluginContext context, AnnotationQueries queries, File file) {
-    try {
-      IOUtility.exportJSON(file, queries);
-      context.log("Exported JSON content to the file: " + file.getName());
-    } catch (Exception e) {
-      context.log("Couldn't export JSON content to the file: " + file.getName());
+    @UITopiaVariant(
+            affiliation = "Free University of Bozen-Bolzano",
+            author = "onprom team",
+            email = "onprom@inf.unibz.it",
+            website = "http://onprom.inf.unibz.it"
+    )
+    @PluginVariant(requiredParameterLabels = {0, 1})
+    public void export(PluginContext context, AnnotationQueries queries, File file) {
+        try {
+            IOUtility.exportJSON(file, queries);
+            context.log("Exported queries content to the file: " + file.getName());
+        } catch (Exception e) {
+            context.log("Couldn't export queries content to the file: " + file.getName());
+        }
     }
-  }
 }

@@ -34,7 +34,7 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Table for displaying and editing attributes in class form
@@ -42,7 +42,7 @@ import java.util.LinkedList;
  * @author T. E. Kalayci
  */
 public class AttributeTable extends JTable implements MouseListener {
-    private final AttributeTableModel model = new AttributeTableModel(new LinkedList<>());
+    private final AttributeTableModel model = new AttributeTableModel();
 
     public AttributeTable(boolean editable) {
         super();
@@ -58,11 +58,11 @@ public class AttributeTable extends JTable implements MouseListener {
         }
     }
 
-    public LinkedList<Attribute> getAttributes() {
+    public List<Attribute> getAttributes() {
         return model.getAttributes();
     }
 
-    public void setAttributes(LinkedList<Attribute> attributes) {
+    public void setAttributes(List<Attribute> attributes) {
         model.setAttributes(attributes);
     }
 
@@ -143,7 +143,7 @@ public class AttributeTable extends JTable implements MouseListener {
             //check if other attributes have same name
             for (int i = 0; i < model.getRowCount(); i++) {
                 if (i != getEditingRow()) {
-                    if (model.getAttribute(i).getName().equals(textField.getText())) {
+                    if (model.getAttribute(i).filter(a -> a.getName().equals(textField.getText())).isPresent()) {
                         textField.selectAll();
                         UIUtility.error("Name already given to other attribute!");
                         return false;
