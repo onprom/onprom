@@ -29,7 +29,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>it.unibz.inf.kaos</groupId>
     <artifactId>onprom</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>2.0.0</version>
     <packaging>pom</packaging>
     <name>onprom - Parent Project of onprom Tools</name>
     <url>http://onprom.inf.unibz.it</url>
@@ -43,6 +43,12 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
+    <scm>
+        <connection>scm:git:git@github.com:onprom/onprom.git</connection>
+        <developerConnection>scm:git:git@github.com:onprom/onprom.git</developerConnection>
+        <url>git@github.com:onprom/onprom.git</url>
+        <tag>${project.version}</tag>
+    </scm>
     <developers>
         <developer>
             <id>tekrei</id>
@@ -57,10 +63,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <logback.version>1.2.3</logback.version>
-        <maven.compiler.version>3.7.0</maven.compiler.version>
+        <maven.compiler.version>3.8.0</maven.compiler.version>
         <maven.assembly.version>3.1.0</maven.assembly.version>
         <owlapi.version>4.2.5</owlapi.version>
-        <jackson.version>2.9.5</jackson.version>
+        <jackson.version>2.9.7</jackson.version>
         <local.repository>file://${basedir}/../onprom-maven</local.repository>
     </properties>
     <modules>

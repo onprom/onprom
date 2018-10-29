@@ -33,7 +33,7 @@
     <parent>
         <artifactId>onprom</artifactId>
         <groupId>it.unibz.inf.kaos</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>2.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <build>
@@ -52,7 +52,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>${maven.assembly.version}</version>
                 <configuration>
-                    <finalName>${project.artifactId}</finalName>
+                    <finalName>${project.artifactId}-${project.version}</finalName>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>

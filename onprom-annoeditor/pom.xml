@@ -32,7 +32,7 @@
     <parent>
         <groupId>it.unibz.inf.kaos</groupId>
         <artifactId>onprom</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>2.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <build>
@@ -89,7 +89,7 @@
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-querybuilder</artifactId>
-            <version>3.7.0</version>
+            <version>3.9.0</version>
         </dependency>
     </dependencies>
 </project>
