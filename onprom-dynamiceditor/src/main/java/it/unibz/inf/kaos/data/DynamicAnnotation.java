@@ -32,6 +32,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import it.unibz.inf.kaos.data.query.AnnotationQuery;
 import it.unibz.inf.kaos.data.query.BinaryAnnotationQuery;
+import it.unibz.inf.kaos.data.query.UnaryAnnotationQuery;
 import it.unibz.inf.kaos.dynamic.DynamicAnnotationEditor;
 import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.interfaces.AnnotationProperties;
@@ -46,7 +47,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 
 /**
  * Created by T. E. Kalayci on 13-Oct-2017.
@@ -144,7 +144,7 @@ public class DynamicAnnotation extends Annotation {
         externalURIComponents.forEach(component -> {
             String id = "_E" + uriFields.size() + "_" + hashCode();
             uriFields.put(id, ImmutablePair.of(id, component));
-            //TODO shall we keep adding component to the URI or just leave it to be a part of WHERE clause?
+            //TODO shall we keep adding external component to the URI or just leave it to be a part of WHERE clause?
             uri.add(id);
         });
 
@@ -164,53 +164,69 @@ public class DynamicAnnotation extends Annotation {
             }
         });
 
-        attributeValues.forEach((key, value) -> {
-            logger.info("\tgenerating attribute query for " + key);
-            SelectBuilder builder;
-            String field = uriFields.containsKey(key) ? uriFields.get(key).left : XESConstants.attValue;
-            builder = SimpleQueryExporter.getStringAttributeQueryBuilder(value.getAttribute(), this, null, Var.alloc(field));
-            addURIFields(builder, key);
-            queries.add(new BinaryAnnotationQuery(
-                    builder.toString(), key,
-                    uri.toArray(new String[]{}), new String[]{field})
-            );
-        });
-
-        relationValues.forEach((key, value) -> {
-            logger.info("\tgenerating relation query for " + key);
-            SelectBuilder builder = new SelectBuilder();
-            final Var classVar = Var.alloc(getVarName());
-            Var relationVar = Var.alloc(value.getVarName());
-            boolean inheritanceExist = value.getRelatedClass().equalsOrInherits(relatedClass);
-            if (inheritanceExist) {
-                relationVar = classVar;
-            }
-            builder.addVar(classVar);
-
-            if (!inheritanceExist && (value.getPath() != null)) {
-                SimpleQueryExporter.addJoin(builder, value.getPath()
-                        //, ImmutableMap.of(getCleanName(), getVarName(), value.getRelatedClass().getCleanName(), value.getVarName())
-                );
-            } else {
-                builder.addWhere(classVar, "a", "<" + relatedClass.getLongName() + ">");
-                try {
-                    builder.addVar(value.getVarName());
-                    if (!value.getVarName().equalsIgnoreCase(getVarName())) {
-                        builder.addBind("?" + getVarName(), "?" + value.getVarName());
-                    }
-                } catch (Exception e) {
-                    logger.error(e.getMessage());
-                }
-            }
-            builder.addVar(relationVar);
-            addURIFields(builder, key);
-            String[] firstComponent = value.getAnnotation().getURI(builder);
-            if (firstComponent.length < 1) {
-                firstComponent = new String[]{relationVar.getVarName()};
-            }
-            queries.add(new BinaryAnnotationQuery(builder.toString(), key, firstComponent, uri.toArray(new String[]{})));
-        });
+        queries.add(getAnnotationInstanceQuery());
+        attributeValues.forEach((key, value) -> queries.add(getAttributeQuery(key, value)));
+        relationValues.forEach((key, value) -> queries.add(getRelationQuery(key, value)));
         return queries;
+    }
+
+    private BinaryAnnotationQuery getAttributeQuery(String key, DynamicNavigationalAttribute value) {
+        logger.info("\tgenerating attribute query for " + key);
+        String field = uriFields.containsKey(key) ? uriFields.get(key).left : XESConstants.attValue;
+        SelectBuilder builder = SimpleQueryExporter.getStringAttributeQueryBuilder(
+                value.getAttribute(), this, null, Var.alloc(field)
+        );
+        addURIFields(builder, key);
+        return new BinaryAnnotationQuery(
+                builder.toString(), key,
+                uri.toArray(new String[]{}), new String[]{field}
+        );
+    }
+
+    private BinaryAnnotationQuery getRelationQuery(String key, DynamicAnnotationAttribute value) {
+        logger.info("\tgenerating relation query for " + key);
+        SelectBuilder builder = new SelectBuilder();
+        final Var classVar = Var.alloc(getVarName());
+        Var relationVar = Var.alloc(value.getVarName());
+        boolean inheritanceExist = value.getRelatedClass().equalsOrInherits(relatedClass);
+        if (inheritanceExist) {
+            relationVar = classVar;
+        }
+        builder.addVar(classVar);
+
+        if (!inheritanceExist && (value.getPath() != null)) {
+            SimpleQueryExporter.addJoin(builder, value.getPath()
+                    //, ImmutableMap.of(getCleanName(), getVarName(), value.getRelatedClass().getCleanName(), value.getVarName())
+            );
+        } else {
+            builder.addWhere(classVar, "a", "<" + relatedClass.getLongName() + ">");
+            try {
+                builder.addVar(value.getVarName());
+                if (!value.getVarName().equalsIgnoreCase(getVarName())) {
+                    builder.addBind("?" + getVarName(), "?" + value.getVarName());
+                }
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
+        }
+        builder.addVar(relationVar);
+        addURIFields(builder, key);
+        String[] firstComponent = value.getAnnotation().getURI(builder);
+        if (firstComponent.length < 1) {
+            firstComponent = new String[]{relationVar.getVarName()};
+        }
+        return new BinaryAnnotationQuery(builder.toString(), key, firstComponent, uri.toArray(new String[]{}));
+    }
+
+    private UnaryAnnotationQuery getAnnotationInstanceQuery() {
+        // add unary query for this annotation instance
+        SelectBuilder builder = new SelectBuilder();
+        final Var classVar = Var.alloc(getVarName());
+        builder.addVar(classVar);
+
+        builder.addWhere(classVar, "a", "<" + relatedClass.getLongName() + ">");
+        addURIFields(builder, "");
+        return new UnaryAnnotationQuery(builder.toString(), annotationClass.getLongName(), uri.toArray(new String[]{}));
     }
 
     private void addURIFields(final SelectBuilder builder, final String currentKey) {
