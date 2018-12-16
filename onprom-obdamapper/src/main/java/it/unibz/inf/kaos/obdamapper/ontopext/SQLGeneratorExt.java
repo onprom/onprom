@@ -236,11 +236,9 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 			logger.info(String.format(logMsgTemplate, "SQL: \n"+querystr+"\n"));
 
 			logger.info(String.format(logMsgTemplate, "Variable Map:"));
-			Iterator<String> it = selectClause.getSecondComponent().keySet().iterator();
-			while(it.hasNext()){
-				String key = it.next();
-				logger.info(String.format(logMsgTemplate, "\t Var map - Key: "+key+", "
-									+ "Value: "+selectClause.getSecondComponent().get(key)));				
+            for (String key : selectClause.getSecondComponent().keySet()) {
+                logger.info(String.format(logMsgTemplate, "\t Var map - Key: " + key + ", "
+                        + "Value: " + selectClause.getSecondComponent().get(key)));
 			}
 			logger.info(String.format(logMsgTemplate, "END OF Variable Map \n"));
 			//arsa: END OF modify concat
@@ -283,7 +281,7 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 
 		logger.info(String.format(logMsgTemplate, "getSelectClause2: "+query));
 
-		HashMap<String, String> varMap = new HashMap<String, String>();
+        HashMap<String, String> varMap = new HashMap<>();
 
 		/*
 		 * If the head has size 0 this is a boolean query.
@@ -302,7 +300,7 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 			//arsa: modify concat
 			//return sb.toString();
 			varMap.put("x", "'true'");
-			return new ObjectPair<String, HashMap<String, String>>(sb.toString(), varMap);
+            return new ObjectPair<>(sb.toString(), varMap);
 			//arsa: END OF modify concat
 		}
 
@@ -368,7 +366,7 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 		
 		//arsa: modify concat
 		//return sb.toString();
-		return new ObjectPair<String, HashMap<String, String>>(sb.toString(), varMap);
+        return new ObjectPair<>(sb.toString(), varMap);
 		//arsa: END OF modify concat
 	}
 
@@ -380,7 +378,7 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 		//arsa: modify concat - purpose: prevent concatenation in the generated SQL (solution: make the string to be concatenated as a URI template)
 		//arsa: this HashMap newVarMap will contain the mapping between 
 		//		an answer variable name and the URI Template for instantiating the corresponding answer variable
-		HashMap<String, String> newVarMap = new HashMap<String, String>();
+        HashMap<String, String> newVarMap = new HashMap<>();
 		boolean buildAlias = true;
 		//arsa: END OF modify concat
 		
@@ -526,12 +524,12 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 		// the normal case where the main column simply an answer variable
 		if(buildAlias){
 			newVarMap.put(variableNameOri, "{"+variableName+"}");
-			return new ObjectPair<String, HashMap<String, String>>(
+            return new ObjectPair<>(
 					String.format(mainTemplate, mainColumn, variableName), newVarMap);
 		}
 		
 		//the case where the mainColumn needs to be concatenated into URI or is a constant
-		return new ObjectPair<String, HashMap<String, String>>(mainColumn, newVarMap);
+        return new ObjectPair<>(mainColumn, newVarMap);
 		//arsa: END OF modify concat
 	}
 
@@ -642,9 +640,9 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 				//return new ObjectPair<String,String>(vex.get(0), null);
 				
 				if(!vex.get(0).equals("{}"))
-					return new ObjectPair<String,String>("'"+vex.get(0)+"'", null);
+                    return new ObjectPair<>("'" + vex.get(0) + "'", null);
 				else
-					return new ObjectPair<String,String>(vex.get(0), null);
+                    return new ObjectPair<>(vex.get(0), null);
 				//arsa: END OF modify - bug fix - 2017.08.07
 				
 				//arsa: END OF modify concat
@@ -662,7 +660,7 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 			 */
 			//arsa: remove CAST
 			//return sqladapter.sqlCast(getSQLString(t, index, false), Types.VARCHAR);
-			return new ObjectPair<String,String>(getSQLString(t, index, false), null);
+            return new ObjectPair<>(getSQLString(t, index, false), null);
 			//arsa: END OF remove CAST
 			
 		} 
@@ -675,7 +673,7 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 			 * concrete URI, we return the string representing that URI.
 			 */
 			URIConstant uc = (URIConstant) t;
-			return new ObjectPair<String,String>(sqladapter.getSQLLexicalFormString(uc.getURI()), null);
+            return new ObjectPair<>(sqladapter.getSQLLexicalFormString(uc.getURI()), null);
 		}
 		else if (t instanceof Function) {
 			
@@ -686,7 +684,7 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 			 */
 			//arsa: remove CAST
 			//return sqladapter.sqlCast(getSQLString(t, index, false), Types.VARCHAR);
-			return new ObjectPair<String,String>(getSQLString(t, index, false), null);
+            return new ObjectPair<>(getSQLString(t, index, false), null);
 			//arsa: END OF remove CAST
 		}
 
@@ -703,8 +701,9 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 		logger.info(String.format(logMsgTemplate, "private String getStringConcatenation2(String[] params)"));
 
 		StringBuilder sb= new StringBuilder();
-		for(int ii = 0; ii < params.length; ii++)
-			sb.append(params[ii]+", ");
+        for (String param : params) {
+            sb.append(param).append(", ");
+        }
 
 		logger.info(String.format(logMsgTemplate, "params: "+ sb));
 		
@@ -723,42 +722,40 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 //			}
 //		}
 
-		StringBuffer URITemplate = new StringBuffer();
-		HashMap<String,String> ansVarSet = new HashMap<String,String>();// just to check whether it already contains a particular answer variable
-		StringBuffer ansVar = new StringBuffer();
+        StringBuilder URITemplate = new StringBuilder();
+        HashMap<String, String> ansVarSet = new HashMap<>();// just to check whether it already contains a particular answer variable
+        StringBuilder ansVar = new StringBuilder();
 		boolean addComma = false;
-		
-		for(int ii = 0; ii < params.length; ii++){
-			String curStr = params[ii];
-			
+
+        for (String curStr : params) {
 			//if ((curStr.substring(0, this.VIEW_NAME_PREFIX.length())).equalsIgnoreCase(this.VIEW_NAME_PREFIX))
 
-			
+
 			String curStrUC = curStr.toUpperCase();
-			if (curStrUC.matches(VIEW_NAME_PREFIX+".*")){ 
+            if (curStrUC.matches(VIEW_NAME_PREFIX + ".*")) {
 				//if the current string to concatenate is an answer variable
-			
+
 				String aliasName;
-				if(ansVarSet.containsKey(curStr))
+                if (ansVarSet.containsKey(curStr))
 					aliasName = ansVarSet.get(curStr);
-				else{
+                else {
 					aliasName = getUniqueVarName();
 					ansVarSet.put(curStr, aliasName);
 				}
-					
+
 				URITemplate.append(String.format("{%s}", aliasName));
 
-				if(addComma){
-					if(ansVarSet.containsKey(curStr))//check if it is already added to the select clause
-						ansVar.append(String.format(", %s", curStr+" AS "+aliasName));
-				}else{
-					if(ansVarSet.containsKey(curStr)){ //check if it is already added to the select clause
-						ansVar.append(curStr+" AS "+aliasName);
+                if (addComma) {
+                    if (ansVarSet.containsKey(curStr))//check if it is already added to the select clause
+                        ansVar.append(String.format(", %s", curStr + " AS " + aliasName));
+                } else {
+                    if (ansVarSet.containsKey(curStr)) { //check if it is already added to the select clause
+                        ansVar.append(curStr).append(" AS ").append(aliasName);
 						addComma = true;
 					}
 				}
-				
-			}else URITemplate.append(curStr);
+
+            } else URITemplate.append(curStr);
 		}
 
 		logger.info(String.format(logMsgTemplate, "String Answer Variable: "+ansVar));
@@ -769,7 +766,7 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 		//toReturn.append(sqladapter.strConcat(params));
 		//return toReturn.toString();
 		//return ansVar.toString();
-		return new ObjectPair<String, String>(ansVar.toString(), this.cleanQuotes(URITemplate.toString()));
+        return new ObjectPair<>(ansVar.toString(), this.cleanQuotes(URITemplate.toString()));
 	}
 
 	private String getFROM2(CQIE query, QueryAliasIndex index) {
@@ -785,11 +782,10 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 		//arsa: modify where - remove IS NOT NULL
 		if(removeIsNotNULL){
 			List<Function> body = query.getBody();
-			List<Function> newBody = new ArrayList<Function>(); 
-			
-			for(int ii = 0; ii <  body.size(); ii++){
-				Function f = body.get(ii);
-				if(!f.getFunctionSymbol().getName().equals("IS_NOT_NULL"))
+            List<Function> newBody = new ArrayList<>();
+
+            for (Function f : body) {
+                if (!f.getFunctionSymbol().getName().equals("IS_NOT_NULL"))
 					newBody.add(f);
 			}
 	

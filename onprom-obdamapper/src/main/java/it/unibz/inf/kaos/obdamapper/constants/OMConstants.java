@@ -2,8 +2,6 @@ package it.unibz.inf.kaos.obdamapper.constants;
 
 import java.util.HashMap;
 
-import com.google.common.collect.ImmutableMap;
-
 public class OMConstants {
 
 	//Logger related constants
@@ -116,6 +114,6 @@ public class OMConstants {
 		public static final String XES_ATT_KEY_LIFECYCLE_TRANSITION = "lifecycle:transition";
 		public static final String XES_ATT_KEY_ORG_RESOURCE = "org:resource";
 
-		public static HashMap<String, String> xesconstants = new HashMap<String,String>();
+    public static HashMap<String, String> xesconstants = new HashMap<>();
 		
 }

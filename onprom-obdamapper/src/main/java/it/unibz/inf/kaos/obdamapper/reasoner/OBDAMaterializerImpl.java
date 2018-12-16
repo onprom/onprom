@@ -1,39 +1,19 @@
 package it.unibz.inf.kaos.obdamapper.reasoner;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.AddAxiom;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLIndividual;
-import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLObject;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestConstants;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestPreferences;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWL;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConnection;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLFactory;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLResultSet;
-import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLStatement;
+import it.unibz.inf.ontop.owlrefplatform.owlapi.*;
 import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration.Builder;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.*;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /*
  * the idea is that this class contains various ways of materializing the given OBDA System
@@ -43,8 +23,8 @@ public class OBDAMaterializerImpl extends OBDAMaterializerAbstract implements OB
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(OBDAMaterializer.class);
 	private QuestOWL questReasoner;
 	private OWLOntology targetOntology;
-	private OWLOntologyManager ontoMan = null;
-	private OWLDataFactory owlDataFactory = null;
+	private OWLOntologyManager ontoMan;
+	private OWLDataFactory owlDataFactory;
 	
 	//Some query templates
 	private String qClassRetrieverTemplate = 
@@ -113,7 +93,7 @@ public class OBDAMaterializerImpl extends OBDAMaterializerAbstract implements OB
 		//END OF Preparing the resulting Ontology
 		//----------------------------------------------------------------------------------------
 
-		ArrayList<AddAxiom> newAxioms = new ArrayList<AddAxiom>();
+		ArrayList<AddAxiom> newAxioms = new ArrayList<>();
 		StringBuilder log = new StringBuilder();
 
 		//----------------------------------------------------------------------------------------
@@ -200,7 +180,7 @@ public class OBDAMaterializerImpl extends OBDAMaterializerAbstract implements OB
 
 		//Collect all class names in the target ontology
 		Set<OWLClass> classes = this.targetOntology.getClassesInSignature();
-		ArrayList<OWLClassAssertionAxiom> results = new ArrayList<OWLClassAssertionAxiom>();
+		ArrayList<OWLClassAssertionAxiom> results = new ArrayList<>();
 		
 		QuestOWLConnection conn = questReasoner.getConnection();
         QuestOWLStatement st = conn.createStatement();
@@ -241,7 +221,7 @@ public class OBDAMaterializerImpl extends OBDAMaterializerAbstract implements OB
 
 		//Collect all class names in the target ontology
 		Set<OWLObjectProperty> objectProperties = this.targetOntology.getObjectPropertiesInSignature();
-		ArrayList<OWLObjectPropertyAssertionAxiom> results = new ArrayList<OWLObjectPropertyAssertionAxiom>();
+		ArrayList<OWLObjectPropertyAssertionAxiom> results = new ArrayList<>();
 		
 		QuestOWLConnection conn = questReasoner.getConnection();
         QuestOWLStatement st = conn.createStatement();
@@ -282,7 +262,7 @@ public class OBDAMaterializerImpl extends OBDAMaterializerAbstract implements OB
 
 		//Collect all class names in the target ontology
 		Set<OWLDataProperty> dataProperties = this.targetOntology.getDataPropertiesInSignature();
-		ArrayList<OWLDataPropertyAssertionAxiom> results = new ArrayList<OWLDataPropertyAssertionAxiom>();
+		ArrayList<OWLDataPropertyAssertionAxiom> results = new ArrayList<>();
 		
 		QuestOWLConnection conn = questReasoner.getConnection();
         QuestOWLStatement st = conn.createStatement();
@@ -320,7 +300,7 @@ public class OBDAMaterializerImpl extends OBDAMaterializerAbstract implements OB
 	}
 	
 	private OWLOntology cloneTargetOntology() throws OWLOntologyCreationException{
-		HashSet<OWLOntology> targets = new HashSet<OWLOntology>();
+		HashSet<OWLOntology> targets = new HashSet<>();
 		IRI targetOntoIRI = this.targetOntology.getOntologyID().getOntologyIRI().get();
 		targets.add(this.targetOntology);
 		return ontoMan.createOntology(targetOntoIRI, targets, false);

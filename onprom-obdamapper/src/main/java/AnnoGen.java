@@ -9,7 +9,7 @@ import it.unibz.inf.kaos.data.query.UnaryAnnotationQuery;
 public class AnnoGen {
 
 
-	public static void main(String ar[]){
+    public static void main(String[] ar) {
 
 		try {
 			
