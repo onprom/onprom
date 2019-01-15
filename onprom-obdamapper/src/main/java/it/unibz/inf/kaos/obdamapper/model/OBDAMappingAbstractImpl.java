@@ -6,29 +6,8 @@
 
 package it.unibz.inf.kaos.obdamapper.model;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDataPropertyRangeAxiom;
-import org.semanticweb.owlapi.model.OWLDatatype;
-import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.vocab.OWL2Datatype;
-import org.slf4j.LoggerFactory;
-
 import ch.qos.logback.classic.Logger;
-import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException;
-import it.unibz.inf.ontop.model.Function;
-import it.unibz.inf.ontop.model.OBDADataFactory;
-import it.unibz.inf.ontop.model.OBDADataSource;
-import it.unibz.inf.ontop.model.OBDAMappingAxiom;
-import it.unibz.inf.ontop.model.OBDAModel;
-import it.unibz.inf.ontop.model.OBDASQLQuery;
+import it.unibz.inf.ontop.model.*;
 import it.unibz.inf.ontop.model.impl.OBDAModelImpl;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestConstants;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestPreferences;
@@ -36,8 +15,15 @@ import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration;
 import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration.Builder;
 import it.unibz.inf.ontop.parser.TargetQueryParserException;
 import it.unibz.inf.ontop.parser.TurtleOBDASyntaxParser;
-import uk.ac.manchester.cs.owl.owlapi.OWL2DatatypeImpl;
+import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
+import org.slf4j.LoggerFactory;
 import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 
 public abstract class OBDAMappingAbstractImpl extends OBDAModelImpl implements OBDAMapping {
@@ -51,7 +37,8 @@ public abstract class OBDAMappingAbstractImpl extends OBDAModelImpl implements O
 		this.targetOntology = targetOntology;
 
 		if(obdaDataSources.size() > 1){
-			//TODO: generate a message that we only support 1 OBDA Data Source, trus cuma diambil yang pertama	
+			//generate a message that we only support 1 OBDA Data Source, trus cuma diambil yang pertama
+			logger.error("we only support 1 OBDA Data Source");
 		}
 		
 		if(obdaDataSources.size() >= 1)
@@ -71,11 +58,11 @@ public abstract class OBDAMappingAbstractImpl extends OBDAModelImpl implements O
 		
 	protected void addMapping(URI obdaDataSourceID, String sourceQuery, String targetQuery){
 
-		System.out.println("\n\t--------------------------------------------------------------------");
-		System.out.println("\tDEBUGA: ADD MAPPING");
-		System.out.println("\tDEBUGA: sourceQuery: \n\n"+sourceQuery.replace("\n", " "));
-		System.out.println("\n\tDEBUGA: targetQuery: \n\n\t"+targetQuery);
-		System.out.println("\n\t--------------------------------------------------------------------");
+		logger.debug("--------------------------------------------------------------------");
+		logger.debug("ADD MAPPING");
+		logger.debug("sourceQuery: \n\n" + sourceQuery.replace("\n", " "));
+		logger.debug("targetQuery: \n\n\t" + targetQuery);
+		logger.debug("--------------------------------------------------------------------");
 		
 		OBDADataFactory fact = this.getDataFactory();
 		

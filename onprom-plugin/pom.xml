@@ -94,7 +94,7 @@
             <groupId>processmining</groupId>
             <artifactId>prom</artifactId>
             <version>6.6</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

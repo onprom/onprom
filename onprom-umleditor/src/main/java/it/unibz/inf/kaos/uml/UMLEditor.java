@@ -45,7 +45,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -81,7 +81,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     setTitle("UML Editor");
   }
 
-  public static void main(String args[]) {
+    public static void main(String[] args) {
     new UMLEditor(null, null).display();
   }
 

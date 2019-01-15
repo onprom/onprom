@@ -4,5 +4,5 @@ import java.util.EventListener;
 
 public interface ExecutionMsgListener extends EventListener {
 
-	public void addNewExecutionMsg(ExecutionMsgEvent log);
+    void addNewExecutionMsg(ExecutionMsgEvent log);
 }

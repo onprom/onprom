@@ -36,7 +36,7 @@ import it.unibz.inf.kaos.ui.utility.*;
 import it.unibz.inf.kaos.uml.UMLEditor;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import javax.swing.JToolBar;
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
@@ -91,7 +91,7 @@ public class AnnotationEditor extends UMLEditor {
         setTitle("Annotation Editor");
     }
 
-    public static void main(String a[]) {
+    public static void main(String[] a) {
         new AnnotationEditor(null, null).display();
     }
 
