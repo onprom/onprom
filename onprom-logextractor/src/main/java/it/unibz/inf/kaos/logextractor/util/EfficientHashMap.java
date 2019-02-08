@@ -16,10 +16,10 @@
 
 package it.unibz.inf.kaos.logextractor.util;
 
-import java.util.ArrayList;
+import org.eclipse.collections.api.map.MutableMap;
+import org.eclipse.collections.impl.factory.Maps;
 
-import gnu.trove.map.hash.TIntIntHashMap;
-import gnu.trove.map.hash.TObjectIntHashMap;
+import java.util.Collection;
 
 /**
  * 
@@ -28,31 +28,24 @@ import gnu.trove.map.hash.TObjectIntHashMap;
  */
 public class EfficientHashMap<V> {
 
-	private TIntIntHashMap map;
-	private TObjectIntHashMap<String> collisionMap;
-	private ArrayList<V> values;
-	private int counter;
-	
-	public EfficientHashMap(int initCapacity){
-	
-		map = new TIntIntHashMap(initCapacity);
-		collisionMap = new TObjectIntHashMap<String>(initCapacity);
-		values = new ArrayList<V>(initCapacity);
-		counter = 0;
-	}
+	private MutableMap<String, V> map;
+	//private TObjectIntHashMap<String> collisionMap;
+	//private ArrayList<V> values;
+	//private int counter;
 
 	public EfficientHashMap(){
-		
-		map = new TIntIntHashMap();
-		collisionMap = new TObjectIntHashMap<String>();
-		values = new ArrayList<V>();
-		counter = 0;
+
+		map = Maps.mutable.empty();
+		//map = new TIntIntHashMap(initCapacity);
+		//collisionMap = new TObjectIntHashMap<String>(initCapacity);
+		//values = new ArrayList<V>(initCapacity);
+		//counter = 0;
 	}
 
 	
 	public void put(String key, V value){
-		
-		int keyInt = key.hashCode();
+		map.put(key, value);
+		/*int keyInt = key.hashCode();
 		
 		if(!this.map.contains(keyInt)){
 			
@@ -65,36 +58,36 @@ public class EfficientHashMap<V> {
 			this.collisionMap.put(key.intern(), counter);
 			this.values.add(value);
 			counter++;
-		}
+		}*/
 	}
 	
 	public boolean containsKey(String key){
-		
-		return this.map.containsKey(key.hashCode());
+
+		return this.map.containsKey(key);
 	}
 
 	public V get (String key){
-		
-		if(this.collisionMap.contains(key)){
+		return map.get(key);
+		/*if(this.collisionMap.contains(key)){
 			
 			int idx = this.collisionMap.get(key);
 			return this.values.get(idx);
 		}else{
 			
-			int idx = this.map.get(key.hashCode());
+			int idx = this.map.get(key);
 			return this.values.get(idx);
-		}
+		}*/
 	}
 	
 	public void clear(){
 		
 		this.map.clear();
-		this.values.clear();
+		//this.values.clear();
 	}
-	
-	public ArrayList<V> values(){
-		
-		return this.values;
+
+	public Collection<V> values() {
+
+		return this.map.values();
 	}
 
 }

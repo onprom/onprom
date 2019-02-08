@@ -38,7 +38,7 @@
     </parent>
 
     <properties>
-        <openxes.version>2.23</openxes.version>
+        <openxes.version>2.26</openxes.version>
         <ontop.version>1.18.1-OnProm</ontop.version>
     </properties>
 
@@ -188,7 +188,17 @@
     	<!-- ################################################################ -->
 	    <!-- END OF Logger Related -->	
 		<!-- ################################################################ -->
-        
+        <dependency>
+            <groupId>org.eclipse.collections</groupId>
+            <artifactId>eclipse-collections-api</artifactId>
+            <version>9.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.collections</groupId>
+            <artifactId>eclipse-collections</artifactId>
+            <version>9.2.0</version>
+        </dependency>
         
       </dependencies>
 </project>

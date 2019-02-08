@@ -26,22 +26,25 @@
 
 package it.unibz.inf.kaos.ui.panel;
 
+import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.logextractor.XESLogExtractorWithEBDAMapping;
+import it.unibz.inf.kaos.obdamapper.OBDAMapper;
+import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
 import it.unibz.inf.kaos.onprom.OnpromToolkit;
 import it.unibz.inf.kaos.ui.component.TreeNode;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorButtons;
+import it.unibz.inf.ontop.io.ModelIOManager;
 import it.unibz.inf.ontop.model.OBDAModel;
 import org.deckfour.xes.model.XLog;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
 import java.util.Set;
 
 public class CustomExtractionPanel extends JPanel {
@@ -103,8 +106,8 @@ public class CustomExtractionPanel extends JPanel {
                 XLog xlog = null;
                 long start = System.currentTimeMillis();
                 if (cmbEventOntology.getSelectedIndex() > -1) {
-                    if (cmbXESAnnotations.getSelectedIndex() < 0) {
-                        UIUtility.error("Please select all required inputs!");
+                    if (cmbDomainOntology.getSelectedIndex() < -1 || cmbEventOntology.getSelectedIndex() < -1 || cmbMappings.getSelectedIndex() < -1 || cmbEventAnnotations.getSelectedIndex() < -1 || cmbXESAnnotations.getSelectedIndex() < -1) {
+                        UIUtility.error("Please select domain ontology, OBDA mappings, custom event ontology, domain to event ontology annotations and event to XES ontology annotations!");
                     } else {
                         xlog = new XESLogExtractorWithEBDAMapping().extractXESLog(
                                 (OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(),
@@ -114,6 +117,8 @@ public class CustomExtractionPanel extends JPanel {
                                 (AnnotationQueries) cmbXESAnnotations.getItemAt(cmbXESAnnotations.getSelectedIndex()).getUserObject()
                         );
                     }
+                } else if (cmbDomainOntology.getSelectedIndex() < -1 || cmbMappings.getSelectedIndex() < -1 || cmbEventAnnotations.getSelectedIndex() < -1) {
+                    UIUtility.error("Please select domain ontology, OBDA mappings, custom event ontology, domain to event ontology annotations and event to XES ontology annotations!");
                 } else {
                     xlog = new XESLogExtractorWithEBDAMapping().extractXESLog(
                             (OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(),
@@ -141,6 +146,32 @@ public class CustomExtractionPanel extends JPanel {
             initUI(toolkit);
             revalidate();
             repaint();
+        }, null), gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        add(UIUtility.createButton(UMLEditorButtons.EXPORT_OBDA, event -> {
+            try {
+                if (cmbDomainOntology.getSelectedIndex() < -1 || cmbEventOntology.getSelectedIndex() < -1 || cmbMappings.getSelectedIndex() < -1 || cmbEventAnnotations.getSelectedIndex() < -1) {
+                    UIUtility.error("Please select domain ontology, OBDA mappings, custom event ontology and domain to event ontology annotations!");
+                } else {
+                    OBDAMapping model = new OBDAMapper().createOBDAMapping(
+                            (OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(),
+                            (OWLOntology) cmbEventOntology.getItemAt(cmbEventOntology.getSelectedIndex()).getUserObject(),
+                            (OBDAModel) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
+                            (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject()
+                    );
+                    UIUtility.selectFileToOpen(FileType.MAPPING).ifPresent(file -> {
+                        try {
+                            new ModelIOManager(model).save(file);
+                        } catch (IOException e) {
+                            logger.error(e.getMessage(), e);
+                            UIUtility.error(e.getMessage());
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+                UIUtility.error(e.getMessage());
+            }
         }, null), gridBagConstraints);
     }
 }

@@ -183,7 +183,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         JMenuItem exportItem = new JMenuItem("Export Log", KeyEvent.VK_E);
         exportItem.addActionListener(e -> UIUtility.executeInBackground(this::exportLog, progressBar));
         mnTools.add(exportItem);
-        JMenuItem showExportItem = new JMenuItem("Export Log using Custom Event Ontology", KeyEvent.VK_D);
+        JMenuItem showExportItem = new JMenuItem("Advanced Export", KeyEvent.VK_D);
         showExportItem.addActionListener(e -> UIUtility.executeInBackground(this::showExportDiagram, progressBar));
         mnTools.add(showExportItem);
         menuBar.add(mnTools);
