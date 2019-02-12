@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2017 Free University of Bozen-Bolzano
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,226 +15,213 @@
  */
 package it.unibz.inf.kaos.logextractor.util;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-
-import org.deckfour.xes.model.XAttribute;
-import org.deckfour.xes.model.XAttributeMap;
-import org.deckfour.xes.model.XEvent;
-import org.deckfour.xes.model.XTrace;
-
 import it.unibz.inf.kaos.logextractor.constants.LEConstants;
 import it.unibz.inf.kaos.logextractor.exception.UnsupportedAttributeTypeException;
 import it.unibz.inf.kaos.logextractor.model.XAtt;
 import it.unibz.inf.kaos.logextractor.model.XAttributeOnProm;
 import it.unibz.inf.kaos.logextractor.model.XEventOnPromEfficient;
+import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XAttributeMap;
+import org.deckfour.xes.model.XEvent;
+import org.deckfour.xes.model.XTrace;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 /**
- * 
  * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
- *
  */
 public class Print {
 
-	public static StringBuilder logXAttributesExtraction(HashMap<String,XAttribute> attributes){
+    public static StringBuilder logXAttributesExtraction(HashMap<String, XAttribute> attributes) {
 
-		StringBuilder info = 
-			new StringBuilder(	"\n\n"+LEConstants.LOGGER_LONG_DOUBLE_LINE+
-								"\nResults of XAttributes Extraction\n");
-		info.append(getStringOfXAttributes(attributes));
-		info.append("\nEND OF Results of XAttributes Extraction\n"+
-					LEConstants.LOGGER_LONG_DOUBLE_LINE+"\n");
-		
-		return info;
-	}
-	
-	public static StringBuilder getStringOfXAttributes(HashMap<String,XAttribute> attributes){
+        StringBuilder info =
+                new StringBuilder("\n\n" + LEConstants.LOGGER_LONG_DOUBLE_LINE +
+                        "\nResults of XAttributes Extraction\n");
+        info.append(getStringOfXAttributes(attributes));
+        info.append("\nEND OF Results of XAttributes Extraction\n" +
+                LEConstants.LOGGER_LONG_DOUBLE_LINE + "\n");
 
-		StringBuilder info = new StringBuilder();
+        return info;
+    }
 
-		for (Entry<String, XAttribute> xae : attributes.entrySet()) {
-			XAttribute xa = xae.getValue();
-
-			info.append("\tXAttribute URI: \t").append(xae.getKey()).append("\n\tXAttribute Type: \t").append(xa.getClass().getSimpleName()).append("\n\tXAttribute Key: \t").append(xa.getKey()).append("\n\tXAttribute value: \t").append(xa).append("\n");
-		}
-		
-		return info;
-	}
-
-	public static StringBuilder getStringOfXAttributes(EfficientHashMap<XAtt> attributes){
+    public static StringBuilder getStringOfXAttributes(HashMap<String, XAttribute> attributes) {
 
         StringBuilder info = new StringBuilder();
 
-        attributes.values().forEach(xa -> {
-            info.append("\tXAttribute Type: \t").append(xa.getClass().getSimpleName()).append("\n\tXAttribute Key: \t").append(xa.getKey()).append("\n\tXAttribute value: \t").append(xa).append("\n");
-        });
-		return info;
-	}
+        for (Entry<String, XAttribute> xae : attributes.entrySet()) {
+            XAttribute xa = xae.getValue();
 
-	public static StringBuilder getStringOfXAttributeOnProm(HashMap<String,XAttributeOnProm> attributes){
+            info.append("\tXAttribute URI: \t").append(xae.getKey()).append("\n\tXAttribute Type: \t").append(xa.getClass().getSimpleName()).append("\n\tXAttribute Key: \t").append(xa.getKey()).append("\n\tXAttribute value: \t").append(xa).append("\n");
+        }
 
-		StringBuilder info = new StringBuilder();
+        return info;
+    }
 
-		for (Entry<String, XAttributeOnProm> xae : attributes.entrySet()) {
-			XAttribute xa = null;
-			try {
-				xa = xae.getValue().toXESXAttribute();
-			} catch (UnsupportedAttributeTypeException e) {
-				e.printStackTrace();
-			}
+    public static StringBuilder getStringOfXAttributes(EfficientHashMap<XAtt> attributes) {
 
-			if (xa != null) {
-				info.append("\tXAttribute URI: \t").append(xae.getKey()).append("\n\tXAttribute Type: \t").append(xa.getClass().getSimpleName()).append("\n\tXAttribute Key: \t").append(xa.getKey()).append("\n\tXAttribute value: \t").append(xa).append("\n");
-			}
-		}
-		
-		return info;
-	}
+        StringBuilder info = new StringBuilder();
 
-	public static StringBuilder logXEventsExtraction(HashMap<String, XEvent> events){
+        attributes.values().forEach(xa -> info.append("\tXAttribute Type: \t").append(xa.getClass().getSimpleName()).append("\n\tXAttribute Key: \t").append(xa.getKey()).append("\n\tXAttribute value: \t").append(xa).append("\n"));
+        return info;
+    }
 
-		StringBuilder info = 
-			new StringBuilder(	"\n\n"+LEConstants.LOGGER_LONG_DOUBLE_LINE+"\n"+
-								"Results of XEvents Extraction\n");
+    public static StringBuilder getStringOfXAttributeOnProm(HashMap<String, XAttributeOnProm> attributes) {
 
-		info.append(getStringOfXEvents(events));
+        StringBuilder info = new StringBuilder();
 
-		info.append("\nEND OF Results of XEvents Extraction\n"+
-					LEConstants.LOGGER_LONG_DOUBLE_LINE+"\n");
+        for (Entry<String, XAttributeOnProm> xae : attributes.entrySet()) {
+            XAttribute xa = null;
+            try {
+                xa = xae.getValue().toXESXAttribute();
+            } catch (UnsupportedAttributeTypeException e) {
+                e.printStackTrace();
+            }
 
-		return info;
-	}
+            if (xa != null) {
+                info.append("\tXAttribute URI: \t").append(xae.getKey()).append("\n\tXAttribute Type: \t").append(xa.getClass().getSimpleName()).append("\n\tXAttribute Key: \t").append(xa.getKey()).append("\n\tXAttribute value: \t").append(xa).append("\n");
+            }
+        }
 
-	public static <T extends XEvent> StringBuilder getStringOfXEvents(HashMap<String, T> events){
+        return info;
+    }
 
-		Iterator<Entry<String, T>> evit = events.entrySet().iterator();
-		StringBuilder info = new StringBuilder();
-		
-		while(evit.hasNext()){
-			Entry<String, T> xee = evit.next();
-			XEvent xe = xee.getValue();
-			
-			info.append(LEConstants.LOGGER_LINE+"\n");
-			info.append("XEvent URI: \t").append(xee.getKey()).append("\n");
+    public static StringBuilder logXEventsExtraction(HashMap<String, XEvent> events) {
 
-			//handling event's attributes
-			XAttributeMap xattmap = xe.getAttributes();
-			info.append(getStringOfXAttributeMap("\t", xattmap));
-			//END OF handling event's attributes
-		}
-		
-		return 	info;
-	}
+        StringBuilder info =
+                new StringBuilder("\n\n" + LEConstants.LOGGER_LONG_DOUBLE_LINE + "\n" +
+                        "Results of XEvents Extraction\n");
 
-	public static StringBuilder getStringOfXEvents(EfficientHashMap<XEventOnPromEfficient> events){
+        info.append(getStringOfXEvents(events));
 
-		StringBuilder info = new StringBuilder();
+        info.append("\nEND OF Results of XEvents Extraction\n" +
+                LEConstants.LOGGER_LONG_DOUBLE_LINE + "\n");
+
+        return info;
+    }
+
+    public static <T extends XEvent> StringBuilder getStringOfXEvents(HashMap<String, T> events) {
+
+        Iterator<Entry<String, T>> evit = events.entrySet().iterator();
+        StringBuilder info = new StringBuilder();
+
+        while (evit.hasNext()) {
+            Entry<String, T> xee = evit.next();
+            XEvent xe = xee.getValue();
+
+            info.append(LEConstants.LOGGER_LINE).append("\nXEvent URI: \t").append(xee.getKey()).append("\n");
+
+            //handling event's attributes
+            XAttributeMap xattmap = xe.getAttributes();
+            info.append(getStringOfXAttributeMap("\t", xattmap));
+            //END OF handling event's attributes
+        }
+
+        return info;
+    }
+
+    public static StringBuilder getStringOfXEvents(EfficientHashMap<XEventOnPromEfficient> events) {
+
+        StringBuilder info = new StringBuilder();
 
         events.values().forEach(xe -> {
-			info.append(LEConstants.LOGGER_LINE+"\n");
-			info.append("XEvent: \t").append(xe).append("\n");
+            info.append(LEConstants.LOGGER_LINE).append("\nXEvent: \t").append(xe).append("\n");
 
-			//handling event's attributes
+            //handling event's attributes
             info.append(getStringOfXAttributeMap("\t", xe.getAttributes()));
-			//END OF handling event's attributes
+            //END OF handling event's attributes
 
         });
-		
-		return 	info;
-	}
 
-	public static StringBuilder logXTracesExtraction(HashMap<String,XTrace> traces){
+        return info;
+    }
 
-		StringBuilder info = new StringBuilder(	
-					"\n\n"+LEConstants.LOGGER_LONG_DOUBLE_LINE+
-					"\nResults of XTraces Extraction\n");
+    public static StringBuilder logXTracesExtraction(HashMap<String, XTrace> traces) {
 
-		info.append(getStringOfXTraces(traces));
-		
-		info.append("\nEND OF Results of XTraces Extraction\n"+
-					LEConstants.LOGGER_LONG_DOUBLE_LINE+"\n");
+        StringBuilder info = new StringBuilder(
+                "\n\n" + LEConstants.LOGGER_LONG_DOUBLE_LINE +
+                        "\nResults of XTraces Extraction\n");
 
-		return info;
-	}
-	
-	public static StringBuilder getStringOfXTraces(HashMap<String,XTrace> traces){
+        info.append(getStringOfXTraces(traces));
 
-		Iterator<Entry<String, XTrace>> trit = traces.entrySet().iterator();
-		StringBuilder info = new StringBuilder("");
-		
-		while(trit.hasNext()){
-			Entry<String, XTrace> xte = trit.next();
-			XTrace xt = xte.getValue();
-			
-			info.append(LEConstants.LOGGER_LINE+"\n");
-			info.append("XTrace URI: \t"+xte.getKey()+"\n");
+        info.append("\nEND OF Results of XTraces Extraction\n" +
+                LEConstants.LOGGER_LONG_DOUBLE_LINE + "\n");
 
-			//handling trace's attributes
-			XAttributeMap xattmap = xt.getAttributes();
-			info.append(getStringOfXAttributeMap("\t", xattmap));
-			//END OF handling trace's attributes
-			
-			//iterate over trace's events
-			for (XEvent xe : xt) {
-				info.append("\t" + LEConstants.LOGGER_LINE + "\n");
-				info.append("\tXEvent: ").append(xe.toString()).append("\n");
+        return info;
+    }
 
-				//handling event's attributes
-				info.append(getStringOfXAttributeMap("\t\t", xe.getAttributes()));
-			}
-			//END OF iterate over trace's events
-		}
-		
-		return info;
-	}
+    public static StringBuilder getStringOfXTraces(HashMap<String, XTrace> traces) {
 
-	public static StringBuilder getStringOfXTraces(EfficientHashMap<XTrace> traces){
+        Iterator<Entry<String, XTrace>> trit = traces.entrySet().iterator();
+        StringBuilder info = new StringBuilder();
 
-		StringBuilder info = new StringBuilder("");
+        while (trit.hasNext()) {
+            Entry<String, XTrace> xte = trit.next();
+            XTrace xt = xte.getValue();
+
+            info.append(LEConstants.LOGGER_LINE).append("\nXTrace URI: \t").append(xte.getKey()).append("\n");
+
+            //handling trace's attributes
+            XAttributeMap xattmap = xt.getAttributes();
+            info.append(getStringOfXAttributeMap("\t", xattmap));
+            //END OF handling trace's attributes
+
+            //iterate over trace's events
+            for (XEvent xe : xt) {
+                info.append("\t" + LEConstants.LOGGER_LINE + "\n").append("\tXEvent: ").append(xe.toString()).append("\n");
+
+                //handling event's attributes
+                info.append(getStringOfXAttributeMap("\t\t", xe.getAttributes()));
+            }
+            //END OF iterate over trace's events
+        }
+
+        return info;
+    }
+
+    public static StringBuilder getStringOfXTraces(EfficientHashMap<XTrace> traces) {
+
+        StringBuilder info = new StringBuilder();
 
         traces.values().forEach(xt -> {
-			info.append(LEConstants.LOGGER_LINE+"\n");
-			info.append("XTrace: \t"+xt+"\n");
+            info.append(LEConstants.LOGGER_LINE + "\n");
+            info.append("XTrace: \t").append(xt).append("\n");
 
-			//handling trace's attributes
-			XAttributeMap xattmap = xt.getAttributes();
-			info.append(getStringOfXAttributeMap("\t", xattmap));
-			//END OF handling trace's attributes
+            //handling trace's attributes
+            XAttributeMap xattmap = xt.getAttributes();
+            info.append(getStringOfXAttributeMap("\t", xattmap));
+            //END OF handling trace's attributes
 
-			//iterate over trace's events
-			for(int ii = 0; ii < xt.size(); ii++){
-				XEvent xe = xt.get(ii);
-				info.append("\t"+LEConstants.LOGGER_LINE+"\n");
-				info.append("\tXEvent: "+xe.toString()+"\n");
+            //iterate over trace's events
+            for (XEvent xe : xt) {
+                info.append("\t" + LEConstants.LOGGER_LINE + "\n");
+                info.append("\tXEvent: ").append(xe.toString()).append("\n");
 
-				//handling event's attributes
-				info.append(getStringOfXAttributeMap("\t\t",xe.getAttributes()));
-			}
-			//END OF iterate over trace's events
+                //handling event's attributes
+                info.append(getStringOfXAttributeMap("\t\t", xe.getAttributes()));
+            }
+            //END OF iterate over trace's events
 
         });
-		return info;
-	}
+        return info;
+    }
 
-	public static StringBuilder getStringOfXAttributeMap(String tab, XAttributeMap xattmap){
-		
-		Iterator<Entry<String, XAttribute>> atit = xattmap.entrySet().iterator();
+    public static StringBuilder getStringOfXAttributeMap(String tab, XAttributeMap xattmap) {
 
-		StringBuilder info = new StringBuilder("");
-		
-		while(atit.hasNext()){
-			Entry<String, XAttribute> xae = atit.next();
-			XAttribute xa = xae.getValue();
-			
-			info.append(tab+LEConstants.LOGGER_LINE+"\n");
-			info.append(tab+"XAttribute URI: \t"+xae.getKey()+
-			"\n"+tab+"XAttribute Type: \t"+xa.getClass().getSimpleName()+
-			"\n"+tab+"XAttribute Key: \t"+xa.getKey()+
-			"\n"+tab+"XAttribute value: \t"+xa+"\n");
-		}
+        Iterator<Entry<String, XAttribute>> atit = xattmap.entrySet().iterator();
 
-		return info;
-	}
+        StringBuilder info = new StringBuilder();
+
+        while (atit.hasNext()) {
+            Entry<String, XAttribute> xae = atit.next();
+            XAttribute xa = xae.getValue();
+
+            info.append(tab).append(LEConstants.LOGGER_LINE).append("\n");
+            info.append(tab).append("XAttribute URI: \t").append(xae.getKey()).append("\n").append(tab).append("XAttribute Type: \t").append(xa.getClass().getSimpleName()).append("\n").append(tab).append("XAttribute Key: \t").append(xa.getKey()).append("\n").append(tab).append("XAttribute value: \t").append(xa).append("\n");
+        }
+
+        return info;
+    }
 
 }
