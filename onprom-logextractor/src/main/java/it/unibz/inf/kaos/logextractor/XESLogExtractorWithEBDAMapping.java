@@ -139,8 +139,7 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 		 * @throws OWLOntologyCreationException 
 		 */
 		public XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) throws OWLOntologyCreationException, InvalidDataSourcesNumberException, IOException, it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException, XESLogExtractionFailureException {
-	
-			return extractXESLogUsingOnlyAtomicQueriesMO(domainOntology, obdaModel, annotation);	
+			return extractXESLogUsingOnlyAtomicQueriesMO(domainOntology, obdaModel, annotation);
 		}
 		
 		/**
@@ -200,8 +199,7 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 		public XLog extractXESLogSimpleImpl(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) throws OWLOntologyCreationException, InvalidDataSourcesNumberException, IOException, it.unibz.inf.kaos.obdamapper.exception.InvalidAnnotationException, XESLogExtractionFailureException {
 	
 			EBDAMapping ebdaModel = createEBDAMapping(domainOntology, obdaModel, annotation);
-			XLog xlog = extractXESLogSimplImpl(ebdaModel);
-			return xlog;	
+			return extractXESLogSimplImpl(ebdaModel);
 		}
 		
 		/**
@@ -296,9 +294,8 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 	
 			if(ebdaModel == null) 
 				throw new XESLogExtractionFailureException(LEConstants.MSG_EBDA_CONSTRUCTION_FAILURE);
-	
-			XLog xlog = extractOnPromXESLogUsingOnlyAtomicQueriesMO(ebdaModel);
-			return xlog;	
+
+			return extractOnPromXESLogUsingOnlyAtomicQueriesMO(ebdaModel);
 		}
 	
 		/**
@@ -423,9 +420,8 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 	
 			if(ebdaModel == null) 
 				throw new XESLogExtractionFailureException(LEConstants.MSG_EBDA_CONSTRUCTION_FAILURE);
-	
-			XLog xlog = extractXESLogUsingOnlyAtomicQueriesMO(ebdaModel);
-			return xlog;	
+
+			return extractXESLogUsingOnlyAtomicQueriesMO(ebdaModel);
 		}
 	
 		/**
