@@ -16,41 +16,37 @@
 
 package it.unibz.inf.kaos.logextractor.util;
 
-import gnu.trove.map.hash.TIntIntHashMap;
+import com.google.common.collect.Maps;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
  */
 public class EfficientHashMap<V> {
 
-    private TIntIntHashMap map;
-    private ArrayList<V> values;
+    private HashMap<String, V> map;
 
     public EfficientHashMap() {
-        values = new ArrayList<>();
-        map = new TIntIntHashMap();
+        map = Maps.newHashMap();
     }
 
 
     public void put(String key, V value) {
-        int index = values.size();
-        this.map.put(key.hashCode(), index);
-        this.values.add(value);
+        this.map.put(key, value);
     }
 
     public boolean containsKey(String key) {
-        return this.map.containsKey(key.hashCode());
+        return map.containsKey(key);
     }
 
     public V get(String key) {
-        return this.values.get(map.get(key.hashCode()));
+        return map.get(key);
     }
 
     public Collection<V> values() {
-        return this.values;
+        return this.map.values();
     }
 
 }
