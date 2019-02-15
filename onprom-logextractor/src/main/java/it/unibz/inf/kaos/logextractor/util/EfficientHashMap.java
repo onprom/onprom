@@ -16,37 +16,44 @@
 
 package it.unibz.inf.kaos.logextractor.util;
 
-import com.google.common.collect.Maps;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
  */
 public class EfficientHashMap<V> {
 
-    private HashMap<String, V> map;
+    private final Map<String, Integer> map;
+    private final ArrayList<V> values;
 
     public EfficientHashMap() {
-        map = Maps.newHashMap();
+        map = new HashMap<>();
+        values = new ArrayList<>();
     }
 
-
     public void put(String key, V value) {
-        this.map.put(key, value);
+        this.map.put(key, values.size());
+        values.add(value);
     }
 
     public boolean containsKey(String key) {
         return map.containsKey(key);
     }
 
+    public int size() {
+        return values.size();
+    }
+
     public V get(String key) {
-        return map.get(key);
+        return values.get(map.get(key));
     }
 
     public Collection<V> values() {
-        return this.map.values();
+        return this.values;
     }
 
 }

@@ -16,31 +16,35 @@
 
 package it.unibz.inf.kaos.logextractor;
 
-import ch.qos.logback.classic.Logger;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.logextractor.constants.LEConstants;
-import it.unibz.inf.kaos.logextractor.model.*;
+import it.unibz.inf.kaos.logextractor.model.EBDAMapping;
+import it.unibz.inf.kaos.logextractor.model.LEObjectFactory;
+import it.unibz.inf.kaos.logextractor.model.XFactoryOnProm;
 import it.unibz.inf.kaos.logextractor.reasoner.SimpleEBDAReasonerImpl;
-import it.unibz.inf.kaos.logextractor.util.EfficientHashMap;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
 import it.unibz.inf.ontop.model.OBDADataSource;
 import it.unibz.inf.ontop.model.OBDAModel;
+import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class SimpleXESLogExtractorWithEBDAMapping {
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(LEConstants.LOGGER_NAME);
+    private static final Logger logger = LoggerFactory.getLogger(SimpleXESLogExtractorWithEBDAMapping.class);
 
     public XLog extractXESLog(OWLOntology domainOnto, OBDAModel obdaModel, AnnotationQueries firstAnnoQueries, OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries) {
         try {
             OBDAMapping obdaMapping = new OBDAMapper().createOBDAMapping(domainOnto, eventOntoVariant, obdaModel, firstAnnoQueries);
             if (obdaMapping != null) {
-                return extractXESLogUsingOnlyAtomicQueriesMO(eventOntoVariant, obdaMapping, secondAnnoQueries);
+                return extractXESLog(eventOntoVariant, obdaMapping, secondAnnoQueries);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -48,31 +52,37 @@ public class SimpleXESLogExtractorWithEBDAMapping {
         return null;
     }
 
-    public XLog extractXESLogUsingOnlyAtomicQueriesMO(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) {
+    public XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) {
         try {
-            logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Start creating an EBDA Mapping"));
             EBDAMapping ebdaModel = createEBDAMapping(domainOntology, obdaModel, annotation);
+            System.gc();
             if (ebdaModel != null) {
-                logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Start extracting XES Log from the EBDA Mapping"));
+                logger.info("Start extracting XES Log from the EBDA Mapping");
+                long start = System.currentTimeMillis();
                 SimpleEBDAReasonerImpl ebdaR = new SimpleEBDAReasonerImpl(ebdaModel);
-                logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Retrieving XES attributes information"));
-                EfficientHashMap<XAtt> xatts = ebdaR.getAttributes();
-                logger.info("result: " + xatts.values().size() + " attributes are extracted.");
-                logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Retrieving XES events information"));
-                EfficientHashMap<XEventOnPromEfficient> xevents = ebdaR.getXEvents(xatts);
-                logger.info("result: " + xevents.values().size() + " events are extracted.");
-                logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Retrieving XES traces information"));
-                EfficientHashMap<XTrace> xtraces = ebdaR.getXTraces(xevents, xatts);
-                logger.info("result: " + xtraces.values().size() + " traces are extracted.");
+                logger.info("Initialized reasoner in " + (System.currentTimeMillis() - start) + " ms");
+                logger.info("Retrieving XES attributes information");
+                start = System.currentTimeMillis();
+                Map<String, XAttribute> attributes = ebdaR.getAttributes();
+                logger.info(attributes.size() + " attributes are extracted in " + (System.currentTimeMillis() - start) + " ms");
+                System.gc();
+                logger.info("Retrieving XES events information");
+                start = System.currentTimeMillis();
+                Map<String, XEvent> events = ebdaR.getEvents(attributes);
+                logger.info(events.size() + " events are extracted in " + (System.currentTimeMillis() - start) + " ms");
+                System.gc();
+                logger.info("Retrieving XES traces information");
+                start = System.currentTimeMillis();
+                Collection<XTrace> traces = ebdaR.getTraces(events, attributes);
+                logger.info(traces.size() + " traces are extracted in " + (System.currentTimeMillis() - start) + " ms");
                 ebdaR.dispose();
-                logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Constructing XES log"));
-                XLogOnProm xlog = XFactoryOnProm.getInstance().createXLogOnProm(true);
-                if (xlog != null) {
-                    //Add traces to the log
-                    xlog.addAll(xtraces.values());
-                    logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Finish extracting XES Log from the EBDA Model"));
-                    return xlog;
-                }
+                System.gc();
+                logger.info("Constructing XES log");
+                XLog xlog = XFactoryOnProm.getInstance().createXLogOnProm(true);
+                xlog.addAll(traces);
+                System.gc();
+                logger.info("Finished extracting XES Log from the EBDA Model");
+                return xlog;
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -84,7 +94,7 @@ public class SimpleXESLogExtractorWithEBDAMapping {
         try {
             List<OBDADataSource> odsList = obdaModel.getSources();
             if (odsList.size() == 1) {
-                logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Constructing EBDA Mapping"));
+                logger.info("Constructing EBDA Mapping");
                 return LEObjectFactory.getInstance().createEBDAMapping(domainOntology, obdaModel, annotation);
             }
         } catch (Exception e) {

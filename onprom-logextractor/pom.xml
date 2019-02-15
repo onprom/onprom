@@ -66,7 +66,7 @@
     </build>
 
     <!-- for Ontop 1.18.1-OnProm -->
-    <repositories>  
+    <repositories>
         <repository>
 		    <id>thirdparty</id>
 		    <url>http://obdavm.inf.unibz.it:8080/nexus/content/repositories/thirdparty</url>

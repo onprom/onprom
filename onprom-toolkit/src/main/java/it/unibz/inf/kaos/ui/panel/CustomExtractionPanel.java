@@ -48,7 +48,9 @@ import java.io.IOException;
 import java.util.Set;
 
 public class CustomExtractionPanel extends JPanel {
-    private static final Logger logger = LoggerFactory.getLogger(CustomExtractionPanel.class.getSimpleName());
+    private static final Logger logger = LoggerFactory.getLogger(CustomExtractionPanel.class);
+
+    private static final Dimension CMB_DIMENSION = new Dimension(400, 25);
 
     public CustomExtractionPanel(OnpromToolkit toolkit) {
         initUI(toolkit);
@@ -64,7 +66,7 @@ public class CustomExtractionPanel extends JPanel {
         add(UIUtility.createLabel("Domain ontology:", null), gridBagConstraints);
         gridBagConstraints.gridx = 1;
         JComboBox<TreeNode<Object>> cmbDomainOntology = UIUtility.createWideComboBox(resources.stream().filter(a ->
-                a.getUserObject() instanceof OWLOntology), null, null, false, true);
+                a.getUserObject() instanceof OWLOntology), CMB_DIMENSION, null, false, true);
         add(cmbDomainOntology, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
@@ -72,7 +74,7 @@ public class CustomExtractionPanel extends JPanel {
         add(UIUtility.createLabel("OBDA mappings:", null), gridBagConstraints);
         gridBagConstraints.gridx = 1;
         JComboBox<TreeNode<Object>> cmbMappings = UIUtility.createWideComboBox(resources.stream().filter(a ->
-                a.getUserObject() instanceof OBDAModel), null, null, false, true);
+                a.getUserObject() instanceof OBDAModel), CMB_DIMENSION, null, false, true);
         add(cmbMappings, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
@@ -80,7 +82,7 @@ public class CustomExtractionPanel extends JPanel {
         add(UIUtility.createLabel("Custom event ontology:", null), gridBagConstraints);
         gridBagConstraints.gridx = 1;
         JComboBox<TreeNode<Object>> cmbEventOntology = UIUtility.createWideComboBox(resources.stream().filter(a ->
-                a.getUserObject() instanceof OWLOntology), null, null, false, true);
+                a.getUserObject() instanceof OWLOntology), CMB_DIMENSION, null, false, true);
         add(cmbEventOntology, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
@@ -88,7 +90,7 @@ public class CustomExtractionPanel extends JPanel {
         add(UIUtility.createLabel("Domain to event ontology Annotations:", null), gridBagConstraints);
         gridBagConstraints.gridx = 1;
         JComboBox<TreeNode<Object>> cmbEventAnnotations = UIUtility.createWideComboBox(resources.stream().filter(a ->
-                a.getUserObject() instanceof AnnotationQueries), null, null, false, true);
+                a.getUserObject() instanceof AnnotationQueries), CMB_DIMENSION, null, false, true);
         add(cmbEventAnnotations, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
@@ -96,12 +98,15 @@ public class CustomExtractionPanel extends JPanel {
         add(UIUtility.createLabel("Event to XES ontology annotations:", null), gridBagConstraints);
         gridBagConstraints.gridx = 1;
         JComboBox<TreeNode<Object>> cmbXESAnnotations = UIUtility.createWideComboBox(resources.stream().filter(a ->
-                a.getUserObject() instanceof AnnotationQueries), null, null, false, true);
+                a.getUserObject() instanceof AnnotationQueries), CMB_DIMENSION, null, false, true);
         add(cmbXESAnnotations, gridBagConstraints);
 
+        JPanel buttonPanel = new JPanel();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        add(UIUtility.createButton(UMLEditorButtons.EXPORT, event -> UIUtility.executeInBackground(() -> {
+        add(buttonPanel, gridBagConstraints);
+
+        buttonPanel.add(UIUtility.createButton(UMLEditorButtons.EXPORT, event -> UIUtility.executeInBackground(() -> {
             try {
                 XLog xlog = null;
                 long start = System.currentTimeMillis();
@@ -120,7 +125,7 @@ public class CustomExtractionPanel extends JPanel {
                 } else if (cmbDomainOntology.getSelectedIndex() < -1 || cmbMappings.getSelectedIndex() < -1 || cmbEventAnnotations.getSelectedIndex() < -1) {
                     UIUtility.error("Please select domain ontology, OBDA mappings, custom event ontology, domain to event ontology annotations and event to XES ontology annotations!");
                 } else {
-                    xlog = new SimpleXESLogExtractorWithEBDAMapping().extractXESLogUsingOnlyAtomicQueriesMO((OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(), (OBDAModel) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(), (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject());
+                    xlog = new SimpleXESLogExtractorWithEBDAMapping().extractXESLog((OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(), (OBDAModel) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(), (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject());
                 }
                 if (xlog != null) {
                     logger.debug(String.format("EXTRACTION TOOK %s SECONDS", (System.currentTimeMillis() - start) / 1000));
@@ -131,8 +136,7 @@ public class CustomExtractionPanel extends JPanel {
                 UIUtility.error(e.getMessage());
             }
         }, toolkit.getProgressBar())), gridBagConstraints);
-        gridBagConstraints.gridx = 1;
-        add(UIUtility.createButton(UMLEditorButtons.RESET, e -> {
+        buttonPanel.add(UIUtility.createButton(UMLEditorButtons.RESET, e -> {
             cmbDomainOntology.setSelectedIndex(-1);
             cmbMappings.setSelectedIndex(-1);
             cmbEventOntology.setSelectedIndex(-1);
@@ -143,8 +147,7 @@ public class CustomExtractionPanel extends JPanel {
             revalidate();
             repaint();
         }, null), gridBagConstraints);
-        gridBagConstraints.gridx = 2;
-        add(UIUtility.createButton(UMLEditorButtons.EXPORT_OBDA, event -> {
+        buttonPanel.add(UIUtility.createButton(UMLEditorButtons.EXPORT_OBDA, event -> {
             try {
                 if (cmbDomainOntology.getSelectedIndex() < -1 || cmbEventOntology.getSelectedIndex() < -1 || cmbMappings.getSelectedIndex() < -1 || cmbEventAnnotations.getSelectedIndex() < -1) {
                     UIUtility.error("Please select domain ontology, OBDA mappings, custom event ontology and domain to event ontology annotations!");

@@ -26,37 +26,77 @@
 
 package it.unibz.inf.kaos.logextractor.reasoner;
 
-import ch.qos.logback.classic.Logger;
-import it.unibz.inf.kaos.logextractor.constants.LEConstants;
 import it.unibz.inf.kaos.logextractor.constants.XESEOConstants;
 import it.unibz.inf.kaos.logextractor.model.EBDAMapping;
-import it.unibz.inf.kaos.logextractor.model.XAtt;
-import it.unibz.inf.kaos.logextractor.model.XEventOnPromEfficient;
-import it.unibz.inf.kaos.logextractor.model.XFactoryOnProm;
-import it.unibz.inf.kaos.logextractor.util.EfficientHashMap;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestConstants;
 import it.unibz.inf.ontop.owlrefplatform.core.QuestPreferences;
 import it.unibz.inf.ontop.owlrefplatform.owlapi.*;
 import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWLConfiguration.Builder;
 import org.deckfour.xes.extension.XExtension;
+import org.deckfour.xes.extension.std.XConceptExtension;
+import org.deckfour.xes.extension.std.XLifecycleExtension;
+import org.deckfour.xes.extension.std.XOrganizationalExtension;
+import org.deckfour.xes.extension.std.XTimeExtension;
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XTrace;
+import org.deckfour.xes.model.impl.*;
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.OWLException;
-import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SimpleEBDAReasonerImpl {
 
-    private static final Logger logger = (Logger) LoggerFactory.getLogger("EBDAReasoner");
+    private static final Logger logger = LoggerFactory.getLogger(SimpleEBDAReasonerImpl.class);
+    private static final XExtension TIME_EXTENSION = XTimeExtension.instance();
+    private static final XExtension CONCEPT_EXTENSION = XConceptExtension.instance();
+    private static final XExtension LIFECYCLE_EXTENSION = XLifecycleExtension.instance();
+    private static final XExtension ORGANIZATION_EXTENSION = XOrganizationalExtension.instance();
 
     private QuestOWL questReasoner;
-    private XFactoryOnProm xfact;
+
+    private XAttribute createXAttribute(String type, String key, String value, XExtension extension) {
+
+        if (type == null || key == null || value == null) {
+            return null;
+        }
+
+        if (type.toLowerCase().equals("literal")) {
+            return new XAttributeLiteralImpl(key, value, extension);
+        } else if (type.toLowerCase().equals("timestamp")) {
+
+            // Note: based on the the method "public static Timestamp valueOf(String s)" in "java.sql.Timestamp"
+            // we assume that the timestamp is in format yyyy-[m]m-[d]d hh:mm:ss[.f...].
+            // The fractional seconds may be omitted. The leading zero for mm and dd may also be omitted.
+            return new XAttributeTimestampImpl(key, Timestamp.valueOf(value).getTime(), extension);
+        }
+        return null;
+    }
+
+    private XExtension getPredefinedXExtension(String key) {
+        if (key == null) return null;
+        switch (key.toLowerCase()) {
+            case "time:timestamp":
+                return TIME_EXTENSION;
+            case "concept:name":
+                return CONCEPT_EXTENSION;
+            case "lifecycle:transition":
+                return LIFECYCLE_EXTENSION;
+            case "org:resource":
+                return ORGANIZATION_EXTENSION;
+            default:
+                return null;
+        }
+    }
 
     public SimpleEBDAReasonerImpl(EBDAMapping ebdaMapping) {
         try {
-            this.xfact = XFactoryOnProm.getInstance();
             OWLOntology eventOnto = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(this.getClass().getResource(XESEOConstants.eventOntoPath).openStream());
 
             QuestPreferences preferences = new QuestPreferences();
@@ -76,144 +116,153 @@ public class SimpleEBDAReasonerImpl {
     }
 
     public void dispose() {
-        if (this.questReasoner != null)
+        try {
             this.questReasoner.dispose();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 
-    public EfficientHashMap<XAtt> getAttributes() throws OWLException {
+    public Map<String, XAttribute> getAttributes() {
+        try {
+            Map<String, XAttribute> attributes = new HashMap<>();
+            QuestOWLConnection conn = questReasoner.getConnection();
+            QuestOWLStatement st = conn.createStatement();
 
-        EfficientHashMap<XAtt> attributes = new EfficientHashMap<>();
-        QuestOWLConnection conn = questReasoner.getConnection();
-        QuestOWLStatement st = conn.createStatement();
+            long start = System.currentTimeMillis();
+            QuestOWLResultSet resultSet = st.executeTuple(XESEOConstants.qAttTypeKeyVal_Simple);
+            logger.info("Finished executing attributes query in " + (System.currentTimeMillis() - start) + "ms");
 
-        QuestOWLResultSet resultSet = st.executeTuple(XESEOConstants.qAttTypeKeyVal_Simple);
-        logger.info("Result set has " + resultSet.getFetchSize() + " rows and " + resultSet.getColumnCount() + " columns");
+            while (resultSet.nextRow()) {
+                try {
+                    String attributeKey = resultSet.getOWLObject(XESEOConstants.qAttTypeKeyVal_SimpleAnsVarAtt).toString();
+                    String type = resultSet.getOWLLiteral(XESEOConstants.qAttTypeAnsVarAttType).getLiteral();
+                    String key = resultSet.getOWLLiteral(XESEOConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
+                    String value = resultSet.getOWLLiteral(XESEOConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
 
-        while (resultSet.nextRow()) {
-            try {
-                OWLObject attribute = resultSet.getOWLObject(XESEOConstants.qAttTypeKeyVal_SimpleAnsVarAtt);
-                String type = resultSet.getOWLLiteral(XESEOConstants.qAttTypeAnsVarAttType).getLiteral();
-                String key = resultSet.getOWLLiteral(XESEOConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
-                String value = resultSet.getOWLLiteral(XESEOConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
-                XExtension extension = this.xfact.getPredefinedXExtension(key);
-
-                if (attribute != null && !attributes.containsKey(attribute.toString())) {
-                    XAtt xatt = xfact.createXAttNoURI(type);
-                    xatt.setKey(key);
-                    xatt.setVal(value);
-                    if (extension != null) xatt.setExtension(extension);
-                    attributes.put(attribute.toString(), xatt);
+                    if (!attributes.containsKey(attributeKey)) {
+                        XExtension extension = getPredefinedXExtension(key);
+                        XAttribute attribute = createXAttribute(type, key, value, extension);
+                        if (attribute != null) {
+                            attributes.put(attributeKey, attribute);
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                logger.error(e.getMessage());
             }
+            logger.info("Finished extracting " + attributes.size() + " attributes");
+            resultSet.close();
+            st.close();
+            conn.close();
+            return attributes;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
         }
-        resultSet.close();
-        st.close();
-        conn.close();
-        questReasoner.dispose();
-        return attributes;
+        return null;
     }
 
-    public EfficientHashMap<XEventOnPromEfficient> getXEvents(EfficientHashMap<XAtt> xattmap) throws OWLException {
-        EfficientHashMap<XEventOnPromEfficient> events = new EfficientHashMap<>();
-        QuestOWLConnection conn = questReasoner.getConnection();
-        QuestOWLStatement st = conn.createStatement();
+    public Map<String, XEvent> getEvents(Map<String, XAttribute> attributes) {
+        try {
+            Map<String, XEvent> events = new HashMap<>();
+            QuestOWLConnection conn = questReasoner.getConnection();
+            QuestOWLStatement st = conn.createStatement();
 
-        QuestOWLResultSet resultSet = st.executeTuple(XESEOConstants.qEvtAtt_Simple);
-        logger.info("Result set has " + resultSet.getFetchSize() + " rows and " + resultSet.getColumnCount() + " columns");
+            long start = System.currentTimeMillis();
+            QuestOWLResultSet resultSet = st.executeTuple(XESEOConstants.qEvtAtt_Simple);
+            logger.info("Finished executing events query in " + (System.currentTimeMillis() - start) + "ms");
 
-        while (resultSet.nextRow()) {
-            try {
-                String eventKey = resultSet.getOWLObject(XESEOConstants.qEvtAtt_SimpleAnsVarEvent).toString();
-                String attributeKey = resultSet.getOWLObject(XESEOConstants.qEvtAtt_SimpleAnsVarAtt).toString();
-                XAtt attribute = xattmap.get(attributeKey);
+            while (resultSet.nextRow()) {
+                try {
+                    String eventKey = resultSet.getOWLObject(XESEOConstants.qEvtAtt_SimpleAnsVarEvent).toString();
 
-                if (events.containsKey(eventKey) && attribute.hasCompleteInfo()) {
-                    events.get(eventKey).addXAttribute(attribute);
-                } else {
-                    XEventOnPromEfficient event = this.xfact.createXEventOnPromNoURI();
-                    if (event != null && attribute != null && attribute.hasCompleteInfo()) {
-                        event.addXAttribute(attribute);
+                    XEvent event = events.get(eventKey);
+                    if (event == null) {
+                        event = new XEventImpl();
+                        events.put(eventKey, event);
                     }
-                    events.put(eventKey, event);
+
+                    String attributeKey = resultSet.getOWLObject(XESEOConstants.qEvtAtt_SimpleAnsVarAtt).toString();
+                    XAttribute attribute = attributes.get(attributeKey);
+                    if (attribute != null) {
+                        event.getAttributes().put(attribute.getKey(), attribute);
+                    }
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                logger.error(e.getMessage());
             }
+            resultSet.close();
+            st.close();
+            conn.close();
+            return events;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
         }
-        resultSet.close();
-        st.close();
-        conn.close();
-        questReasoner.dispose();
-        return events;
+        return null;
     }
 
-    public EfficientHashMap<XTrace> getXTraces(EfficientHashMap<XEventOnPromEfficient> xevtmap, EfficientHashMap<XAtt> xattmap) throws OWLException {
+    public Collection<XTrace> getTraces(Map<String, XEvent> events, Map<String, XAttribute> attributes) {
 
-        EfficientHashMap<XTrace> traces = new EfficientHashMap<>();
-        QuestOWLConnection conn = questReasoner.getConnection();
-        QuestOWLStatement st = conn.createStatement();
+        try {
+            Map<String, XTrace> traces = new HashMap<>();
+            QuestOWLConnection conn = questReasoner.getConnection();
+            QuestOWLStatement st = conn.createStatement();
 
-        QuestOWLResultSet resultSet = st.executeTuple(XESEOConstants.qTrace_Simple);
-        logger.info("Result set has " + resultSet.getFetchSize() + " rows and " + resultSet.getColumnCount() + " columns");
+            logger.info("Handling traces and attributes");
+            long start = System.currentTimeMillis();
+            QuestOWLResultSet resultSet = st.executeTuple(XESEOConstants.qTraceAtt_Simple);
+            logger.info("Finished executing traces attributes query in " + (System.currentTimeMillis() - start) + "ms");
 
-        while (resultSet.nextRow()) {
-            try {
-                String traceKey = resultSet.getOWLObject(XESEOConstants.qTraceAnsVarTrace).toString();
-                XTrace trace = this.xfact.createXTraceNaiveImpl();
-                if (trace != null) {
-                    traces.put(traceKey, trace);
-                }
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-            }
-        }
-        resultSet.close();
-
-        logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling traces events"));
-        resultSet = st.executeTuple(XESEOConstants.qTraceEvt_Simple);
-        logger.info("Result set has " + resultSet.getFetchSize() + " rows and " + resultSet.getColumnCount() + " columns");
-
-        while (resultSet.nextRow()) {
-            try {
-                String traceKey = resultSet.getOWLObject(XESEOConstants.qTraceEvt_SimpleAnsVarTrace).toString();
-                String eventKey = resultSet.getOWLObject(XESEOConstants.qTraceEvt_SimpleAnsVarEvent).toString();
-
-                if (traces.containsKey(traceKey)) {
-                    XEvent event = xevtmap.get(eventKey);
-                    if (event != null) {
-                        traces.get(traceKey).add(event);
+            while (resultSet.nextRow()) {
+                try {
+                    String traceKey = resultSet.getOWLObject(XESEOConstants.qTraceAtt_SimpleAnsVarTrace).toString();
+                    XTrace trace = traces.get(traceKey);
+                    if (trace == null) {
+                        trace = new XTraceImpl(new XAttributeMapImpl());
+                        traces.put(traceKey, trace);
                     }
-                }
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-            }
-        }
-        resultSet.close();
 
-        logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling traces attributes"));
-        resultSet = st.executeTuple(XESEOConstants.qTraceAtt_Simple);
-        logger.info("Result set has " + resultSet.getFetchSize() + " rows and " + resultSet.getColumnCount() + " columns");
-
-        while (resultSet.nextRow()) {
-            try {
-                String traceKey = resultSet.getOWLObject(XESEOConstants.qTraceAtt_SimpleAnsVarTrace).toString();
-                String attributeKey = resultSet.getOWLObject(XESEOConstants.qTraceAtt_SimpleAnsVarAtt).toString();
-                if (traces.containsKey(traceKey)) {
-                    XAtt attribute = xattmap.get(attributeKey);
-                    if (attribute != null && attribute.hasCompleteInfo()) {
-                        traces.get(traceKey).getAttributes().put(attribute.getKey(), attribute);
+                    String attributeKey = resultSet.getOWLObject(XESEOConstants.qTraceAtt_SimpleAnsVarAtt).toString();
+                    XAttribute attribute = attributes.get(attributeKey);
+                    if (attribute != null) {
+                        trace.getAttributes().put(attribute.getKey(), attribute);
                     }
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                logger.error(e.getMessage());
             }
+            resultSet.close();
+
+            logger.info("Handling events of traces");
+            start = System.currentTimeMillis();
+            resultSet = st.executeTuple(XESEOConstants.qTraceEvt_Simple);
+            logger.info("Finished executing traces events query in " + (System.currentTimeMillis() - start) + "ms");
+
+            while (resultSet.nextRow()) {
+                try {
+                    String traceKey = resultSet.getOWLObject(XESEOConstants.qTraceEvt_SimpleAnsVarTrace).toString();
+                    String eventKey = resultSet.getOWLObject(XESEOConstants.qTraceEvt_SimpleAnsVarEvent).toString();
+
+                    XTrace trace = traces.get(traceKey);
+
+                    if (trace != null) {
+                        XEvent event = events.get(eventKey);
+                        if (event != null) {
+                            trace.add(event);
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                }
+            }
+            resultSet.close();
+
+            st.close();
+            conn.close();
+            return traces.values();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
         }
-        resultSet.close();
-        st.close();
-        conn.close();
-        questReasoner.dispose();
-        return traces;
+        return null;
     }
 }
