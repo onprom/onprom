@@ -37,10 +37,13 @@ import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.extension.std.XLifecycleExtension;
 import org.deckfour.xes.extension.std.XOrganizationalExtension;
 import org.deckfour.xes.extension.std.XTimeExtension;
+import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XTrace;
-import org.deckfour.xes.model.impl.*;
+import org.deckfour.xes.model.impl.XAttributeMapImpl;
+import org.deckfour.xes.model.impl.XEventImpl;
+import org.deckfour.xes.model.impl.XTraceImpl;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
@@ -60,6 +63,29 @@ public class SimpleEBDAReasonerImpl {
     private static final XExtension ORGANIZATION_EXTENSION = XOrganizationalExtension.instance();
 
     private QuestOWL questReasoner;
+    private XFactory factory;
+
+
+    public SimpleEBDAReasonerImpl(EBDAMapping ebdaMapping, XFactory factory) {
+        try {
+            this.factory = factory;
+            OWLOntology eventOnto = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(this.getClass().getResource(XESEOConstants.eventOntoPath).openStream());
+
+            QuestPreferences preferences = new QuestPreferences();
+            preferences.setCurrentValueOf(QuestPreferences.ABOX_MODE, QuestConstants.VIRTUAL);
+            preferences.setCurrentValueOf(QuestPreferences.SQL_GENERATE_REPLACE, QuestConstants.FALSE);
+
+            Builder builder = QuestOWLConfiguration.builder();
+            builder.obdaModel(ebdaMapping);
+            builder.preferences(preferences);
+            QuestOWLConfiguration config = builder.build();
+
+            questReasoner = new QuestOWLFactory().createReasoner(eventOnto, config);
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
 
     private XAttribute createXAttribute(String type, String key, String value, XExtension extension) {
 
@@ -68,13 +94,15 @@ public class SimpleEBDAReasonerImpl {
         }
 
         if (type.toLowerCase().equals("literal")) {
-            return new XAttributeLiteralImpl(key, value, extension);
+            return factory.createAttributeLiteral(key, value, extension);
+            //return new XAttributeLiteralImpl(key, value, extension);
         } else if (type.toLowerCase().equals("timestamp")) {
 
             // Note: based on the the method "public static Timestamp valueOf(String s)" in "java.sql.Timestamp"
             // we assume that the timestamp is in format yyyy-[m]m-[d]d hh:mm:ss[.f...].
             // The fractional seconds may be omitted. The leading zero for mm and dd may also be omitted.
-            return new XAttributeTimestampImpl(key, Timestamp.valueOf(value).getTime(), extension);
+            return factory.createAttributeTimestamp(key, Timestamp.valueOf(value).getTime(), extension);
+            //return new XAttributeTimestampImpl(key, Timestamp.valueOf(value).getTime(), extension);
         }
         return null;
     }
@@ -95,26 +123,6 @@ public class SimpleEBDAReasonerImpl {
         }
     }
 
-    public SimpleEBDAReasonerImpl(EBDAMapping ebdaMapping) {
-        try {
-            OWLOntology eventOnto = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(this.getClass().getResource(XESEOConstants.eventOntoPath).openStream());
-
-            QuestPreferences preferences = new QuestPreferences();
-            preferences.setCurrentValueOf(QuestPreferences.ABOX_MODE, QuestConstants.VIRTUAL);
-            preferences.setCurrentValueOf(QuestPreferences.SQL_GENERATE_REPLACE, QuestConstants.FALSE);
-
-            Builder builder = QuestOWLConfiguration.builder();
-            builder.obdaModel(ebdaMapping);
-            builder.preferences(preferences);
-            QuestOWLConfiguration config = builder.build();
-
-            questReasoner = new QuestOWLFactory().createReasoner(eventOnto, config);
-
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
     public void dispose() {
         try {
             this.questReasoner.dispose();
@@ -125,6 +133,7 @@ public class SimpleEBDAReasonerImpl {
 
     public Map<String, XAttribute> getAttributes() {
         try {
+
             Map<String, XAttribute> attributes = new HashMap<>();
             QuestOWLConnection conn = questReasoner.getConnection();
             QuestOWLStatement st = conn.createStatement();
@@ -133,6 +142,7 @@ public class SimpleEBDAReasonerImpl {
             QuestOWLResultSet resultSet = st.executeTuple(XESEOConstants.qAttTypeKeyVal_Simple);
             logger.info("Finished executing attributes query in " + (System.currentTimeMillis() - start) + "ms");
 
+            start = System.currentTimeMillis();
             while (resultSet.nextRow()) {
                 try {
                     String attributeKey = resultSet.getOWLObject(XESEOConstants.qAttTypeKeyVal_SimpleAnsVarAtt).toString();
@@ -151,7 +161,7 @@ public class SimpleEBDAReasonerImpl {
                     logger.error(e.getMessage());
                 }
             }
-            logger.info("Finished extracting " + attributes.size() + " attributes");
+            logger.info("Finished extracting " + attributes.size() + " attributes in " + (System.currentTimeMillis() - start) + "ms");
             resultSet.close();
             st.close();
             conn.close();
@@ -171,7 +181,7 @@ public class SimpleEBDAReasonerImpl {
             long start = System.currentTimeMillis();
             QuestOWLResultSet resultSet = st.executeTuple(XESEOConstants.qEvtAtt_Simple);
             logger.info("Finished executing events query in " + (System.currentTimeMillis() - start) + "ms");
-
+            start = System.currentTimeMillis();
             while (resultSet.nextRow()) {
                 try {
                     String eventKey = resultSet.getOWLObject(XESEOConstants.qEvtAtt_SimpleAnsVarEvent).toString();
@@ -191,6 +201,7 @@ public class SimpleEBDAReasonerImpl {
                     logger.error(e.getMessage());
                 }
             }
+            logger.info("Finished extracting " + events.size() + " events in " + (System.currentTimeMillis() - start) + "ms");
             resultSet.close();
             st.close();
             conn.close();
@@ -208,11 +219,10 @@ public class SimpleEBDAReasonerImpl {
             QuestOWLConnection conn = questReasoner.getConnection();
             QuestOWLStatement st = conn.createStatement();
 
-            logger.info("Handling traces and attributes");
             long start = System.currentTimeMillis();
             QuestOWLResultSet resultSet = st.executeTuple(XESEOConstants.qTraceAtt_Simple);
             logger.info("Finished executing traces attributes query in " + (System.currentTimeMillis() - start) + "ms");
-
+            start = System.currentTimeMillis();
             while (resultSet.nextRow()) {
                 try {
                     String traceKey = resultSet.getOWLObject(XESEOConstants.qTraceAtt_SimpleAnsVarTrace).toString();
@@ -231,13 +241,13 @@ public class SimpleEBDAReasonerImpl {
                     logger.error(e.getMessage());
                 }
             }
+            logger.info("Finished extracting " + traces.size() + " traces in " + (System.currentTimeMillis() - start) + "ms");
             resultSet.close();
 
-            logger.info("Handling events of traces");
             start = System.currentTimeMillis();
             resultSet = st.executeTuple(XESEOConstants.qTraceEvt_Simple);
             logger.info("Finished executing traces events query in " + (System.currentTimeMillis() - start) + "ms");
-
+            start = System.currentTimeMillis();
             while (resultSet.nextRow()) {
                 try {
                     String traceKey = resultSet.getOWLObject(XESEOConstants.qTraceEvt_SimpleAnsVarTrace).toString();
@@ -255,6 +265,7 @@ public class SimpleEBDAReasonerImpl {
                     logger.error(e.getMessage());
                 }
             }
+            logger.info("Finished updates traces events in " + (System.currentTimeMillis() - start) + "ms");
             resultSet.close();
 
             st.close();

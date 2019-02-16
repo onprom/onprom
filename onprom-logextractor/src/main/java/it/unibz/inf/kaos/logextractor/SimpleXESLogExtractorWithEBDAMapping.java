@@ -19,12 +19,17 @@ package it.unibz.inf.kaos.logextractor;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.logextractor.model.EBDAMapping;
 import it.unibz.inf.kaos.logextractor.model.LEObjectFactory;
-import it.unibz.inf.kaos.logextractor.model.XFactoryOnProm;
 import it.unibz.inf.kaos.logextractor.reasoner.SimpleEBDAReasonerImpl;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
 import it.unibz.inf.ontop.model.OBDADataSource;
 import it.unibz.inf.ontop.model.OBDAModel;
+import org.deckfour.xes.classification.XEventAttributeClassifier;
+import org.deckfour.xes.classification.XEventLifeTransClassifier;
+import org.deckfour.xes.classification.XEventNameClassifier;
+import org.deckfour.xes.classification.XEventResourceClassifier;
+import org.deckfour.xes.factory.XFactory;
+import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
@@ -32,7 +37,9 @@ import org.deckfour.xes.model.XTrace;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xeslite.external.XFactoryExternalStore;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -55,33 +62,21 @@ public class SimpleXESLogExtractorWithEBDAMapping {
     public XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) {
         try {
             EBDAMapping ebdaModel = createEBDAMapping(domainOntology, obdaModel, annotation);
-            System.gc();
             if (ebdaModel != null) {
+                XFactoryExternalStore.InMemoryStoreImpl factory = new XFactoryExternalStore.InMemoryStoreImpl();
+                XFactoryRegistry.instance().setCurrentDefault(factory);
+
                 logger.info("Start extracting XES Log from the EBDA Mapping");
                 long start = System.currentTimeMillis();
-                SimpleEBDAReasonerImpl ebdaR = new SimpleEBDAReasonerImpl(ebdaModel);
+                SimpleEBDAReasonerImpl ebdaR = new SimpleEBDAReasonerImpl(ebdaModel, factory);
                 logger.info("Initialized reasoner in " + (System.currentTimeMillis() - start) + " ms");
-                logger.info("Retrieving XES attributes information");
-                start = System.currentTimeMillis();
                 Map<String, XAttribute> attributes = ebdaR.getAttributes();
-                logger.info(attributes.size() + " attributes are extracted in " + (System.currentTimeMillis() - start) + " ms");
-                System.gc();
-                logger.info("Retrieving XES events information");
-                start = System.currentTimeMillis();
                 Map<String, XEvent> events = ebdaR.getEvents(attributes);
-                logger.info(events.size() + " events are extracted in " + (System.currentTimeMillis() - start) + " ms");
-                System.gc();
-                logger.info("Retrieving XES traces information");
-                start = System.currentTimeMillis();
                 Collection<XTrace> traces = ebdaR.getTraces(events, attributes);
-                logger.info(traces.size() + " traces are extracted in " + (System.currentTimeMillis() - start) + " ms");
                 ebdaR.dispose();
-                System.gc();
-                logger.info("Constructing XES log");
-                XLog xlog = XFactoryOnProm.getInstance().createXLogOnProm(true);
+                XLog xlog = factory.createLog();
+                addDefaultExtensions(factory, xlog);
                 xlog.addAll(traces);
-                System.gc();
-                logger.info("Finished extracting XES Log from the EBDA Model");
                 return xlog;
             }
         } catch (Exception e) {
@@ -102,9 +97,22 @@ public class SimpleXESLogExtractorWithEBDAMapping {
         }
         return null;
     }
+
+    private void addDefaultExtensions(XFactory factory, XLog xlog) {
+        try {
+            xlog.getGlobalTraceAttributes().add(factory.createAttributeLiteral("concept:name", "DEFAULT", null));
+
+            xlog.getGlobalEventAttributes().add(factory.createAttributeTimestamp("time:timestamp", Timestamp.valueOf("1970-01-01 01:00:00").getTime(), null));
+            xlog.getGlobalEventAttributes().add(factory.createAttributeLiteral("lifecycle:transition", "complete", null));
+            xlog.getGlobalEventAttributes().add(factory.createAttributeLiteral("concept:name", "DEFAULT", null));
+
+            xlog.getClassifiers().add(new XEventAttributeClassifier("Time timestamp", "time:timestamp"));
+            xlog.getClassifiers().add(new XEventLifeTransClassifier());
+            xlog.getClassifiers().add(new XEventNameClassifier());
+            xlog.getClassifiers().add(new XEventResourceClassifier());
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+    }
 }
-
-
-
-
-

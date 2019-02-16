@@ -79,9 +79,7 @@
         </repository>
     </repositories>
     <!-- END OF for Ontop 1.18.1-OnProm -->
-
 	<dependencies>
-	
 	    <!-- =============================================================== -->
 		<!-- Ontop -->
         <!-- =============================================================== -->
@@ -173,20 +171,24 @@
             <artifactId>openxes</artifactId>
             <version>${openxes.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.andreas-solti.xeslite</groupId>
+            <artifactId>xeslite</artifactId>
+            <version>0.0.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.deckfour</groupId>
+                    <artifactId>openxes</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.mapdb</groupId>
+            <artifactId>mapdb</artifactId>
+            <version>3.0.7</version>
+        </dependency>
         <!-- =============================================================== -->
-		<!-- END OF XES related libraries -->
+        <!-- END OF XES related libraries -->
         <!-- =============================================================== -->
-        
-        <!-- ################################################################ -->
-	    <!-- Logger Related -->	
-		<!-- ################################################################ -->
-    	<dependency>
-    		<groupId>ch.qos.logback</groupId>
-    		<artifactId>logback-core</artifactId>
-    		<version>${logback.version}</version>
-    	</dependency>
-    	<!-- ################################################################ -->
-	    <!-- END OF Logger Related -->	
-		<!-- ################################################################ -->
       </dependencies>
 </project>
