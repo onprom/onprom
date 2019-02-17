@@ -48,10 +48,14 @@ public class SimpleXESLogExtractorWithEBDAMapping {
     private static final Logger logger = LoggerFactory.getLogger(SimpleXESLogExtractorWithEBDAMapping.class);
 
     public XLog extractXESLog(OWLOntology domainOnto, OBDAModel obdaModel, AnnotationQueries firstAnnoQueries, OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries) {
+        return extractXESLog(domainOnto, obdaModel, firstAnnoQueries, eventOntoVariant, secondAnnoQueries, null);
+    }
+
+    public XLog extractXESLog(OWLOntology domainOnto, OBDAModel obdaModel, AnnotationQueries firstAnnoQueries, OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries, XFactory factory) {
         try {
             OBDAMapping obdaMapping = new OBDAMapper().createOBDAMapping(domainOnto, eventOntoVariant, obdaModel, firstAnnoQueries);
             if (obdaMapping != null) {
-                return extractXESLog(eventOntoVariant, obdaMapping, secondAnnoQueries);
+                return extractXESLog(eventOntoVariant, obdaMapping, secondAnnoQueries, factory);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -60,10 +64,17 @@ public class SimpleXESLogExtractorWithEBDAMapping {
     }
 
     public XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) {
+        return extractXESLog(domainOntology, obdaModel, annotation, null);
+    }
+
+    public XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation, XFactory factory) {
         try {
             EBDAMapping ebdaModel = createEBDAMapping(domainOntology, obdaModel, annotation);
             if (ebdaModel != null) {
-                XFactoryExternalStore.InMemoryStoreImpl factory = new XFactoryExternalStore.InMemoryStoreImpl();
+                if (factory == null) {
+                    factory = new XFactoryExternalStore.InMemoryStoreImpl();
+                }
+                logger.info("Factory in use: " + factory.getDescription());
                 XFactoryRegistry.instance().setCurrentDefault(factory);
 
                 logger.info("Start extracting XES Log from the EBDA Mapping");
