@@ -75,16 +75,31 @@ public class SimpleEBDAReasonerImpl {
             preferences.setCurrentValueOf(QuestPreferences.ABOX_MODE, QuestConstants.VIRTUAL);
             preferences.setCurrentValueOf(QuestPreferences.SQL_GENERATE_REPLACE, QuestConstants.FALSE);
 
-            Builder builder = QuestOWLConfiguration.builder();
-            builder.obdaModel(ebdaMapping);
-            builder.preferences(preferences);
-            QuestOWLConfiguration config = builder.build();
+            Builder configurationBuilder = QuestOWLConfiguration.builder();
+            configurationBuilder.obdaModel(ebdaMapping);
+            configurationBuilder.preferences(preferences);
 
-            questReasoner = new QuestOWLFactory().createReasoner(eventOnto, config);
+            questReasoner = new QuestOWLFactory().createReasoner(eventOnto, configurationBuilder.build());
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    public boolean printUnfoldedQueries() {
+        try {
+            // Unfold queries
+            QuestOWLStatement st = questReasoner.getConnection().createStatement();
+            logger.info("Attributes Query:" + st.getUnfolding(XESEOConstants.qAttTypeKeyVal_Simple));
+            logger.info("Events Query:" + st.getUnfolding(XESEOConstants.qEvtAtt_Simple));
+            logger.info("Traces attributes Query:" + st.getUnfolding(XESEOConstants.qTraceAtt_Simple));
+            logger.info("Traces events Query:" + st.getUnfolding(XESEOConstants.qTraceEvt_Simple));
+            return true;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return false;
+        }
+
     }
 
     private XAttribute createXAttribute(String type, String key, String value, XExtension extension) {
@@ -125,6 +140,7 @@ public class SimpleEBDAReasonerImpl {
 
     public void dispose() {
         try {
+            questReasoner.getConnection().close();
             this.questReasoner.dispose();
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -132,11 +148,9 @@ public class SimpleEBDAReasonerImpl {
     }
 
     public Map<String, XAttribute> getAttributes() {
+        Map<String, XAttribute> attributes = new HashMap<>();
         try {
-
-            Map<String, XAttribute> attributes = new HashMap<>();
-            QuestOWLConnection conn = questReasoner.getConnection();
-            QuestOWLStatement st = conn.createStatement();
+            QuestOWLStatement st = questReasoner.getConnection().createStatement();
 
             long start = System.currentTimeMillis();
             QuestOWLResultSet resultSet = st.executeTuple(XESEOConstants.qAttTypeKeyVal_Simple);
@@ -146,7 +160,7 @@ public class SimpleEBDAReasonerImpl {
             while (resultSet.nextRow()) {
                 try {
                     String attributeKey = resultSet.getOWLObject(XESEOConstants.qAttTypeKeyVal_SimpleAnsVarAtt).toString();
-                    String type = resultSet.getOWLLiteral(XESEOConstants.qAttTypeAnsVarAttType).getLiteral();
+                    String type = resultSet.getOWLLiteral(XESEOConstants.qAttTypeKeyVal_SimpleAnsVarAttType).getLiteral();
                     String key = resultSet.getOWLLiteral(XESEOConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
                     String value = resultSet.getOWLLiteral(XESEOConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
 
@@ -164,19 +178,16 @@ public class SimpleEBDAReasonerImpl {
             logger.info("Finished extracting " + attributes.size() + " attributes in " + (System.currentTimeMillis() - start) + "ms");
             resultSet.close();
             st.close();
-            conn.close();
-            return attributes;
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        return null;
+        return attributes;
     }
 
     public Map<String, XEvent> getEvents(Map<String, XAttribute> attributes) {
+        Map<String, XEvent> events = new HashMap<>();
         try {
-            Map<String, XEvent> events = new HashMap<>();
-            QuestOWLConnection conn = questReasoner.getConnection();
-            QuestOWLStatement st = conn.createStatement();
+            QuestOWLStatement st = questReasoner.getConnection().createStatement();
 
             long start = System.currentTimeMillis();
             QuestOWLResultSet resultSet = st.executeTuple(XESEOConstants.qEvtAtt_Simple);
@@ -185,39 +196,38 @@ public class SimpleEBDAReasonerImpl {
             while (resultSet.nextRow()) {
                 try {
                     String eventKey = resultSet.getOWLObject(XESEOConstants.qEvtAtt_SimpleAnsVarEvent).toString();
-
                     XEvent event = events.get(eventKey);
                     if (event == null) {
                         event = new XEventImpl();
                         events.put(eventKey, event);
                     }
-
-                    String attributeKey = resultSet.getOWLObject(XESEOConstants.qEvtAtt_SimpleAnsVarAtt).toString();
-                    XAttribute attribute = attributes.get(attributeKey);
-                    if (attribute != null) {
-                        event.getAttributes().put(attribute.getKey(), attribute);
+                    try {
+                        String attributeKey = resultSet.getOWLObject(XESEOConstants.qEvtAtt_SimpleAnsVarAtt).toString();
+                        XAttribute attribute = attributes.get(attributeKey);
+                        if (attribute != null) {
+                            event.getAttributes().put(attribute.getKey(), attribute);
+                        }
+                    } catch (Exception e) {
+                        logger.error(e.getMessage());
                     }
                 } catch (Exception e) {
                     logger.error(e.getMessage());
                 }
+
             }
             logger.info("Finished extracting " + events.size() + " events in " + (System.currentTimeMillis() - start) + "ms");
             resultSet.close();
             st.close();
-            conn.close();
-            return events;
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        return null;
+        return events;
     }
 
     public Collection<XTrace> getTraces(Map<String, XEvent> events, Map<String, XAttribute> attributes) {
-
+        Map<String, XTrace> traces = new HashMap<>();
         try {
-            Map<String, XTrace> traces = new HashMap<>();
-            QuestOWLConnection conn = questReasoner.getConnection();
-            QuestOWLStatement st = conn.createStatement();
+            QuestOWLStatement st = questReasoner.getConnection().createStatement();
 
             long start = System.currentTimeMillis();
             QuestOWLResultSet resultSet = st.executeTuple(XESEOConstants.qTraceAtt_Simple);
@@ -269,11 +279,9 @@ public class SimpleEBDAReasonerImpl {
             resultSet.close();
 
             st.close();
-            conn.close();
-            return traces.values();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        return null;
+        return traces.values();
     }
 }

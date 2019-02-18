@@ -32,7 +32,7 @@ import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 import it.unibz.inf.kaos.ui.utility.ZoomUtility;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -55,6 +55,8 @@ public abstract class AbstractDiagramShape<T extends Diagram> implements Diagram
   private int endX;
   @JsonIgnore
   private int endY;
+  @JsonIgnore
+  private boolean disabled;
 
   AbstractDiagramShape() {
   }
@@ -95,6 +97,15 @@ public abstract class AbstractDiagramShape<T extends Diagram> implements Diagram
     if (longName == null || longName.isEmpty())
       return getName();
     return longName;
+  }
+
+  @Override
+  public void toggleDisabled() {
+    this.disabled = !this.disabled;
+  }
+
+  public boolean isDisabled() {
+    return this.disabled;
   }
 
   @Override

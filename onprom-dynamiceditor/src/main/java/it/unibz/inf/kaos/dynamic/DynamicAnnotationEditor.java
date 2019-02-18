@@ -27,15 +27,13 @@
 package it.unibz.inf.kaos.dynamic;
 
 import it.unibz.inf.kaos.annotation.AnnotationEditor;
-import it.unibz.inf.kaos.data.AbstractActionType;
-import it.unibz.inf.kaos.data.DynamicAnnotation;
-import it.unibz.inf.kaos.data.FileType;
-import it.unibz.inf.kaos.data.UMLClass;
+import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
 import it.unibz.inf.kaos.interfaces.AnnotationFactory;
 import it.unibz.inf.kaos.interfaces.AnnotationProperties;
 import it.unibz.inf.kaos.owl.OWLImporter;
 import it.unibz.inf.kaos.owl.OWLUtility;
+import it.unibz.inf.kaos.ui.action.DiagramPanelAction;
 import it.unibz.inf.kaos.ui.action.ToolbarAction;
 import it.unibz.inf.kaos.ui.form.AnnotationSelectionDialog;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
@@ -43,7 +41,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.JToolBar;
+import javax.swing.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -133,8 +131,9 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
     @Override
     protected JToolBar createToolbar() {
         JToolBar toolBar = super.createToolbar();
-        toolBar.add(UIUtility.createToolbarButton(loadXESOntology()), 3);
-        toolBar.add(UIUtility.createToolbarButton(selectCustomUpperOntology()), 4);
+        toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.disable, this, diagramPanel)), 3);
+        toolBar.add(UIUtility.createToolbarButton(loadXESOntology()), 4);
+        toolBar.add(UIUtility.createToolbarButton(selectCustomUpperOntology()), 5);
         return toolBar;
     }
 

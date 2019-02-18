@@ -33,11 +33,8 @@ import it.unibz.inf.kaos.interfaces.AnnotationProperties;
 import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
-import javax.swing.JPanel;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -101,7 +98,11 @@ public abstract class Annotation extends AbstractDiagramShape<AnnotationDiagram>
         }
         rectangleWidth += 3 * DrawingUtility.MARGIN;
         //draw a rectangle for the box using font and background color
-        g2d.setColor(bgColor);
+        if (this.isDisabled()) {
+            g2d.setColor(Color.GRAY);
+        } else {
+            g2d.setColor(bgColor);
+        }
         g2d.fillRect(startX, startY, rectangleWidth, rectangleHeight);
         //draw line between the class and the annotation
         g2d.drawLine(startX + rectangleWidth / 2, startY + rectangleHeight / 2, getRelatedClass().getCenterX(),

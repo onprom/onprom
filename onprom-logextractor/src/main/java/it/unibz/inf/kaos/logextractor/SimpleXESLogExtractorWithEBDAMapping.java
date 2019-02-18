@@ -37,7 +37,7 @@ import org.deckfour.xes.model.XTrace;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xeslite.external.XFactoryExternalStore;
+import org.xeslite.lite.factory.XFactoryLiteImpl;
 
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -72,7 +72,7 @@ public class SimpleXESLogExtractorWithEBDAMapping {
             EBDAMapping ebdaModel = createEBDAMapping(domainOntology, obdaModel, annotation);
             if (ebdaModel != null) {
                 if (factory == null) {
-                    factory = new XFactoryExternalStore.InMemoryStoreImpl();
+                    factory = new XFactoryLiteImpl();
                 }
                 logger.info("Factory in use: " + factory.getDescription());
                 XFactoryRegistry.instance().setCurrentDefault(factory);
@@ -80,15 +80,19 @@ public class SimpleXESLogExtractorWithEBDAMapping {
                 logger.info("Start extracting XES Log from the EBDA Mapping");
                 long start = System.currentTimeMillis();
                 SimpleEBDAReasonerImpl ebdaR = new SimpleEBDAReasonerImpl(ebdaModel, factory);
-                logger.info("Initialized reasoner in " + (System.currentTimeMillis() - start) + " ms");
-                Map<String, XAttribute> attributes = ebdaR.getAttributes();
-                Map<String, XEvent> events = ebdaR.getEvents(attributes);
-                Collection<XTrace> traces = ebdaR.getTraces(events, attributes);
-                ebdaR.dispose();
-                XLog xlog = factory.createLog();
-                addDefaultExtensions(factory, xlog);
-                xlog.addAll(traces);
-                return xlog;
+                if (ebdaR.printUnfoldedQueries()) {
+                    logger.info("Initialized reasoner in " + (System.currentTimeMillis() - start) + " ms");
+                    Map<String, XAttribute> attributes = ebdaR.getAttributes();
+                    Map<String, XEvent> events = ebdaR.getEvents(attributes);
+                    Collection<XTrace> traces = ebdaR.getTraces(events, attributes);
+                    ebdaR.dispose();
+                    XLog xlog = factory.createLog();
+                    addDefaultExtensions(factory, xlog);
+                    xlog.addAll(traces);
+                    return xlog;
+                } else {
+                    logger.error("Can't unfold queries, something is wrong, please check logs");
+                }
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
