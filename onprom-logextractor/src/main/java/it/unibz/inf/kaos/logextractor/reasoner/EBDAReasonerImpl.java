@@ -662,22 +662,63 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 			//Handling Attribute Types
 			//============================================================================
 			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling XAttribute Types"));
-
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling XAttribute Types - The SPARQL query: \n\n"+XESEOConstants.qAttType));
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling XAttribute Types - The SQL query: \n\n"+st.getUnfolding(XESEOConstants.qAttType)));
         	QuestOWLResultSet rs2 = st.executeTuple(XESEOConstants.qAttType);
+        	
         	
 			while (rs2.nextRow()) {
 				attObj = rs2.getOWLObject(XESEOConstants.qAttTypeAnsVarAtt);
 				newAtt = (attObj == null? null: attObj.toString().intern()); 
 				if(newAtt == null) continue;//if the attribute is null, then skip the rest and move on
 				
+				
+
+				//////////////////////////////////////////////////////////////////////////////////////////
+				
 				//if 'attributes' already has an attribute 'att', then fetch the next row
 				//Note: if we encounter this case, then there is a chance that an attribute has either multiple
 				//key, value or type because we use distinct in the query.
 				if(attributes.containsKey(newAtt))
 					continue;
+				
+				//////////////////////////////////////////////////////////////////////////////////////////
+
 
 				typeObj = rs2.getOWLLiteral(XESEOConstants.qAttTypeAnsVarAttType); 
 				type = (typeObj == null? null: typeObj.getLiteral().intern()); 
+				
+				
+				//////////////////////////////////////////////////////////////////////////////////////////
+				//to debug whether an attribute has either multiple key, value or type 
+				//Note: to use these, don't forget to turn of the codes for skipping this case above
+				
+//				if(attributes.containsKey(newAtt)){
+//					
+//					XAtt atemp = attributes.get(newAtt);
+//					
+//					String oldTp = atemp.getClass().toString();
+//					
+//					if(atemp instanceof XAttLiteralEfficient)
+//						oldTp = "literal";
+//					else if(atemp instanceof XAttTimestampEfficient)
+//						oldTp = "timestamp";
+//						
+//					String newTp = type.trim();
+//
+//					if(!newTp.equals(oldTp)){
+//					
+//						System.out.println("============================================================");
+//						System.out.println("SERIOUS WARNING: duplicate attribute identifier: "+ newAtt);
+//						System.out.println("old: "+ oldTp);
+//						System.out.println("new: "+ newTp);
+//						System.out.println("============================================================");
+//					}
+//				}
+				
+				//END OF to debug whether an attribute has either multiple key, value or type 
+				//////////////////////////////////////////////////////////////////////////////////////////
+				
 				if(type == null) continue;//if the attribute type is null, then skip the rest and move on
 
 				try {
@@ -695,7 +736,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 					currentExecutionNote.append(String.format(LEConstants.ATT_CREATION_FAILURE, newAtt));
 					continue;
 				}
-
+				
 				attributes.put(newAtt, xatt);
 				
 			}
@@ -711,6 +752,8 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 			//Handling Attribute Keys and Extension
 			//============================================================================
 			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling XAttribute Keys"));
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling XAttribute Keys - The SPARQL query: \n\n"+XESEOConstants.qAttKey));
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling XAttribute Keys - The SQL query: \n\n"+st.getUnfolding(XESEOConstants.qAttKey)));
 
         	QuestOWLResultSet rs = st.executeTuple(XESEOConstants.qAttKey);
         	
@@ -747,6 +790,8 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 			//Handling Attribute Values
 			//============================================================================
 			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling XAttribute Values"));
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling XAttribute Values - The SPARQL query: \n\n"+XESEOConstants.qAttValue));
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling XAttribute Values - The SQL query: \n\n"+st.getUnfolding(XESEOConstants.qAttValue)));
 
         	QuestOWLResultSet rs3 = st.executeTuple(XESEOConstants.qAttValue);
 
@@ -1897,6 +1942,9 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	
 			//logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, 
 			//	"Querying the relations between events and their attributes"));
+
+        	logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling Events - The SPARQL query: \n\n"+XESEOConstants.qEvtAtt_Simple));
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling Events - The SQL query: \n\n"+st.getUnfolding(XESEOConstants.qEvtAtt_Simple)));
 
 			rs = st.executeTuple(XESEOConstants.qEvtAtt_Simple);
 			
@@ -4203,7 +4251,9 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 			//Handling ALL Traces 
 			//====================================================================================================
 			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling ALL traces"));
-				
+        	logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling ALL traces - The SPARQL query: \n\n"+XESEOConstants.qTrace_Simple));
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling Events - The SQL query: \n\n"+st.getUnfolding(XESEOConstants.qTrace_Simple)));
+
 				QuestOWLResultSet rs3 = st.executeTuple(XESEOConstants.qTrace_Simple);
 				
 				while (rs3.nextRow()) {
@@ -4234,6 +4284,8 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 			//Handling traces events
 	        //====================================================================================================
 			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling traces events"));
+        	logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling traces events - The SPARQL query: \n\n"+XESEOConstants.qTraceEvt_Simple));
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling traces events - The SQL query: \n\n"+st.getUnfolding(XESEOConstants.qTraceEvt_Simple)));
 
 				QuestOWLResultSet rs = st.executeTuple(XESEOConstants.qTraceEvt_Simple);				
 				
@@ -4287,7 +4339,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 											+ "One possible reason: there is a mismatch between the XES attribute type and some reserved XES attribute key. "
 											+ "E.g., if the AnnotationQueries says that a certain attribute with the key='time:timestamp' has the type literal, then an exception might be thrown here ");
 									
-									/*
+									
 									XAttribute timestamp = xevt.getAttributes().get("time:timestamp");
 									if (!(timestamp instanceof XAttTimestampEfficient)) {
 										logger.error(
@@ -4296,7 +4348,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 												" TS Value: " + timestamp + " TS Class: " + timestamp.getClass());
 									}
 									logger.error(e.getMessage(), e);
-									*/
+									
 								}
 							}
 						}
@@ -4314,6 +4366,8 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 			//Handling Traces Attributes
 	        //====================================================================================================
 			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling traces attributes"));
+        	logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling traces attributes - The SPARQL query: \n\n"+XESEOConstants.qTraceAtt_Simple));
+			logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, "Handling traces attributes - The SQL query: \n\n"+st.getUnfolding(XESEOConstants.qTraceAtt_Simple)));
 
 				QuestOWLResultSet rs2 = st.executeTuple(XESEOConstants.qTraceAtt_Simple);
 		
