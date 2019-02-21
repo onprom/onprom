@@ -1,0 +1,488 @@
+{
+  "@class" : "it.unibz.inf.kaos.data.query.AnnotationQueries",
+  "queries" : [ "java.util.LinkedHashSet", [ {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_174780778) (\"lifecycle:transition\" AS ?_I1_174780778) (\"START\" AS ?_I2_174780778)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_174780778", "_I1_174780778", "_I2_174780778" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_174780778) (\"lifecycle:transition\" AS ?_I1_174780778) (\"START\" AS ?_I2_174780778)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_174780778", "_I1_174780778", "_I2_174780778" ],
+    "secondComponent" : [ "_I0_174780778" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"lifecycle:transition\" AS ?_I1_174780778) (\"literal\" AS ?_I0_174780778) (\"START\" AS ?_I2_174780778)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_174780778", "_I1_174780778", "_I2_174780778" ],
+    "secondComponent" : [ "_I1_174780778" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"START\" AS ?_I2_174780778) (\"literal\" AS ?_I0_174780778) (\"lifecycle:transition\" AS ?_I1_174780778)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_174780778", "_I1_174780778", "_I2_174780778" ],
+    "secondComponent" : [ "_I2_174780778" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_174780778) (\"lifecycle:transition\" AS ?_I1_174780778) (\"START\" AS ?_I2_174780778) (\"SubCaseStart\" AS ?_L_47946759) ?Case\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event .\n    ?Case     <http://onprom.inf.unibz.it/c-contains-s>  ?SubCase}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_47946759", "Case" ],
+    "secondComponent" : [ "Event", "_I0_174780778", "_I1_174780778", "_I2_174780778" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_2093585290) (\"sid\" AS ?_I1_2093585290) ?_I2_2093585290\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event ;\n              <http://onprom.inf.unibz.it/sName>  ?_I2_2093585290}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_2093585290", "_I1_2093585290", "_I2_2093585290" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_2093585290) (\"sid\" AS ?_I1_2093585290) ?_I2_2093585290\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event ;\n              <http://onprom.inf.unibz.it/sName>  ?_I2_2093585290}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_2093585290", "_I1_2093585290", "_I2_2093585290" ],
+    "secondComponent" : [ "_I0_2093585290" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"sid\" AS ?_I1_2093585290) (\"literal\" AS ?_I0_2093585290) ?_I2_2093585290\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event ;\n              <http://onprom.inf.unibz.it/sName>  ?_I2_2093585290}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_2093585290", "_I1_2093585290", "_I2_2093585290" ],
+    "secondComponent" : [ "_I1_2093585290" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I2_2093585290 (\"literal\" AS ?_I0_2093585290) (\"sid\" AS ?_I1_2093585290)\nWHERE\n  { ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event ;\n              <http://onprom.inf.unibz.it/sName>  ?_I2_2093585290}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_2093585290", "_I1_2093585290", "_I2_2093585290" ],
+    "secondComponent" : [ "_I2_2093585290" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_2093585290) (\"sid\" AS ?_I1_2093585290) ?_I2_2093585290 (\"SubCaseComplete\" AS ?_L_480791491) ?Case\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event ;\n              <http://onprom.inf.unibz.it/sName>  ?_I2_2093585290 ;\n              <http://onprom.inf.unibz.it/s-contains-e>  ?Event .\n    ?Case     <http://onprom.inf.unibz.it/c-contains-s>  ?SubCase}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_480791491", "Case" ],
+    "secondComponent" : [ "Event", "_I0_2093585290", "_I1_2093585290", "_I2_2093585290" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Case (\"literal\" AS ?_I0_1848587562) (\"concept:name\" AS ?_I1_1848587562) ?_I2_1848587562\nWHERE\n  { ?Case  a                     <http://onprom.inf.unibz.it/Case> ;\n           <http://onprom.inf.unibz.it/cName>  ?_I2_1848587562}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Case", "_I0_1848587562", "_I1_1848587562", "_I2_1848587562" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Case (\"literal\" AS ?_I0_1848587562) (\"concept:name\" AS ?_I1_1848587562) ?_I2_1848587562\nWHERE\n  { ?Case  a                     <http://onprom.inf.unibz.it/Case> ;\n           <http://onprom.inf.unibz.it/cName>  ?_I2_1848587562}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Case", "_I0_1848587562", "_I1_1848587562", "_I2_1848587562" ],
+    "secondComponent" : [ "_I0_1848587562" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Case (\"concept:name\" AS ?_I1_1848587562) (\"literal\" AS ?_I0_1848587562) ?_I2_1848587562\nWHERE\n  { ?Case  a                     <http://onprom.inf.unibz.it/Case> ;\n           <http://onprom.inf.unibz.it/cName>  ?_I2_1848587562}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Case", "_I0_1848587562", "_I1_1848587562", "_I2_1848587562" ],
+    "secondComponent" : [ "_I1_1848587562" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Case ?_I2_1848587562 (\"literal\" AS ?_I0_1848587562) (\"concept:name\" AS ?_I1_1848587562)\nWHERE\n  { ?Case  <http://onprom.inf.unibz.it/cName>  ?_I2_1848587562}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Case", "_I0_1848587562", "_I1_1848587562", "_I2_1848587562" ],
+    "secondComponent" : [ "_I2_1848587562" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Case (\"literal\" AS ?_I0_1848587562) (\"concept:name\" AS ?_I1_1848587562) ?_I2_1848587562\nWHERE\n  { ?Case  a                     <http://onprom.inf.unibz.it/Case> ;\n           <http://onprom.inf.unibz.it/cName>  ?_I2_1848587562}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-has-a",
+    "firstComponent" : [ "Case" ],
+    "secondComponent" : [ "Case", "_I0_1848587562", "_I1_1848587562", "_I2_1848587562" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_1693327395) (\"concept:name\" AS ?_I1_1693327395) ?_I2_1693327395\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_1693327395}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_1693327395", "_I1_1693327395", "_I2_1693327395" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_1693327395) (\"concept:name\" AS ?_I1_1693327395) ?_I2_1693327395\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_1693327395}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_1693327395", "_I1_1693327395", "_I2_1693327395" ],
+    "secondComponent" : [ "_I0_1693327395" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"concept:name\" AS ?_I1_1693327395) (\"literal\" AS ?_I0_1693327395) ?_I2_1693327395\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_1693327395}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_1693327395", "_I1_1693327395", "_I2_1693327395" ],
+    "secondComponent" : [ "_I1_1693327395" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I2_1693327395 (\"literal\" AS ?_I0_1693327395) (\"concept:name\" AS ?_I1_1693327395)\nWHERE\n  { ?Event  <http://onprom.inf.unibz.it/eName>  ?_I2_1693327395}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_1693327395", "_I1_1693327395", "_I2_1693327395" ],
+    "secondComponent" : [ "_I2_1693327395" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_1693327395) (\"concept:name\" AS ?_I1_1693327395) ?_I2_1693327395 (\"SubCaseStart\" AS ?_L_47946759) ?Case\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> ;\n              <http://onprom.inf.unibz.it/eName>  ?_I2_1693327395 .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event .\n    ?Case     <http://onprom.inf.unibz.it/c-contains-s>  ?SubCase}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_47946759", "Case" ],
+    "secondComponent" : [ "Event", "_I0_1693327395", "_I1_1693327395", "_I2_1693327395" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"timestamp\" AS ?_I0_1828255542) (\"time:timestamp\" AS ?_I1_1828255542) ?_I2_1828255542\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/startTS>  ?_I2_1828255542}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_1828255542", "_I1_1828255542", "_I2_1828255542" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"timestamp\" AS ?_I0_1828255542) (\"time:timestamp\" AS ?_I1_1828255542) ?_I2_1828255542\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/startTS>  ?_I2_1828255542}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_1828255542", "_I1_1828255542", "_I2_1828255542" ],
+    "secondComponent" : [ "_I0_1828255542" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"time:timestamp\" AS ?_I1_1828255542) (\"timestamp\" AS ?_I0_1828255542) ?_I2_1828255542\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/startTS>  ?_I2_1828255542}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_1828255542", "_I1_1828255542", "_I2_1828255542" ],
+    "secondComponent" : [ "_I1_1828255542" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I2_1828255542 (\"timestamp\" AS ?_I0_1828255542) (\"time:timestamp\" AS ?_I1_1828255542)\nWHERE\n  { ?Event  <http://onprom.inf.unibz.it/startTS>  ?_I2_1828255542}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_1828255542", "_I1_1828255542", "_I2_1828255542" ],
+    "secondComponent" : [ "_I2_1828255542" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"timestamp\" AS ?_I0_1828255542) (\"time:timestamp\" AS ?_I1_1828255542) ?_I2_1828255542 (\"SubCaseStart\" AS ?_L_47946759) ?Case\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> ;\n              <http://onprom.inf.unibz.it/startTS>  ?_I2_1828255542 .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event .\n    ?Case     <http://onprom.inf.unibz.it/c-contains-s>  ?SubCase}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_47946759", "Case" ],
+    "secondComponent" : [ "Event", "_I0_1828255542", "_I1_1828255542", "_I2_1828255542" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"timestamp\" AS ?_I0_1235762943) (\"time:timestamp\" AS ?_I1_1235762943) ?_I2_1235762943\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/endTS>  ?_I2_1235762943}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_1235762943", "_I1_1235762943", "_I2_1235762943" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"timestamp\" AS ?_I0_1235762943) (\"time:timestamp\" AS ?_I1_1235762943) ?_I2_1235762943\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/endTS>  ?_I2_1235762943}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_1235762943", "_I1_1235762943", "_I2_1235762943" ],
+    "secondComponent" : [ "_I0_1235762943" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"time:timestamp\" AS ?_I1_1235762943) (\"timestamp\" AS ?_I0_1235762943) ?_I2_1235762943\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/endTS>  ?_I2_1235762943}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_1235762943", "_I1_1235762943", "_I2_1235762943" ],
+    "secondComponent" : [ "_I1_1235762943" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I2_1235762943 (\"timestamp\" AS ?_I0_1235762943) (\"time:timestamp\" AS ?_I1_1235762943)\nWHERE\n  { ?Event  <http://onprom.inf.unibz.it/endTS>  ?_I2_1235762943}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_1235762943", "_I1_1235762943", "_I2_1235762943" ],
+    "secondComponent" : [ "_I2_1235762943" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"timestamp\" AS ?_I0_1235762943) (\"time:timestamp\" AS ?_I1_1235762943) ?_I2_1235762943 (\"SubCaseComplete\" AS ?_L_480791491) ?Case\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> ;\n              <http://onprom.inf.unibz.it/endTS>  ?_I2_1235762943 .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event .\n    ?Case     <http://onprom.inf.unibz.it/c-contains-s>  ?SubCase}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_480791491", "Case" ],
+    "secondComponent" : [ "Event", "_I0_1235762943", "_I1_1235762943", "_I2_1235762943" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_54202402) (\"lifecycle:transition\" AS ?_I1_54202402) (\"START\" AS ?_I2_54202402)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_54202402", "_I1_54202402", "_I2_54202402" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_54202402) (\"lifecycle:transition\" AS ?_I1_54202402) (\"START\" AS ?_I2_54202402)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_54202402", "_I1_54202402", "_I2_54202402" ],
+    "secondComponent" : [ "_I0_54202402" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"lifecycle:transition\" AS ?_I1_54202402) (\"literal\" AS ?_I0_54202402) (\"START\" AS ?_I2_54202402)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_54202402", "_I1_54202402", "_I2_54202402" ],
+    "secondComponent" : [ "_I1_54202402" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"START\" AS ?_I2_54202402) (\"literal\" AS ?_I0_54202402) (\"lifecycle:transition\" AS ?_I1_54202402)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_54202402", "_I1_54202402", "_I2_54202402" ],
+    "secondComponent" : [ "_I2_54202402" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_54202402) (\"lifecycle:transition\" AS ?_I1_54202402) (\"START\" AS ?_I2_54202402) (\"CaseStart\" AS ?_L_1478648670) ?_E1_1478648670 ?Case\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/startTS>  ?_E1_1478648670 .\n    ?Case   <http://onprom.inf.unibz.it/c-contains-e>  ?Event}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_1478648670", "_E1_1478648670", "Case" ],
+    "secondComponent" : [ "Event", "_I0_54202402", "_I1_54202402", "_I2_54202402" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"SubCaseStart\" AS ?_L_47946759) ?Case\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event .\n    ?Case     <http://onprom.inf.unibz.it/c-contains-s>  ?SubCase}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Event",
+    "component" : [ "Event", "_L_47946759", "Case" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?Case (\"SubCaseStart\" AS ?_L_47946759)\nWHERE\n  { ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event .\n    ?Case     <http://onprom.inf.unibz.it/c-contains-s>  ?SubCase}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Case" ],
+    "secondComponent" : [ "Event", "_L_47946759", "Case" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_640828973) (\"concept:name\" AS ?_I1_640828973) ?_I2_640828973\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_640828973}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_640828973", "_I1_640828973", "_I2_640828973" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_640828973) (\"concept:name\" AS ?_I1_640828973) ?_I2_640828973\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_640828973}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_640828973", "_I1_640828973", "_I2_640828973" ],
+    "secondComponent" : [ "_I0_640828973" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"concept:name\" AS ?_I1_640828973) (\"literal\" AS ?_I0_640828973) ?_I2_640828973\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_640828973}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_640828973", "_I1_640828973", "_I2_640828973" ],
+    "secondComponent" : [ "_I1_640828973" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I2_640828973 (\"literal\" AS ?_I0_640828973) (\"concept:name\" AS ?_I1_640828973)\nWHERE\n  { ?Event  <http://onprom.inf.unibz.it/eName>  ?_I2_640828973}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_640828973", "_I1_640828973", "_I2_640828973" ],
+    "secondComponent" : [ "_I2_640828973" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_640828973) (\"concept:name\" AS ?_I1_640828973) ?_I2_640828973 (\"SubCaseComplete\" AS ?_L_480791491) ?Case\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> ;\n              <http://onprom.inf.unibz.it/eName>  ?_I2_640828973 .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event .\n    ?Case     <http://onprom.inf.unibz.it/c-contains-s>  ?SubCase}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_480791491", "Case" ],
+    "secondComponent" : [ "Event", "_I0_640828973", "_I1_640828973", "_I2_640828973" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"CaseComplete\" AS ?_L_1469344945) ?_E1_1469344945 ?Case\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/endTS>  ?_E1_1469344945 .\n    ?Case   <http://onprom.inf.unibz.it/c-contains-e>  ?Event}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Event",
+    "component" : [ "Event", "_L_1469344945", "_E1_1469344945", "Case" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?Case (\"CaseComplete\" AS ?_L_1469344945) ?_E1_1469344945\nWHERE\n  { ?Case   <http://onprom.inf.unibz.it/c-contains-e>  ?Event .\n    ?Event  <http://onprom.inf.unibz.it/endTS>  ?_E1_1469344945}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Case" ],
+    "secondComponent" : [ "Event", "_L_1469344945", "_E1_1469344945", "Case" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_977701166) (\"concept:name\" AS ?_I1_977701166) ?_I2_977701166\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_977701166}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_977701166", "_I1_977701166", "_I2_977701166" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_977701166) (\"concept:name\" AS ?_I1_977701166) ?_I2_977701166\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_977701166}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_977701166", "_I1_977701166", "_I2_977701166" ],
+    "secondComponent" : [ "_I0_977701166" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"concept:name\" AS ?_I1_977701166) (\"literal\" AS ?_I0_977701166) ?_I2_977701166\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_977701166}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_977701166", "_I1_977701166", "_I2_977701166" ],
+    "secondComponent" : [ "_I1_977701166" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I2_977701166 (\"literal\" AS ?_I0_977701166) (\"concept:name\" AS ?_I1_977701166)\nWHERE\n  { ?Event  <http://onprom.inf.unibz.it/eName>  ?_I2_977701166}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_977701166", "_I1_977701166", "_I2_977701166" ],
+    "secondComponent" : [ "_I2_977701166" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_977701166) (\"concept:name\" AS ?_I1_977701166) ?_I2_977701166 (\"CaseComplete\" AS ?_L_1469344945) ?_E1_1469344945 ?Case\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_977701166 ;\n            <http://onprom.inf.unibz.it/endTS>  ?_E1_1469344945 .\n    ?Case   <http://onprom.inf.unibz.it/c-contains-e>  ?Event}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_1469344945", "_E1_1469344945", "Case" ],
+    "secondComponent" : [ "Event", "_I0_977701166", "_I1_977701166", "_I2_977701166" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_1950406314) (\"lifecycle:transition\" AS ?_I1_1950406314) (\"COMPLETE\" AS ?_I2_1950406314)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_1950406314", "_I1_1950406314", "_I2_1950406314" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_1950406314) (\"lifecycle:transition\" AS ?_I1_1950406314) (\"COMPLETE\" AS ?_I2_1950406314)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_1950406314", "_I1_1950406314", "_I2_1950406314" ],
+    "secondComponent" : [ "_I0_1950406314" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"lifecycle:transition\" AS ?_I1_1950406314) (\"literal\" AS ?_I0_1950406314) (\"COMPLETE\" AS ?_I2_1950406314)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_1950406314", "_I1_1950406314", "_I2_1950406314" ],
+    "secondComponent" : [ "_I1_1950406314" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"COMPLETE\" AS ?_I2_1950406314) (\"literal\" AS ?_I0_1950406314) (\"lifecycle:transition\" AS ?_I1_1950406314)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_1950406314", "_I1_1950406314", "_I2_1950406314" ],
+    "secondComponent" : [ "_I2_1950406314" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_1950406314) (\"lifecycle:transition\" AS ?_I1_1950406314) (\"COMPLETE\" AS ?_I2_1950406314) (\"SubCaseComplete\" AS ?_L_480791491) ?Case\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event .\n    ?Case     <http://onprom.inf.unibz.it/c-contains-s>  ?SubCase}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_480791491", "Case" ],
+    "secondComponent" : [ "Event", "_I0_1950406314", "_I1_1950406314", "_I2_1950406314" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_106876725) (\"sid\" AS ?_I1_106876725) ?_I2_106876725\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event ;\n              <http://onprom.inf.unibz.it/sName>  ?_I2_106876725}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_106876725", "_I1_106876725", "_I2_106876725" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_106876725) (\"sid\" AS ?_I1_106876725) ?_I2_106876725\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event ;\n              <http://onprom.inf.unibz.it/sName>  ?_I2_106876725}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_106876725", "_I1_106876725", "_I2_106876725" ],
+    "secondComponent" : [ "_I0_106876725" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"sid\" AS ?_I1_106876725) (\"literal\" AS ?_I0_106876725) ?_I2_106876725\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event ;\n              <http://onprom.inf.unibz.it/sName>  ?_I2_106876725}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_106876725", "_I1_106876725", "_I2_106876725" ],
+    "secondComponent" : [ "_I1_106876725" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I2_106876725 (\"literal\" AS ?_I0_106876725) (\"sid\" AS ?_I1_106876725)\nWHERE\n  { ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event ;\n              <http://onprom.inf.unibz.it/sName>  ?_I2_106876725}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_106876725", "_I1_106876725", "_I2_106876725" ],
+    "secondComponent" : [ "_I2_106876725" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_106876725) (\"sid\" AS ?_I1_106876725) ?_I2_106876725 (\"SubCaseStart\" AS ?_L_47946759) ?Case\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event ;\n              <http://onprom.inf.unibz.it/sName>  ?_I2_106876725 ;\n              <http://onprom.inf.unibz.it/s-contains-e>  ?Event .\n    ?Case     <http://onprom.inf.unibz.it/c-contains-s>  ?SubCase}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_47946759", "Case" ],
+    "secondComponent" : [ "Event", "_I0_106876725", "_I1_106876725", "_I2_106876725" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"SubCaseComplete\" AS ?_L_480791491) ?Case\nWHERE\n  { ?Event    a                     <http://onprom.inf.unibz.it/Event> .\n    ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event .\n    ?Case     <http://onprom.inf.unibz.it/c-contains-s>  ?SubCase}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Event",
+    "component" : [ "Event", "_L_480791491", "Case" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?Case (\"SubCaseComplete\" AS ?_L_480791491)\nWHERE\n  { ?SubCase  <http://onprom.inf.unibz.it/s-contains-e>  ?Event .\n    ?Case     <http://onprom.inf.unibz.it/c-contains-s>  ?SubCase}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Case" ],
+    "secondComponent" : [ "Event", "_L_480791491", "Case" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"timestamp\" AS ?_I0_1445175117) (\"time:timestamp\" AS ?_I1_1445175117) ?_I2_1445175117\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/startTS>  ?_I2_1445175117}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_1445175117", "_I1_1445175117", "_I2_1445175117" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"timestamp\" AS ?_I0_1445175117) (\"time:timestamp\" AS ?_I1_1445175117) ?_I2_1445175117\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/startTS>  ?_I2_1445175117}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_1445175117", "_I1_1445175117", "_I2_1445175117" ],
+    "secondComponent" : [ "_I0_1445175117" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"time:timestamp\" AS ?_I1_1445175117) (\"timestamp\" AS ?_I0_1445175117) ?_I2_1445175117\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/startTS>  ?_I2_1445175117}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_1445175117", "_I1_1445175117", "_I2_1445175117" ],
+    "secondComponent" : [ "_I1_1445175117" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I2_1445175117 (\"timestamp\" AS ?_I0_1445175117) (\"time:timestamp\" AS ?_I1_1445175117)\nWHERE\n  { ?Event  <http://onprom.inf.unibz.it/startTS>  ?_I2_1445175117}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_1445175117", "_I1_1445175117", "_I2_1445175117" ],
+    "secondComponent" : [ "_I2_1445175117" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"timestamp\" AS ?_I0_1445175117) (\"time:timestamp\" AS ?_I1_1445175117) ?_I2_1445175117 (\"CaseStart\" AS ?_L_1478648670) ?_E1_1478648670 ?Case\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/startTS>  ?_I2_1445175117 ;\n            <http://onprom.inf.unibz.it/startTS>  ?_E1_1478648670 .\n    ?Case   <http://onprom.inf.unibz.it/c-contains-e>  ?Event}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_1478648670", "_E1_1478648670", "Case" ],
+    "secondComponent" : [ "Event", "_I0_1445175117", "_I1_1445175117", "_I2_1445175117" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_1138311213) (\"concept:name\" AS ?_I1_1138311213) ?_I2_1138311213\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_1138311213}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_1138311213", "_I1_1138311213", "_I2_1138311213" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_1138311213) (\"concept:name\" AS ?_I1_1138311213) ?_I2_1138311213\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_1138311213}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_1138311213", "_I1_1138311213", "_I2_1138311213" ],
+    "secondComponent" : [ "_I0_1138311213" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"concept:name\" AS ?_I1_1138311213) (\"literal\" AS ?_I0_1138311213) ?_I2_1138311213\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_1138311213}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_1138311213", "_I1_1138311213", "_I2_1138311213" ],
+    "secondComponent" : [ "_I1_1138311213" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I2_1138311213 (\"literal\" AS ?_I0_1138311213) (\"concept:name\" AS ?_I1_1138311213)\nWHERE\n  { ?Event  <http://onprom.inf.unibz.it/eName>  ?_I2_1138311213}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_1138311213", "_I1_1138311213", "_I2_1138311213" ],
+    "secondComponent" : [ "_I2_1138311213" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_1138311213) (\"concept:name\" AS ?_I1_1138311213) ?_I2_1138311213 (\"CaseStart\" AS ?_L_1478648670) ?_E1_1478648670 ?Case\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/eName>  ?_I2_1138311213 ;\n            <http://onprom.inf.unibz.it/startTS>  ?_E1_1478648670 .\n    ?Case   <http://onprom.inf.unibz.it/c-contains-e>  ?Event}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_1478648670", "_E1_1478648670", "Case" ],
+    "secondComponent" : [ "Event", "_I0_1138311213", "_I1_1138311213", "_I2_1138311213" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Case\nWHERE\n  { ?Case  a                     <http://onprom.inf.unibz.it/Case>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Trace",
+    "component" : [ "Case" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_1621822033) (\"lifecycle:transition\" AS ?_I1_1621822033) (\"COMPLETE\" AS ?_I2_1621822033)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_1621822033", "_I1_1621822033", "_I2_1621822033" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_1621822033) (\"lifecycle:transition\" AS ?_I1_1621822033) (\"COMPLETE\" AS ?_I2_1621822033)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_1621822033", "_I1_1621822033", "_I2_1621822033" ],
+    "secondComponent" : [ "_I0_1621822033" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"lifecycle:transition\" AS ?_I1_1621822033) (\"literal\" AS ?_I0_1621822033) (\"COMPLETE\" AS ?_I2_1621822033)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_1621822033", "_I1_1621822033", "_I2_1621822033" ],
+    "secondComponent" : [ "_I1_1621822033" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"COMPLETE\" AS ?_I2_1621822033) (\"literal\" AS ?_I0_1621822033) (\"lifecycle:transition\" AS ?_I1_1621822033)\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_1621822033", "_I1_1621822033", "_I2_1621822033" ],
+    "secondComponent" : [ "_I2_1621822033" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"literal\" AS ?_I0_1621822033) (\"lifecycle:transition\" AS ?_I1_1621822033) (\"COMPLETE\" AS ?_I2_1621822033) (\"CaseComplete\" AS ?_L_1469344945) ?_E1_1469344945 ?Case\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/endTS>  ?_E1_1469344945 .\n    ?Case   <http://onprom.inf.unibz.it/c-contains-e>  ?Event}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_1469344945", "_E1_1469344945", "Case" ],
+    "secondComponent" : [ "Event", "_I0_1621822033", "_I1_1621822033", "_I2_1621822033" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"timestamp\" AS ?_I0_1937755395) (\"time:timestamp\" AS ?_I1_1937755395) ?_I2_1937755395\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/endTS>  ?_I2_1937755395}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Attribute",
+    "component" : [ "Event", "_I0_1937755395", "_I1_1937755395", "_I2_1937755395" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"timestamp\" AS ?_I0_1937755395) (\"time:timestamp\" AS ?_I1_1937755395) ?_I2_1937755395\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/endTS>  ?_I2_1937755395}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "Event", "_I0_1937755395", "_I1_1937755395", "_I2_1937755395" ],
+    "secondComponent" : [ "_I0_1937755395" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"time:timestamp\" AS ?_I1_1937755395) (\"timestamp\" AS ?_I0_1937755395) ?_I2_1937755395\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/endTS>  ?_I2_1937755395}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "Event", "_I0_1937755395", "_I1_1937755395", "_I2_1937755395" ],
+    "secondComponent" : [ "_I1_1937755395" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I2_1937755395 (\"timestamp\" AS ?_I0_1937755395) (\"time:timestamp\" AS ?_I1_1937755395)\nWHERE\n  { ?Event  <http://onprom.inf.unibz.it/endTS>  ?_I2_1937755395}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "Event", "_I0_1937755395", "_I1_1937755395", "_I2_1937755395" ],
+    "secondComponent" : [ "_I2_1937755395" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"timestamp\" AS ?_I0_1937755395) (\"time:timestamp\" AS ?_I1_1937755395) ?_I2_1937755395 (\"CaseComplete\" AS ?_L_1469344945) ?_E1_1469344945 ?Case\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/endTS>  ?_I2_1937755395 ;\n            <http://onprom.inf.unibz.it/endTS>  ?_E1_1469344945 .\n    ?Case   <http://onprom.inf.unibz.it/c-contains-e>  ?Event}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "Event", "_L_1469344945", "_E1_1469344945", "Case" ],
+    "secondComponent" : [ "Event", "_I0_1937755395", "_I1_1937755395", "_I2_1937755395" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event (\"CaseStart\" AS ?_L_1478648670) ?_E1_1478648670 ?Case\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/Event> ;\n            <http://onprom.inf.unibz.it/startTS>  ?_E1_1478648670 .\n    ?Case   <http://onprom.inf.unibz.it/c-contains-e>  ?Event}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Event",
+    "component" : [ "Event", "_L_1478648670", "_E1_1478648670", "Case" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?Case (\"CaseStart\" AS ?_L_1478648670) ?_E1_1478648670\nWHERE\n  { ?Case   <http://onprom.inf.unibz.it/c-contains-e>  ?Event .\n    ?Event  <http://onprom.inf.unibz.it/startTS>  ?_E1_1478648670}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Case" ],
+    "secondComponent" : [ "Event", "_L_1478648670", "_E1_1478648670", "Case" ]
+  } ] ]
+}

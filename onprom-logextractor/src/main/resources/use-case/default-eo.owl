@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://onprom.inf.unibz.it/"
+     xml:base="http://onprom.inf.unibz.it/"
+     xmlns:onprom="http://kaos.inf.unibz.it/onprom/"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://onprom.inf.unibz.it/"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://kaos.inf.unibz.it/onprom/coordinates -->
+
+    <owl:AnnotationProperty rdf:about="http://kaos.inf.unibz.it/onprom/coordinates"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://onprom.inf.unibz.it/e-has-a -->
+
+    <owl:ObjectProperty rdf:about="http://onprom.inf.unibz.it/e-has-a">
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/Event"/>
+        <rdfs:range rdf:resource="http://onprom.inf.unibz.it/Attribute"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/t-contains-e -->
+
+    <owl:ObjectProperty rdf:about="http://onprom.inf.unibz.it/t-contains-e">
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/Trace"/>
+        <rdfs:range rdf:resource="http://onprom.inf.unibz.it/Event"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/t-has-a -->
+
+    <owl:ObjectProperty rdf:about="http://onprom.inf.unibz.it/t-has-a">
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/Trace"/>
+        <rdfs:range rdf:resource="http://onprom.inf.unibz.it/Attribute"/>
+        <onprom:coordinates rdf:datatype="http://www.w3.org/2001/XMLSchema#string">52,275</onprom:coordinates>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://onprom.inf.unibz.it/attKey -->
+
+    <owl:DatatypeProperty rdf:about="http://onprom.inf.unibz.it/attKey">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/attType -->
+
+    <owl:DatatypeProperty rdf:about="http://onprom.inf.unibz.it/attType">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/attValue -->
+
+    <owl:DatatypeProperty rdf:about="http://onprom.inf.unibz.it/attValue">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://onprom.inf.unibz.it/Attribute -->
+
+    <owl:Class rdf:about="http://onprom.inf.unibz.it/Attribute">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://onprom.inf.unibz.it/attKey"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://onprom.inf.unibz.it/attType"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://onprom.inf.unibz.it/attValue"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <onprom:coordinates rdf:datatype="http://www.w3.org/2001/XMLSchema#string">268,221</onprom:coordinates>
+    </owl:Class>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/Event -->
+
+    <owl:Class rdf:about="http://onprom.inf.unibz.it/Event">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <rdf:Description>
+                        <owl:inverseOf rdf:resource="http://onprom.inf.unibz.it/t-contains-e"/>
+                    </rdf:Description>
+                </owl:onProperty>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <onprom:coordinates rdf:datatype="http://www.w3.org/2001/XMLSchema#string">297,28</onprom:coordinates>
+    </owl:Class>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/Trace -->
+
+    <owl:Class rdf:about="http://onprom.inf.unibz.it/Trace">
+        <onprom:coordinates rdf:datatype="http://www.w3.org/2001/XMLSchema#string">22,28</onprom:coordinates>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.2.5) https://github.com/owlcs/owlapi -->
+
