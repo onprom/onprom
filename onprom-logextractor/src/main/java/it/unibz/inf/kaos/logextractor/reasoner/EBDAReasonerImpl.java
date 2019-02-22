@@ -632,14 +632,14 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * @throws OWLException
 	 * @since June 2017
 	 */
-	public EfficientHashMap<XAtt> getXAttributesWithSplitQueryMO() throws OWLException{
+	public HashMap<String,XAtt> getXAttributesWithSplitQueryMO() throws OWLException{
 		
 		//init execution logging message
 		StringBuilder currentExecutionNote = new StringBuilder("EBDAReasoner:getXAttributesWithSplitQueryMO():\n");
 		int currExecNoteInitLength = currentExecutionNote.length();//to check if there is any additional execution note
 		//END OF init execution logging message
 
-        EfficientHashMap<XAtt> attributes = new EfficientHashMap<>();
+		HashMap<String,XAtt> attributes = new HashMap<String,XAtt>();
 		QuestOWLConnection conn = questReasoner.getConnection();
         QuestOWLStatement st = conn.createStatement();
         
@@ -839,7 +839,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
         //Enable the line below to debug the attributes extraction results
         if(verbose)
         	logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, 
-        			new StringBuilder("XAttributes Extraction Results:\n\n").append(Print.getStringOfXAttributes(attributes))));
+        			new StringBuilder("XAttributes Extraction Results:\n\n").append(Print.getStringOfXAttributes2(attributes))));
         
 		return attributes;
 	}	
@@ -1926,14 +1926,14 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
 	 * @since June 2017
 	 */
-	public EfficientHashMap<XEventOnPromEfficient> getXEventsOnPromUsingAtomicQueryMO(EfficientHashMap<XAtt> xattmap) throws OWLException{
+	public HashMap<String,XEventOnPromEfficient> getXEventsOnPromUsingAtomicQueryMO(HashMap<String,XAtt> xattmap) throws OWLException{
 		
 		//init execution logging message
 		StringBuilder currentExecutionNote = new StringBuilder("EBDAReasoner:getXEventsOnPromUsingAtomicQueryMO(EfficientHashMap2<XAtt> xattmap):\n");
 		int currExecNoteInitLength = currentExecutionNote.length();//to check if there is any additional execution note
 		//END OF init execution logging message
 
-        EfficientHashMap<XEventOnPromEfficient> events = new EfficientHashMap<>();
+		HashMap<String,XEventOnPromEfficient> events = new HashMap<String,XEventOnPromEfficient>();
 		QuestOWLConnection conn = questReasoner.getConnection();
         QuestOWLStatement st = conn.createStatement();
         QuestOWLResultSet rs = null;
@@ -3964,7 +3964,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
 	 * @since June 2017
 	 */
-	public EfficientHashMap<XTrace> getXTracesUsingAtomicQueriesAndWithEventMandatoryAttributesCheckMO(EfficientHashMap<XEventOnPromEfficient> xevtmap, EfficientHashMap<XAtt> xattmap) throws OWLException{
+	public HashMap<String,XTrace> getXTracesUsingAtomicQueriesAndWithEventMandatoryAttributesCheckMO(HashMap<String,XEventOnPromEfficient> xevtmap, HashMap<String,XAtt> xattmap) throws OWLException{
 		
 		//init execution logging message
 		StringBuilder currentExecutionNote = new StringBuilder(
@@ -3972,7 +3972,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 		int currExecNoteInitLength = currentExecutionNote.length();//to check if there is any additional execution note
 		//END OF init execution logging message
 
-        EfficientHashMap<XTrace> traces = new EfficientHashMap<>();
+		HashMap<String,XTrace> traces = new HashMap<String,XTrace>();
 		QuestOWLConnection conn = questReasoner.getConnection();
         QuestOWLStatement st = conn.createStatement();
 
@@ -4228,7 +4228,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 	 * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
 	 * @since June 2017
 	 */
-	public EfficientHashMap<XTrace> getXTracesUsingAtomicQueriesAndWithoutEventMandatoryAttributesCheckMO(EfficientHashMap<XEventOnPromEfficient> xevtmap, EfficientHashMap<XAtt> xattmap) throws OWLException{
+	public HashMap<String,XTrace> getXTracesUsingAtomicQueriesAndWithoutEventMandatoryAttributesCheckMO(HashMap<String,XEventOnPromEfficient> xevtmap, HashMap<String,XAtt> xattmap) throws OWLException{
 		
 		//init execution logging message
 		StringBuilder currentExecutionNote = new StringBuilder(
@@ -4236,7 +4236,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
 		int currExecNoteInitLength = currentExecutionNote.length();//to check if there is any additional execution note
 		//END OF init execution logging message
 
-        EfficientHashMap<XTrace> traces = new EfficientHashMap<>();
+		HashMap<String,XTrace> traces = new HashMap<String,XTrace>();
 		QuestOWLConnection conn = questReasoner.getConnection();
         QuestOWLStatement st = conn.createStatement();
 

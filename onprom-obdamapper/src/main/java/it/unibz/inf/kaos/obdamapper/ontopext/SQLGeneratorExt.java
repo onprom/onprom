@@ -315,6 +315,10 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 		int hpos = 0;
 		String mainColumn = "";
 		
+		//arsa:for handling repeated answer variables
+		HashSet<String> ansVarTracker = new HashSet<String>();
+		//arsa:END OF for handling repeated answer variables
+		
 		//loop for each selected variable
 		while (hit.hasNext()) {
 			
@@ -347,9 +351,36 @@ public class SQLGeneratorExt extends SQLGenerator implements SQLQueryGenerator {
 			//sb.append(", ");
 			//arsa:END OF remove type and lang answer variables
 			
+
+
 			if(!mainColumn.equals("")){
-				sb.append(mainColumn);
-				if (hit.hasNext()) {
+				
+				
+				//arsa:for handling repeated answer variables
+				//System.out.println("DEBUGAGILA - mainColumn: "+mainColumn);
+				
+				StringTokenizer strtok = new StringTokenizer(mainColumn, ",");
+				StringBuilder newMainColumn = new StringBuilder("");
+				while(strtok.hasMoreTokens()){
+					String curAnsVar = strtok.nextToken().trim();
+					
+					if(!ansVarTracker.contains(curAnsVar)){
+						ansVarTracker.add(curAnsVar);
+						
+						if (newMainColumn.length() != 0 && !curAnsVar.equals(""))
+							newMainColumn.append(", ");
+						
+						newMainColumn.append(curAnsVar);
+					}
+				}
+				//System.out.println("DEBUGAGILA - newMainColumn: "+newMainColumn);
+				sb.append(newMainColumn);
+				//sb.append(mainColumn);
+				//arsa:END OF for handling repeated answer variables
+				
+				
+				
+				if (!newMainColumn.equals("") && hit.hasNext()) {
 					sb.append(", ");
 				}
 			}

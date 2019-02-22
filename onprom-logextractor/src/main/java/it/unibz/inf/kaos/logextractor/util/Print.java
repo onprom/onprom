@@ -16,6 +16,7 @@
 package it.unibz.inf.kaos.logextractor.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -63,6 +64,25 @@ public class Print {
 							"\n\tXAttribute Type: \t"+xa.getClass().getSimpleName()+
 							"\n\tXAttribute Key: \t"+xa.getKey()+
 							"\n\tXAttribute value: \t"+xa+"\n");
+		}
+		
+		return info;
+	}
+	
+	public static StringBuilder getStringOfXAttributes2(HashMap<String,XAtt> attributes){
+
+		StringBuilder info = new StringBuilder("");
+		Collection<XAtt> values = attributes.values();
+		Iterator<XAtt> it = values.iterator();
+		
+		while(it.hasNext()){
+			
+			XAtt xa = it.next();
+			
+			info.append( 	
+					"\tXAttribute Type: \t"+xa.getClass().getSimpleName()+
+					"\n\tXAttribute Key: \t"+xa.getKey()+
+					"\n\tXAttribute value: \t"+xa+"\n");
 		}
 		
 		return info;

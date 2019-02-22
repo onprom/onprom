@@ -334,7 +334,7 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 				
 				snapshotMemory();
 				
-				EfficientHashMap<XAtt> xatts = ebdaR.getXAttributesWithSplitQueryMO();
+				HashMap<String, XAtt> xatts = ebdaR.getXAttributesWithSplitQueryMO();
 				
 				logger.info("result: "+ xatts.values().size()+" attributes are extracted.");
 	
@@ -345,7 +345,7 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 				
 				snapshotMemory();
 	
-				EfficientHashMap<XEventOnPromEfficient> xevents = ebdaR.getXEventsOnPromUsingAtomicQueryMO(xatts);
+				HashMap<String,XEventOnPromEfficient> xevents = ebdaR.getXEventsOnPromUsingAtomicQueryMO(xatts);
 	
 				logger.info("result: "+ xevents.values().size()+" events are extracted.");
 	
@@ -356,7 +356,7 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 				
 				snapshotMemory();
 	
-				EfficientHashMap<XTrace> xtraces = ebdaR.getXTracesUsingAtomicQueriesAndWithEventMandatoryAttributesCheckMO(xevents, xatts);
+				HashMap<String,XTrace> xtraces = ebdaR.getXTracesUsingAtomicQueriesAndWithEventMandatoryAttributesCheckMO(xevents, xatts);
 	
 				logger.info("result: "+ xtraces.values().size()+" traces are extracted.");
 	
@@ -461,7 +461,7 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 				
 				snapshotMemory();
 				
-				EfficientHashMap<XAtt> xatts = ebdaR.getXAttributesWithSplitQueryMO();
+				HashMap<String, XAtt> xatts = ebdaR.getXAttributesWithSplitQueryMO();
 				
 				logger.info("result: "+ xatts.values().size()+" attributes are extracted.");
 	
@@ -472,7 +472,7 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 				
 				snapshotMemory();
 	
-				EfficientHashMap<XEventOnPromEfficient> xevents = ebdaR.getXEventsOnPromUsingAtomicQueryMO(xatts);
+				HashMap<String,XEventOnPromEfficient> xevents = ebdaR.getXEventsOnPromUsingAtomicQueryMO(xatts);
 	
 				logger.info("result: "+ xevents.values().size()+" events are extracted.");
 	
@@ -483,7 +483,7 @@ public class XESLogExtractorWithEBDAMapping implements ExecutionMsgListener{
 				
 				snapshotMemory();
 	
-				EfficientHashMap<XTrace> xtraces = ebdaR.getXTracesUsingAtomicQueriesAndWithoutEventMandatoryAttributesCheckMO(xevents, xatts);
+				HashMap<String,XTrace> xtraces = ebdaR.getXTracesUsingAtomicQueriesAndWithoutEventMandatoryAttributesCheckMO(xevents, xatts);
 	
 				logger.info("result: "+ xtraces.values().size()+" traces are extracted.");
 	

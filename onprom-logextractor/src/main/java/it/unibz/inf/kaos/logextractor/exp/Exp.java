@@ -248,8 +248,8 @@ abstract class Exp {
 			XESLogExtractorWithEBDAMapping xle = new XESLogExtractorWithEBDAMapping();
 
 			//logger setting for xle
-//			xle.enableAllOntopLogger();
-//			xle.turnOnMemorySnapshot();
+			xle.enableAllOntopLogger();
+			xle.turnOnMemorySnapshot();
 			xle.setVerboseMode(true);
 			//END OF logger setting for xle
 
