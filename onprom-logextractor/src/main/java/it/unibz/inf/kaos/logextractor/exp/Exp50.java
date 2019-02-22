@@ -21,8 +21,8 @@ class Exp50 extends Exp{
 	public static void main(String[] ar){
 						
 		try{
-//			Exp50 e = new Exp50(ar[0]);
-			Exp50 e = new Exp50("");
+			Exp50 e = new Exp50(ar[0]);
+//			Exp50 e = new Exp50("");
 			e.extractXESLog(System.out);
 //			e.extractXESLogAndMappings(System.out);
 		}catch(Exception e){

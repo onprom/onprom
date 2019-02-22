@@ -21,8 +21,8 @@ class Exp10 extends Exp{
 	public static void main(String[] ar){
 						
 		try{
-//			Exp10 e = new Exp10(ar[0]);
-			Exp10 e = new Exp10("");
+			Exp10 e = new Exp10(ar[0]);
+//			Exp10 e = new Exp10("");
 			e.extractXESLog(System.out);
 //			e.extractXESLogAndMappings(System.out);
 		}catch(Exception e){

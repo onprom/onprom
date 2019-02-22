@@ -74,28 +74,28 @@ abstract class Exp {
 		this.codeName = codeName;
 
 		//read config
-//		BufferedReader reader = new BufferedReader(new FileReader(configFile));
-//		String inp = reader.readLine();
-//		String out = reader.readLine();
-//		reader.close();
-//		
-//		StringTokenizer strtok1 = new StringTokenizer(inp, ":");
-//		StringTokenizer strtok2 = new StringTokenizer(out, ":");
-//		
-//		if(strtok1.countTokens() != 2 || strtok2.countTokens() != 2)
-//			throw new Exception("Invalid Input");
-//			
-//		String in1 = strtok1.nextToken().trim();
-//		String in2 = strtok2.nextToken().trim();
-//		
-//		if(!in1.equalsIgnoreCase("INPUT") || !in2.equalsIgnoreCase("OUTPUT"))
-//			throw new Exception("Invalid Input");
-//		
-//		this.pathTestInput = strtok1.nextToken().trim();
-//		this.pathTestOutput = strtok2.nextToken().trim();		
+		BufferedReader reader = new BufferedReader(new FileReader(configFile));
+		String inp = reader.readLine();
+		String out = reader.readLine();
+		reader.close();
 		
-		this.pathTestInput = "src/main/resources/use-case/";
-		this.pathTestOutput = "src/main/resources/use-case-out/";
+		StringTokenizer strtok1 = new StringTokenizer(inp, ":");
+		StringTokenizer strtok2 = new StringTokenizer(out, ":");
+		
+		if(strtok1.countTokens() != 2 || strtok2.countTokens() != 2)
+			throw new Exception("Invalid Input");
+			
+		String in1 = strtok1.nextToken().trim();
+		String in2 = strtok2.nextToken().trim();
+		
+		if(!in1.equalsIgnoreCase("INPUT") || !in2.equalsIgnoreCase("OUTPUT"))
+			throw new Exception("Invalid Input");
+		
+		this.pathTestInput = strtok1.nextToken().trim();
+		this.pathTestOutput = strtok2.nextToken().trim();		
+		
+//		this.pathTestInput = "src/main/resources/use-case/";
+//		this.pathTestOutput = "src/main/resources/use-case-out/";
 		
 		//Input
 		this.obdaFile = obdaFile;
