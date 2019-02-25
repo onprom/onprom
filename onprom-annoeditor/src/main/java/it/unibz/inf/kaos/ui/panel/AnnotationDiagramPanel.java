@@ -35,11 +35,11 @@ import it.unibz.inf.kaos.ui.edit.AddDeleteAnnotationEdit;
 import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
 import it.unibz.inf.kaos.ui.utility.*;
 
-import javax.swing.JPanel;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.Set;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -161,24 +161,26 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     }
 
     @Override
-    public Set<NavigationalAttribute> findAttributes(UMLClass startNode, boolean functional, DataType... types) {
+    public Collection<NavigationalAttribute> findAttributes(UMLClass startNode, boolean functional, DataType... types) {
         return getClasses()
                 .map(endNode -> getNavigationalAttributes(startNode, endNode, functional, types))
-                .flatMap(Set::stream)
-                .collect(Collectors.toSet());
+                .flatMap(Collection::stream)
+                .sorted(Comparator.comparing(Object::toString))
+                .collect(Collectors.toList());
     }
 
-    private Set<NavigationalAttribute> getNavigationalAttributes(UMLClass startNode, UMLClass endNode, boolean functional, DataType[] types) {
+    private Collection<NavigationalAttribute> getNavigationalAttributes(UMLClass startNode, UMLClass endNode, boolean functional, DataType[] types) {
         return endNode.getAttributes().stream()
                 .filter(attribute -> ((types == null || types.length < 1 || Stream.of(types).anyMatch(type -> type == attribute.getType())) && NavigationUtility.isConnected(startNode, endNode, functional)))
                 .map(attribute -> new NavigationalAttribute(endNode, attribute))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override
-    public <T extends Annotation> Set<T> findAnnotations(UMLClass startNode, boolean functional, Class<T> type) {
+    public <T extends Annotation> Collection<T> findAnnotations(UMLClass startNode, boolean functional, Class<T> type) {
         return shapes.getAll(type).
                 filter(annotation -> NavigationUtility.isConnected(startNode, annotation.getRelatedClass(), functional))
-                .collect(Collectors.toSet());
+                .sorted(Comparator.comparing(Annotation::toString))
+                .collect(Collectors.toList());
     }
 }

@@ -32,7 +32,7 @@ import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.dynamic.DynamicAnnotationEditor;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
-import it.unibz.inf.kaos.logextractor.XESLogExtractorWithEBDAMapping;
+import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractorWithEBDAMapping;
 import it.unibz.inf.kaos.ui.component.*;
 import it.unibz.inf.kaos.ui.form.InformationDialog;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
@@ -50,9 +50,7 @@ import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.tree.TreePath;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -183,7 +181,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         JMenuItem exportItem = new JMenuItem("Export Log", KeyEvent.VK_E);
         exportItem.addActionListener(e -> UIUtility.executeInBackground(this::exportLog, progressBar));
         mnTools.add(exportItem);
-        JMenuItem showExportItem = new JMenuItem("Export Log using Custom Event Ontology", KeyEvent.VK_D);
+        JMenuItem showExportItem = new JMenuItem("Advanced Export", KeyEvent.VK_D);
         showExportItem.addActionListener(e -> UIUtility.executeInBackground(this::showExportDiagram, progressBar));
         mnTools.add(showExportItem);
         menuBar.add(mnTools);
@@ -283,7 +281,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
             if (ontology != null && model != null && queries != null) {
                 try {
                     long start = System.currentTimeMillis();
-                    XLog xlog = new XESLogExtractorWithEBDAMapping().extractXESLog(ontology, model, queries);
+                    XLog xlog = new SimpleXESLogExtractorWithEBDAMapping().extractXESLog(ontology, model, queries);
                     logger.debug(String.format("EXTRACTION TOOK %s SECONDS", (System.currentTimeMillis() - start) / 1000));
                     displayLogSummary(xlog);
                 } catch (Exception e) {

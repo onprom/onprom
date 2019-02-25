@@ -30,9 +30,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import it.unibz.inf.kaos.data.State;
 
-import javax.swing.JPanel;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Interface of diagram shapes
@@ -67,4 +66,5 @@ public interface DiagramShape<T extends Diagram> {
 
     java.util.Optional<? extends JPanel> getForm(T panel);
 
+    void toggleDisabled();
 }
