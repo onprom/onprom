@@ -92,8 +92,6 @@ public class LogSummaryPanel extends JInternalFrame {
         panel.add(chartPanel, gridBagConstraints);
 
         gridBagConstraints.gridy++;
-        //panel.add(UIUtility.createLabel("All Traces Available in the Log", TXT_SIZE), gridBagConstraints);
-        //gridBagConstraints.gridy++;
         DefaultListModel<String> listModel = new DefaultListModel<>();
         JList<String> list = new JList<>(listModel);
         info.getLog().forEach(trace -> {

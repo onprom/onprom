@@ -31,7 +31,7 @@ import it.unibz.inf.kaos.data.DataType;
 import it.unibz.inf.kaos.data.NavigationalAttribute;
 import it.unibz.inf.kaos.data.UMLClass;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * Interface to provide classes to use annotation diagram panel
@@ -52,7 +52,7 @@ public interface AnnotationDiagram extends Diagram {
 
     void resetAttributeStates();
 
-    Set<NavigationalAttribute> findAttributes(UMLClass startNode, boolean functional, DataType... types);
+    Collection<NavigationalAttribute> findAttributes(UMLClass startNode, boolean functional, DataType... types);
 
-    <T extends Annotation> Set<T> findAnnotations(UMLClass startNode, boolean functional, Class<T> type);
+    <T extends Annotation> Collection<T> findAnnotations(UMLClass startNode, boolean functional, Class<T> type);
 }

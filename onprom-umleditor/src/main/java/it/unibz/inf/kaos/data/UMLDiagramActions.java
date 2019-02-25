@@ -38,6 +38,7 @@ public enum UMLDiagramActions implements ActionType {
   save("save", 's', "Save Changes to the File", "Save"),
   saveas("saveas", 'a', "Save Diagram to a new JSON File", "Save As..."),
   delete("delete", 'd', "Delete Selected Object", "Delete"),
+  disable("disable", 'i', "Disable Selected Object", "Disable"),
   newdiagram("newdiagram", 'n', "New Diagram", "New"),
   print("print", 'p', "Send Diagram to Printer", "Print"),
   image("image", 'i', "Export Diagram as Image", "Export Image"),

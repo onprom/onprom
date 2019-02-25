@@ -39,6 +39,7 @@ public enum UMLEditorButtons implements Buttons {
     CANCEL("Cancel", "Cancel the operation", 'c'),
     SAVE("Save", "<u>S</u>ave the changes", 's'),
     EXPORT("Export", "Start <u>e</u>xport operation", 'e'),
+    EXPORT_OBDA("Generate OBDA", "Generate intermediate <u>O</u>BDA", 'o'),
     RESET("Reset", "<u>R</u>eset the form", 'r'),
     ADD("+", "<u>A</u>dd new attribute to the Class", 'a'),
     REMOVE("-", "<u>R</u>emove selected attribute from Class", 'r'),

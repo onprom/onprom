@@ -74,6 +74,8 @@ public class DiagramPanelAction extends ToolbarAction {
           UIUtility.executeInBackground(() -> DrawingUtility.exportImage(diagramPanel), diagramEditor.getProgressBar());
       } else if (actionType.equals(UMLDiagramActions.print)) {
           UIUtility.executeInBackground(() -> DrawingUtility.print(diagramPanel), diagramEditor.getProgressBar());
+      } else if (actionType.equals(UMLDiagramActions.disable)) {
+          diagramPanel.toggleDisabled();
       }
     diagramPanel.setCurrentAction(actionType);
   }

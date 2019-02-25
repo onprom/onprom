@@ -839,7 +839,7 @@ public class EBDAReasonerImpl extends EBDAReasonerAbstract{
         //Enable the line below to debug the attributes extraction results
         if(verbose)
         	logger.info(String.format(LEConstants.LOG_INFO_TEMPLATE, 
-        			new StringBuilder("XAttributes Extraction Results:\n\n").append(Print.getStringOfXAttributes2(attributes))));
+        			new StringBuilder("XAttributes Extraction Results:\n\n").append(Print.getStringOfXAtts(attributes))));
         
 		return attributes;
 	}	

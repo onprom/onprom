@@ -37,8 +37,7 @@ import it.unibz.inf.kaos.ui.utility.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -183,6 +182,11 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
     public void addClass(UMLClass cls) {
         UIUtility.addName(cls.getName());
         shapes.add(cls);
+        repaint();
+    }
+
+    public void toggleDisabled() {
+        shapes.getSelectedShapes().forEach(DiagramShape::toggleDisabled);
         repaint();
     }
 
