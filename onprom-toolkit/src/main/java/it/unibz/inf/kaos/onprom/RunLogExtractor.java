@@ -27,7 +27,7 @@
 package it.unibz.inf.kaos.onprom;
 
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractorWithEBDAMapping;
+import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
@@ -70,7 +70,7 @@ public class RunLogExtractor {
             // load ontologies
             OWLOntology domainOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(domainOntologyFile);
             OWLOntology eventOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(eventOntologyFile);
-            OWLOntology onpromOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(RunLogExtractor.class.getResourceAsStream("/_EVENTONTO/eo-onprom.owl"));
+            OWLOntology onpromOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(RunLogExtractor.class.getResourceAsStream("/eo-onprom.owl"));
             // start extraction process
             if (output.createNewFile()) {
                 IOUtility.readJSON(firstLevelFile, AnnotationQueries.class).ifPresent(firstLevel -> IOUtility.readJSON(secondLevelFile, AnnotationQueries.class).ifPresent(secondLevel -> {
@@ -81,7 +81,7 @@ public class RunLogExtractor {
                         new ModelIOManager(finalMapping).save(finalMappingsFile);
                         // extract log
                         new XesXmlGZIPSerializer().serialize(
-                                new SimpleXESLogExtractorWithEBDAMapping().extractXESLog(domainOntology, obdaModel, firstLevel, eventOntology, secondLevel),
+                                new SimpleXESLogExtractor().extractXESLog(domainOntology, obdaModel, firstLevel, eventOntology, secondLevel),
                                 new FileOutputStream(output)
                         );
                     } catch (Exception e) {

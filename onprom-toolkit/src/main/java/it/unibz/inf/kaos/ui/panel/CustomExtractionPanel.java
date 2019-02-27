@@ -28,7 +28,7 @@ package it.unibz.inf.kaos.ui.panel;
 
 import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractorWithEBDAMapping;
+import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
 import it.unibz.inf.kaos.onprom.OnpromToolkit;
@@ -114,7 +114,7 @@ public class CustomExtractionPanel extends JPanel {
                     if (cmbDomainOntology.getSelectedIndex() < -1 || cmbEventOntology.getSelectedIndex() < -1 || cmbMappings.getSelectedIndex() < -1 || cmbEventAnnotations.getSelectedIndex() < -1 || cmbXESAnnotations.getSelectedIndex() < -1) {
                         UIUtility.error("Please select domain ontology, OBDA mappings, custom event ontology, domain to event ontology annotations and event to XES ontology annotations!");
                     } else {
-                        xlog = new SimpleXESLogExtractorWithEBDAMapping().extractXESLog(
+                        xlog = new SimpleXESLogExtractor().extractXESLog(
                                 (OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(),
                                 (OBDAModel) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
                                 (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject(),
@@ -125,7 +125,7 @@ public class CustomExtractionPanel extends JPanel {
                 } else if (cmbDomainOntology.getSelectedIndex() < -1 || cmbMappings.getSelectedIndex() < -1 || cmbEventAnnotations.getSelectedIndex() < -1) {
                     UIUtility.error("Please select domain ontology, OBDA mappings, custom event ontology, domain to event ontology annotations and event to XES ontology annotations!");
                 } else {
-                    xlog = new SimpleXESLogExtractorWithEBDAMapping().extractXESLog((OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(), (OBDAModel) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(), (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject());
+                    xlog = new SimpleXESLogExtractor().extractXESLog((OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(), (OBDAModel) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(), (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject());
                 }
                 if (xlog != null) {
                     logger.debug(String.format("EXTRACTION TOOK %s SECONDS", (System.currentTimeMillis() - start) / 1000));

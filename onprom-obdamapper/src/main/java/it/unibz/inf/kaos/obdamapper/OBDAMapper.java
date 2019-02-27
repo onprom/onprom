@@ -1,13 +1,5 @@
 package it.unibz.inf.kaos.obdamapper;
 
-import java.text.DecimalFormat;
-import java.util.List;
-
-import org.openrdf.query.parser.QueryParserRegistry;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.rdf.rdfxml.parser.TripleLogger;
-import org.slf4j.LoggerFactory;
-
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
@@ -31,6 +23,13 @@ import it.unibz.inf.ontop.owlrefplatform.core.unfolding.DatalogUnfolder;
 import it.unibz.inf.ontop.owlrefplatform.owlapi.QuestOWL;
 import it.unibz.inf.ontop.parser.SQLQueryDeepParser;
 import it.unibz.inf.ontop.parser.TableNameVisitor;
+import org.openrdf.query.parser.QueryParserRegistry;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.rdf.rdfxml.parser.TripleLogger;
+import org.slf4j.LoggerFactory;
+
+import java.text.DecimalFormat;
+import java.util.List;
 
 public class OBDAMapper {
 
@@ -71,8 +70,8 @@ public class OBDAMapper {
 	}
 
 	public OWLOntology materializeTargetOntology(OBDAMapping obdaMapping) throws Exception{
-		
-		if(!obdaMapping.isValid() || obdaMapping == null)
+
+		if (obdaMapping == null || !obdaMapping.isValid())
 			throw new Exception("Invalid OBDAMapping input");
 			//TODO: create a better exception? A more informative one?
 

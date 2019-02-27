@@ -52,7 +52,7 @@ public class OBDAMappingImpl extends OBDAMappingAbstractImpl implements OBDAMapp
         logger.info(String.format(OMConstants.LOG_INFO_TEMPLATE, "An OBDA Mapping is initialized"));
     }
 
-    protected OBDAMappingImpl(
+    public OBDAMappingImpl(
             OWLOntology sourceOntology, OWLOntology targetOntology, OBDAModel sourceObdaModel, AnnotationQueries annoQ)
             throws InvalidDataSourcesNumberException {
 
