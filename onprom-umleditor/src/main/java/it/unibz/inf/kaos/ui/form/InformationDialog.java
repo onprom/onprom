@@ -46,10 +46,10 @@ public class InformationDialog extends JDialog {
 
     private final JEditorPane editorPane;
 
-    private InformationDialog() {
+    private InformationDialog(String message, String title) {
         setModal(true);
-        setTitle("Information");
-        setLayout(null);
+        setTitle(title);
+        setLayout(new BorderLayout());
 
         editorPane = new JEditorPane();
         editorPane.setContentType("text/html");
@@ -67,21 +67,22 @@ public class InformationDialog extends JDialog {
                 }
             }
         });
+        editorPane.setText(message);
+        editorPane.setCaretPosition(0);
         JScrollPane pane = new JScrollPane(editorPane);
         pane.setBorder(null);
-      pane.setBounds(5, 5, 450, 350);
-        add(pane);
+        add(pane, BorderLayout.CENTER);
         JButton ok = UIUtility.createButton(UMLEditorButtons.OK, e -> setVisible(false));
-      ok.setBounds(175, 355, 100, 25);
-        add(ok);
-      setSize(450, 420);
+        add(ok, BorderLayout.SOUTH);
+        pack();
         setLocationRelativeTo(null);
     }
 
+    public static void display(String message, String title) {
+        new InformationDialog(message, title).setVisible(true);
+    }
+
     public static void display(String message) {
-        InformationDialog dialog = new InformationDialog();
-        dialog.editorPane.setText(message);
-        dialog.editorPane.setCaretPosition(0);
-        dialog.setVisible(true);
+        display(message, "Information");
     }
 }

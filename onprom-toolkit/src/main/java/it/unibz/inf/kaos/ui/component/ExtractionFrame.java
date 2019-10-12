@@ -29,10 +29,8 @@ package it.unibz.inf.kaos.ui.component;
 import it.unibz.inf.kaos.onprom.OnpromToolkit;
 import it.unibz.inf.kaos.ui.panel.CustomExtractionPanel;
 
-import javax.swing.JInternalFrame;
-import javax.swing.JScrollPane;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author T. E. Kalayci on 10-Jul-2017.

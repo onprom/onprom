@@ -26,23 +26,24 @@
   -->
 
 <svg xmlns="http://www.w3.org/2000/svg"
-   xml:space="preserve"
-   width="512px"
-   viewBox="0 0 512 512"
-   version="1.1"
-   id="Layer_1"
-   height="512px"
-   enable-background="new 0 0 512 512">
-    <defs id="defs7" />
+     xml:space="preserve"
+     width="512px"
+     viewBox="0 0 512 512"
+     version="1.1"
+     id="Layer_1"
+     height="512px"
+     enable-background="new 0 0 512 512">
+    <defs id="defs7"/>
     <path style="fill:#e46c3b;fill-opacity:1"
-     id="path2"
-     d="M 436.16285,183.129 259.23085,6.196 h -15.192 -5.633 H 71.803855 V 506 H 436.24385 V 183.16 Z m -176.932,-147.484 137.153,137.152 h -137.153 z M 92.628855,485.175 V 27.021 H 238.40585 v 166.601 h 177.014 V 485.174 H 92.628855 Z" /><text
-     transform="scale(0.58940593,1.6966236)"
-     id="text821"
-     y="257.13083"
-     x="178.27974"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:192px;line-height:27.34354401px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.09374177px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     xml:space="preserve"><tspan
+          id="path2"
+          d="M 436.16285,183.129 259.23085,6.196 h -15.192 -5.633 H 71.803855 V 506 H 436.24385 V 183.16 Z m -176.932,-147.484 137.153,137.152 h -137.153 z M 92.628855,485.175 V 27.021 H 238.40585 v 166.601 h 177.014 V 485.174 H 92.628855 Z"/>
+    <text
+            transform="scale(0.58940593,1.6966236)"
+            id="text821"
+            y="257.13083"
+            x="178.27974"
+            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:192px;line-height:27.34354401px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.09374177px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+            xml:space="preserve"><tspan
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:192px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#7ca8c9;fill-opacity:1;stroke-width:1.09374177px"
        y="257.13083"
        x="178.27974"

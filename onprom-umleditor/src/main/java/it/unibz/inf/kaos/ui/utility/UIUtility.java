@@ -94,6 +94,15 @@ public class UIUtility {
         return LocalDateTime.now().toString();
     }
 
+    public static void executeInBackground(Runnable method) {
+        SwingWorker worker = new SwingWorker() {
+            public Void doInBackground() {
+                method.run();
+                return null;
+            }
+        };
+        worker.execute();
+    }
     public static void executeInBackground(Runnable method, JProgressBar progressBar) {
         SwingWorker worker = new SwingWorker() {
             public Void doInBackground() {
@@ -145,9 +154,17 @@ public class UIUtility {
         return confirm(UMLEditorMessages.DELETE_CONFIRM);
     }
 
-    public static boolean confirm(Messages message) {
-        int confirmation = JOptionPane.showConfirmDialog(null, message.getMessage(), message.getTitle(), JOptionPane.YES_NO_OPTION);
+    public static boolean confirm(String message) {
+        return confirm(message, "Confirmation");
+    }
+
+    public static boolean confirm(String message, String title) {
+        int confirmation = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
         return confirmation == JOptionPane.YES_OPTION;
+    }
+
+    public static boolean confirm(Messages message) {
+        return confirm(message.getMessage(), message.getTitle());
     }
 
     public static void error(String message) {
@@ -160,6 +177,14 @@ public class UIUtility {
 
     private static void error(String message, String title) {
         JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), title, JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void info(String message) {
+        info(message, "Information");
+    }
+
+    public static void info(String message, String title) {
+        JOptionPane.showMessageDialog(null, String.format(HTML_STRING, message), title, JOptionPane.INFORMATION_MESSAGE);
     }
 
     static void warning(Messages message) {

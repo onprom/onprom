@@ -27,7 +27,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>onprom-logextractor</artifactId>
-	<name>Log extractor for OnProm</name>
+    <name>Log extractor for OnProm v1.18</name>
 	<description>A Prom plugin for extracting XES Log from database by utilizing ontologies</description>
 
     <parent>
@@ -77,12 +77,12 @@
         <dependency>
             <groupId>it.unibz.inf.ontop</groupId>
             <artifactId>ontop-obdalib-core</artifactId>
-            <version>${ontop.version}</version>
+            <version>1.18.1-OnProm</version>
         </dependency>
 		<dependency>
 		    <groupId>it.unibz.inf.ontop</groupId>
     		<artifactId>ontop-quest-owlapi</artifactId>
-            <version>${ontop.version}</version>
+            <version>1.18.1-OnProm</version>
 		</dependency>
 		<!-- =============================================================== -->
 		<!-- END OF Ontop -->
@@ -94,32 +94,32 @@
     	<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-            <version>1.4.197</version>
+            <version>1.4.199</version>
 		</dependency>
     	<dependency>
     		<groupId>mysql</groupId>
     		<artifactId>mysql-connector-java</artifactId>
-            <version>8.0.12</version>
+            <version>8.0.17</version>
     	</dependency>
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
-            <version>42.2.5</version>
+            <version>42.2.8</version>
 		</dependency>
         <dependency>
-            <groupId>com.ibm</groupId>
-            <artifactId>db2jcc4.jar</artifactId>
-            <version>10.1.4</version>
+            <groupId>com.ibm.db2.jcc</groupId>
+            <artifactId>db2jcc</artifactId>
+            <version>db2jcc4</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
-            <version>7.1.1.jre10-preview</version>
+            <version>7.4.1.jre12</version>
         </dependency>
         <dependency>
-            <groupId>com.oracle.jdbc</groupId>
+            <groupId>com.oracle.ojdbc</groupId>
             <artifactId>ojdbc8</artifactId>
-            <version>12.2.0.1</version>
+            <version>19.3.0.0</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.jtds</groupId>
@@ -129,7 +129,6 @@
         <!-- =============================================================== -->
 		<!-- END OF JDBC Drivers -->
         <!-- =============================================================== -->
-		
 		<!-- =============================================================== -->
 		<!-- Related to OnProm -->
         <!-- =============================================================== -->
@@ -194,33 +193,5 @@
     	<!-- ################################################################ -->
 	    <!-- END OF Logger Related -->
 		<!-- ################################################################ -->
-
-
-
-    	<!-- ################################################################ -->
-	    <!-- Others -->
-		<!-- ################################################################ -->
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
-        <!-- ################################################################ -->
-	    <!-- Others -->
-		<!-- ################################################################ -->
-
-
       </dependencies>
 </project>

@@ -60,43 +60,43 @@
         <dependency>
             <groupId>it.unibz.inf.ontop</groupId>
             <artifactId>ontop-system-owlapi</artifactId>
-            <version>3.0.0-beta-2</version>
+            <version>${ontop.version}</version>
         </dependency>
         <dependency>
             <artifactId>ontop-mapping-sql-core</artifactId>
             <groupId>it.unibz.inf.ontop</groupId>
-            <version>3.0.0-beta-2</version>
+            <version>${ontop.version}</version>
         </dependency>
         <dependency>
             <groupId>it.unibz.inf.ontop</groupId>
             <artifactId>ontop-reformulation-core</artifactId>
-            <version>3.0.0-beta-2</version>
+            <version>${ontop.version}</version>
         </dependency>
         <dependency>
             <groupId>it.unibz.inf.ontop</groupId>
             <artifactId>ontop-owlapi</artifactId>
-            <version>3.0.0-beta-2</version>
+            <version>${ontop.version}</version>
         </dependency>
         <dependency>
             <groupId>it.unibz.inf.ontop</groupId>
             <artifactId>ontop-system-sql-owlapi</artifactId>
-            <version>3.0.0-beta-2</version>
+            <version>${ontop.version}</version>
         </dependency>
         <!-- DATABASE DRIVERS -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.197</version>
+            <version>1.4.199</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.12</version>
+            <version>8.0.17</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.5</version>
+            <version>42.2.8</version>
         </dependency>
         <dependency>
             <groupId>com.ibm.db2.jcc</groupId>
@@ -106,7 +106,7 @@
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
-            <version>7.2.1.jre11</version>
+            <version>7.4.1.jre12</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.jtds</groupId>

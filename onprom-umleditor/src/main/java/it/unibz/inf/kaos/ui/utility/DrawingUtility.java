@@ -126,7 +126,7 @@ public class DrawingUtility {
         }
     }
 
-    private static BufferedImage getLogo() {
+    public static BufferedImage getLogo() {
         if (LOGO == null) {
             IOUtility.getImageURL("onprom").ifPresent(url -> {
                 try {

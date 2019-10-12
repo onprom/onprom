@@ -46,8 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
+import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
