@@ -86,14 +86,32 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <artifactId>onprom-logextractor</artifactId>
+            <artifactId>onprom-logextractor-v3</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>processmining</groupId>
-            <artifactId>prom</artifactId>
-            <version>6.6</version>
+            <artifactId>prom-plugins</artifactId>
+            <version>6.9</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>processmining</groupId>
+            <artifactId>prom-framework</artifactId>
+            <version>6.9</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>processmining</groupId>
+            <artifactId>prom-models</artifactId>
+            <version>6.9</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>processmining</groupId>
+            <artifactId>prom-contexts</artifactId>
+            <version>6.9</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -78,7 +78,7 @@
         <module>onprom-obdamapper</module>
         <module>onprom-logextractor-v3</module>
         <module>onprom-toolkit</module>
-        <!--<module>onprom-plugin</module>-->
+        <module>onprom-plugin</module>
     </modules>
     <repositories>
         <repository>

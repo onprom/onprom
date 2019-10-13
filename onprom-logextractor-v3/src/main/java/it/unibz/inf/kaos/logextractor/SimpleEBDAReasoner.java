@@ -38,11 +38,6 @@ import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
 import it.unibz.inf.ontop.owlapi.resultset.OWLBindingSet;
 import it.unibz.inf.ontop.owlapi.resultset.TupleOWLResultSet;
 import org.deckfour.xes.extension.XExtension;
-import org.deckfour.xes.extension.std.XConceptExtension;
-import org.deckfour.xes.extension.std.XLifecycleExtension;
-import org.deckfour.xes.extension.std.XOrganizationalExtension;
-import org.deckfour.xes.extension.std.XTimeExtension;
-import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XTrace;
@@ -58,7 +53,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -68,10 +62,10 @@ class SimpleEBDAReasoner {
     private static final Logger logger = LoggerFactory.getLogger(SimpleEBDAReasoner.class);
 
     private OntopOWLReasoner reasoner;
-    private XFactory factory;
+    private SimpleXESFactory factory;
     private OntopOWLConnection connection;
 
-    SimpleEBDAReasoner(OBDAModel ebdaMapping, XFactory factory) {
+    SimpleEBDAReasoner(OBDAModel ebdaMapping, SimpleXESFactory factory) {
         try {
             this.factory = factory;
             OBDADataSource dataSource = ebdaMapping.getSources().get(0);
@@ -140,36 +134,6 @@ class SimpleEBDAReasoner {
         }
     }
 
-    private XAttribute createXAttribute(String type, String key, String value, XExtension extension) {
-
-        if (type != null && key != null && value != null) {
-            if (type.toLowerCase().equals("timestamp")) {
-                // we assume that the timestamp is in format yyyy-[m]m-[d]d hh:mm:ss[.f...].
-                // The fractional seconds may be omitted. The leading zero for mm and dd may also be omitted.
-                return factory.createAttributeTimestamp(key, Timestamp.valueOf(value).getTime(), extension);
-            } else {
-                return factory.createAttributeLiteral(key, value, extension);
-            }
-        }
-        return null;
-    }
-
-    private XExtension getPredefinedXExtension(String key) {
-        if (key != null) {
-            switch (key.toLowerCase()) {
-                case "time:timestamp":
-                    return XTimeExtension.instance();
-                case "concept:name":
-                    return XConceptExtension.instance();
-                case "lifecycle:transition":
-                    return XLifecycleExtension.instance();
-                case "org:resource":
-                    return XOrganizationalExtension.instance();
-            }
-        }
-        return null;
-    }
-
     void dispose() {
         try {
             reasoner.dispose();
@@ -196,8 +160,8 @@ class SimpleEBDAReasoner {
                     String value = result.getOWLLiteral(XESConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
 
                     if (!attributes.containsKey(attributeKey)) {
-                        XExtension extension = getPredefinedXExtension(key);
-                        XAttribute attribute = createXAttribute(type, key, value, extension);
+                        XExtension extension = factory.getPredefinedXExtension(key);
+                        XAttribute attribute = factory.createXAttribute(type, key, value, extension);
                         if (attribute != null) {
                             attributes.put(attributeKey, attribute);
                         }

@@ -21,11 +21,6 @@ import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.model.OBDAMappingImpl;
 import it.unibz.inf.ontop.model.OBDADataSource;
 import it.unibz.inf.ontop.model.OBDAModel;
-import org.deckfour.xes.classification.XEventAttributeClassifier;
-import org.deckfour.xes.classification.XEventLifeTransClassifier;
-import org.deckfour.xes.classification.XEventNameClassifier;
-import org.deckfour.xes.classification.XEventResourceClassifier;
-import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
@@ -35,9 +30,7 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xeslite.lite.factory.XFactoryLiteImpl;
 
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -46,14 +39,10 @@ public class SimpleXESLogExtractor {
     private static final Logger logger = LoggerFactory.getLogger(SimpleXESLogExtractor.class);
 
     public XLog extractXESLog(OWLOntology domainOnto, OBDAModel obdaModel, AnnotationQueries firstAnnoQueries, OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries) {
-        return extractXESLog(domainOnto, obdaModel, firstAnnoQueries, eventOntoVariant, secondAnnoQueries, null);
-    }
-
-    public XLog extractXESLog(OWLOntology domainOnto, OBDAModel obdaModel, AnnotationQueries firstAnnoQueries, OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries, XFactory factory) {
         try {
             OBDAModel obdaMapping = new OBDAMapper().createOBDAMapping(domainOnto, eventOntoVariant, obdaModel, firstAnnoQueries);
             if (obdaMapping != null) {
-                return extractXESLog(eventOntoVariant, obdaMapping, secondAnnoQueries, factory);
+                return extractXESLog(eventOntoVariant, obdaMapping, secondAnnoQueries);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -62,16 +51,20 @@ public class SimpleXESLogExtractor {
     }
 
     public XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) {
-        return extractXESLog(domainOntology, obdaModel, annotation, null);
-    }
-
-    public XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation, XFactory factory) {
         try {
             OBDAModel ebdaModel = createEBDAMapping(domainOntology, obdaModel, annotation);
+            XLog xlog = extractXESLog(ebdaModel);
+            if (xlog != null) return xlog;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public XLog extractXESLog(OBDAModel ebdaModel) {
+        try {
             if (ebdaModel != null) {
-                if (factory == null) {
-                    factory = new XFactoryLiteImpl();
-                }
+                SimpleXESFactory factory = new SimpleXESFactory();
                 logger.info("Factory in use: " + factory.getDescription());
                 XFactoryRegistry.instance().setCurrentDefault(factory);
 
@@ -85,7 +78,7 @@ public class SimpleXESLogExtractor {
                     Collection<XTrace> traces = ebdaR.getTraces(events, attributes);
                     ebdaR.dispose();
                     XLog xlog = factory.createLog();
-                    addDefaultExtensions(factory, xlog);
+                    factory.addDefaultExtensions(xlog);
                     xlog.addAll(traces);
                     return xlog;
                 } else {
@@ -98,7 +91,7 @@ public class SimpleXESLogExtractor {
         return null;
     }
 
-    private OBDAModel createEBDAMapping(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) {
+    public OBDAModel createEBDAMapping(OWLOntology domainOntology, OBDAModel obdaModel, AnnotationQueries annotation) {
         try {
             List<OBDADataSource> odsList = obdaModel.getSources();
             if (odsList.size() == 1) {
@@ -115,24 +108,6 @@ public class SimpleXESLogExtractor {
             logger.error(e.getMessage(), e);
         }
         return null;
-    }
-
-    private void addDefaultExtensions(XFactory factory, XLog xlog) {
-        try {
-            xlog.getGlobalTraceAttributes().add(factory.createAttributeLiteral("concept:name", "DEFAULT", null));
-
-            xlog.getGlobalEventAttributes().add(factory.createAttributeTimestamp("time:timestamp", Timestamp.valueOf("1970-01-01 01:00:00").getTime(), null));
-            xlog.getGlobalEventAttributes().add(factory.createAttributeLiteral("lifecycle:transition", "complete", null));
-            xlog.getGlobalEventAttributes().add(factory.createAttributeLiteral("concept:name", "DEFAULT", null));
-
-            xlog.getClassifiers().add(new XEventAttributeClassifier("Time timestamp", "time:timestamp"));
-            xlog.getClassifiers().add(new XEventLifeTransClassifier());
-            xlog.getClassifiers().add(new XEventNameClassifier());
-            xlog.getClassifiers().add(new XEventResourceClassifier());
-
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
     }
 }
 
