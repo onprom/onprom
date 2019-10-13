@@ -36,7 +36,7 @@ import java.awt.*;
  * 29-Sep-16
  */
 public class ZoomUtility {
-    public static final Dimension INITIAL_SIZE = new Dimension(2400, 1800);
+    public static final Dimension INITIAL_SIZE = new Dimension(Short.MAX_VALUE, Short.MAX_VALUE);
     private static final float MIN_SCALE = 0.5f;
     private static final float MAX_SCALE = 4f;
     private static final float DEFAULT_SCALE = 1.0f;

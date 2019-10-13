@@ -43,12 +43,7 @@ public enum UMLEditorMessages implements Messages {
     LAYOUT_DIAGRAM("Diagram Layout", "Are you sure you want to layout the diagram, you'll lose the current layout?"),
     SAVE_FILE("Save File", "Would you like to save as file also?"),
     FILE_EXISTS("File Exists", "Are you sure you want to overwrite existing file?"),
-    CLOSE_EDITOR("Closing Editor", "Are you sure you want to close this dialog? Your changes that you didn't save will be lost!"),
-    ABOUT("About onprom", "<a href='http://onprom.inf.unibz.it' target='_blank'><img align='right' src='http://onprom.inf.unibz.it/wp-content/uploads/2017/02/cropped-onprom-4-w300.png' border='0'></a>" +
-    "<p>Tool chain is developed under <a href='http://kaos.inf.unibz.it' target='_blank'>Euregio KAOS</a> project by <a href='http://www.inf.unibz.it/krdb/' target='_blank'>KRDB research center</a> in <a href='http://www.unibz.it' target='_blank'>Free University of Bozen-Bolzano</a>.</p>" +
-    "<p>You can visit project website for more information: <a href='http://onprom.inf.unibz.it' target='_blank'>http://onprom.inf.unibz.it</a>.</p>" +
-    "<p>The development of the tool suite still in progress, it may contain bugs and/or errors. Please <a href='http://onprom.inf.unibz.it/index.php/contact/' target=''>let us know</a> any errors or problems.</p>" +
-    "<p>Please consider that this software and examples are distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</p>");
+    CLOSE_EDITOR("Closing Editor", "Are you sure you want to close this dialog? Your changes that you didn't save will be lost!");
 
     private final String title;
     private final String message;

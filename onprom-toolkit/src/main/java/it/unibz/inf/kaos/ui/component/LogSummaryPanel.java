@@ -46,8 +46,8 @@ import java.awt.*;
  */
 public class LogSummaryPanel extends JInternalFrame {
     private static final Dimension TXT_SIZE = new Dimension(375, 25);
-    private final XLogInfo info;
     private static final Dimension CHART_SIZE = new Dimension(800, 300);
+    private final XLogInfo info;
 
     public LogSummaryPanel(XLogInfo _info) {
         super("Log Summary", true, true, true, true);
@@ -96,16 +96,16 @@ public class LogSummaryPanel extends JInternalFrame {
         JList<String> list = new JList<>(listModel);
         info.getLog().forEach(trace -> {
             StringBuilder events = new StringBuilder();
-            if(!trace.getAttributes().isEmpty() && trace.getAttributes().get("concept:name")!=null) {
+            if (!trace.getAttributes().isEmpty() && trace.getAttributes().get("concept:name") != null) {
                 events.append(trace.getAttributes().get("concept:name").toString());
             }
             events.append(" ⇨");
             trace.forEach(event -> {
-                if(event.getAttributes()!=null && event.getAttributes().get("concept:name")!=null) {
+                if (event.getAttributes() != null && event.getAttributes().get("concept:name") != null) {
                     events.append(" ").append(event.getAttributes().get("concept:name").toString()).append(" →");
                 }
             });
-            listModel.addElement(events.substring(0, events.length()-1));
+            listModel.addElement(events.substring(0, events.length() - 1));
         });
         final JScrollPane jScrollPane = new JScrollPane(list);
         jScrollPane.setPreferredSize(CHART_SIZE);

@@ -32,12 +32,14 @@ import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.dynamic.DynamicAnnotationEditor;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
-import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractorWithEBDAMapping;
+import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
 import it.unibz.inf.kaos.ui.component.*;
 import it.unibz.inf.kaos.ui.form.InformationDialog;
+import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
-import it.unibz.inf.kaos.ui.utility.UMLEditorMessages;
 import it.unibz.inf.kaos.uml.UMLEditor;
+import it.unibz.inf.kaos.utility.ToolkitMessages;
+import it.unibz.inf.kaos.utility.VersionUtility;
 import it.unibz.inf.ontop.model.OBDAModel;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
@@ -76,6 +78,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     private final WindowTree windows;
 
     private OnpromToolkit() {
+        setIconImage(DrawingUtility.getLogo());
         objects = new ObjectTree(this);
         windows = new WindowTree();
         this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetAdapter() {
@@ -144,6 +147,15 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         return progressBar;
     }
 
+    private void checkForUpdate() {
+        UIUtility.executeInBackground(() -> {
+            progressBar.setIndeterminate(true);
+            String message = VersionUtility.checkVersion();
+            progressBar.setIndeterminate(false);
+            InformationDialog.display(message, "Update Information");
+        });
+    }
+
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         JMenu mnFile = new JMenu("File");
@@ -189,8 +201,11 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         JMenu mnHelp = new JMenu("Help");
         mnHelp.setMnemonic(KeyEvent.VK_H);
         JMenuItem aboutItem = new JMenuItem("About", KeyEvent.VK_A);
-        aboutItem.addActionListener(e -> InformationDialog.display(UMLEditorMessages.ABOUT.getMessage()));
+        aboutItem.addActionListener(e -> InformationDialog.display(ToolkitMessages.ABOUT.getMessage(), "About onprom"));
         mnHelp.add(aboutItem);
+        JMenuItem versionCheckItem = new JMenuItem("Check for Updates", KeyEvent.VK_C);
+        versionCheckItem.addActionListener(e -> checkForUpdate());
+        mnHelp.add(versionCheckItem);
         menuBar.add(mnHelp);
 
         return menuBar;
@@ -281,7 +296,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
             if (ontology != null && model != null && queries != null) {
                 try {
                     long start = System.currentTimeMillis();
-                    XLog xlog = new SimpleXESLogExtractorWithEBDAMapping().extractXESLog(ontology, model, queries);
+                    XLog xlog = new SimpleXESLogExtractor().extractXESLog(ontology, model, queries);
                     logger.debug(String.format("EXTRACTION TOOK %s SECONDS", (System.currentTimeMillis() - start) / 1000));
                     displayLogSummary(xlog);
                 } catch (Exception e) {
