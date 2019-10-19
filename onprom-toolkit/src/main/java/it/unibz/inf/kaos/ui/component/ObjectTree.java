@@ -3,7 +3,7 @@
  *
  * ObjectTree.java
  *
- * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -28,13 +28,12 @@ package it.unibz.inf.kaos.ui.component;
 
 import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.kaos.onprom.OnpromToolkit;
 import it.unibz.inf.kaos.ui.form.InformationDialog;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
-import it.unibz.inf.ontop.io.ModelIOManager;
-import it.unibz.inf.ontop.model.OBDAModel;
-import it.unibz.inf.ontop.model.impl.OBDADataFactoryImpl;
+import it.unibz.inf.ontop.protege.core.OBDAModel;
 import org.apache.commons.io.FilenameUtils;
 import org.deckfour.xes.in.XesXmlParser;
 import org.deckfour.xes.model.XLog;
@@ -51,8 +50,10 @@ import javax.swing.tree.TreePath;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -76,6 +77,9 @@ public class ObjectTree {
                         break;
                     case ANNOTATION:
                         toolkit.displayAnnotationEditor();
+                        break;
+                    case DS_PROPERTIES:
+                        toolkit.displayPropertiesEditor(selectedNode);
                         break;
                     case XLOG:
                         toolkit.displayLogSummary(selectedNode);
@@ -143,9 +147,22 @@ public class ObjectTree {
                     break;
                 case MAPPING:
                     try {
-                        OBDAModel obdaModel = OBDADataFactoryImpl.getInstance().getOBDAModel();
-                        new ModelIOManager(obdaModel).load(selectedFile);
-                        addObject(selectedFile.getName(), FileType.MAPPING, obdaModel);
+                        Properties dsProperties = OntopUtility.getDataSourceProperties(selectedFile);
+                        if (dsProperties != null && dsProperties.size() > 0) {
+                            addObject(selectedFile.getName() + ".properties", FileType.DS_PROPERTIES, OntopUtility.getDataSourceProperties(selectedFile));
+                            addObject(selectedFile.getName(), FileType.MAPPING, OntopUtility.getOBDAModel(selectedFile, dsProperties));
+                        } else {
+                            addObject(selectedFile.getName(), FileType.MAPPING, OntopUtility.getOBDAModel(selectedFile));
+                        }
+                    } catch (Exception e) {
+                        logError(e);
+                    }
+                    break;
+                case DS_PROPERTIES:
+                    try {
+                        Properties dsProperties = new Properties();
+                        dsProperties.load(new FileInputStream(selectedFile));
+                        addObject(selectedFile.getName(), FileType.DS_PROPERTIES, dsProperties);
                     } catch (Exception e) {
                         logError(e);
                     }
@@ -209,7 +226,14 @@ public class ObjectTree {
         switch (type) {
             case MAPPING:
                 try {
-                    new ModelIOManager((OBDAModel) object).save(new File(filePath));
+                    OntopUtility.saveModel((OBDAModel) object, new File(filePath));
+                } catch (Exception e) {
+                    logError(e);
+                }
+                break;
+            case DS_PROPERTIES:
+                try {
+                    ((Properties) object).store(new FileOutputStream(filePath), null);
                 } catch (Exception e) {
                     logError(e);
                 }

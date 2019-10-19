@@ -3,7 +3,7 @@
  *
  * RelationForm.java
  *
- * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -36,12 +36,8 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorButtons;
 import it.unibz.inf.kaos.ui.utility.UMLEditorLabels;
 
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Relation form

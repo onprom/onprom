@@ -3,7 +3,7 @@
  *
  * Association.java
  *
- * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -30,10 +30,7 @@ import it.unibz.inf.kaos.interfaces.UMLDiagram;
 import it.unibz.inf.kaos.ui.form.RelationForm;
 import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
+import java.awt.*;
 
 /**
  * @author T. E. Kalayci

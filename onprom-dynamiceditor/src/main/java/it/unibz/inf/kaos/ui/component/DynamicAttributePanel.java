@@ -3,7 +3,7 @@
  *
  * DynamicAttributePanel.java
  *
- * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -35,7 +35,7 @@ import it.unibz.inf.kaos.ui.utility.AnnotationEditorLabels;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 
 import javax.swing.*;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.util.Set;
 
 /**

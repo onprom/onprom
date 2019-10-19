@@ -3,7 +3,7 @@
  *
  * OnpromToolkit.java
  *
- * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -35,12 +35,14 @@ import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
 import it.unibz.inf.kaos.ui.component.*;
 import it.unibz.inf.kaos.ui.form.InformationDialog;
+import it.unibz.inf.kaos.ui.panel.DatasourcePropertiesPanel;
+import it.unibz.inf.kaos.ui.panel.ExtractionPanel;
 import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.uml.UMLEditor;
 import it.unibz.inf.kaos.utility.ToolkitMessages;
 import it.unibz.inf.kaos.utility.VersionUtility;
-import it.unibz.inf.ontop.model.OBDAModel;
+import it.unibz.inf.ontop.protege.core.OBDAModel;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -63,6 +65,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.Collection;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -71,7 +74,9 @@ import java.util.Set;
 public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     private static final Logger logger = LoggerFactory.getLogger(OnpromToolkit.class.getSimpleName());
     private final JProgressBar progressBar = new JProgressBar();
-    private final FileType[] supportedFormats = {FileType.ONTOLOGY, FileType.UML, FileType.ANNOTATION, FileType.MAPPING, FileType.QUERIES, FileType.XLOG};
+    private final FileType[] supportedFormats = {
+            FileType.ONTOLOGY, FileType.UML, FileType.ANNOTATION, FileType.MAPPING, FileType.QUERIES, FileType.XLOG, FileType.DS_PROPERTIES
+    };
     private final JDesktopPane desktop = new JDesktopPane();
 
     private final ObjectTree objects;
@@ -224,25 +229,21 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         displayEditor(new AnnotationEditor(null, this));
     }
 
+    public void displayPropertiesEditor(TreeNode<Object> node) {
+        node.getUserObjectProvider().ifPresent(selectedObject -> {
+            if (selectedObject instanceof Properties) {
+                showInternalFrame(new InternalFrame(new DatasourcePropertiesPanel((Properties) selectedObject)));
+            }
+        });
+    }
+
     public void displayDynamicAnnotationEditor() {
         displayEditor(new DynamicAnnotationEditor(null, null, this));
     }
 
     private void displayEditor(UMLEditor editor) {
         editor.setProgressBar(progressBar);
-        editor.addInternalFrameListener(new InternalFrameAdapter() {
-            @Override
-            public void internalFrameClosed(InternalFrameEvent e) {
-                windows.removeNodeWithObject(e.getInternalFrame());
-            }
-        });
-        desktop.add(editor, BorderLayout.CENTER);
-        try {
-            editor.setMaximum(true);
-        } catch (Exception e) {
-            logError(e);
-        }
-        windows.add(editor.getTitle(), FileType.OTHER, editor);
+        showInternalFrame(editor);
         loadShapes(editor);
     }
 
@@ -259,20 +260,23 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     }
 
     private void showExportDiagram() {
-        ExtractionFrame editor = new ExtractionFrame(this);
-        editor.addInternalFrameListener(new InternalFrameAdapter() {
+        showInternalFrame(new InternalFrame(new ExtractionPanel(this)));
+    }
+
+    private void showInternalFrame(JInternalFrame internalFrame) {
+        internalFrame.addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosed(InternalFrameEvent e) {
                 windows.removeNodeWithObject(e.getInternalFrame());
             }
         });
-        desktop.add(editor, BorderLayout.CENTER);
+        desktop.add(internalFrame, BorderLayout.CENTER);
         try {
-            editor.setMaximum(true);
+            internalFrame.setMaximum(true);
         } catch (Exception e) {
             logError(e);
         }
-        windows.add(editor.getTitle(), FileType.OTHER, editor);
+        windows.add(internalFrame.getTitle(), FileType.OTHER, internalFrame);
     }
 
     private void exportLog() {
@@ -281,10 +285,14 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
             OWLOntology ontology = null;
             OBDAModel model = null;
             AnnotationQueries queries = null;
+            Properties properties = null;
             for (TreePath path : paths) {
                 Object object = ((TreeNode) path.getLastPathComponent()).getUserObject();
                 if (object instanceof OWLOntology) {
                     ontology = (OWLOntology) object;
+                }
+                if (object instanceof Properties) {
+                    properties = (Properties) object;
                 }
                 if (object instanceof OBDAModel) {
                     model = (OBDAModel) object;
@@ -293,10 +301,12 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                     queries = (AnnotationQueries) object;
                 }
             }
-            if (ontology != null && model != null && queries != null) {
+            if (ontology != null && model != null && queries != null && properties != null) {
                 try {
                     long start = System.currentTimeMillis();
-                    XLog xlog = new SimpleXESLogExtractor().extractXESLog(ontology, model, queries);
+                    XLog xlog = new SimpleXESLogExtractor().extractXESLog(ontology, model,
+                            properties,
+                            queries);
                     logger.debug(String.format("EXTRACTION TOOK %s SECONDS", (System.currentTimeMillis() - start) / 1000));
                     displayLogSummary(xlog);
                 } catch (Exception e) {

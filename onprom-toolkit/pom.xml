@@ -16,7 +16,7 @@
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~        http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,7 @@
     <parent>
         <artifactId>onprom</artifactId>
         <groupId>it.unibz.inf.kaos</groupId>
-        <version>2.2.0</version>
+        <version>2.3.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <build>
@@ -89,7 +89,7 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <artifactId>onprom-logextractor-v3</artifactId>
+            <artifactId>onprom-logextractor</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
         </dependency>

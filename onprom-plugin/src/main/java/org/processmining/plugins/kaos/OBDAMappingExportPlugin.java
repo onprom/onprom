@@ -3,13 +3,13 @@
  *
  * OBDAMappingExportPlugin.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@
 
 package org.processmining.plugins.kaos;
 
-import it.unibz.inf.ontop.io.ModelIOManager;
-import it.unibz.inf.ontop.model.OBDAModel;
+import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
+import it.unibz.inf.ontop.protege.core.OBDAModel;
 import org.processmining.contexts.uitopia.annotations.UIExportPlugin;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.plugin.PluginContext;
@@ -52,7 +52,7 @@ public class OBDAMappingExportPlugin {
     @PluginVariant(requiredParameterLabels = {0, 1})
     public void export(PluginContext context, OBDAModel model, File file) {
         try {
-            new ModelIOManager(model).save(file);
+            OntopUtility.saveModel(model, file);
             context.log("Succesfully exported mapping to the file:" + file.getName());
         } catch (Exception e) {
             context.log("Couldn't export mapping:" + e.getMessage(), Logger.MessageLevel.ERROR);

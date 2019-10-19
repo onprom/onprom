@@ -3,7 +3,7 @@
  *
  * FileType.java
  *
- * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -39,6 +39,7 @@ public enum FileType {
     ANNOTATION("Annotated Domain Models (*.ann)", "ann"),
     UML("UML Data Models (*.udm)", "udm"),
     MAPPING("Ontop Mappings (*.obda)", "obda"),
+    DS_PROPERTIES("Datasource Properties (*.properties)", "properties"),
     QUERIES("Annotation Queries (*.aqr)", "aqr"),
     JSON("JSON files (*.json)", "json"),
     IMAGE("Supported Image Files (*.png, *.jpg, *.jpeg, *.gif, *.svg)", "png", "jpg", "jpeg", "gif", "svg", "pdf"),

@@ -15,7 +15,7 @@
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~        http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,21 +25,20 @@
   -->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>onprom-logextractor</artifactId>
-    <name>Log extractor for OnProm v1.18</name>
-	<description>A Prom plugin for extracting XES Log from database by utilizing ontologies</description>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>onprom-logextractor</artifactId>
+    <name>Log extractor for OnProm using Ontop</name>
+    <description>A Prom plugin for extracting XES Log from database by utilizing ontologies</description>
 
     <parent>
         <groupId>it.unibz.inf.kaos</groupId>
         <artifactId>onprom</artifactId>
-        <version>2.2.0</version>
+        <version>2.3.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <properties>
         <openxes.version>2.26</openxes.version>
-        <ontop.version>1.18.1-OnProm</ontop.version>
     </properties>
 
     <build>
@@ -56,56 +55,23 @@
         </plugins>
     </build>
 
-    <!-- for Ontop 1.18.1-OnProm -->
-    <repositories>
-        <repository>
-		    <id>thirdparty</id>
-		    <url>http://obdavm.inf.unibz.it:8080/nexus/content/repositories/thirdparty</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <!-- END OF for Ontop 1.18.1-OnProm -->
-	<dependencies>
-	    <!-- =============================================================== -->
-		<!-- Ontop -->
-        <!-- =============================================================== -->
+    <dependencies>
+        <!-- DATABASE DRIVERS -->
         <dependency>
-            <groupId>it.unibz.inf.ontop</groupId>
-            <artifactId>ontop-obdalib-core</artifactId>
-            <version>1.18.1-OnProm</version>
-        </dependency>
-		<dependency>
-		    <groupId>it.unibz.inf.ontop</groupId>
-    		<artifactId>ontop-quest-owlapi</artifactId>
-            <version>1.18.1-OnProm</version>
-		</dependency>
-		<!-- =============================================================== -->
-		<!-- END OF Ontop -->
-        <!-- =============================================================== -->
-		
-		<!-- =============================================================== -->
-		<!-- JDBC Drivers -->
-        <!-- =============================================================== -->
-    	<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
             <version>1.4.199</version>
-		</dependency>
-    	<dependency>
-    		<groupId>mysql</groupId>
-    		<artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
             <version>8.0.17</version>
-    	</dependency>
-		<dependency>
-		    <groupId>org.postgresql</groupId>
-		    <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
             <version>42.2.8</version>
-		</dependency>
+        </dependency>
         <dependency>
             <groupId>com.ibm.db2.jcc</groupId>
             <artifactId>db2jcc</artifactId>
@@ -117,41 +83,23 @@
             <version>7.4.1.jre12</version>
         </dependency>
         <dependency>
-            <groupId>com.oracle.ojdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-            <version>19.3.0.0</version>
-        </dependency>
-        <dependency>
             <groupId>net.sourceforge.jtds</groupId>
             <artifactId>jtds</artifactId>
             <version>1.3.1</version>
         </dependency>
-        <!-- =============================================================== -->
-		<!-- END OF JDBC Drivers -->
-        <!-- =============================================================== -->
-		<!-- =============================================================== -->
-		<!-- Related to OnProm -->
-        <!-- =============================================================== -->
+        <!-- ONPROM -->
         <dependency>
-            <artifactId>onprom-data</artifactId>
-            <groupId>${project.groupId}</groupId>
-            <version>${project.version}</version>
-        </dependency>
-        
-		<dependency>
             <artifactId>onprom-obdamapper</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
         </dependency>
-        
-		<!-- =============================================================== -->
-		<!-- END OF Related to OnProm -->
-        <!-- =============================================================== -->
-        
-        <!-- =============================================================== -->
-		<!-- XES related libraries -->
-        <!-- =============================================================== -->
-		<dependency>
+        <dependency>
+            <artifactId>onprom-umleditor</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- OTHER -->
+        <dependency>
             <groupId>deckfour</groupId>
             <artifactId>spex</artifactId>
             <version>1.0</version>
@@ -173,25 +121,15 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
             <!-- needed for XLog to XML serialization in Java > 8 -->
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>2.4.0-b180830.0359</version>
         </dependency>
-        <!-- =============================================================== -->
-        <!-- END OF XES related libraries -->
-        <!-- =============================================================== -->
-
-        <!-- ################################################################ -->
-	    <!-- Logger Related -->
-		<!-- ################################################################ -->
-    	<dependency>
-    		<groupId>ch.qos.logback</groupId>
-    		<artifactId>logback-core</artifactId>
-    		<version>${logback.version}</version>
-    	</dependency>
-    	<!-- ################################################################ -->
-	    <!-- END OF Logger Related -->
-		<!-- ################################################################ -->
-      </dependencies>
+    </dependencies>
 </project>

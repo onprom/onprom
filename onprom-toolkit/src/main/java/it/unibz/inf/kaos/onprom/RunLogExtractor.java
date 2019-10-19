@@ -15,7 +15,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,11 +29,9 @@ package it.unibz.inf.kaos.onprom;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
-import it.unibz.inf.kaos.obdamapper.model.OBDAMapping;
+import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
-import it.unibz.inf.ontop.io.ModelIOManager;
-import it.unibz.inf.ontop.model.OBDAModel;
-import it.unibz.inf.ontop.model.impl.OBDADataFactoryImpl;
+import it.unibz.inf.ontop.protege.core.OBDAModel;
 import org.deckfour.xes.out.XesXmlGZIPSerializer;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -41,6 +39,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.Properties;
 
 public class RunLogExtractor {
 
@@ -65,9 +64,8 @@ public class RunLogExtractor {
             // prepare XES log output file
             File finalMappingsFile = new File(outputFileName + ".obda");
             File output = new File(outputFileName + ".xes.gz");
-            // load mappings
-            OBDAModel obdaModel = OBDADataFactoryImpl.getInstance().getOBDAModel();
-            new ModelIOManager(obdaModel).load(domainMappingsFile);
+            Properties dataSourceProperties = OntopUtility.getDataSourceProperties(domainMappingsFile);
+            OBDAModel obdaModel = OntopUtility.getOBDAModel(domainMappingsFile, dataSourceProperties);
             // load ontologies
             OWLOntology domainOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(domainOntologyFile);
             OWLOntology eventOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(eventOntologyFile);
@@ -77,12 +75,11 @@ public class RunLogExtractor {
                 IOUtility.readJSON(firstLevelFile, AnnotationQueries.class).ifPresent(firstLevel -> IOUtility.readJSON(secondLevelFile, AnnotationQueries.class).ifPresent(secondLevel -> {
                     try {
                         //generate final mapping
-                        OBDAMapping firstMapping = new OBDAMapper().createOBDAMapping(domainOntology, eventOntology, obdaModel, firstLevel);
-                        OBDAMapping finalMapping = new OBDAMapper().createOBDAMapping(eventOntology, onpromOntology, firstMapping, secondLevel);
-                        new ModelIOManager(finalMapping).save(finalMappingsFile);
+                        OBDAModel firstMapping = new OBDAMapper(domainOntology, eventOntology, obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
+                        OBDAModel finalMapping = new OBDAMapper(eventOntology, onpromOntology, firstMapping, dataSourceProperties, secondLevel).getOBDAModel();
                         // extract log
                         new XesXmlGZIPSerializer().serialize(
-                                new SimpleXESLogExtractor().extractXESLog(domainOntology, obdaModel, firstLevel, eventOntology, secondLevel),
+                                new SimpleXESLogExtractor().extractXESLog(domainOntology, finalMapping, dataSourceProperties, firstLevel, eventOntology, secondLevel),
                                 new FileOutputStream(output)
                         );
                     } catch (Exception e) {
@@ -90,7 +87,7 @@ public class RunLogExtractor {
                     }
                 }));
             }
-            System.out.println("TOTAL EXTRACTION TIME: "+(System.currentTimeMillis() - start)/1000 + "s");
+            System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) / 1000 + "s");
             System.exit(0);
         } catch (Exception e) {
             e.printStackTrace();

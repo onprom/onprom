@@ -1,15 +1,15 @@
 /*
  * onprom-plugin
  *
- * LogExtractionPlugin.java
+ * LogExtractorPlugin.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,10 @@ package org.processmining.plugins.kaos;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.logextractor.EOToXESLogConverter;
 import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
+import it.unibz.inf.kaos.logextractor.XESConstants;
 import it.unibz.inf.kaos.logextractor.XOToXESLogConverter;
-import it.unibz.inf.ontop.model.OBDAModel;
+import it.unibz.inf.kaos.obdamapper.OBDAMapper;
+import it.unibz.inf.ontop.protege.core.OBDAModel;
 import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
@@ -39,6 +41,8 @@ import org.processmining.framework.plugin.annotations.PluginCategory;
 import org.processmining.framework.plugin.annotations.PluginQuality;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.semanticweb.owlapi.model.OWLOntology;
+
+import java.util.Properties;
 
 /**
  * Prom plug in for onprom XES log extraction
@@ -99,16 +103,9 @@ public class LogExtractorPlugin {
         return xlog;
     }
 
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // STANDARD LOG EXTRACTOR PLUG IN
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     @Plugin(
             name = "OnProM Log Extractor",
-            parameterLabels = {"Domain Ontology", "OBDA Mapping", "Annotation"},
+            parameterLabels = {"Domain Ontology", "OBDA Mapping", "Datasource Properties", "Annotation"},
             returnLabels = {"XES Event Log"},
             returnTypes = {XLog.class},
             help = "OnProM Log Extractor - Extract XES event logs from relational databases based on OnProm Methodology (see http://onprom.inf.unibz.it)",
@@ -121,42 +118,27 @@ public class LogExtractorPlugin {
             email = "onprom@inf.unibz.it",
             website = "http://onprom.inf.unibz.it"
     )
-    @PluginVariant(requiredParameterLabels = {0, 1, 2})
+    @PluginVariant(requiredParameterLabels = {0, 1, 2, 3})
     public XLog extractXESLog(final UIPluginContext context,
-                              OWLOntology ontology, OBDAModel obdaModel, AnnotationQueries annotationQueries) {
+                              OWLOntology ontology, OBDAModel obdaModel, Properties properties, AnnotationQueries annotationQueries) {
 
-        context.getProgress().setIndeterminate(true);
         XLog xlog = null;
-        SimpleXESLogExtractor logExtractor = new SimpleXESLogExtractor();
 
         try {
-            xlog = logExtractor.extractXESLog(ontology, obdaModel, annotationQueries);
-
+            context.getProgress().setIndeterminate(true);
+            xlog = new SimpleXESLogExtractor().extractXESLog(ontology, obdaModel, properties, annotationQueries);
+            context.getFutureResult(0).setLabel("XES log extracted from DB");
         } catch (Exception e) {
             context.log(e);
         }
 
-        //logExtractor.printExecutionNote();
-        context.getFutureResult(0).setLabel("XES log extracted from DB");
+        context.getProgress().setIndeterminate(false);
         return xlog;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // END OF STANDARD LOG EXTRACTOR PLUG IN
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // LOG EXTRACTOR PLUG IN VARIANT - Produce XES Log and EBDAModel
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     @Plugin(
             name = "OnProM Log Extractor (Out: Log & EBDA Model)",
-            parameterLabels = {"Domain Ontology", "OBDA Mapping", "Annotation"},
+            parameterLabels = {"Domain Ontology", "OBDA Mapping", "Datasource Properties", "Annotation"},
             returnLabels = {"XES Event Log", "EBDA Model"},
             returnTypes = {XLog.class, OBDAModel.class},
             help = "OnProM Log Extractor - Extract XES event logs from relational databases based on OnProm Methodology (see http://onprom.inf.unibz.it)",
@@ -169,44 +151,34 @@ public class LogExtractorPlugin {
             email = "onprom@inf.unibz.it",
             website = "http://onprom.inf.unibz.it"
     )
-    @PluginVariant(requiredParameterLabels = {0, 1, 2})
+    @PluginVariant(requiredParameterLabels = {0, 1, 2, 3})
     public Object[] extractXESLog2(final UIPluginContext context,
-                                   OWLOntology ontology, OBDAModel obdaModel, AnnotationQueries annotationQueries) {
+                                   OWLOntology ontology, OBDAModel obdaModel, Properties datasourceProperties, AnnotationQueries annotationQueries) {
 
         context.getProgress().setIndeterminate(true);
-        SimpleXESLogExtractor logExtractor = new SimpleXESLogExtractor();
         XLog xlog = null;
         OBDAModel ebdaMapping = null;
 
         try {
-            ebdaMapping = logExtractor.createEBDAMapping(ontology, obdaModel, annotationQueries);
-            xlog = logExtractor.extractXESLog(ebdaMapping);
-
+            ebdaMapping = new OBDAMapper(ontology,
+                    XESConstants.getDefaultEventOntology(),
+                    obdaModel,
+                    datasourceProperties,
+                    annotationQueries
+            ).getOBDAModel();
+            xlog = new SimpleXESLogExtractor().extractXESLog(ebdaMapping, datasourceProperties);
+            context.getFutureResult(0).setLabel("XES log extracted from DB");
         } catch (Exception e) {
             context.log(e);
         }
 
-        context.getFutureResult(0).setLabel("XES log extracted from DB");
-
+        context.getProgress().setIndeterminate(false);
         return new Object[]{xlog, ebdaMapping};
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // END OF LOG EXTRACTOR PLUG IN VARIANT - Produce XES Log and EBDAModel
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // LOG EXTRACTOR PLUG IN VARIANT - Takes EBDAModel as the input
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     @Plugin(
             name = "OnProM Log Extractor (Input: EBDA Model)",
-            parameterLabels = {"EBDA Model"},
+            parameterLabels = {"EBDA Model", "Datasource Properties"},
             returnLabels = {"XES Event Log"},
             returnTypes = {XLog.class},
             help = "OnProM Log Extractor - Extract XES event logs from relational databases based on OnProm Methodology (see http://onprom.inf.unibz.it)",
@@ -219,37 +191,22 @@ public class LogExtractorPlugin {
             email = "onprom@inf.unibz.it",
             website = "http://onprom.inf.unibz.it"
     )
-    @PluginVariant(requiredParameterLabels = {0})
-    public XLog extractXESLog(final UIPluginContext context, OBDAModel ebdaMapping) {
+    @PluginVariant(requiredParameterLabels = {0, 1})
+    public XLog extractXESLog(final UIPluginContext context, OBDAModel ebdaMapping, Properties datasourceProperties) {
 
-        context.getProgress().setIndeterminate(true);
-        SimpleXESLogExtractor logExtractor = new SimpleXESLogExtractor();
         XLog xlog = null;
 
         try {
-            xlog = logExtractor.extractXESLog(ebdaMapping);
-
+            context.getProgress().setIndeterminate(true);
+            xlog = new SimpleXESLogExtractor().extractXESLog(ebdaMapping, datasourceProperties);
+            context.getFutureResult(0).setLabel("XES log extracted from DB");
         } catch (Exception e) {
             context.log(e);
         }
 
-        //logExtractor.printExecutionNote();
-        context.getFutureResult(0).setLabel("XES log extracted from DB");
+        context.getProgress().setIndeterminate(false);
         return xlog;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // END OF LOG EXTRACTOR PLUG IN VARIANT - Takes EBDAModel as the input
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // LOG EXTRACTOR PLUG IN that takes into account the event ontology variant
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Plugin(
             name = "OnProM Log Extractor (with EO Variant)",
@@ -270,10 +227,14 @@ public class LogExtractorPlugin {
             email = "onprom@inf.unibz.it",
             website = "http://onprom.inf.unibz.it"
     )
-    @PluginVariant(requiredParameterLabels = {0, 1, 2, 3, 4})
+    @PluginVariant(requiredParameterLabels = {0, 1, 2, 3, 4, 5})
     public XLog extractXESLog(final UIPluginContext context,
-                              OWLOntology domainOnto, OBDAModel obdaModel, AnnotationQueries firstAnnoQueries,
-                              OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries) {
+                              OWLOntology domainOnto,
+                              OBDAModel obdaModel,
+                              Properties datasourceProperties,
+                              AnnotationQueries firstAnnoQueries,
+                              OWLOntology eventOntoVariant,
+                              AnnotationQueries secondAnnoQueries) {
 
         context.getProgress().setIndeterminate(true);
 
@@ -282,7 +243,7 @@ public class LogExtractorPlugin {
 
         try {
             xlog = logExtractor.extractXESLog(
-                    domainOnto, obdaModel, firstAnnoQueries, eventOntoVariant, secondAnnoQueries);
+                    domainOnto, obdaModel, datasourceProperties, firstAnnoQueries, eventOntoVariant, secondAnnoQueries);
 
         } catch (Exception e) {
             context.log(e);

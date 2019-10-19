@@ -3,7 +3,7 @@
  *
  * ClassForm.java
  *
- * Copyright (C) 2016-2018 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -36,13 +36,8 @@ import it.unibz.inf.kaos.ui.component.AttributeTable;
 import it.unibz.inf.kaos.ui.edit.EditFactory;
 import it.unibz.inf.kaos.ui.utility.*;
 
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 

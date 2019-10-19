@@ -3,13 +3,13 @@
  *
  * OBDAMappingImportPlugin.java
  *
- * Copyright (C) 2016-2017 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
- *  KAOS: Knowledge-Aware Operational Support project
- *  (https://kaos.inf.unibz.it).
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
  *
- *  Please visit https://onprom.inf.unibz.it for more information.
+ * Please visit https://onprom.inf.unibz.it for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,9 @@
 
 package org.processmining.plugins.kaos;
 
+import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
-import it.unibz.inf.ontop.io.ModelIOManager;
-import it.unibz.inf.ontop.model.OBDAModel;
-import it.unibz.inf.ontop.model.impl.OBDADataFactoryImpl;
+import it.unibz.inf.ontop.protege.core.OBDAModel;
 import org.processmining.contexts.uitopia.annotations.UIImportPlugin;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.abstractplugins.AbstractImportPlugin;
@@ -38,11 +37,16 @@ import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.events.Logger;
 
 import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * @author T. E. Kalayci
  */
-@Plugin(name = "OBDA Mapping File", parameterLabels = {"Filename"}, returnLabels = {"OBDA mapping imported from file"}, returnTypes = {OBDAModel.class})
+@Plugin(name = "OBDA Mapping File",
+        parameterLabels = {"Filename"},
+        returnLabels = {"OBDA Mappings", "Datasource Properties"},
+        returnTypes = {OBDAModel.class, Properties.class}
+)
 @UIImportPlugin(description = "Mapping (OBDA)", extensions = {"obda"})
 public class OBDAMappingImportPlugin extends AbstractImportPlugin {
     @UITopiaVariant(
@@ -52,13 +56,12 @@ public class OBDAMappingImportPlugin extends AbstractImportPlugin {
             website = "http://onprom.inf.unibz.it"
     )
     @Override
-    protected OBDAModel importFromStream(final PluginContext context, final InputStream input, final String filename, final long fileSizeInBytes) {
+    protected Object[] importFromStream(final PluginContext context, final InputStream input, final String filename, final long fileSizeInBytes) {
         try {
-            OBDAModel obdaModel = OBDADataFactoryImpl.getInstance().getOBDAModel();
-            ModelIOManager ioManager = new ModelIOManager(obdaModel);
-            ioManager.load(input);
+            Properties properties = OntopUtility.getDataSourceProperties(getFile());
+            OBDAModel obdaModel = OntopUtility.getOBDAModel(getFile(), properties);
             context.getFutureResult(0).setLabel("OBDA Mapping (" + filename + " ) " + UIUtility.getCurrentDateTime());
-            return obdaModel;
+            return new Object[]{obdaModel, properties};
         } catch (Exception e) {
             context.log("Couldn't load OBDA model: " + e.getMessage(), Logger.MessageLevel.ERROR);
         }
