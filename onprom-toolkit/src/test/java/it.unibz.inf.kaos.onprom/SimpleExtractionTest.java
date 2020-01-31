@@ -48,12 +48,16 @@ public class SimpleExtractionTest {
         try {
             long start = System.currentTimeMillis();
             // prepare files
-            String folder = "/home/kalayci/Desktop/onprom/conference/";
+            if(args.length < 1) {
+                System.out.println("Please use by providing folder of the files");
+                System.exit(-1);
+            }
+            String folder = args[0];
             File domainMappingsFile = new File(folder + "conference.obda");
             File domainOntologyFile = new File(folder + "conference.owl");
             File eventOntologyFile = new File(folder + "custom-eo.owl");
-            File firstLevelFile = new File(folder + "conference-lvl1.aqr");
-            File secondLevelFile = new File(folder + "conference-lvl2.aqr");
+            File firstLevelFile = new File(folder + "level1.aqr");
+            File secondLevelFile = new File(folder + "level2.aqr");
             // generate output file names
             String outputFileName = domainOntologyFile.getParent() + "/" + firstLevelFile.getName() + System.currentTimeMillis();
             // redirect console output to a text file
