@@ -37,6 +37,8 @@ import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
 import it.unibz.inf.ontop.spec.mapping.OBDASQLQuery;
 import it.unibz.inf.ontop.spec.mapping.impl.SQLMappingFactoryImpl;
+import it.unibz.inf.ontop.spec.mapping.parser.TargetQueryParser;
+import it.unibz.inf.ontop.spec.mapping.parser.impl.TurtleOBDASQLParser;
 import it.unibz.inf.ontop.spec.mapping.pp.impl.OntopNativeSQLPPTriplesMap;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLDatatype;
@@ -100,9 +102,11 @@ public class OBDAMapper {
         String newId = "ONPROM_MAPPING_" + obdaModel.getMapping(obdaModel.getDatasource().getSourceID()).size();
         logger.info("######################\nID:" + newId + "\nTARGET:" + target + "\nSOURCE:" + source + "\n######################");
         OBDASQLQuery body = SQLMappingFactoryImpl.getInstance().getSQLQuery(source.trim());
+        TargetQueryParser textParser = new TurtleOBDASQLParser(obdaModel.getMutablePrefixManager().getPrefixMap(),
+                obdaModel.getTermFactory(), obdaModel.getTargetAtomFactory(), obdaModel.getRdfFactory());
         try {
             logger.info("######################\nBODY:"+ body.getSQLQuery() + "\n######################");
-            obdaModel.addTriplesMap(new OntopNativeSQLPPTriplesMap(newId, body, obdaModel.createTargetQueryParser().parse(target)), false);
+            obdaModel.addTriplesMap(new OntopNativeSQLPPTriplesMap(newId, body, textParser.parse(target)), false);
         } catch (Exception e) {
             e.printStackTrace();
         }

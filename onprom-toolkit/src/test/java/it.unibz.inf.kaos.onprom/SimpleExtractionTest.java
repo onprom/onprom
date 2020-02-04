@@ -59,12 +59,13 @@ public class SimpleExtractionTest {
             File firstLevelFile = new File(folder + "level1.aqr");
             File secondLevelFile = new File(folder + "level2.aqr");
             // generate output file names
-            String outputFileName = domainOntologyFile.getParent() + "/" + firstLevelFile.getName() + System.currentTimeMillis();
+            String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName() + System.currentTimeMillis();
             // redirect console output to a text file
             PrintStream out = new PrintStream(new FileOutputStream(outputFileName + ".txt"));
             System.setOut(out);
             // prepare XES log output file
-            File finalMappingsFile = new File(outputFileName + ".obda");
+            File finalMappingsFile = new File(outputFileName + "_lvl2.obda");
+            File firstMappingsFile = new File(outputFileName + "_lvl1.obda");
             File output = new File(outputFileName + ".xes.gz");
             // load mappings
             Properties dataSourceProperties = OntopUtility.getDataSourceProperties(domainMappingsFile);
@@ -79,9 +80,10 @@ public class SimpleExtractionTest {
                     try {
                         //generate final mapping
                         OBDAModel firstMapping = new OBDAMapper(domainOntology, eventOntology, obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
+                        OntopUtility.saveModel(firstMapping, firstMappingsFile);
                         OBDAModel finalMapping = new OBDAMapper(eventOntology, onpromOntology, firstMapping, dataSourceProperties, secondLevel).getOBDAModel();
                         OntopUtility.saveModel(finalMapping, finalMappingsFile);
-                        XLog xTraces = new SimpleXESLogExtractor().extractXESLog(domainOntology, obdaModel, dataSourceProperties, firstLevel, eventOntology, secondLevel);
+                        XLog xTraces = new SimpleXESLogExtractor().extractXESLog(finalMapping, dataSourceProperties);
                         // extract log
                         new XesXmlGZIPSerializer().serialize(xTraces, new FileOutputStream(output));
                     } catch (Exception e) {

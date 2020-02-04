@@ -26,6 +26,8 @@
 
 package it.unibz.inf.kaos.obdamapper.utility;
 
+import it.unibz.inf.ontop.datalog.DatalogFactory;
+import it.unibz.inf.ontop.dbschema.JdbcTypeMapper;
 import it.unibz.inf.ontop.injection.*;
 import it.unibz.inf.ontop.model.atom.AtomFactory;
 import it.unibz.inf.ontop.model.atom.TargetAtomFactory;
@@ -60,6 +62,7 @@ public class OntopUtility {
                 .ontology(ontology)
                 .ppMapping(obdaModel.generatePPMapping())
                 .properties(dataSourceProperties)
+                .enableIRISafeEncoding(false)
                 .build();
     }
 
@@ -71,10 +74,11 @@ public class OntopUtility {
                 configuration.getInjector().getInstance(AtomFactory.class),
                 configuration.getInjector().getInstance(TermFactory.class),
                 configuration.getInjector().getInstance(TypeFactory.class),
+                configuration.getInjector().getInstance(DatalogFactory.class),
                 configuration.getInjector().getInstance(TargetAtomFactory.class),
                 configuration.getInjector().getInstance(SubstitutionFactory.class),
-                configuration.getInjector().getInstance(RDF.class),
-                configuration.getInjector().getInstance(TargetQueryParserFactory.class)
+                configuration.getInjector().getInstance(JdbcTypeMapper.class),
+                configuration.getInjector().getInstance(RDF.class)
                 );
     }
 
