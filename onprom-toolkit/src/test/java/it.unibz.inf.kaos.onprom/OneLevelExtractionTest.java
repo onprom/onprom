@@ -42,54 +42,48 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Properties;
 
-public class SimpleExtractionTest {
+public class OneLevelExtractionTest {
 
     public static void main(String[] args) {
         try {
             long start = System.currentTimeMillis();
             // prepare files
-            if(args.length < 1) {
+            if (args.length < 1) {
                 System.out.println("Please use by providing folder of the files");
                 System.exit(-1);
             }
             String folder = args[0];
             File domainMappingsFile = new File(folder + "conference.obda");
             File domainOntologyFile = new File(folder + "conference.owl");
-            File eventOntologyFile = new File(folder + "custom-eo.owl");
-            File firstLevelFile = new File(folder + "level1.aqr");
-            File secondLevelFile = new File(folder + "level2.aqr");
+            File queriesFile = new File(folder + "conference.aqr");
             // generate output file names
             String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName() + System.currentTimeMillis();
             // redirect console output to a text file
             PrintStream out = new PrintStream(new FileOutputStream(outputFileName + ".txt"));
             System.setOut(out);
             // prepare XES log output file
-            File finalMappingsFile = new File(outputFileName + "_lvl2.obda");
-            File firstMappingsFile = new File(outputFileName + "_lvl1.obda");
+            File generatedMappingsFile = new File(outputFileName + "_generated.obda");
             File output = new File(outputFileName + ".xes.gz");
             // load mappings
             Properties dataSourceProperties = OntopUtility.getDataSourceProperties(domainMappingsFile);
             OBDAModel obdaModel = OntopUtility.getOBDAModel(domainMappingsFile, dataSourceProperties);
             // load ontologies
             OWLOntology domainOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(domainOntologyFile);
-            OWLOntology eventOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(eventOntologyFile);
-            OWLOntology onpromOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(SimpleExtractionTest.class.getResourceAsStream("/eo-onprom.owl"));
+            OWLOntology onpromOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(OneLevelExtractionTest.class.getResourceAsStream("/eo-onprom.owl"));
             // start extraction process
             if (output.createNewFile()) {
-                IOUtility.readJSON(firstLevelFile, AnnotationQueries.class).ifPresent(firstLevel -> IOUtility.readJSON(secondLevelFile, AnnotationQueries.class).ifPresent(secondLevel -> {
+                IOUtility.readJSON(queriesFile, AnnotationQueries.class).ifPresent(firstLevel -> {
                     try {
                         //generate final mapping
-                        OBDAModel firstMapping = new OBDAMapper(domainOntology, eventOntology, obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
-                        OntopUtility.saveModel(firstMapping, firstMappingsFile);
-                        OBDAModel finalMapping = new OBDAMapper(eventOntology, onpromOntology, firstMapping, dataSourceProperties, secondLevel).getOBDAModel();
-                        OntopUtility.saveModel(finalMapping, finalMappingsFile);
-                        XLog xTraces = new SimpleXESLogExtractor().extractXESLog(finalMapping, dataSourceProperties);
+                        OBDAModel firstMapping = new OBDAMapper(domainOntology, SimpleXESLogExtractor.getDefaultEventOntology(), obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
+                        OntopUtility.saveModel(firstMapping, generatedMappingsFile);
+                        XLog xTraces = new SimpleXESLogExtractor().extractXESLog(firstMapping, dataSourceProperties);
                         // extract log
                         new XesXmlGZIPSerializer().serialize(xTraces, new FileOutputStream(output));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }));
+                });
             }
             System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) / 1000 + "s");
             System.exit(0);

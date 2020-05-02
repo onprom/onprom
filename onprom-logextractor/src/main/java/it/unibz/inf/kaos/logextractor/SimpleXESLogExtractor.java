@@ -60,22 +60,10 @@ public class SimpleXESLogExtractor {
         return null;
     }
 
-    public XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, Properties dataSourceProperties, AnnotationQueries annotation) {
-        try {
-            logger.info("Constructing EBDA Mapping");
-            OBDAModel ebdaModel = new OBDAMapper(domainOntology,
-                    OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(
-                            SimpleXESLogExtractor.class.getResourceAsStream(XESConstants.eventOntoPath)
-                    ),
-                    obdaModel,
-                    dataSourceProperties,
-                    annotation
-            ).getOBDAModel();
-            return extractXESLog(ebdaModel, dataSourceProperties);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return null;
+    public static OWLOntology getDefaultEventOntology() throws Exception {
+        return OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(
+                SimpleXESLogExtractor.class.getResourceAsStream(XESConstants.eventOntoPath)
+        );
     }
 
     public XLog extractXESLog(OBDAModel ebdaModel, Properties dataSourceProperties) {
@@ -102,6 +90,22 @@ public class SimpleXESLogExtractor {
                     logger.error("Can't unfold queries, something is wrong, please check logs");
                 }
             }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, Properties dataSourceProperties, AnnotationQueries annotation) {
+        try {
+            logger.info("Constructing EBDA Mapping");
+            OBDAModel ebdaModel = new OBDAMapper(domainOntology,
+                    getDefaultEventOntology(),
+                    obdaModel,
+                    dataSourceProperties,
+                    annotation
+            ).getOBDAModel();
+            return extractXESLog(ebdaModel, dataSourceProperties);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
