@@ -31,14 +31,14 @@ import it.unibz.inf.kaos.data.query.*;
 import it.unibz.inf.kaos.obdamapper.utility.OBDAMappingUtility;
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.ontop.injection.OntopSQLOWLAPIConfiguration;
+import it.unibz.inf.ontop.iq.IQ;
+import it.unibz.inf.ontop.iq.node.NativeNode;
 import it.unibz.inf.ontop.owlapi.OntopOWLFactory;
 import it.unibz.inf.ontop.owlapi.OntopOWLReasoner;
 import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
-import it.unibz.inf.ontop.spec.mapping.OBDASQLQuery;
-import it.unibz.inf.ontop.spec.mapping.impl.SQLMappingFactoryImpl;
+import it.unibz.inf.ontop.spec.mapping.SQLPPSourceQueryFactory;
 import it.unibz.inf.ontop.spec.mapping.parser.TargetQueryParser;
-import it.unibz.inf.ontop.spec.mapping.parser.impl.TurtleOBDASQLParser;
 import it.unibz.inf.ontop.spec.mapping.pp.impl.OntopNativeSQLPPTriplesMap;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLDatatype;
@@ -58,20 +58,22 @@ public class OBDAMapper {
 
     private final OWLOntology targetOntology;
     private final OBDAModel obdaModel;
-    private final Properties dataSourceProperties;
     private OntopOWLStatement statement;
+    private final TargetQueryParser textParser;
+    private final SQLPPSourceQueryFactory sourceQueryFactory;
 
     public OBDAMapper(
             OWLOntology sourceOntology, OWLOntology targetOntology, OBDAModel sourceObdaModel, Properties dataSourceProperties, AnnotationQueries annotationQueries) {
         this.targetOntology = targetOntology;
-        this.dataSourceProperties = dataSourceProperties;
         OntopSQLOWLAPIConfiguration config = OntopUtility.getConfiguration(sourceOntology, sourceObdaModel, dataSourceProperties);
         this.obdaModel = OntopUtility.emptyOBDAModel(config);
+        this.textParser = obdaModel.createTargetQueryParser();
+        this.sourceQueryFactory = obdaModel.getSourceQueryFactory();
+
         try {
             OntopOWLReasoner reasoner = OntopOWLFactory.defaultFactory().createReasoner(config);
             this.statement = reasoner.getConnection().createStatement();
             this.startMapping(annotationQueries);
-            logger.info("An OBDA Mapping is initialized");
             reasoner.close();
             reasoner.dispose();
         } catch (Exception e) {
@@ -79,16 +81,8 @@ public class OBDAMapper {
         }
     }
 
-    public OWLOntology getTargetOntology() {
-        return targetOntology;
-    }
-
     public OBDAModel getOBDAModel() {
         return obdaModel;
-    }
-
-    public Properties getDataSourceProperties() {
-        return dataSourceProperties;
     }
 
     private void startMapping(AnnotationQueries annotationQueries) {
@@ -99,14 +93,15 @@ public class OBDAMapper {
     }
 
     private void addMapping(String source, String target) {
-        String newId = "ONPROM_MAPPING_" + obdaModel.getMapping(obdaModel.getDatasource().getSourceID()).size();
-        logger.info("######################\nID:" + newId + "\nTARGET:" + target + "\nSOURCE:" + source + "\n######################");
-        OBDASQLQuery body = SQLMappingFactoryImpl.getInstance().getSQLQuery(source.trim());
-        TargetQueryParser textParser = new TurtleOBDASQLParser(obdaModel.getMutablePrefixManager().getPrefixMap(),
-                obdaModel.getTermFactory(), obdaModel.getTargetAtomFactory(), obdaModel.getRdfFactory());
         try {
-            logger.info("######################\nBODY:"+ body.getSQLQuery() + "\n######################");
-            obdaModel.addTriplesMap(new OntopNativeSQLPPTriplesMap(newId, body, textParser.parse(target)), false);
+            String newId = "ONPROM_MAPPING_" + obdaModel.getMapping(obdaModel.getDatasource().getSourceID()).size();
+            logger.info("######################\nID:" + newId + "\nTARGET:" + target + "\nSOURCE:" + source + "\n######################");
+            IQ executableQuery = this.statement.getExecutableQuery(source);
+            String sqlQuery = ((NativeNode) executableQuery.getTree().getChildren().get(0)).getNativeQueryString();
+            logger.info("######################\nBODY:" + sqlQuery + "\n######################");
+            obdaModel.addTriplesMap(new OntopNativeSQLPPTriplesMap(newId,
+                    sourceQueryFactory.createSourceQuery(sqlQuery),
+                    textParser.parse(target)), false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,9 +112,9 @@ public class OBDAMapper {
         String[] firstComponent = annoQ.getFirstComponent();
         String[] secondComponent = annoQ.getSecondComponent();
         IRI targetURI = annoQ.getTargetIRI();
-        String sourceSQLQuery = annoQ.getQuery();
+        String query = annoQ.getQuery();
 
-        if (firstComponent == null || secondComponent == null || targetURI == null || sourceSQLQuery == null) {
+        if (firstComponent == null || secondComponent == null || targetURI == null || query == null) {
             logger.error("invalid input - some inputs contain null value");
             return;
         }
@@ -149,7 +144,6 @@ public class OBDAMapper {
                     dataType = defaultDataType;
             }
 
-            String unfoldedQuery = statement.getExecutableQuery(sourceSQLQuery).toString();
             String targetQuery = "";
 
             StringBuilder firstURITemplate = getComponentTemplate(firstComponent);
@@ -191,10 +185,10 @@ public class OBDAMapper {
                         secondURITemplate);
             }
             if (
-                    unfoldedQuery != null && !unfoldedQuery.equals("") &&
+                    !query.equals("") &&
                             targetQuery != null && !targetQuery.equals("")) {
 
-                this.addMapping(unfoldedQuery, targetQuery);
+                this.addMapping(query, targetQuery);
             }
         } catch (Exception e) {
             logger.info(e.getMessage(), e);
@@ -217,9 +211,9 @@ public class OBDAMapper {
 
         String[] uriComponent = annoQ.getComponent();
         IRI targetURI = annoQ.getTargetIRI();
-        String sourceSQLQuery = annoQ.getQuery();
+        String query = annoQ.getQuery();
 
-        if (uriComponent == null || targetURI == null || sourceSQLQuery == null) {
+        if (uriComponent == null || targetURI == null || query == null) {
             logger.error("invalid input - some inputs contain null value");
             return;
         }
@@ -229,9 +223,6 @@ public class OBDAMapper {
         try {
 
             targetEntity = OBDAMappingUtility.getOWLTargetEntity(targetOntology, targetURI);
-
-            String unfoldedQuery = statement.getExecutableQuery(sourceSQLQuery).toString();
-
             StringBuilder uriTemplate = getComponentTemplate(uriComponent);
             if (uriTemplate.length() == 0) {
                 logger.error("something wrong with the answer variables information - skip");
@@ -246,10 +237,10 @@ public class OBDAMapper {
                     OBDAMappingUtility.cleanURI(uriTemplate.toString()), targetEntity.toString());
 
             if (
-                    unfoldedQuery != null && !unfoldedQuery.equals("") &&
+                    !query.equals("") &&
                             targetQuery != null && !targetQuery.equals("")) {
 
-                this.addMapping(unfoldedQuery, targetQuery);
+                this.addMapping(query, targetQuery);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

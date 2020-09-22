@@ -49,7 +49,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.2.4</version>
                 <configuration>
                     <shadedArtifactAttached>false</shadedArtifactAttached>
                     <transformers>
@@ -89,7 +89,7 @@
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-querybuilder</artifactId>
-            <version>3.13.1</version>
+            <version>3.16.0</version>
         </dependency>
     </dependencies>
 </project>
