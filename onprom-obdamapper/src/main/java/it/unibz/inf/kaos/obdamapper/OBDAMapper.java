@@ -27,12 +27,17 @@
 package it.unibz.inf.kaos.obdamapper;
 
 import ch.qos.logback.classic.Logger;
+import com.google.common.collect.ImmutableMap;
 import it.unibz.inf.kaos.data.query.*;
 import it.unibz.inf.kaos.obdamapper.utility.OBDAMappingUtility;
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.ontop.injection.OntopSQLOWLAPIConfiguration;
 import it.unibz.inf.ontop.iq.IQ;
+import it.unibz.inf.ontop.iq.node.ConstructionNode;
 import it.unibz.inf.ontop.iq.node.NativeNode;
+import it.unibz.inf.ontop.model.term.ImmutableTerm;
+import it.unibz.inf.ontop.model.term.RDFLiteralConstant;
+import it.unibz.inf.ontop.model.term.Variable;
 import it.unibz.inf.ontop.owlapi.OntopOWLFactory;
 import it.unibz.inf.ontop.owlapi.OntopOWLReasoner;
 import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
@@ -40,6 +45,7 @@ import it.unibz.inf.ontop.protege.core.OBDAModel;
 import it.unibz.inf.ontop.spec.mapping.SQLPPSourceQueryFactory;
 import it.unibz.inf.ontop.spec.mapping.parser.TargetQueryParser;
 import it.unibz.inf.ontop.spec.mapping.pp.impl.OntopNativeSQLPPTriplesMap;
+import it.unibz.inf.ontop.substitution.ImmutableSubstitution;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLEntity;
@@ -48,7 +54,8 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.slf4j.LoggerFactory;
 import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl;
 
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class OBDAMapper {
     protected static final Logger logger = (Logger) LoggerFactory.getLogger(OBDAMapper.class);
@@ -99,6 +106,31 @@ public class OBDAMapper {
             IQ executableQuery = this.statement.getExecutableQuery(source);
             String sqlQuery = ((NativeNode) executableQuery.getTree().getChildren().get(0)).getNativeQueryString();
             logger.info("######################\nBODY:" + sqlQuery + "\n######################");
+
+            ConstructionNode constructionNode =  (ConstructionNode)executableQuery.getTree().getRootNode();
+            ImmutableSubstitution<ImmutableTerm> substitution =  constructionNode.getSubstitution();
+
+            ImmutableMap<Variable, ImmutableTerm> map = substitution.getImmutableMap();
+
+            Map<Variable, Variable> m1 = map.entrySet().stream()
+                    .map(e -> new AbstractMap.SimpleEntry<>(
+                            e.getKey(),
+                            e.getValue().getVariableStream().collect(Collectors.toList())))
+                    .filter(e -> e.getValue().size() == 1)
+                    .map(e -> new AbstractMap.SimpleEntry<>(
+                            e.getKey(),
+                            e.getValue().get(0)))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+            Map<Variable, ImmutableTerm> m2 = map.entrySet()
+                    .stream().filter(e -> e.getValue() instanceof RDFLiteralConstant)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+            HashMap<Variable, ImmutableTerm> m = new HashMap<>();
+            m.putAll(m1);
+            m.putAll(m2);
+
+
             obdaModel.addTriplesMap(new OntopNativeSQLPPTriplesMap(newId,
                     sourceQueryFactory.createSourceQuery(sqlQuery),
                     textParser.parse(target)), false);
