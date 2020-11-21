@@ -27,6 +27,7 @@
 package it.unibz.inf.kaos.obdamapper;
 
 import ch.qos.logback.classic.Logger;
+import com.github.jsonldjava.shaded.com.google.common.collect.Streams;
 import com.google.common.collect.ImmutableMap;
 import it.unibz.inf.kaos.data.query.*;
 import it.unibz.inf.kaos.obdamapper.utility.OBDAMappingUtility;
@@ -36,6 +37,7 @@ import it.unibz.inf.ontop.iq.IQ;
 import it.unibz.inf.ontop.iq.node.ConstructionNode;
 import it.unibz.inf.ontop.iq.node.NativeNode;
 import it.unibz.inf.ontop.model.term.ImmutableTerm;
+import it.unibz.inf.ontop.model.term.RDFConstant;
 import it.unibz.inf.ontop.model.term.RDFLiteralConstant;
 import it.unibz.inf.ontop.model.term.Variable;
 import it.unibz.inf.ontop.owlapi.OntopOWLFactory;
@@ -46,16 +48,16 @@ import it.unibz.inf.ontop.spec.mapping.SQLPPSourceQueryFactory;
 import it.unibz.inf.ontop.spec.mapping.parser.TargetQueryParser;
 import it.unibz.inf.ontop.spec.mapping.pp.impl.OntopNativeSQLPPTriplesMap;
 import it.unibz.inf.ontop.substitution.ImmutableSubstitution;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLDatatype;
-import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.slf4j.LoggerFactory;
 import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl;
 
 import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class OBDAMapper {
     protected static final Logger logger = (Logger) LoggerFactory.getLogger(OBDAMapper.class);
@@ -103,33 +105,9 @@ public class OBDAMapper {
         try {
             String newId = "ONPROM_MAPPING_" + obdaModel.getMapping(obdaModel.getDatasource().getSourceID()).size();
             logger.info("######################\nID:" + newId + "\nTARGET:" + target + "\nSOURCE:" + source + "\n######################");
-            IQ executableQuery = this.statement.getExecutableQuery(source);
-            String sqlQuery = ((NativeNode) executableQuery.getTree().getChildren().get(0)).getNativeQueryString();
-            logger.info("######################\nBODY:" + sqlQuery + "\n######################");
+            OntopReformulationResult refResult = reformulate(source);
 
-            ConstructionNode constructionNode =  (ConstructionNode)executableQuery.getTree().getRootNode();
-            ImmutableSubstitution<ImmutableTerm> substitution =  constructionNode.getSubstitution();
-
-            ImmutableMap<Variable, ImmutableTerm> map = substitution.getImmutableMap();
-
-            Map<Variable, Variable> m1 = map.entrySet().stream()
-                    .map(e -> new AbstractMap.SimpleEntry<>(
-                            e.getKey(),
-                            e.getValue().getVariableStream().collect(Collectors.toList())))
-                    .filter(e -> e.getValue().size() == 1)
-                    .map(e -> new AbstractMap.SimpleEntry<>(
-                            e.getKey(),
-                            e.getValue().get(0)))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-            Map<Variable, ImmutableTerm> m2 = map.entrySet()
-                    .stream().filter(e -> e.getValue() instanceof RDFLiteralConstant)
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-            HashMap<Variable, ImmutableTerm> m = new HashMap<>();
-            m.putAll(m1);
-            m.putAll(m2);
-
+            String sqlQuery = refResult.sqlString;
 
             obdaModel.addTriplesMap(new OntopNativeSQLPPTriplesMap(newId,
                     sourceQueryFactory.createSourceQuery(sqlQuery),
@@ -139,12 +117,50 @@ public class OBDAMapper {
         }
     }
 
-    private void addMapping(BinaryAnnotationQuery annoQ) {
+    private OntopReformulationResult reformulate(String source) {
+        IQ executableQuery;
+        try {
+            executableQuery = this.statement.getExecutableQuery(source);
+        } catch (OWLException e) {
+            throw new IllegalArgumentException(e);
+        }
+        String sqlQuery = ((NativeNode) executableQuery.getTree().getChildren().get(0)).getNativeQueryString();
+        logger.info("######################\nBODY:" + sqlQuery + "\n######################");
 
+        ConstructionNode constructionNode = (ConstructionNode) executableQuery.getTree().getRootNode();
+        ImmutableSubstitution<ImmutableTerm> substitution = constructionNode.getSubstitution();
+
+        ImmutableMap<Variable, ImmutableTerm> map = substitution.getImmutableMap();
+
+        Stream<Entry<String, ImmutableTerm>> m1 = map
+                .entrySet().stream()
+                .map(e -> new SimpleEntry<>(
+                        e.getKey(),
+                        e.getValue().getVariableStream().collect(Collectors.toList())))
+                .filter(e -> e.getValue().size() == 1)
+                .map(e -> new SimpleEntry<>(
+                        e.getKey().getName(),
+                        e.getValue().get(0)));
+
+        Stream<Entry<String, ImmutableTerm>> m2 = map.entrySet()
+                .stream()
+                .filter(e -> e.getValue() instanceof RDFLiteralConstant)
+                .map(e -> new SimpleEntry<>(e.getKey().getName(), e.getValue()));
+
+        Map<String, ImmutableTerm> m =
+                Streams.concat(m1, m2).collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+
+        return new OntopReformulationResult(sqlQuery,m);
+    }
+
+    private void addMapping(BinaryAnnotationQuery annoQ) {
         String[] firstComponent = annoQ.getFirstComponent();
         String[] secondComponent = annoQ.getSecondComponent();
         IRI targetURI = annoQ.getTargetIRI();
         String query = annoQ.getQuery();
+
+        OntopReformulationResult result = reformulate(query);
+        Map<String, ImmutableTerm> map = result.substitution;
 
         if (firstComponent == null || secondComponent == null || targetURI == null || query == null) {
             logger.error("invalid input - some inputs contain null value");
@@ -157,16 +173,13 @@ public class OBDAMapper {
         OWLDatatype defaultDataType = new OWLDatatypeImpl(OWL2Datatype.RDFS_LITERAL.getIRI());
 
         try {
-
             targetEntity = OBDAMappingUtility.getOWLTargetEntity(targetOntology, targetURI);
 
             if (targetEntity.isOWLDataProperty()) {
-
                 if (secondComponent.length > 1) {
                     logger.error(
                             "wrong annotation - for the mapping to data property"
                                     + "the second component must contain exactly one answer variable/constant");
-
                     return;
                 }
 
@@ -178,8 +191,8 @@ public class OBDAMapper {
 
             String targetQuery = "";
 
-            StringBuilder firstURITemplate = getComponentTemplate(firstComponent);
-            StringBuilder secondURITemplate = getComponentTemplate(secondComponent);
+            StringBuilder firstURITemplate = getComponentTemplate(firstComponent, map);
+            StringBuilder secondURITemplate = getComponentTemplate(secondComponent, map);
 
             if (firstURITemplate.length() == 0 || secondURITemplate.length() == 0) {
                 logger.error("something wrong with the answer variables information");
@@ -190,7 +203,6 @@ public class OBDAMapper {
             logger.info("secondURITemplate: " + secondURITemplate);
 
             if (targetEntity.isOWLObjectProperty()) {
-
                 logger.info("Add a mapping to an OBJECT PROPERTY");
 
                 targetQuery = String.format(objPropTripleTemplate,
@@ -199,7 +211,6 @@ public class OBDAMapper {
                         OBDAMappingUtility.cleanURI(secondURITemplate.toString()));
 
             } else if (targetEntity.isOWLDataProperty()) {
-
                 logger.info("Add a mapping to a DATA PROPERTY");
 
                 if (OBDAMappingUtility.isConstant(secondURITemplate.toString())) {
@@ -216,9 +227,8 @@ public class OBDAMapper {
                         targetEntity.toString(),
                         secondURITemplate);
             }
-            if (
-                    !query.equals("") &&
-                            targetQuery != null && !targetQuery.equals("")) {
+            if (!query.equals("") &&
+                    targetQuery != null && !targetQuery.equals("")) {
 
                 this.addMapping(query, targetQuery);
             }
@@ -227,11 +237,18 @@ public class OBDAMapper {
         }
     }
 
-    private StringBuilder getComponentTemplate(String[] uriComponent) {
+    private StringBuilder getComponentTemplate(String[] uriComponent, Map<String, ImmutableTerm> map) {
         StringBuilder uriTemplate = new StringBuilder();
         for (int i = 0; i < uriComponent.length; i++) {
             String uc = uriComponent[i];
-            uriTemplate.append("{").append(uc).append("}");
+
+            ImmutableTerm term = map.get(uc);
+            if (term instanceof Variable) {
+                uriTemplate.append("{").append(((Variable) term).getName()).append("}");
+            } else if (term instanceof RDFConstant) {
+                uriTemplate.append(((RDFConstant) term).getValue());
+            }
+
             if (i < uriComponent.length - 1) {
                 uriTemplate.append("/");
             }
@@ -253,9 +270,10 @@ public class OBDAMapper {
         OWLEntity targetEntity;
 
         try {
-
             targetEntity = OBDAMappingUtility.getOWLTargetEntity(targetOntology, targetURI);
-            StringBuilder uriTemplate = getComponentTemplate(uriComponent);
+            OntopReformulationResult result = reformulate(query);
+            Map<String, ImmutableTerm> map = result.substitution;
+            StringBuilder uriTemplate = getComponentTemplate(uriComponent, map);
             if (uriTemplate.length() == 0) {
                 logger.error("something wrong with the answer variables information - skip");
                 return;
@@ -268,10 +286,7 @@ public class OBDAMapper {
             String targetQuery = String.format(conceptTripleTemplate,
                     OBDAMappingUtility.cleanURI(uriTemplate.toString()), targetEntity.toString());
 
-            if (
-                    !query.equals("") &&
-                            targetQuery != null && !targetQuery.equals("")) {
-
+            if (!query.equals("") && targetQuery != null && !targetQuery.equals("")) {
                 this.addMapping(query, targetQuery);
             }
         } catch (Exception e) {
@@ -290,5 +305,15 @@ public class OBDAMapper {
         public void visit(UnaryAnnotationQuery query) {
             addMapping(query);
         }
+    }
+
+    static class OntopReformulationResult {
+        public OntopReformulationResult(String sqlString, Map<String, ImmutableTerm> substitution) {
+            this.sqlString = sqlString;
+            this.substitution = substitution;
+        }
+
+        String sqlString;
+        Map<String, ImmutableTerm> substitution;
     }
 }
