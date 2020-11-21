@@ -191,8 +191,8 @@ public class OBDAMapper {
 
             String targetQuery = "";
 
-            StringBuilder firstURITemplate = getComponentTemplate(firstComponent, map);
-            StringBuilder secondURITemplate = getComponentTemplate(secondComponent, map);
+            String firstURITemplate = getComponentTemplate(firstComponent, map);
+            StringBuilder secondURITemplate = new StringBuilder(getComponentTemplate(secondComponent, map));
 
             if (firstURITemplate.length() == 0 || secondURITemplate.length() == 0) {
                 logger.error("something wrong with the answer variables information");
@@ -237,23 +237,38 @@ public class OBDAMapper {
         }
     }
 
-    private StringBuilder getComponentTemplate(String[] uriComponent, Map<String, ImmutableTerm> map) {
-        StringBuilder uriTemplate = new StringBuilder();
-        for (int i = 0; i < uriComponent.length; i++) {
-            String uc = uriComponent[i];
+    private String getComponentTemplate(String[] uriComponent, Map<String, ImmutableTerm> map) {
 
-            ImmutableTerm term = map.get(uc);
-            if (term instanceof Variable) {
-                uriTemplate.append("{").append(((Variable) term).getName()).append("}");
-            } else if (term instanceof RDFConstant) {
-                uriTemplate.append(((RDFConstant) term).getValue());
-            }
-
-            if (i < uriComponent.length - 1) {
-                uriTemplate.append("/");
-            }
-        }
-        return uriTemplate;
+        return Arrays.stream(uriComponent)
+                .map(map::get)
+                .map(term -> {
+                    if (term instanceof Variable) {
+                        return "{" + ((Variable) term).getName() + "}";
+                    } else if (term instanceof RDFConstant) {
+                        return (((RDFConstant) term).getValue());
+                    } else {
+                        throw new IllegalArgumentException("unknown type: " + term);
+                    }
+                })
+                .collect(Collectors.joining("/"));
+//
+//
+//        StringBuilder uriTemplate = new StringBuilder();
+//        for (int i = 0; i < uriComponent.length; i++) {
+//            String uc = uriComponent[i];
+//
+//            ImmutableTerm term = map.get(uc);
+//            if (term instanceof Variable) {
+//                uriTemplate.append("{").append(((Variable) term).getName()).append("}");
+//            } else if (term instanceof RDFConstant) {
+//                uriTemplate.append(((RDFConstant) term).getValue());
+//            }
+//
+//            if (i < uriComponent.length - 1) {
+//                uriTemplate.append("/");
+//            }
+//        }
+//        return uriTemplate;
     }
 
     private void addMapping(UnaryAnnotationQuery annoQ) {
@@ -273,7 +288,7 @@ public class OBDAMapper {
             targetEntity = OBDAMappingUtility.getOWLTargetEntity(targetOntology, targetURI);
             OntopReformulationResult result = reformulate(query);
             Map<String, ImmutableTerm> map = result.substitution;
-            StringBuilder uriTemplate = getComponentTemplate(uriComponent, map);
+            String uriTemplate = getComponentTemplate(uriComponent, map);
             if (uriTemplate.length() == 0) {
                 logger.error("something wrong with the answer variables information - skip");
                 return;
