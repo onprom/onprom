@@ -105,12 +105,9 @@ public class OBDAMapper {
         try {
             String newId = "ONPROM_MAPPING_" + obdaModel.getMapping(obdaModel.getDatasource().getSourceID()).size();
             logger.info("######################\nID:" + newId + "\nTARGET:" + target + "\nSOURCE:" + source + "\n######################");
-            OntopReformulationResult refResult = reformulate(source);
-
-            String sqlQuery = refResult.sqlString;
 
             obdaModel.addTriplesMap(new OntopNativeSQLPPTriplesMap(newId,
-                    sourceQueryFactory.createSourceQuery(sqlQuery),
+                    sourceQueryFactory.createSourceQuery(source),
                     textParser.parse(target)), false);
         } catch (Exception e) {
             e.printStackTrace();
@@ -230,7 +227,7 @@ public class OBDAMapper {
             if (!query.equals("") &&
                     targetQuery != null && !targetQuery.equals("")) {
 
-                this.addMapping(query, targetQuery);
+                this.addMapping(result.sqlString, targetQuery);
             }
         } catch (Exception e) {
             logger.info(e.getMessage(), e);
@@ -251,24 +248,6 @@ public class OBDAMapper {
                     }
                 })
                 .collect(Collectors.joining("/"));
-//
-//
-//        StringBuilder uriTemplate = new StringBuilder();
-//        for (int i = 0; i < uriComponent.length; i++) {
-//            String uc = uriComponent[i];
-//
-//            ImmutableTerm term = map.get(uc);
-//            if (term instanceof Variable) {
-//                uriTemplate.append("{").append(((Variable) term).getName()).append("}");
-//            } else if (term instanceof RDFConstant) {
-//                uriTemplate.append(((RDFConstant) term).getValue());
-//            }
-//
-//            if (i < uriComponent.length - 1) {
-//                uriTemplate.append("/");
-//            }
-//        }
-//        return uriTemplate;
     }
 
     private void addMapping(UnaryAnnotationQuery annoQ) {
@@ -302,7 +281,7 @@ public class OBDAMapper {
                     OBDAMappingUtility.cleanURI(uriTemplate.toString()), targetEntity.toString());
 
             if (!query.equals("") && targetQuery != null && !targetQuery.equals("")) {
-                this.addMapping(query, targetQuery);
+                this.addMapping(result.sqlString, targetQuery);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
