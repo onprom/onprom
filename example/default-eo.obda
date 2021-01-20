@@ -1,0 +1,436 @@
+[PrefixDeclaration]
+:		http://onprom.inf.unibz.it/
+owl:		http://www.w3.org/2002/07/owl#
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+xml:		http://www.w3.org/XML/1998/namespace
+xsd:		http://www.w3.org/2001/XMLSchema#
+obda:		https://w3id.org/obda/vocabulary#
+rdfs:		http://www.w3.org/2000/01/rdf-schema#
+onprom:		http://kaos.inf.unibz.it/onprom/
+
+[MappingDeclaration] @collection [[
+mappingId	ONPROM_MAPPING_0
+target		:{id1m15}/ :t-has-a :{id1m15}/literal/conceptname/{title1m15}/ . 
+source		SELECT v1."id" AS "id1m15", v1."title" AS "title1m15"
+			FROM "paper" v1
+
+mappingId	ONPROM_MAPPING_1
+target		:{id1m15}/literal/conceptname/{title1m15}/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m15", v1."title" AS "title1m15"
+			FROM "paper" v1
+
+mappingId	ONPROM_MAPPING_2
+target		:{id1m15}/literal/conceptname/{title1m15}/ :attKey "concept:name" . 
+source		SELECT v1."id" AS "id1m15", v1."title" AS "title1m15"
+			FROM "paper" v1
+
+mappingId	ONPROM_MAPPING_3
+target		:{id1m15}/literal/conceptname/{title1m15}/ :attValue {title1m15}^^xsd:string . 
+source		SELECT v1."id" AS "id1m15", v1."title" AS "title1m15"
+			FROM "paper" v1
+
+mappingId	ONPROM_MAPPING_4
+target		:{paper1m3}/ :t-contains-e :ReviewAcceptance/{id1m3}/ . 
+source		SELECT v1."id" AS "id1m3", v1."paper" AS "paper1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_5
+target		:ReviewAcceptance/{id1m3}/ :e-has-a :literal/conceptname/{id1m3}/ReviewAcceptance/ . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_6
+target		:literal/conceptname/{id1m3}/ReviewAcceptance/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_7
+target		:literal/conceptname/{id1m3}/ReviewAcceptance/ :attKey "concept:name" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_8
+target		:literal/conceptname/{id1m3}/ReviewAcceptance/ :attValue "ReviewAcceptance" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_9
+target		:ReviewAcceptance/{id1m8}/ :e-has-a :ReviewAcceptance/{id1m8}/timestamp/timetimestamp/{v0}/ . 
+source		SELECT v1."id" AS "id1m8", v1."acceptancetime" AS "v0"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_10
+target		:ReviewAcceptance/{id1m8}/timestamp/timetimestamp/{v0}/ :attType "timestamp" . 
+source		SELECT v1."id" AS "id1m8", v1."acceptancetime" AS "v0"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_11
+target		:ReviewAcceptance/{id1m8}/timestamp/timetimestamp/{v0}/ :attKey "time:timestamp" . 
+source		SELECT v1."id" AS "id1m8", v1."acceptancetime" AS "v0"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_12
+target		:ReviewAcceptance/{id1m8}/timestamp/timetimestamp/{v0}/ :attValue {v0}^^xsd:string . 
+source		SELECT v1."id" AS "id1m8", v1."acceptancetime" AS "v0"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_13
+target		:ReviewAcceptance/{id1m3}/ :e-has-a :literal/lifecycletransition/{id1m3}/Complete/ . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_14
+target		:literal/lifecycletransition/{id1m3}/Complete/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_15
+target		:literal/lifecycletransition/{id1m3}/Complete/ :attKey "lifecycle:transition" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_16
+target		:literal/lifecycletransition/{id1m3}/Complete/ :attValue "Complete" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_17
+target		:{id1m23}/ :t-contains-e :Decision/{id1m23}/ . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_18
+target		:Decision/{id1m23}/ :e-has-a :literal/conceptname/{id1m23}/Decision/ . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_19
+target		:literal/conceptname/{id1m23}/Decision/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_20
+target		:literal/conceptname/{id1m23}/Decision/ :attKey "concept:name" . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_21
+target		:literal/conceptname/{id1m23}/Decision/ :attValue "Decision" . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_22
+target		:Decision/{id1m17}/ :e-has-a :Decision/{id1m17}/timestamp/timetimestamp/{v0}/ . 
+source		SELECT v1."id" AS "id1m17", v1."decisiontime" AS "v0"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_23
+target		:Decision/{id1m17}/timestamp/timetimestamp/{v0}/ :attType "timestamp" . 
+source		SELECT v1."id" AS "id1m17", v1."decisiontime" AS "v0"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_24
+target		:Decision/{id1m17}/timestamp/timetimestamp/{v0}/ :attKey "time:timestamp" . 
+source		SELECT v1."id" AS "id1m17", v1."decisiontime" AS "v0"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_25
+target		:Decision/{id1m17}/timestamp/timetimestamp/{v0}/ :attValue {v0}^^xsd:string . 
+source		SELECT v1."id" AS "id1m17", v1."decisiontime" AS "v0"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_26
+target		:Decision/{id1m23}/ :e-has-a :literal/lifecycletransition/{id1m23}/Complete/ . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_27
+target		:literal/lifecycletransition/{id1m23}/Complete/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_28
+target		:literal/lifecycletransition/{id1m23}/Complete/ :attKey "lifecycle:transition" . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_29
+target		:literal/lifecycletransition/{id1m23}/Complete/ :attValue "Complete" . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+
+mappingId	ONPROM_MAPPING_30
+target		:{paper1m3}/ :t-contains-e :ReviewCompleted/{id1m1}/ . 
+source		SELECT v1."id" AS "id1m1", v2."paper" AS "paper1m3"
+			FROM "review" v1, "reviewrequest" v2
+			WHERE v1."idrr" = v2."id"
+
+mappingId	ONPROM_MAPPING_31
+target		:ReviewCompleted/{id1m1}/ :e-has-a :literal/conceptname/{id1m1}/ReviewCompleted/ . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+
+mappingId	ONPROM_MAPPING_32
+target		:literal/conceptname/{id1m1}/ReviewCompleted/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+
+mappingId	ONPROM_MAPPING_33
+target		:literal/conceptname/{id1m1}/ReviewCompleted/ :attKey "concept:name" . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+
+mappingId	ONPROM_MAPPING_34
+target		:literal/conceptname/{id1m1}/ReviewCompleted/ :attValue "ReviewCompleted" . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+
+mappingId	ONPROM_MAPPING_35
+target		:ReviewCompleted/{id1m11}/ :e-has-a :ReviewCompleted/{id1m11}/timestamp/timetimestamp/{v0}/ . 
+source		SELECT v1."id" AS "id1m11", v1."submissiontime" AS "v0"
+			FROM "review" v1
+
+mappingId	ONPROM_MAPPING_36
+target		:ReviewCompleted/{id1m11}/timestamp/timetimestamp/{v0}/ :attType "timestamp" . 
+source		SELECT v1."id" AS "id1m11", v1."submissiontime" AS "v0"
+			FROM "review" v1
+
+mappingId	ONPROM_MAPPING_37
+target		:ReviewCompleted/{id1m11}/timestamp/timetimestamp/{v0}/ :attKey "time:timestamp" . 
+source		SELECT v1."id" AS "id1m11", v1."submissiontime" AS "v0"
+			FROM "review" v1
+
+mappingId	ONPROM_MAPPING_38
+target		:ReviewCompleted/{id1m11}/timestamp/timetimestamp/{v0}/ :attValue {v0}^^xsd:string . 
+source		SELECT v1."id" AS "id1m11", v1."submissiontime" AS "v0"
+			FROM "review" v1
+
+mappingId	ONPROM_MAPPING_39
+target		:ReviewCompleted/{id1m1}/ :e-has-a :literal/lifecycletransition/{id1m1}/Complete/ . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+
+mappingId	ONPROM_MAPPING_40
+target		:literal/lifecycletransition/{id1m1}/Complete/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+
+mappingId	ONPROM_MAPPING_41
+target		:literal/lifecycletransition/{id1m1}/Complete/ :attKey "lifecycle:transition" . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+
+mappingId	ONPROM_MAPPING_42
+target		:literal/lifecycletransition/{id1m1}/Complete/ :attValue "Complete" . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+
+mappingId	ONPROM_MAPPING_43
+target		:{paper2m4}/ :t-contains-e :CameraReady/{id1m29}/ . 
+source		SELECT v1."id" AS "id1m29", v1."paper" AS "paper2m4"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_44
+target		:CameraReady/{id1m29}/ :e-has-a :literal/conceptname/{id1m29}/CameraReady/ . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_45
+target		:literal/conceptname/{id1m29}/CameraReady/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_46
+target		:literal/conceptname/{id1m29}/CameraReady/ :attKey "concept:name" . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_47
+target		:literal/conceptname/{id1m29}/CameraReady/ :attValue "CameraReady" . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_48
+target		:CameraReady/{id1m29}/ :e-has-a :CameraReady/{id1m29}/timestamp/timetimestamp/{v0}/ . 
+source		SELECT v1."id" AS "id1m29", v1."uploadtime" AS "v0"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_49
+target		:CameraReady/{id1m29}/timestamp/timetimestamp/{v0}/ :attType "timestamp" . 
+source		SELECT v1."id" AS "id1m29", v1."uploadtime" AS "v0"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_50
+target		:CameraReady/{id1m29}/timestamp/timetimestamp/{v0}/ :attKey "time:timestamp" . 
+source		SELECT v1."id" AS "id1m29", v1."uploadtime" AS "v0"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_51
+target		:CameraReady/{id1m29}/timestamp/timetimestamp/{v0}/ :attValue {v0}^^xsd:string . 
+source		SELECT v1."id" AS "id1m29", v1."uploadtime" AS "v0"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_52
+target		:CameraReady/{id1m29}/ :e-has-a :literal/lifecycletransition/{id1m29}/Complete/ . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_53
+target		:literal/lifecycletransition/{id1m29}/Complete/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_54
+target		:literal/lifecycletransition/{id1m29}/Complete/ :attKey "lifecycle:transition" . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_55
+target		:literal/lifecycletransition/{id1m29}/Complete/ :attValue "Complete" . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+
+mappingId	ONPROM_MAPPING_56
+target		:{paper2m4}/ :t-contains-e :Creation/{id1m26}/ . 
+source		SELECT v1."id" AS "id1m26", v1."paper" AS "paper2m4"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_57
+target		:Creation/{id1m26}/ :e-has-a :literal/conceptname/{id1m26}/Creation/ . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_58
+target		:literal/conceptname/{id1m26}/Creation/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_59
+target		:literal/conceptname/{id1m26}/Creation/ :attKey "concept:name" . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_60
+target		:literal/conceptname/{id1m26}/Creation/ :attValue "Creation" . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_61
+target		:Creation/{id1m26}/ :e-has-a :Creation/{id1m26}/timestamp/timetimestamp/{v0}/ . 
+source		SELECT v1."id" AS "id1m26", v1."uploadtime" AS "v0"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_62
+target		:Creation/{id1m26}/timestamp/timetimestamp/{v0}/ :attType "timestamp" . 
+source		SELECT v1."id" AS "id1m26", v1."uploadtime" AS "v0"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_63
+target		:Creation/{id1m26}/timestamp/timetimestamp/{v0}/ :attKey "time:timestamp" . 
+source		SELECT v1."id" AS "id1m26", v1."uploadtime" AS "v0"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_64
+target		:Creation/{id1m26}/timestamp/timetimestamp/{v0}/ :attValue {v0}^^xsd:string . 
+source		SELECT v1."id" AS "id1m26", v1."uploadtime" AS "v0"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_65
+target		:Creation/{id1m26}/ :e-has-a :literal/lifecycletransition/{id1m26}/Complete/ . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_66
+target		:literal/lifecycletransition/{id1m26}/Complete/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_67
+target		:literal/lifecycletransition/{id1m26}/Complete/ :attKey "lifecycle:transition" . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_68
+target		:literal/lifecycletransition/{id1m26}/Complete/ :attValue "Complete" . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+
+mappingId	ONPROM_MAPPING_69
+target		:{paper1m3}/ :t-contains-e :ReviewInvitation/{id1m3}/ . 
+source		SELECT v1."id" AS "id1m3", v1."paper" AS "paper1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_70
+target		:ReviewInvitation/{id1m3}/ :e-has-a :literal/conceptname/{id1m3}/ReviewInvitation/ . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_71
+target		:literal/conceptname/{id1m3}/ReviewInvitation/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_72
+target		:literal/conceptname/{id1m3}/ReviewInvitation/ :attKey "concept:name" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_73
+target		:literal/conceptname/{id1m3}/ReviewInvitation/ :attValue "ReviewInvitation" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_74
+target		:ReviewInvitation/{id1m10}/ :e-has-a :ReviewInvitation/{id1m10}/timestamp/timetimestamp/{v0}/ . 
+source		SELECT v1."id" AS "id1m10", v1."invitationtime" AS "v0"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_75
+target		:ReviewInvitation/{id1m10}/timestamp/timetimestamp/{v0}/ :attType "timestamp" . 
+source		SELECT v1."id" AS "id1m10", v1."invitationtime" AS "v0"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_76
+target		:ReviewInvitation/{id1m10}/timestamp/timetimestamp/{v0}/ :attKey "time:timestamp" . 
+source		SELECT v1."id" AS "id1m10", v1."invitationtime" AS "v0"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_77
+target		:ReviewInvitation/{id1m10}/timestamp/timetimestamp/{v0}/ :attValue {v0}^^xsd:string . 
+source		SELECT v1."id" AS "id1m10", v1."invitationtime" AS "v0"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_78
+target		:ReviewInvitation/{id1m3}/ :e-has-a :literal/lifecycletransition/{id1m3}/Complete/ . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_79
+target		:literal/lifecycletransition/{id1m3}/Complete/ :attType "literal" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_80
+target		:literal/lifecycletransition/{id1m3}/Complete/ :attKey "lifecycle:transition" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+
+mappingId	ONPROM_MAPPING_81
+target		:literal/lifecycletransition/{id1m3}/Complete/ :attValue "Complete" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+]]
+

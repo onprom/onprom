@@ -53,6 +53,7 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.slf4j.LoggerFactory;
 import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
@@ -94,10 +95,27 @@ public class OBDAMapper {
         return obdaModel;
     }
 
+    public <T> T[] concatenate(T[] a, T[] b) {
+        int aLen = a.length;
+        int bLen = b.length;
+
+        @SuppressWarnings("unchecked")
+        T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
+        System.arraycopy(a, 0, c, 0, aLen);
+        System.arraycopy(b, 0, c, aLen, bLen);
+
+        return c;
+    }
+
     private void startMapping(AnnotationQueries annotationQueries) {
+        System.out.println("So, we need to take ");
         AnnotationQueriesProcessor mappingAdder = new AnnotationQueriesProcessor();
         for (AnnotationQuery aq : annotationQueries.getAllQueries()) {
-            if (aq != null) aq.accept(mappingAdder);
+
+                aq.accept(mappingAdder);
+
+            //if (aq != null)
+
         }
     }
 
@@ -169,6 +187,10 @@ public class OBDAMapper {
         OWLDatatype dataType = null;
         OWLDatatype defaultDataType = new OWLDatatypeImpl(OWL2Datatype.RDFS_LITERAL.getIRI());
 
+
+
+
+
         try {
             targetEntity = OBDAMappingUtility.getOWLTargetEntity(targetOntology, targetURI);
 
@@ -184,6 +206,14 @@ public class OBDAMapper {
 
                 if (dataType == null)
                     dataType = defaultDataType;
+            }
+
+            // FIXME: HACKY!
+            //System.out.println(aq);
+            if(targetEntity.isOWLObjectProperty()){
+//                new BinaryAnnotationQuery(a.getQuery(), baq.getTargetIRI().toString(), baq.getFirstComponent(),
+                secondComponent = concatenate(annoQ.getFirstComponent(), annoQ.getSecondComponent());
+
             }
 
             String targetQuery = "";
@@ -230,7 +260,7 @@ public class OBDAMapper {
                 this.addMapping(result.sqlString, targetQuery);
             }
         } catch (Exception e) {
-            logger.info(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 

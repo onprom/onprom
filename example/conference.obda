@@ -10,7 +10,7 @@ rdfs:		http://www.w3.org/2000/01/rdf-schema#
 sourceUri	datasource1
 connectionUrl	jdbc:postgresql://localhost:5432/conference-10
 username	xiao
-password
+password    
 driverClass	org.postgresql.Driver
 
 [MappingDeclaration] @collection [[

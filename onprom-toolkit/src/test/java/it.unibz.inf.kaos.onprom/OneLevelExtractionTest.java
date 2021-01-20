@@ -59,8 +59,8 @@ public class OneLevelExtractionTest {
             // generate output file names
             String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName() + System.currentTimeMillis();
             // redirect console output to a text file
-            PrintStream out = new PrintStream(new FileOutputStream(outputFileName + ".txt"));
-            System.setOut(out);
+//            PrintStream out = new PrintStream(new FileOutputStream(outputFileName + ".txt"));
+//            System.setOut(out);
             // prepare XES log output file
             File generatedMappingsFile = new File(outputFileName + "_generated.obda");
             File output = new File(outputFileName + ".xes.gz");
