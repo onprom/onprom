@@ -30,6 +30,7 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClasses;
 import org.deckfour.xes.info.XLogInfo;
+import org.deckfour.xes.model.XAttributeMap;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PlotOrientation;
@@ -37,6 +38,8 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * Frame showing log summary
@@ -63,9 +66,11 @@ public class LogSummaryPanel extends JInternalFrame {
         this.setVisible(true);
     }
 
+
     private JPanel createPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
+
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridx = 0;
         panel.add(UIUtility.createLabel("Number of traces: " + info.getNumberOfTraces(), TXT_SIZE), gridBagConstraints);
@@ -94,14 +99,20 @@ public class LogSummaryPanel extends JInternalFrame {
         gridBagConstraints.gridy++;
         DefaultListModel<String> listModel = new DefaultListModel<>();
         JList<String> list = new JList<>(listModel);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
         info.getLog().forEach(trace -> {
             StringBuilder events = new StringBuilder();
             if (!trace.getAttributes().isEmpty() && trace.getAttributes().get("concept:name") != null) {
                 events.append(trace.getAttributes().get("concept:name").toString());
             }
             events.append(" ⇨");
+
+            trace.sort((e1,e2)->{
+                return e1.getAttributes().get("time:timestamp").toString().compareTo(e2.getAttributes().get("time:timestamp").toString());
+            });
+
             trace.forEach(event -> {
-                if (event.getAttributes() != null && event.getAttributes().get("concept:name") != null) {
+                if(event.getAttributes()!=null && event.getAttributes().get("concept:name")!=null) {
                     events.append(" ").append(event.getAttributes().get("concept:name").toString()).append(" →");
                 }
             });

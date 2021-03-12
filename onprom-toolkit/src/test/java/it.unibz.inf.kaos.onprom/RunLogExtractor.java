@@ -51,8 +51,8 @@ public class RunLogExtractor {
         try {
             long start = System.currentTimeMillis();
             // prepare files
-            File domainMappingsFile = new File(args[1]);
             File domainOntologyFile = new File(args[0]);
+            File domainMappingsFile = new File(args[1]);
             File eventOntologyFile = new File(args[2]);
             File firstLevelFile = new File(args[3]);
             File secondLevelFile = new File(args[4]);

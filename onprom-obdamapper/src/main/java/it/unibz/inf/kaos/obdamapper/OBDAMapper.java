@@ -71,6 +71,7 @@ public class OBDAMapper {
     private OntopOWLStatement statement;
     private final TargetQueryParser textParser;
     private final SQLPPSourceQueryFactory sourceQueryFactory;
+    private String[] ontoClass = null; // to store the ISI of the object of OWLObjectProperty
 
     public OBDAMapper(
             OWLOntology sourceOntology, OWLOntology targetOntology, OBDAModel sourceObdaModel, Properties dataSourceProperties, AnnotationQueries annotationQueries) {
@@ -110,8 +111,8 @@ public class OBDAMapper {
     private void startMapping(AnnotationQueries annotationQueries) {
         System.out.println("So, we need to take ");
         AnnotationQueriesProcessor mappingAdder = new AnnotationQueriesProcessor();
-        for (AnnotationQuery aq : annotationQueries.getAllQueries()) {
 
+        for (AnnotationQuery aq : annotationQueries.getAllQueries()) {
                 aq.accept(mappingAdder);
 
             //if (aq != null)
@@ -169,13 +170,16 @@ public class OBDAMapper {
     }
 
     private void addMapping(BinaryAnnotationQuery annoQ) {
+
         String[] firstComponent = annoQ.getFirstComponent();
         String[] secondComponent = annoQ.getSecondComponent();
+
         IRI targetURI = annoQ.getTargetIRI();
         String query = annoQ.getQuery();
 
         OntopReformulationResult result = reformulate(query);
         Map<String, ImmutableTerm> map = result.substitution;
+
 
         if (firstComponent == null || secondComponent == null || targetURI == null || query == null) {
             logger.error("invalid input - some inputs contain null value");
@@ -187,14 +191,29 @@ public class OBDAMapper {
         OWLDatatype dataType = null;
         OWLDatatype defaultDataType = new OWLDatatypeImpl(OWL2Datatype.RDFS_LITERAL.getIRI());
 
-
-
-
-
         try {
             targetEntity = OBDAMappingUtility.getOWLTargetEntity(targetOntology, targetURI);
 
+
+            // FIXME: HACKY!
+            //System.out.println(aq);
+            if(targetEntity.isOWLObjectProperty()){
+//                new BinaryAnnotationQuery(a.getQuery(), baq.getTargetIRI().toString(), baq.getFirstComponent(),
+                secondComponent = concatenate(annoQ.getFirstComponent(), annoQ.getSecondComponent());
+                ontoClass = concatenate(annoQ.getFirstComponent(), annoQ.getSecondComponent());
+
+            }
+
+            if (ontoClass == null)
+            {
+                ontoClass = annoQ.getFirstComponent();
+            }
+
             if (targetEntity.isOWLDataProperty()) {
+                //if (firstComponent[0].indexOf("_") != -1 ){
+                    firstComponent = ontoClass.clone();
+                //}
+
                 if (secondComponent.length > 1) {
                     logger.error(
                             "wrong annotation - for the mapping to data property"
@@ -208,13 +227,7 @@ public class OBDAMapper {
                     dataType = defaultDataType;
             }
 
-            // FIXME: HACKY!
-            //System.out.println(aq);
-            if(targetEntity.isOWLObjectProperty()){
-//                new BinaryAnnotationQuery(a.getQuery(), baq.getTargetIRI().toString(), baq.getFirstComponent(),
-                secondComponent = concatenate(annoQ.getFirstComponent(), annoQ.getSecondComponent());
 
-            }
 
             String targetQuery = "";
 
@@ -236,7 +249,6 @@ public class OBDAMapper {
                         OBDAMappingUtility.cleanURI(firstURITemplate.toString()),
                         targetEntity.toString(),
                         OBDAMappingUtility.cleanURI(secondURITemplate.toString()));
-
             } else if (targetEntity.isOWLDataProperty()) {
                 logger.info("Add a mapping to a DATA PROPERTY");
 
@@ -265,14 +277,19 @@ public class OBDAMapper {
     }
 
     private String getComponentTemplate(String[] uriComponent, Map<String, ImmutableTerm> map) {
+//        for (String sss: uriComponent ) {
+//           System.out.print(sss + "--");
+//       }
+//        System.out.println();
 
-        return Arrays.stream(uriComponent)
+
+        return  Arrays.stream(uriComponent)
                 .map(map::get)
                 .map(term -> {
                     if (term instanceof Variable) {
                         return "{" + ((Variable) term).getName() + "}";
-                    } else if (term instanceof RDFConstant) {
-                        return (((RDFConstant) term).getValue());
+                    } else if (term instanceof RDFLiteralConstant) {
+                        return (((RDFLiteralConstant) term).getValue());
                     } else {
                         throw new IllegalArgumentException("unknown type: " + term);
                     }

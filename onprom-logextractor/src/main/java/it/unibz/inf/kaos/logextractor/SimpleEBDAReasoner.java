@@ -174,7 +174,6 @@ class SimpleEBDAReasoner {
                 } catch (Exception e) {
                     logger.error(e.getMessage());
                 }
-
             }
             logger.info("Finished extracting " + events.size() + " events in " + (System.currentTimeMillis() - start) + "ms");
             resultSet.close();
@@ -223,16 +222,23 @@ class SimpleEBDAReasoner {
             resultSet = st.executeSelectQuery(XESConstants.qTraceEvt_Simple);
             logger.info("Finished executing traces events query in " + (System.currentTimeMillis() - start) + "ms");
             start = System.currentTimeMillis();
+
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
                 try {
                     String traceKey = result.getOWLObject(XESConstants.qTraceEvt_SimpleAnsVarTrace).toString();
                     String eventKey = result.getOWLObject(XESConstants.qTraceEvt_SimpleAnsVarEvent).toString();
 
-                    XTrace trace = traces.get(traceKey);
+                    //Process the string into a form that matches the key
+                    String prefix = "<http://onprom.inf.unibz.it/";
+                    String tmp = eventKey.substring(prefix.length(),eventKey.length());
+                    int index1= tmp.indexOf("/");
+                    String tmp2 = tmp.substring(index1+1,tmp.length());
+                    String finalEventKey = prefix + tmp2;
 
+                    XTrace trace = traces.get(traceKey);
                     if (trace != null) {
-                        XEvent event = events.get(eventKey);
+                        XEvent event = events.get(finalEventKey);
                         if (event != null) {
                             trace.add(event);
                         }

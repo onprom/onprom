@@ -1,0 +1,515 @@
+[PrefixDeclaration]
+owl:		http://www.w3.org/2002/07/owl#
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+xml:		http://www.w3.org/XML/1998/namespace
+xsd:		http://www.w3.org/2001/XMLSchema#
+rdfs:		http://www.w3.org/2000/01/rdf-schema#
+
+[MappingDeclaration] @collection [[
+mappingId	ONPROM_MAPPING_0
+target		<http://onprom.inf.unibz.it/{id1m15}> <http://onprom.inf.unibz.it/t-has-a> <http://onprom.inf.unibz.it/{id1m15}/literal/conceptname/{title1m15}> . 
+source		SELECT v1."id" AS "id1m15", v1."title" AS "title1m15"
+			FROM "paper" v1
+			
+
+mappingId	ONPROM_MAPPING_1
+target		<http://onprom.inf.unibz.it/literal/conceptname/{title1m15}> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m15", v1."title" AS "title1m15"
+			FROM "paper" v1
+			
+
+mappingId	ONPROM_MAPPING_2
+target		<http://onprom.inf.unibz.it/literal/conceptname/{title1m15}> <http://onprom.inf.unibz.it/attKey> "concept:name" . 
+source		SELECT v1."id" AS "id1m15", v1."title" AS "title1m15"
+			FROM "paper" v1
+			
+
+mappingId	ONPROM_MAPPING_3
+target		<http://onprom.inf.unibz.it/literal/conceptname/{title1m15}> <http://onprom.inf.unibz.it/attValue> {title1m15}^^xsd:string . 
+source		SELECT v1."id" AS "id1m15", v1."title" AS "title1m15"
+			FROM "paper" v1
+			
+
+mappingId	ONPROM_MAPPING_4
+target		<http://onprom.inf.unibz.it/{paper1m3}> <http://onprom.inf.unibz.it/t-contains-e> <http://onprom.inf.unibz.it/{paper1m3}/ReviewAcceptance/{id1m3}> . 
+source		SELECT v1."id" AS "id1m3", v1."paper" AS "paper1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_5
+target		<http://onprom.inf.unibz.it/ReviewAcceptance/{id1m3}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/ReviewAcceptance/{id1m3}/literal/conceptname/ReviewAcceptance> . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_6
+target		<http://onprom.inf.unibz.it/literal/conceptname/ReviewAcceptance> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_7
+target		<http://onprom.inf.unibz.it/literal/conceptname/ReviewAcceptance> <http://onprom.inf.unibz.it/attKey> "concept:name" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_8
+target		<http://onprom.inf.unibz.it/literal/conceptname/ReviewAcceptance> <http://onprom.inf.unibz.it/attValue> "ReviewAcceptance" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_9
+target		<http://onprom.inf.unibz.it/ReviewAcceptance/{id1m18}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/ReviewAcceptance/{id1m18}/timestamp/timetimestamp/{v0}> . 
+source		SELECT v1."id" AS "id1m18", TO_JSON(v1."acceptancetime")#>>'{}' AS "v0"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_10
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attType> "timestamp" . 
+source		SELECT v1."id" AS "id1m18", TO_JSON(v1."acceptancetime")#>>'{}' AS "v0"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_11
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attKey> "time:timestamp" . 
+source		SELECT v1."id" AS "id1m18", TO_JSON(v1."acceptancetime")#>>'{}' AS "v0"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_12
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attValue> {v0}^^xsd:string . 
+source		SELECT v1."id" AS "id1m18", TO_JSON(v1."acceptancetime")#>>'{}' AS "v0"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_13
+target		<http://onprom.inf.unibz.it/ReviewAcceptance/{id1m3}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/ReviewAcceptance/{id1m3}/literal/lifecycletransition/Complete> . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_14
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_15
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attKey> "lifecycle:transition" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_16
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attValue> "Complete" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_17
+target		<http://onprom.inf.unibz.it/{id1m23}> <http://onprom.inf.unibz.it/t-contains-e> <http://onprom.inf.unibz.it/{id1m23}/Decision/{id1m23}> . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_18
+target		<http://onprom.inf.unibz.it/Decision/{id1m23}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/Decision/{id1m23}/literal/conceptname/Decision> . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_19
+target		<http://onprom.inf.unibz.it/literal/conceptname/Decision> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_20
+target		<http://onprom.inf.unibz.it/literal/conceptname/Decision> <http://onprom.inf.unibz.it/attKey> "concept:name" . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_21
+target		<http://onprom.inf.unibz.it/literal/conceptname/Decision> <http://onprom.inf.unibz.it/attValue> "Decision" . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_22
+target		<http://onprom.inf.unibz.it/Decision/{id1m17}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/Decision/{id1m17}/timestamp/timetimestamp/{v0}> . 
+source		SELECT v1."id" AS "id1m17", TO_JSON(v1."decisiontime")#>>'{}' AS "v0"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_23
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attType> "timestamp" . 
+source		SELECT v1."id" AS "id1m17", TO_JSON(v1."decisiontime")#>>'{}' AS "v0"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_24
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attKey> "time:timestamp" . 
+source		SELECT v1."id" AS "id1m17", TO_JSON(v1."decisiontime")#>>'{}' AS "v0"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_25
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attValue> {v0}^^xsd:string . 
+source		SELECT v1."id" AS "id1m17", TO_JSON(v1."decisiontime")#>>'{}' AS "v0"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_26
+target		<http://onprom.inf.unibz.it/Decision/{id1m23}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/Decision/{id1m23}/literal/lifecycletransition/Complete> . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_27
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_28
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attKey> "lifecycle:transition" . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_29
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attValue> "Complete" . 
+source		SELECT v1."id" AS "id1m23"
+			FROM "decision" v1
+			
+
+mappingId	ONPROM_MAPPING_30
+target		<http://onprom.inf.unibz.it/{paper1m3}> <http://onprom.inf.unibz.it/t-contains-e> <http://onprom.inf.unibz.it/{paper1m3}/ReviewCompleted/{id1m1}> . 
+source		SELECT v1."id" AS "id1m1", v2."paper" AS "paper1m3"
+			FROM "review" v1, "reviewrequest" v2
+			WHERE v1."idrr" = v2."id"
+			
+
+mappingId	ONPROM_MAPPING_31
+target		<http://onprom.inf.unibz.it/ReviewCompleted/{id1m1}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/ReviewCompleted/{id1m1}/literal/conceptname/ReviewCompleted> . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+			
+
+mappingId	ONPROM_MAPPING_32
+target		<http://onprom.inf.unibz.it/literal/conceptname/ReviewCompleted> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+			
+
+mappingId	ONPROM_MAPPING_33
+target		<http://onprom.inf.unibz.it/literal/conceptname/ReviewCompleted> <http://onprom.inf.unibz.it/attKey> "concept:name" . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+			
+
+mappingId	ONPROM_MAPPING_34
+target		<http://onprom.inf.unibz.it/literal/conceptname/ReviewCompleted> <http://onprom.inf.unibz.it/attValue> "ReviewCompleted" . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+			
+
+mappingId	ONPROM_MAPPING_35
+target		<http://onprom.inf.unibz.it/ReviewCompleted/{id1m11}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/ReviewCompleted/{id1m11}/timestamp/timetimestamp/{v0}> . 
+source		SELECT v1."id" AS "id1m11", TO_JSON(v1."submissiontime")#>>'{}' AS "v0"
+			FROM "review" v1
+			
+
+mappingId	ONPROM_MAPPING_36
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attType> "timestamp" . 
+source		SELECT v1."id" AS "id1m11", TO_JSON(v1."submissiontime")#>>'{}' AS "v0"
+			FROM "review" v1
+			
+
+mappingId	ONPROM_MAPPING_37
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attKey> "time:timestamp" . 
+source		SELECT v1."id" AS "id1m11", TO_JSON(v1."submissiontime")#>>'{}' AS "v0"
+			FROM "review" v1
+			
+
+mappingId	ONPROM_MAPPING_38
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attValue> {v0}^^xsd:string . 
+source		SELECT v1."id" AS "id1m11", TO_JSON(v1."submissiontime")#>>'{}' AS "v0"
+			FROM "review" v1
+			
+
+mappingId	ONPROM_MAPPING_39
+target		<http://onprom.inf.unibz.it/ReviewCompleted/{id1m1}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/ReviewCompleted/{id1m1}/literal/lifecycletransition/Complete> . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+			
+
+mappingId	ONPROM_MAPPING_40
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+			
+
+mappingId	ONPROM_MAPPING_41
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attKey> "lifecycle:transition" . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+			
+
+mappingId	ONPROM_MAPPING_42
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attValue> "Complete" . 
+source		SELECT v1."id" AS "id1m1"
+			FROM "review" v1
+			
+
+mappingId	ONPROM_MAPPING_43
+target		<http://onprom.inf.unibz.it/{paper2m4}> <http://onprom.inf.unibz.it/t-contains-e> <http://onprom.inf.unibz.it/{paper2m4}/CameraReady/{id1m29}> . 
+source		SELECT v1."id" AS "id1m29", v1."paper" AS "paper2m4"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_44
+target		<http://onprom.inf.unibz.it/CameraReady/{id1m29}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/CameraReady/{id1m29}/literal/conceptname/CameraReady> . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_45
+target		<http://onprom.inf.unibz.it/literal/conceptname/CameraReady> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_46
+target		<http://onprom.inf.unibz.it/literal/conceptname/CameraReady> <http://onprom.inf.unibz.it/attKey> "concept:name" . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_47
+target		<http://onprom.inf.unibz.it/literal/conceptname/CameraReady> <http://onprom.inf.unibz.it/attValue> "CameraReady" . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_48
+target		<http://onprom.inf.unibz.it/CameraReady/{id1m29}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/CameraReady/{id1m29}/timestamp/timetimestamp/{v0}> . 
+source		SELECT v1."id" AS "id1m29", TO_JSON(v1."uploadtime")#>>'{}' AS "v0"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_49
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attType> "timestamp" . 
+source		SELECT v1."id" AS "id1m29", TO_JSON(v1."uploadtime")#>>'{}' AS "v0"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_50
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attKey> "time:timestamp" . 
+source		SELECT v1."id" AS "id1m29", TO_JSON(v1."uploadtime")#>>'{}' AS "v0"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_51
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attValue> {v0}^^xsd:string . 
+source		SELECT v1."id" AS "id1m29", TO_JSON(v1."uploadtime")#>>'{}' AS "v0"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_52
+target		<http://onprom.inf.unibz.it/CameraReady/{id1m29}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/CameraReady/{id1m29}/literal/lifecycletransition/Complete> . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_53
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_54
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attKey> "lifecycle:transition" . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_55
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attValue> "Complete" . 
+source		SELECT v1."id" AS "id1m29"
+			FROM "acceptance" v1
+			
+
+mappingId	ONPROM_MAPPING_56
+target		<http://onprom.inf.unibz.it/{paper2m4}> <http://onprom.inf.unibz.it/t-contains-e> <http://onprom.inf.unibz.it/{paper2m4}/Creation/{id1m26}> . 
+source		SELECT v1."id" AS "id1m26", v1."paper" AS "paper2m4"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_57
+target		<http://onprom.inf.unibz.it/Creation/{id1m26}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/Creation/{id1m26}/literal/conceptname/Creation> . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_58
+target		<http://onprom.inf.unibz.it/literal/conceptname/Creation> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_59
+target		<http://onprom.inf.unibz.it/literal/conceptname/Creation> <http://onprom.inf.unibz.it/attKey> "concept:name" . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_60
+target		<http://onprom.inf.unibz.it/literal/conceptname/Creation> <http://onprom.inf.unibz.it/attValue> "Creation" . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_61
+target		<http://onprom.inf.unibz.it/Creation/{id1m26}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/Creation/{id1m26}/timestamp/timetimestamp/{v0}> . 
+source		SELECT v1."id" AS "id1m26", TO_JSON(v1."uploadtime")#>>'{}' AS "v0"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_62
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attType> "timestamp" . 
+source		SELECT v1."id" AS "id1m26", TO_JSON(v1."uploadtime")#>>'{}' AS "v0"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_63
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attKey> "time:timestamp" . 
+source		SELECT v1."id" AS "id1m26", TO_JSON(v1."uploadtime")#>>'{}' AS "v0"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_64
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attValue> {v0}^^xsd:string . 
+source		SELECT v1."id" AS "id1m26", TO_JSON(v1."uploadtime")#>>'{}' AS "v0"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_65
+target		<http://onprom.inf.unibz.it/Creation/{id1m26}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/Creation/{id1m26}/literal/lifecycletransition/Complete> . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_66
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_67
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attKey> "lifecycle:transition" . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_68
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attValue> "Complete" . 
+source		SELECT v1."id" AS "id1m26"
+			FROM "submission" v1, "paper" v2
+			WHERE ((v1."uploadtime" = v2."ct") AND v1."paper" = v2."id")
+			
+
+mappingId	ONPROM_MAPPING_69
+target		<http://onprom.inf.unibz.it/{paper1m3}> <http://onprom.inf.unibz.it/t-contains-e> <http://onprom.inf.unibz.it/{paper1m3}/ReviewInvitation/{id1m3}> . 
+source		SELECT v1."id" AS "id1m3", v1."paper" AS "paper1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_70
+target		<http://onprom.inf.unibz.it/ReviewInvitation/{id1m3}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/ReviewInvitation/{id1m3}/literal/conceptname/ReviewInvitation> . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_71
+target		<http://onprom.inf.unibz.it/literal/conceptname/ReviewInvitation> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_72
+target		<http://onprom.inf.unibz.it/literal/conceptname/ReviewInvitation> <http://onprom.inf.unibz.it/attKey> "concept:name" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_73
+target		<http://onprom.inf.unibz.it/literal/conceptname/ReviewInvitation> <http://onprom.inf.unibz.it/attValue> "ReviewInvitation" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_74
+target		<http://onprom.inf.unibz.it/ReviewInvitation/{id1m10}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/ReviewInvitation/{id1m10}/timestamp/timetimestamp/{v0}> . 
+source		SELECT v1."id" AS "id1m10", TO_JSON(v1."invitationtime")#>>'{}' AS "v0"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_75
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attType> "timestamp" . 
+source		SELECT v1."id" AS "id1m10", TO_JSON(v1."invitationtime")#>>'{}' AS "v0"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_76
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attKey> "time:timestamp" . 
+source		SELECT v1."id" AS "id1m10", TO_JSON(v1."invitationtime")#>>'{}' AS "v0"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_77
+target		<http://onprom.inf.unibz.it/timestamp/timetimestamp/{v0}> <http://onprom.inf.unibz.it/attValue> {v0}^^xsd:string . 
+source		SELECT v1."id" AS "id1m10", TO_JSON(v1."invitationtime")#>>'{}' AS "v0"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_78
+target		<http://onprom.inf.unibz.it/ReviewInvitation/{id1m3}> <http://onprom.inf.unibz.it/e-has-a> <http://onprom.inf.unibz.it/ReviewInvitation/{id1m3}/literal/lifecycletransition/Complete> . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_79
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attType> "literal" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_80
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attKey> "lifecycle:transition" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+
+mappingId	ONPROM_MAPPING_81
+target		<http://onprom.inf.unibz.it/literal/lifecycletransition/Complete> <http://onprom.inf.unibz.it/attValue> "Complete" . 
+source		SELECT v1."id" AS "id1m3"
+			FROM "reviewrequest" v1
+			
+]]
+

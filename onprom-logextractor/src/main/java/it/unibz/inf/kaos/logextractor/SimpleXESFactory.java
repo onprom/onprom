@@ -40,15 +40,22 @@ import org.deckfour.xes.model.XLog;
 import org.xeslite.lite.factory.XFactoryLiteImpl;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SimpleXESFactory extends XFactoryLiteImpl {
-    public XAttribute createXAttribute(String type, String key, String value, XExtension extension) {
+    public XAttribute createXAttribute(String type, String key, String value, XExtension extension) throws ParseException {
 
         if (type != null && key != null && value != null) {
             if (type.toLowerCase().equals("timestamp")) {
                 // we assume that the timestamp is in format yyyy-[m]m-[d]d hh:mm:ss[.f...].
                 // The fractional seconds may be omitted. The leading zero for mm and dd may also be omitted.
-                return createAttributeTimestamp(key, Timestamp.valueOf(value).getTime(), extension);
+//                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                Date date = df.parse(value.replace('T',' '));
+//                String time = df.format(date);
+               // System.out.println("time value="+value+"\t"+Timestamp.valueOf(value.replace('T',' ')).getTime());
+                return createAttributeTimestamp(key, Timestamp.valueOf(value.replace('T',' ')).getTime(), extension);
             } else {
                 return createAttributeLiteral(key, value, extension);
             }
