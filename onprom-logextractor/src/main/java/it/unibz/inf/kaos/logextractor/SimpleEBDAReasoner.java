@@ -99,6 +99,7 @@ class SimpleEBDAReasoner {
 
     void dispose() {
         try {
+            connection.close();
             reasoner.dispose();
         } catch (Exception e) {
             logger.error(e.getMessage());

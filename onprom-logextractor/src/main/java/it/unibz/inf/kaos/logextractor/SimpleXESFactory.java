@@ -45,17 +45,27 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SimpleXESFactory extends XFactoryLiteImpl {
+    SimpleDateFormat WITH_T = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    SimpleDateFormat WITHOUT_T = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat ONLY_DATE = new SimpleDateFormat("yyyy-MM-dd");
+
     public XAttribute createXAttribute(String type, String key, String value, XExtension extension) throws ParseException {
 
         if (type != null && key != null && value != null) {
             if (type.toLowerCase().equals("timestamp")) {
                 // we assume that the timestamp is in format yyyy-[m]m-[d]d hh:mm:ss[.f...].
                 // The fractional seconds may be omitted. The leading zero for mm and dd may also be omitted.
-//                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                Date date = df.parse(value.replace('T',' '));
-//                String time = df.format(date);
-               // System.out.println("time value="+value+"\t"+Timestamp.valueOf(value.replace('T',' ')).getTime());
-                return createAttributeTimestamp(key, Timestamp.valueOf(value.replace('T',' ')).getTime(), extension);
+                Date date;
+                try {
+                    date = WITH_T.parse(value);
+                } catch (ParseException e0) {
+                    try {
+                        date = WITHOUT_T.parse(value);
+                    } catch (ParseException e1) {
+                        date = ONLY_DATE.parse(value);
+                    }
+                }
+                return createAttributeTimestamp(key, date, extension);
             } else {
                 return createAttributeLiteral(key, value, extension);
             }
