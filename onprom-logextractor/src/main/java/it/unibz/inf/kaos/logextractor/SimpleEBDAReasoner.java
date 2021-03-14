@@ -45,10 +45,7 @@ import org.deckfour.xes.model.impl.XTraceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 class SimpleEBDAReasoner {
     private static final Logger logger = LoggerFactory.getLogger(SimpleEBDAReasoner.class);
@@ -254,6 +251,12 @@ class SimpleEBDAReasoner {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        return traces.values();
+
+        Collection<XTrace> traceList = traces.values();
+        traceList.forEach(
+                trace -> trace.sort(Comparator.comparing(e -> e.getAttributes().get("time:timestamp")))
+        );
+
+        return traceList;
     }
 }

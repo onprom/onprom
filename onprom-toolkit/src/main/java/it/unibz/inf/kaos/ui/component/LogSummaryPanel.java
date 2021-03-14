@@ -107,9 +107,9 @@ public class LogSummaryPanel extends JInternalFrame {
             }
             events.append(" ⇨");
 
-            trace.sort((e1,e2)->{
-                return e1.getAttributes().get("time:timestamp").toString().compareTo(e2.getAttributes().get("time:timestamp").toString());
-            });
+//            trace.sort((e1,e2)->{
+//                return e1.getAttributes().get("time:timestamp").toString().compareTo(e2.getAttributes().get("time:timestamp").toString());
+//            });
 
             trace.forEach(event -> {
                 if(event.getAttributes()!=null && event.getAttributes().get("concept:name")!=null) {

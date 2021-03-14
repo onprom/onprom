@@ -1,0 +1,4 @@
+*.obda*.txt
+*.obda*.xes
+*.obda*.xes.gz
+*.obda*_generated.obda
