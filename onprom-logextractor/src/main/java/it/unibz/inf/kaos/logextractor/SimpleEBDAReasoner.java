@@ -186,8 +186,8 @@ class SimpleEBDAReasoner {
         Map<String, XTrace> traces = new HashMap<>();
         try {
             OntopOWLStatement st = getStatement();
-
             long start = System.currentTimeMillis();
+            //get the Set of trace and att
             TupleOWLResultSet resultSet = st.executeSelectQuery(XESConstants.qTraceAtt_Simple);
             logger.info("Finished executing traces attributes query in " + (System.currentTimeMillis() - start) + "ms");
             start = System.currentTimeMillis();
@@ -226,21 +226,24 @@ class SimpleEBDAReasoner {
                 try {
                     String traceKey = result.getOWLObject(XESConstants.qTraceEvt_SimpleAnsVarTrace).toString();
                     String eventKey = result.getOWLObject(XESConstants.qTraceEvt_SimpleAnsVarEvent).toString();
+                    //System.out.println("---------eventKey-----------"+eventKey);
 
                     //Process the string into a form that matches the key
-                    String prefix = "<http://onprom.inf.unibz.it/";
-                    String tmp = eventKey.substring(prefix.length(),eventKey.length());
-                    int index1= tmp.indexOf("/");
-                    String tmp2 = tmp.substring(index1+1,tmp.length());
-                    String finalEventKey = prefix + tmp2;
+//                    String prefix = "<http://onprom.inf.unibz.it/";
+//                    String tmp = eventKey.substring(prefix.length(),eventKey.length());
+//                    int index1= tmp.indexOf("/");
+//                    String tmp2 = tmp.substring(index1+1,tmp.length());
+//                    String finalEventKey = prefix + tmp2;
 
                     XTrace trace = traces.get(traceKey);
                     if (trace != null) {
-                        XEvent event = events.get(finalEventKey);
+                        XEvent event = events.get(eventKey);
                         if (event != null) {
                             trace.add(event);
                         }
                     }
+
+
                 } catch (Exception e) {
                     logger.error(e.getMessage());
                 }

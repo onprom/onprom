@@ -200,8 +200,12 @@ public class OBDAMapper {
             if(targetEntity.isOWLObjectProperty()){
 //                new BinaryAnnotationQuery(a.getQuery(), baq.getTargetIRI().toString(), baq.getFirstComponent(),
                 secondComponent = concatenate(annoQ.getFirstComponent(), annoQ.getSecondComponent());
-                ontoClass = concatenate(annoQ.getFirstComponent(), annoQ.getSecondComponent());
 
+                //Currently it can only selectively remove the traceId, otherwise all events belong to the same trace
+                if(targetEntity.toString().indexOf("t-contains-e") != -1){
+                    secondComponent = annoQ.getSecondComponent(); // The traceId is not included in secondComponent here
+                }
+                ontoClass = concatenate(annoQ.getFirstComponent(), annoQ.getSecondComponent());
             }
 
             if (ontoClass == null)
@@ -210,9 +214,7 @@ public class OBDAMapper {
             }
 
             if (targetEntity.isOWLDataProperty()) {
-                //if (firstComponent[0].indexOf("_") != -1 ){
-                    firstComponent = ontoClass.clone();
-                //}
+                firstComponent = ontoClass.clone();
 
                 if (secondComponent.length > 1) {
                     logger.error(
@@ -226,8 +228,6 @@ public class OBDAMapper {
                 if (dataType == null)
                     dataType = defaultDataType;
             }
-
-
 
             String targetQuery = "";
 
@@ -244,7 +244,6 @@ public class OBDAMapper {
 
             if (targetEntity.isOWLObjectProperty()) {
                 logger.info("Add a mapping to an OBJECT PROPERTY");
-
                 targetQuery = String.format(objPropTripleTemplate,
                         OBDAMappingUtility.cleanURI(firstURITemplate.toString()),
                         targetEntity.toString(),
@@ -265,7 +264,7 @@ public class OBDAMapper {
                         OBDAMappingUtility.cleanURI(firstURITemplate.toString()),
                         targetEntity.toString(),
                         secondURITemplate);
-            }
+            } // end of targetEntity.isOWLDataProperty()
             if (!query.equals("") &&
                     targetQuery != null && !targetQuery.equals("")) {
 
@@ -277,11 +276,6 @@ public class OBDAMapper {
     }
 
     private String getComponentTemplate(String[] uriComponent, Map<String, ImmutableTerm> map) {
-//        for (String sss: uriComponent ) {
-//           System.out.print(sss + "--");
-//       }
-//        System.out.println();
-
 
         return  Arrays.stream(uriComponent)
                 .map(map::get)
