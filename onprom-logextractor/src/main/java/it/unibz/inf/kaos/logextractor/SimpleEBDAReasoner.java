@@ -226,9 +226,9 @@ class SimpleEBDAReasoner {
                 try {
                     String traceKey = result.getOWLObject(XESConstants.qTraceEvt_SimpleAnsVarTrace).toString();
                     String eventKey = result.getOWLObject(XESConstants.qTraceEvt_SimpleAnsVarEvent).toString();
-                    //System.out.println("---------eventKey-----------"+eventKey);
 
                     //Process the string into a form that matches the key
+                    // it is not a good solution by using string parsing
 //                    String prefix = "<http://onprom.inf.unibz.it/";
 //                    String tmp = eventKey.substring(prefix.length(),eventKey.length());
 //                    int index1= tmp.indexOf("/");

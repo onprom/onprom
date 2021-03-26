@@ -203,7 +203,8 @@ public class OBDAMapper {
 
                 //Currently it can only selectively remove the traceId, otherwise all events belong to the same trace
                 if(targetEntity.toString().indexOf("t-contains-e") != -1){
-                    secondComponent = annoQ.getSecondComponent(); // The traceId is not included in secondComponent here
+                    // The traceId is not included in secondComponent here
+                    secondComponent = annoQ.getSecondComponent();
                 }
                 ontoClass = concatenate(annoQ.getFirstComponent(), annoQ.getSecondComponent());
             }
