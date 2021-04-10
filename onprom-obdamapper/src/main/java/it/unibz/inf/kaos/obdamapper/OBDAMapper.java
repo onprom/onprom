@@ -200,7 +200,6 @@ public class OBDAMapper {
             if(targetEntity.isOWLObjectProperty()){
 //                new BinaryAnnotationQuery(a.getQuery(), baq.getTargetIRI().toString(), baq.getFirstComponent(),
                 secondComponent = concatenate(annoQ.getFirstComponent(), annoQ.getSecondComponent());
-
                 //Currently it can only selectively remove the traceId, otherwise all events belong to the same trace
                 if(targetEntity.toString().indexOf("t-contains-e") != -1){
                     // The traceId is not included in secondComponent here
@@ -213,6 +212,7 @@ public class OBDAMapper {
             {
                 ontoClass = annoQ.getFirstComponent();
             }
+
 
             if (targetEntity.isOWLDataProperty()) {
                 firstComponent = ontoClass.clone();

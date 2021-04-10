@@ -45,6 +45,7 @@ public class QueryEditor extends JDialog {
     private static final Dimension BOX_SIZE = new Dimension(550, 150);
 
     public QueryEditor(AnnotationQueries _queries) {
+        setTitle("Annotation Query");
     setModal(true);
     setLayout(new GridBagLayout());
     GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
@@ -59,6 +60,7 @@ public class QueryEditor extends JDialog {
 
     //list to display all queries
         DefaultListModel<AnnotationQuery> mdlQueries = new DefaultListModel<>();
+
     //add all the queries to allow editing
     _queries.getAllQueries().forEach(q -> {
       if (q != null) {
@@ -102,7 +104,9 @@ public class QueryEditor extends JDialog {
     add(btn, gridBagConstraints);
 
     gridBagConstraints.gridx = 2;
-    btn = UIUtility.createButton(AnnotationEditorButtons.CONTINUE, e -> setVisible(false), AttributeForm.TXT_SIZE);
+    btn = UIUtility.createButton(AnnotationEditorButtons.CONTINUE,
+            e -> setVisible(false),
+            AttributeForm.TXT_SIZE);
     add(btn, gridBagConstraints);
 
     //display selected query

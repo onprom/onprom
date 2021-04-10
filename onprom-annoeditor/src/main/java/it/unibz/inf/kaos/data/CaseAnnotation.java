@@ -37,6 +37,7 @@ import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 /**
@@ -73,13 +74,16 @@ public class CaseAnnotation extends Annotation {
           builder.addVar(XESConstants.literalExpr, XESConstants.attTypeVar);
           builder.addVar(XESConstants.nameExpr, XESConstants.attKeyVar);
           String query = builder.toString();
-          queries.add(new BinaryAnnotationQuery(query, XESConstants.traceAttributeURI, new String[]{getRelatedClass().getCleanName()}, XESConstants.attArray));
+
+          String[] caseAttributeVariables = concatenate(new String[]{getRelatedClass().getCleanName()}, XESConstants.attArray);
+
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.traceAttributeURI, new String[]{getRelatedClass().getCleanName()}, caseAttributeVariables));
           //attType query
-          queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, XESConstants.attArray, XESConstants.attTypeArr));
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, caseAttributeVariables, XESConstants.attTypeArr));
           //attKey query
-          queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, XESConstants.attArray, XESConstants.attKeyArr));
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, caseAttributeVariables, XESConstants.attKeyArr));
           //attValue query
-          queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, XESConstants.attArray, XESConstants.attValueArr));
+          queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, caseAttributeVariables, XESConstants.attValueArr));
       } catch (Exception e) {
           logger.error(e.getMessage(), e);
           UIUtility.error(e.getMessage());
@@ -99,4 +103,16 @@ public class CaseAnnotation extends Annotation {
     public void setCaseName(NavigationalAttribute name) {
     this.caseName = name;
   }
+
+
+    public <T> T[] concatenate(T[] a, T[] b) {
+        int aLen = a.length;
+        int bLen = b.length;
+
+        @SuppressWarnings("unchecked")
+        T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
+        System.arraycopy(a, 0, c, 0, aLen);
+        System.arraycopy(b, 0, c, aLen, bLen);
+        return c;
+    }
 }
