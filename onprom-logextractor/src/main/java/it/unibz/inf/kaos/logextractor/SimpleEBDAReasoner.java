@@ -255,10 +255,10 @@ class SimpleEBDAReasoner {
             logger.error(e.getMessage());
         }
 
-//        Collection<XTrace> traceList = traces.values();
-//        traceList.forEach(
-//                trace -> trace.sort(Comparator.comparing(e -> e.getAttributes().get("time:timestamp")))
-//        );
+        Collection<XTrace> traceList = traces.values();
+        traceList.forEach(
+                trace -> trace.sort(Comparator.comparing(e -> e.getAttributes().get("time:timestamp")))
+        );
 
         return traces.values();
     }
