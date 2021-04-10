@@ -27,6 +27,7 @@
 package it.unibz.inf.kaos.ui.edit;
 
 import it.unibz.inf.kaos.data.*;
+import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.interfaces.UMLDiagram;
 
@@ -51,7 +52,7 @@ public class EditFactory {
         return new AddDeleteRelationEdit(panel, relationship, associationClass, adding);
     }
 
-    public static UndoableEdit shapesMoved(Collection<DiagramShape> shapes, int moveX, int moveY) {
+    public static UndoableEdit shapesMoved(Collection<DiagramShape<? extends Diagram>> shapes, int moveX, int moveY) {
         return new MoveShapeEdit(shapes, moveX, moveY);
     }
 

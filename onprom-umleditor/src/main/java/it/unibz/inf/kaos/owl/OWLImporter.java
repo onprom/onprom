@@ -30,6 +30,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import it.unibz.inf.kaos.data.*;
+import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import org.semanticweb.owlapi.model.*;
@@ -44,7 +45,7 @@ import java.util.*;
  * 11-Oct-16
  */
 public class OWLImporter extends OWLUtility {
-  public static Set<DiagramShape> getShapes(OWLOntology ontology) {
+  public static Set<DiagramShape<? extends Diagram>> getShapes(OWLOntology ontology) {
       LinkedList<String> messages = Lists.newLinkedList();
 
       HashMap<OWLClass, UMLClass> umlClasses = Maps.newHashMap();
@@ -59,7 +60,7 @@ public class OWLImporter extends OWLUtility {
       HashSet<OWLObjectPropertyExpression> functionalObjectProperties = Sets.newHashSet();
       HashSet<OWLObjectPropertyExpression> inverserFunctionalObjectProperties = Sets.newHashSet();
 
-      Set<DiagramShape> shapes = Sets.newLinkedHashSet();
+      Set<DiagramShape<? extends Diagram>> shapes = Sets.newLinkedHashSet();
 
     UMLClass thingClass = new UMLClass("Thing");
     boolean thingAdded = false;

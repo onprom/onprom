@@ -39,6 +39,7 @@ import org.apache.jena.sparql.core.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Set;
@@ -193,7 +194,7 @@ public class EventAnnotation extends Annotation {
     }
 
     @Override
-    public java.util.Optional<EventForm> getForm(AnnotationDiagram panel) {
+    public java.util.Optional<JPanel> getForm(AnnotationDiagram panel) {
         return java.util.Optional.of(new EventForm(panel, this));
     }
 

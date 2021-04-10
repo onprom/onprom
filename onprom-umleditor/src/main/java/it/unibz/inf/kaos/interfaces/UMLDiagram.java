@@ -44,7 +44,7 @@ public interface UMLDiagram extends Diagram {
     void removeClass(UMLClass cls);
     void removeRelation(Relationship relationship);
 
-    boolean removeShape(DiagramShape shape);
+    boolean removeShape(DiagramShape<? extends Diagram> shape);
 
     Stream<Association> getAssociations();
 

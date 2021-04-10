@@ -28,6 +28,7 @@ package it.unibz.inf.kaos.uml;
 
 import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.data.UMLDiagramActions;
+import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.interfaces.UMLEditorListener;
 import it.unibz.inf.kaos.owl.OWLExporter;
@@ -109,7 +110,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     return progressBar;
   }
 
-  public void load(String _identifier, Set<DiagramShape> shapes) {
+  public void load(String _identifier, Set<DiagramShape<? extends Diagram>> shapes) {
     identifier = _identifier;
     diagramPanel.load(shapes);
   }

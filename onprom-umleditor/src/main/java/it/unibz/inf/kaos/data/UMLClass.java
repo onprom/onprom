@@ -33,6 +33,7 @@ import it.unibz.inf.kaos.ui.form.ClassForm;
 import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
 import javax.annotation.Nonnull;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -107,7 +108,7 @@ public class UMLClass extends AbstractDiagramShape<UMLDiagram> {
   }
 
   public boolean equals(Object object) {
-    return object instanceof UMLClass && getName().equals(((UMLClass) object).getName());
+      return object instanceof UMLClass && getName().equals(((UMLClass) object).getName());
   }
 
   @Override
@@ -209,7 +210,7 @@ public class UMLClass extends AbstractDiagramShape<UMLDiagram> {
   }
 
     @Override
-    public Optional<ClassForm> getForm(UMLDiagram panel) {
+    public Optional<JPanel> getForm(UMLDiagram panel) {
         return Optional.of(new ClassForm(panel, this));
     }
 }

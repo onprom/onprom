@@ -31,6 +31,7 @@ import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.dynamic.DynamicAnnotationEditor;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
+import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
 import it.unibz.inf.kaos.ui.component.*;
@@ -253,7 +254,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                     if (selectedObject instanceof OWLOntology) {
                         umlEditor.loadOntology(node.getIdentifier(), (OWLOntology) selectedObject);
                     } else if (selectedObject instanceof Set) {
-                        umlEditor.load(node.getIdentifier(), (Set<DiagramShape>) selectedObject);
+                        umlEditor.load(node.getIdentifier(), (Set<DiagramShape<? extends Diagram>>) selectedObject);
                     }
                 })
         );
@@ -364,7 +365,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     }
 
     @Override
-    public void store(String identifier, FileType type, Collection<DiagramShape> shapes) {
+    public void store(String identifier, FileType type, Collection<DiagramShape<? extends Diagram>> shapes) {
         objects.addObject(identifier, type, shapes);
     }
 }

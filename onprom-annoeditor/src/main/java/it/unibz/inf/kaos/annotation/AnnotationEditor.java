@@ -102,7 +102,8 @@ public class AnnotationEditor extends UMLEditor {
                 loadedFile = IOUtility.exportJSON(FileType.ANNOTATION, diagramPanel.getShapes(true));
             } else {
                 AnnotationQueries annotationsQueries = new AnnotationQueries();
-                diagramPanel.getAll(Annotation.class).filter(annotation -> !annotation.isDisabled())
+                diagramPanel.getAll(Annotation.class)
+                        .filter(annotation -> !annotation.isDisabled())
                         .map(Annotation::getQuery)
                         .forEach(annotationsQueries::addQuery);
                 if (annotationsQueries.getQueryCount() > 0) {

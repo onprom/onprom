@@ -37,6 +37,7 @@ import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.lang.reflect.Array;
 import java.util.List;
 
@@ -92,7 +93,7 @@ public class CaseAnnotation extends Annotation {
   }
 
   @Override
-  public java.util.Optional<CaseForm> getForm(AnnotationDiagram panel) {
+  public java.util.Optional<JPanel> getForm(AnnotationDiagram panel) {
       return java.util.Optional.of(new CaseForm(panel, this));
   }
 
