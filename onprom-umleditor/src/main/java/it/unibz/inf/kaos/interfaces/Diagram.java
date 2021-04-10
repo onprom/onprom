@@ -35,13 +35,13 @@ import java.util.stream.Stream;
 public interface Diagram {
     boolean isUpdateAllowed();
 
-    Set<DiagramShape> getShapes(boolean forJSON);
+    Set<DiagramShape<? extends Diagram>> getShapes(boolean forJSON);
 
-    <T extends DiagramShape> T findFirst(Class<T> type);
+    <T extends DiagramShape<? extends Diagram>> T findFirst(Class<T> type);
 
-    <T extends DiagramShape> long count(Class<T> type);
+    <T extends DiagramShape<? extends Diagram>> long count(Class<T> type);
 
-    <T extends DiagramShape> Stream<T> getAll(Class<T> type);
+    <T extends DiagramShape<? extends Diagram>> Stream<T> getAll(Class<T> type);
 
     void setCurrentAction(ActionType actionType);
 }

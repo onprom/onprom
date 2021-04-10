@@ -30,6 +30,7 @@ import it.unibz.inf.kaos.interfaces.UMLDiagram;
 import it.unibz.inf.kaos.ui.form.RelationForm;
 import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -268,7 +269,7 @@ public class Association extends Relationship {
   }
 
   @Override
-  public java.util.Optional<RelationForm> getForm(UMLDiagram panel) {
+  public java.util.Optional<JPanel> getForm(UMLDiagram panel) {
       return java.util.Optional.of(new RelationForm(panel, this));
   }
 

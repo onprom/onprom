@@ -168,5 +168,5 @@ public abstract class Annotation extends AbstractDiagramShape<AnnotationDiagram>
     public abstract List<AnnotationQuery> getQuery();
 
     @Override
-    public abstract java.util.Optional<? extends JPanel> getForm(AnnotationDiagram panel);
+    public abstract java.util.Optional<JPanel> getForm(AnnotationDiagram panel);
 }

@@ -27,6 +27,7 @@
 package it.unibz.inf.kaos.data;
 
 import com.google.common.collect.Sets;
+import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 
 import javax.annotation.Nonnull;
@@ -38,12 +39,15 @@ import java.util.stream.Stream;
 /**
  * Created by T. E. Kalayci on 17-Nov-2017.
  */
-public class Shapes implements Iterable<DiagramShape> {
-    private Set<DiagramShape> shapes = Sets.newLinkedHashSet();
-    private Set<DiagramShape> selectedShapes = Sets.newLinkedHashSet();
+public class Shapes implements Iterable<DiagramShape<? extends Diagram>> {
+    private Set<DiagramShape<? extends Diagram>> shapes = Sets.newLinkedHashSet();
+    private Set<DiagramShape<? extends Diagram>> selectedShapes = Sets.newLinkedHashSet();
 
-    public DiagramShape getSelected() {
-        DiagramShape shape = selectedShapes.stream().filter(UMLClass.class::isInstance).findFirst().orElse(null);
+    public DiagramShape<? extends Diagram> getSelected() {
+        DiagramShape<? extends Diagram> shape = selectedShapes.stream()
+                .filter(UMLClass.class::isInstance)
+                .findFirst()
+                .orElse(null);
         if (shape == null) {
             return selectedShapes.stream().findFirst().orElse(null);
         }
@@ -56,19 +60,19 @@ public class Shapes implements Iterable<DiagramShape> {
         return !selectedShapes.isEmpty();
     }
 
-    public Set<DiagramShape> getSelectedShapes() {
+    public Set<DiagramShape<? extends Diagram>> getSelectedShapes() {
         return selectedShapes;
     }
-
+    
     public boolean isShapeSelected() {
         return !selectedShapes.isEmpty();
     }
 
-    public void add(DiagramShape shape) {
+    public void add(DiagramShape<? extends Diagram> shape) {
         shapes.add(shape);
     }
 
-    public void remove(DiagramShape shape) {
+    public void remove(DiagramShape<? extends Diagram> shape) {
         shapes.remove(shape);
     }
 
@@ -86,24 +90,31 @@ public class Shapes implements Iterable<DiagramShape> {
         return getAll(UMLClass.class);
     }
 
-    public Set<DiagramShape> getShapes(boolean forJSON) {
+    public Set<DiagramShape<? extends Diagram>> getShapes(boolean forJSON) {
         if (forJSON) {
-            LinkedHashSet<DiagramShape> all = shapes.stream().filter(UMLClass.class::isInstance).collect(Collectors.toCollection(LinkedHashSet::new));
-            all.addAll(shapes.stream().filter(Association.class::isInstance).collect(Collectors.toCollection(LinkedHashSet::new)));
-            all.addAll(shapes.stream().filter(shape -> !(shape instanceof UMLClass) && !(shape instanceof Association)).collect(Collectors.toCollection(LinkedHashSet::new)));
+            LinkedHashSet<DiagramShape<?>> all = shapes.stream()
+                    .filter(UMLClass.class::isInstance)
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
+            all.addAll(shapes.stream()
+                    .filter(Association.class::isInstance)
+                    .collect(Collectors.toCollection(LinkedHashSet::new)));
+            all.addAll(shapes.stream()
+                    .filter(shape -> !(shape instanceof UMLClass) 
+                            && !(shape instanceof Association))
+                    .collect(Collectors.toCollection(LinkedHashSet::new)));
             return all;
         }
         return shapes;
     }
 
-    public Set<DiagramShape> getShapesAndAnchors() {
-        Set<DiagramShape> allShapes = getShapes(false);
-        allShapes.addAll(getAll(Relationship.class)
+    public Set<DiagramShape<? extends Diagram>> getShapesAndAnchors() {
+        Set<DiagramShape<? extends Diagram>> allShapes = getShapes(false);
+        Set<RelationAnchor> collect = getAll(Relationship.class)
                 .filter(r -> r.getAnchorCount() > 0)
                 .map(Relationship::getAnchors)
                 .flatMap(Collection::stream)
-                .collect(Collectors.toSet())
-        );
+                .collect(Collectors.toSet());
+        allShapes.addAll(collect);
         return allShapes;
     }
 
@@ -137,8 +148,8 @@ public class Shapes implements Iterable<DiagramShape> {
         return getClasses().anyMatch(shape -> shape.over(x, y));
     }
 
-    protected DiagramShape getFirstShapeAt(int x, int y) {
-        DiagramShape _selected = getFirstClassAt(x, y);
+    protected DiagramShape<? extends Diagram> getFirstShapeAt(int x, int y) {
+        DiagramShape<? extends Diagram> _selected = getFirstClassAt(x, y);
         if (_selected == null) {
             _selected = shapes.stream()
                     .filter(shape -> shape.over(x, y))
@@ -151,7 +162,7 @@ public class Shapes implements Iterable<DiagramShape> {
     }
 
     public void updateSelection(boolean isCtrlDown, int startX, int startY) {
-        DiagramShape _selected = getFirstShapeAt(startX, startY);
+        DiagramShape<?> _selected = getFirstShapeAt(startX, startY);
         if (!isCtrlDown) {
             if (_selected == null || (!selectedShapes.contains(_selected))) {
                 selectedShapes.forEach(obj -> obj.setState(State.NORMAL));
@@ -164,19 +175,19 @@ public class Shapes implements Iterable<DiagramShape> {
         }
     }
 
-    public <T extends DiagramShape> Stream<T> getAll(Class<T> type) {
+    public <T extends DiagramShape<? extends Diagram>> Stream<T> getAll(Class<T> type) {
         return shapes.stream()
                 .filter(type::isInstance)
                 .map(type::cast);
     }
 
-    public <T extends DiagramShape> long count(Class<T> type) {
+    public <T extends DiagramShape<? extends Diagram>> long count(Class<T> type) {
         return shapes.stream()
                 .filter(type::isInstance)
                 .count();
     }
 
-    public <T extends DiagramShape> T findFirst(Class<T> type) {
+    public <T extends DiagramShape<? extends Diagram>> T findFirst(Class<T> type) {
         return shapes.stream()
                 .filter(type::isInstance)
                 .findFirst()
@@ -184,7 +195,7 @@ public class Shapes implements Iterable<DiagramShape> {
                 .orElse(null);
     }
 
-    public DiagramShape over(int x, int y) {
+    public DiagramShape<? extends Diagram> over(int x, int y) {
         return shapes.stream()
                 .filter(p -> p.over(x, y))
                 .findFirst()
@@ -192,13 +203,13 @@ public class Shapes implements Iterable<DiagramShape> {
     }
 
 
-    public void load(final Set<DiagramShape> _shapes) {
+    public void load(final Set<DiagramShape<? extends Diagram>> _shapes) {
         shapes = _shapes.stream().filter(Objects::nonNull).collect(Collectors.toSet());
     }
 
     @Nonnull
     @Override
-    public Iterator<DiagramShape> iterator() {
+    public Iterator<DiagramShape<? extends Diagram>> iterator() {
         return shapes.iterator();
     }
 }

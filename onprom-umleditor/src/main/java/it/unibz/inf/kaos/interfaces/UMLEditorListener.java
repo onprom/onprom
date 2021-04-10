@@ -42,7 +42,7 @@ public interface UMLEditorListener {
 
     }
 
-    default void store(String identifier, FileType type, Collection<DiagramShape> shapes) {
+    default void store(String identifier, FileType type, Collection<DiagramShape<? extends Diagram>> shapes) {
 
     }
 }

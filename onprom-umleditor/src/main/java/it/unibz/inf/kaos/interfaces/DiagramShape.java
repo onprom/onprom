@@ -29,9 +29,11 @@ package it.unibz.inf.kaos.interfaces;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import it.unibz.inf.kaos.data.State;
+import it.unibz.inf.kaos.ui.panel.UMLDiagramPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Optional;
 
 /**
  * Interface of diagram shapes
@@ -64,7 +66,8 @@ public interface DiagramShape<T extends Diagram> {
 
     void draw(Graphics2D g2d);
 
-    java.util.Optional<? extends JPanel> getForm(T panel);
+    java.util.Optional<JPanel> getForm(T panel);
 
     void toggleDisabled();
+
 }

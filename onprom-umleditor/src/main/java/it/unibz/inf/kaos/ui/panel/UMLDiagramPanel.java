@@ -29,6 +29,7 @@ package it.unibz.inf.kaos.ui.panel;
 import com.google.common.collect.Lists;
 import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.interfaces.ActionType;
+import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.interfaces.UMLDiagram;
 import it.unibz.inf.kaos.ui.edit.EditFactory;
@@ -82,7 +83,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
     }
 
     private void createShape(int startX, int startY, boolean isControlDown) {
-        DiagramShape selected = shapes.getSelected();
+        DiagramShape<? extends Diagram> selected = shapes.getSelected();
         if (isUpdateAllowed) {
             if (currentAction == UMLDiagramActions.umlclass) {
                 if (!shapes.isClassOver(startX, startY)) {
@@ -118,7 +119,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         }
     }
 
-    private void addAssociationClass(DiagramShape selected, int x, int y) {
+    private void addAssociationClass(DiagramShape<? extends Diagram> selected, int x, int y) {
         if (selected instanceof Association) {
             Association association = (Association) selected;
             AssociationClass aClass = new AssociationClass(association, x, y);
@@ -234,12 +235,12 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
     }
 
     @Override
-    public Set<DiagramShape> getShapes(final boolean forJSON) {
+    public Set<DiagramShape<? extends Diagram>> getShapes(final boolean forJSON) {
         return shapes.getShapes(forJSON);
     }
 
     @Override
-    public boolean removeShape(DiagramShape selected) {
+    public boolean removeShape(DiagramShape<? extends Diagram> selected) {
         if (UIUtility.deleteConfirm()) {
             if (selected instanceof UMLClass) {
                 UMLClass cls = (UMLClass) selected;
@@ -287,7 +288,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
     }
 
     public void removeSelected() {
-        DiagramShape _selected = shapes.getSelected();
+        DiagramShape<? extends Diagram> _selected = shapes.getSelected();
         if (_selected != null) {
             removeShape(_selected);
         }
@@ -353,7 +354,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         return new Dimension(ZoomUtility.getWidth(), ZoomUtility.getHeight());
     }
 
-    public void load(Set<DiagramShape> _shapes) {
+    public void load(Set<DiagramShape<? extends Diagram>> _shapes) {
         if (_shapes != null) {
             DiagramUndoManager.discardAllEdits();
             UIUtility.clearNames();
@@ -366,7 +367,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
         repaint();
     }
 
-    private Set<DiagramShape> getShapesToDraw() {
+    private Set<DiagramShape<? extends Diagram>> getShapesToDraw() {
         if (shapes.isShapeSelected())
             return shapes.getSelectedShapes();
         return shapes.getShapesAndAnchors();
@@ -375,7 +376,7 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
     public Rectangle getDrawingArea() {
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
         int maxX = 0, maxY = 0;
-        for (DiagramShape shape : getShapesToDraw()) {
+        for (DiagramShape<? extends Diagram> shape : getShapesToDraw()) {
             if (shape.getStartX() < minX) {
                 minX = shape.getStartX();
             }
@@ -393,17 +394,17 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
     }
 
     @Override
-    public <T extends DiagramShape> T findFirst(Class<T> type) {
+    public <T extends DiagramShape<? extends Diagram>> T findFirst(Class<T> type) {
         return shapes.findFirst(type);
     }
 
     @Override
-    public <T extends DiagramShape> long count(Class<T> type) {
+    public <T extends DiagramShape<? extends Diagram>> long count(Class<T> type) {
         return shapes.count(type);
     }
 
     @Override
-    public <T extends DiagramShape> Stream<T> getAll(Class<T> type) {
+    public <T extends DiagramShape<? extends Diagram>> Stream<T> getAll(Class<T> type) {
         return shapes.getAll(type);
     }
 
@@ -433,10 +434,14 @@ public class UMLDiagramPanel extends JPanel implements UMLDiagram {
                 if (e.isPopupTrigger()) {
                     removeSelected();
                     return;
-                } else if (shapes.getSelected() != null) {
-                    shapes.getSelected().getForm(UMLDiagramPanel.this).ifPresent(form ->
-                            diagramEditor.loadForm((JPanel) form)
-                    );
+                } else {
+                    DiagramShape selected = shapes.getSelected();
+                    if (selected != null) {
+                        selected.getForm(UMLDiagramPanel.this)
+                                .ifPresent(form ->
+                                        diagramEditor.loadForm((JPanel) form)
+                                );
+                    }
                 }
             }
             shapes.updateSelection(e.isControlDown(), startX, startY);

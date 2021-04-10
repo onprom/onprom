@@ -44,6 +44,7 @@ import org.apache.jena.sparql.core.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -308,7 +309,7 @@ public class DynamicAnnotation extends Annotation {
     }
 
     @Override
-    public java.util.Optional<DynamicAnnotationForm> getForm(AnnotationDiagram panel) {
+    public java.util.Optional<JPanel> getForm(AnnotationDiagram panel) {
         return java.util.Optional.of(new DynamicAnnotationForm(panel, this));
     }
 }

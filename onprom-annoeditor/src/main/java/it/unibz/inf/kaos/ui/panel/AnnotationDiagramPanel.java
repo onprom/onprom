@@ -27,10 +27,7 @@
 package it.unibz.inf.kaos.ui.panel;
 
 import it.unibz.inf.kaos.data.*;
-import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
-import it.unibz.inf.kaos.interfaces.AnnotationFactory;
-import it.unibz.inf.kaos.interfaces.DiagramShape;
-import it.unibz.inf.kaos.interfaces.NavigationListener;
+import it.unibz.inf.kaos.interfaces.*;
 import it.unibz.inf.kaos.ui.edit.AddDeleteAnnotationEdit;
 import it.unibz.inf.kaos.ui.interfaces.DiagramEditor;
 import it.unibz.inf.kaos.ui.utility.*;
@@ -117,7 +114,7 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     }
 
     @Override
-    public boolean removeShape(DiagramShape selected) {
+    public boolean removeShape(DiagramShape<? extends Diagram> selected) {
         if (selected instanceof Annotation) {
             if (UIUtility.confirm(AnnotationEditorMessages.DELETE_CONFIRMATION)) {
                 Annotation annotation = (Annotation) selected;

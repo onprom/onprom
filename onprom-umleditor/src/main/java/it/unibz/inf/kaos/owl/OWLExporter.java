@@ -28,6 +28,7 @@ package it.unibz.inf.kaos.owl;
 
 import com.google.common.collect.Sets;
 import it.unibz.inf.kaos.data.*;
+import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import org.semanticweb.owlapi.model.*;
 import org.slf4j.Logger;
@@ -51,7 +52,7 @@ public class OWLExporter extends OWLUtility {
     public static final String REIFICATION_SEPARATOR = "_2_";
     private static final Logger LOGGER = LoggerFactory.getLogger(OWLExporter.class.getName());
 
-    public static Optional<OWLOntology> export(String documentIRI, Collection<DiagramShape> shapes, File file) {
+    public static Optional<OWLOntology> export(String documentIRI, Collection<DiagramShape<? extends Diagram>> shapes, File file) {
         Optional<OWLOntology> ontologyProvider = createOWLOntology(documentIRI, shapes);
         if (ontologyProvider.isPresent()) {
             OWLOntology ontology = ontologyProvider.get();
@@ -70,7 +71,7 @@ public class OWLExporter extends OWLUtility {
         return Optional.empty();
     }
 
-    private static Optional<OWLOntology> createOWLOntology(String documentIRI, Collection<DiagramShape> shapes) {
+    private static Optional<OWLOntology> createOWLOntology(String documentIRI, Collection<DiagramShape<? extends Diagram>> shapes) {
         try {
             if (!documentIRI.endsWith("/")) {
                 documentIRI = documentIRI + "/";

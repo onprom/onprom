@@ -26,6 +26,7 @@
 
 package it.unibz.inf.kaos.data;
 
+import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.ui.utility.DrawingUtility;
 
 import java.awt.*;
@@ -34,7 +35,7 @@ import java.awt.geom.Rectangle2D;
 /**
  * @author T. E. Kalayci
  */
-public class RelationAnchor extends AbstractDiagramShape {
+public class RelationAnchor extends AbstractDiagramShape<Diagram> {
 
   public RelationAnchor() {
   }

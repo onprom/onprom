@@ -248,7 +248,7 @@ public abstract class AbstractDiagramShape<T extends Diagram> implements Diagram
   }
 
   @Override
-  public java.util.Optional<? extends JPanel> getForm(final T panel) {
+  public java.util.Optional<JPanel> getForm(final T panel) {
     return java.util.Optional.empty();
   }
 }

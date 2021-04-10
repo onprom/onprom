@@ -26,6 +26,7 @@
 
 package it.unibz.inf.kaos.data;
 
+import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import org.semanticweb.owlapi.model.OWLOntology;
 
@@ -41,9 +42,9 @@ import java.util.Set;
 public class EditorObjects {
     private final File file;
     private final OWLOntology ontology;
-    private final Set<DiagramShape> shapes;
+    private final Set<DiagramShape<? extends Diagram>> shapes;
 
-    public EditorObjects(File _file, OWLOntology _ontology, Set<DiagramShape> _shapes) {
+    public EditorObjects(File _file, OWLOntology _ontology, Set<DiagramShape<? extends Diagram>> _shapes) {
         this.file = _file;
         this.ontology = _ontology;
         this.shapes = _shapes;
@@ -53,7 +54,7 @@ public class EditorObjects {
         return ontology;
     }
 
-    public Set<DiagramShape> getShapes() {
+    public Set<DiagramShape<? extends Diagram>> getShapes() {
         return shapes;
     }
 

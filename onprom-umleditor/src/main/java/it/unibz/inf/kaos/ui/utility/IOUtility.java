@@ -34,6 +34,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unibz.inf.kaos.data.EditorObjects;
 import it.unibz.inf.kaos.data.FileType;
+import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.owl.OWLImporter;
 import org.apache.commons.io.FilenameUtils;
@@ -74,7 +75,7 @@ public class IOUtility {
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
     }
 
-    public static File exportJSON(FileType fileType, Set<DiagramShape> allShapes) {
+    public static File exportJSON(FileType fileType, Set<DiagramShape<? extends Diagram>> allShapes) {
         Optional<File> fileProvider = UIUtility.selectFileToSave(fileType);
         if (fileProvider.isPresent()) {
             File file = fileProvider.get();
@@ -158,7 +159,7 @@ public class IOUtility {
         return Optional.empty();
     }
 
-    public static Set<DiagramShape> importJSON(File file) {
+    public static Set<DiagramShape<? extends Diagram>> importJSON(File file) {
         try {
             return OBJECT_MAPPER.readValue(file, getType());
         } catch (Exception e) {
@@ -167,7 +168,7 @@ public class IOUtility {
         return null;
     }
 
-    private static Set<DiagramShape> importJSON(InputStream stream) {
+    private static Set<DiagramShape<? extends Diagram>> importJSON(InputStream stream) {
         try {
             return OBJECT_MAPPER.readValue(stream, getType());
         } catch (Exception e) {

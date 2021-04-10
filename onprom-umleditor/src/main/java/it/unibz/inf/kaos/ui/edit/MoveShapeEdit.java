@@ -26,6 +26,7 @@
 
 package it.unibz.inf.kaos.ui.edit;
 
+import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -41,9 +42,9 @@ import java.util.Collection;
 class MoveShapeEdit extends AbstractUndoableEdit {
     private final int moveX;
     private final int moveY;
-    private final Collection<DiagramShape> shapes;
+    private final Collection<DiagramShape<? extends Diagram>> shapes;
 
-    MoveShapeEdit(Collection<DiagramShape> _cls, int _moveX, int _moveY) {
+    MoveShapeEdit(Collection<DiagramShape<? extends Diagram>> _cls, int _moveX, int _moveY) {
         shapes = _cls;
         moveX = _moveX;
         moveY = _moveY;
