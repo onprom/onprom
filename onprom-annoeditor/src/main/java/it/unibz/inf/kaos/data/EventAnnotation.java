@@ -120,17 +120,7 @@ public class EventAnnotation extends Annotation {
             builder.addVar(XESConstants.nameExpr, XESConstants.attKeyVar);
             String query = builder.toString();
             String [] eventVariables = concatenate(eventAnswerVariables,XESConstants.attArray);
-//            queries.add(new BinaryAnnotationQuery(query, XESConstants.eventAttributeURI,
-//                    eventAnswerVariable, XESConstants.attArray));
-//            queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, XESConstants.attArray, XESConstants.attTypeArr));
-//            queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, XESConstants.attArray, XESConstants.attKeyArr));
-//            queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, XESConstants.attArray, XESConstants.attValueArr));
-
-            queries.add(new BinaryAnnotationQuery(query, XESConstants.eventAttributeURI,
-                    eventAnswerVariables, eventVariables));
-            queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, eventVariables, XESConstants.attTypeArr));
-            queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, eventVariables, XESConstants.attKeyArr));
-            queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, eventVariables, XESConstants.attValueArr));
+            queryAdd(queries, eventAnswerVariables, query, eventVariables);
 
             /*
              timestamp attribute
@@ -155,21 +145,12 @@ public class EventAnnotation extends Annotation {
             builder.addVar(XESConstants.timestampTypeExpr, XESConstants.attType);
             builder.addVar(XESConstants.timestampExpr, XESConstants.attKey);
             query = builder.toString();
-//            queries.add(new BinaryAnnotationQuery(query, XESConstants.eventAttributeURI,
-//                    eventAnswerVariables, XESConstants.attArray)
-//            );
-//            queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, XESConstants.attArray, XESConstants.attTypeArr));
-//            queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, XESConstants.attArray, XESConstants.attKeyArr));
-//            queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, XESConstants.attArray, XESConstants.attValueArr));
-            queries.add(new BinaryAnnotationQuery(query, XESConstants.eventAttributeURI,
-                    eventAnswerVariables, eventVariables)
-            );
-            queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, eventVariables, XESConstants.attTypeArr));
-            queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, eventVariables, XESConstants.attKeyArr));
-            queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, eventVariables, XESConstants.attValueArr));
+            queryAdd(queries, eventAnswerVariables, query, eventVariables);
+
             //lifecycle attribute
             builder = new SelectBuilder();
             builder.addVar(eventVar).addVar("\"" + getLifecycle().toString() + "\"", XESConstants.attValueVar);
+
             //add case path
             if (!inheritanceWithCase) {
                 SimpleQueryExporter.addJoin(builder, getCasePath());
@@ -180,18 +161,21 @@ public class EventAnnotation extends Annotation {
             builder.addVar(XESConstants.literalExpr, XESConstants.attType);
             builder.addVar(XESConstants.lifecycleExpr, XESConstants.attKey);
             query = builder.toString();
-            queries.add(new BinaryAnnotationQuery(query, XESConstants.eventAttributeURI,
-                    eventAnswerVariables, eventVariables)
-            );
-            queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, eventVariables, XESConstants.attTypeArr));
-            queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, eventVariables, XESConstants.attKeyArr));
-            queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, eventVariables, XESConstants.attValueArr));
+            queryAdd(queries, eventAnswerVariables, query, eventVariables);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             UIUtility.error(e.getMessage());
         }
         return queries;
     }
+
+    private void queryAdd(List<AnnotationQuery> queries, String[] eventAnswerVariables, String query, String[] eventVariables) {
+        queries.add(new BinaryAnnotationQuery(query, XESConstants.eventAttributeURI, eventAnswerVariables, eventVariables));
+        queries.add(new BinaryAnnotationQuery(query, XESConstants.attTypeURI, eventVariables, XESConstants.attTypeArr));
+        queries.add(new BinaryAnnotationQuery(query, XESConstants.attKeyURI, eventVariables, XESConstants.attKeyArr));
+        queries.add(new BinaryAnnotationQuery(query, XESConstants.attValueURI, eventVariables, XESConstants.attValueArr));
+    }
+
 
     @Override
     public java.util.Optional<JPanel> getForm(AnnotationDiagram panel) {
