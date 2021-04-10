@@ -34,6 +34,7 @@ import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
 import it.unibz.inf.kaos.ui.form.EventForm;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
+import it.unibz.inf.kaos.util.ToolUtil;
 import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.apache.jena.sparql.core.Var;
 import org.slf4j.Logger;
@@ -63,16 +64,6 @@ public class EventAnnotation extends Annotation {
 
     }
 
-    public <T> T[] concatenate(T[] a, T[] b) {
-        int aLen = a.length;
-        int bLen = b.length;
-
-        @SuppressWarnings("unchecked")
-        T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
-        System.arraycopy(a, 0, c, 0, aLen);
-        System.arraycopy(b, 0, c, aLen, bLen);
-        return c;
-    }
 
     public EventAnnotation(String _label, CaseAnnotation _caseAnnotation, UMLClass _relatedClass) {
         this(_caseAnnotation, _relatedClass);
@@ -119,7 +110,7 @@ public class EventAnnotation extends Annotation {
             builder.addVar(XESConstants.literalExpr, XESConstants.attTypeVar);
             builder.addVar(XESConstants.nameExpr, XESConstants.attKeyVar);
             String query = builder.toString();
-            String [] eventVariables = concatenate(eventAnswerVariables,XESConstants.attArray);
+            String [] eventVariables = ToolUtil.concatenate(eventAnswerVariables,XESConstants.attArray);
             queryAdd(queries, eventAnswerVariables, query, eventVariables);
 
             /*
@@ -144,6 +135,7 @@ public class EventAnnotation extends Annotation {
             builder.addVar("\"" + getLabel() + "\"", XESConstants.labelVar);
             builder.addVar(XESConstants.timestampTypeExpr, XESConstants.attType);
             builder.addVar(XESConstants.timestampExpr, XESConstants.attKey);
+
             query = builder.toString();
             queryAdd(queries, eventAnswerVariables, query, eventVariables);
 
@@ -160,6 +152,7 @@ public class EventAnnotation extends Annotation {
             builder.addVar("\"" + getLabel() + "\"", XESConstants.label);
             builder.addVar(XESConstants.literalExpr, XESConstants.attType);
             builder.addVar(XESConstants.lifecycleExpr, XESConstants.attKey);
+
             query = builder.toString();
             queryAdd(queries, eventAnswerVariables, query, eventVariables);
         } catch (Exception e) {
