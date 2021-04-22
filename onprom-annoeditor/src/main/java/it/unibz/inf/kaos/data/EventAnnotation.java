@@ -32,16 +32,16 @@ import it.unibz.inf.kaos.interfaces.AnnotationDiagram;
 import it.unibz.inf.kaos.interfaces.AnnotationProperties;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
 import it.unibz.inf.kaos.io.SimpleQueryExporter;
+import it.unibz.inf.kaos.logextractor.util.ToolUtil;
 import it.unibz.inf.kaos.ui.form.EventForm;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
-import it.unibz.inf.kaos.util.ToolUtil;
 import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.apache.jena.sparql.core.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import it.unibz.inf.kaos.logextractor.util.ToolUtil;
 
 import javax.swing.*;
-import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Set;
 

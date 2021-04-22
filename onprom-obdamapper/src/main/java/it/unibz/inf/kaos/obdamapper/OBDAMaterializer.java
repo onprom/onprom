@@ -121,7 +121,6 @@ public class OBDAMaterializer {
                 results.add(OWL_DATA_FACTORY.getOWLObjectPropertyAssertionAxiom(op, firstInst, secondInst));
             }
         }
-
         return results;
     }
 

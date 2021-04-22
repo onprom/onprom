@@ -1,6 +1,9 @@
-package it.unibz.inf.kaos.util;
+package it.unibz.inf.kaos.logextractor.util;
 
+import org.deckfour.xes.model.XTrace;
 import java.lang.reflect.Array;
+import java.util.Collection;
+import java.util.Comparator;
 
 public class ToolUtil {
     public static <T> T[] concatenate(T[] a, T[] b) {
@@ -12,5 +15,12 @@ public class ToolUtil {
         System.arraycopy(a, 0, c, 0, aLen);
         System.arraycopy(b, 0, c, aLen, bLen);
         return c;
+    }
+
+    public static Collection<XTrace> sortTrace(Collection<XTrace> collection, String field) {
+        collection.forEach(
+                trace -> trace.sort(Comparator.comparing(e -> e.getAttributes().get(field)))
+        );
+        return collection;
     }
 }

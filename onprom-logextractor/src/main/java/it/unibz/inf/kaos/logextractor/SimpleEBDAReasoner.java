@@ -26,6 +26,7 @@
 
 package it.unibz.inf.kaos.logextractor;
 
+import it.unibz.inf.kaos.logextractor.util.ToolUtil;
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.ontop.injection.OntopSQLOWLAPIConfiguration;
 import it.unibz.inf.ontop.owlapi.OntopOWLFactory;
@@ -255,11 +256,10 @@ class SimpleEBDAReasoner {
             logger.error(e.getMessage());
         }
 
-        Collection<XTrace> traceList = traces.values();
-        traceList.forEach(
-                trace -> trace.sort(Comparator.comparing(e -> e.getAttributes().get("time:timestamp")))
-        );
+        Collection<XTrace> sortedTraces = ToolUtil.sortTrace(traces.values(), "time:timestamp");
 
-        return traces.values();
+//        return traces.values();
+        return sortedTraces;
     }
+
 }

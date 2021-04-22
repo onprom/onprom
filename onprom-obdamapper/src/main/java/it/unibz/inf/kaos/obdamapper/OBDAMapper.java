@@ -227,7 +227,6 @@ public class OBDAMapper {
             }
             if (!query.equals("") &&
                     targetQuery != null && !targetQuery.equals("")) {
-
                 this.addMapping(result.sqlString, targetQuery);
             }
         } catch (Exception e) {
