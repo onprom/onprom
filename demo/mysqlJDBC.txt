@@ -1,0 +1,6 @@
+[SourceDeclaration]
+sourceUri	datasource1
+connectionUrl	jdbc:mysql://localhost:13306/dolibarr
+username	root
+password    root
+driverClass	com.mysql.jdbc.Driver

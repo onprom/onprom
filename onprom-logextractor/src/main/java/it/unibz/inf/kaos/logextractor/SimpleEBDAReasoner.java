@@ -256,10 +256,11 @@ class SimpleEBDAReasoner {
             logger.error(e.getMessage());
         }
 
-        Collection<XTrace> sortedTraces = ToolUtil.sortTrace(traces.values(), "time:timestamp");
 
-//        return traces.values();
-        return sortedTraces;
+      //  Collection<XTrace> sortedTraces = ToolUtil.sortTrace(traces.values(), "time:timestamp");
+
+        return traces.values();
+      //  return sortedTraces;
     }
 
 }

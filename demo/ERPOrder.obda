@@ -1,0 +1,89 @@
+[PrefixDeclaration]
+:		http://www.example.com/dolibarr#
+owl:		http://www.w3.org/2002/07/owl#
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+xml:		http://www.w3.org/XML/1998/namespace
+xsd:		http://www.w3.org/2001/XMLSchema#
+data:		http://www.example.com/dolibarr/data/
+obda:		https://w3id.org/obda/vocabulary#
+rdfs:		http://www.w3.org/2000/01/rdf-schema#
+onprom:		http://kaos.inf.unibz.it/onprom/
+
+[SourceDeclaration]
+sourceUri	datasource1
+connectionUrl	jdbc:mysql://localhost:13306/dolibarr
+username	root
+password    root
+driverClass	com.mysql.jdbc.Driver
+
+[MappingDeclaration] @collection [[
+mappingId	product
+target		data:product/{rowid} a :Product . 
+source		SELECT * FROM llx_product
+
+mappingId	customer
+target		data:customer/{rowid} a :Customer . 
+source		SELECT * FROM llx_societe
+
+mappingId	salesOrder
+target		data:salesOrder/{rowid} a :SalesOrder ; :orderNo {ref}^^xsd:string ; :createDate {date_creation}^^xsd:dateTime ; :orderDate {date_commande}^^xsd:date . 
+source		SELECT * FROM llx_commande
+
+mappingId	payment
+target		data:payment/{rowid} a :Payment ; :payDate {datep}^^xsd:dateTime . 
+source		SELECT rowid,datep FROM llx_paiement
+
+mappingId	shipment
+target		data:shipment/{rowid} a :Shipment ; :shipDate {date_delivery}^^xsd:dateTime . 
+source		SELECT rowid, date_delivery FROM llx_expedition
+
+mappingId	invoice
+target		data:invoice/{rowid} a :Invoice ; :invDate {tms}^^xsd:dateTime . 
+source		SELECT rowid, tms FROM llx_facture
+
+mappingId	shipmentItem
+target		data:shipmentItem/{rowid} a :ShipmentItem . 
+source		SELECT * FROM llx_expeditiondet
+
+mappingId	hasShipmentItem
+target		data:shipment/{fk_expedition} :hasShipmentItem data:shipmentItem/{rowid} . 
+source		SELECT ed.fk_expedition,ed.rowid FROM llx_expeditiondet ed
+
+mappingId	invoiceToPayment
+target		data:invoice/{invoice} :invoiceToPayment data:payment/{pay} . 
+source		SELECT fk_facture as invoice,fk_paiement as pay FROM llx_paiement_facture
+
+mappingId	createsalesOrder
+target		data:customer/{fk_soc} :create data:salesOrder/{rowid} ; :createDate {date_creation}^^xsd:dateTime ; :orderDate {date_commande}^^xsd:date . 
+source		SELECT * FROM llx_commande
+
+mappingId	salesOrderItem
+target		data:salesOrderItem/{rowid} a :OrderItem . 
+source		SELECT * FROM llx_commandedet
+
+mappingId	hasOrderItem
+target		data:salesOrder/{fk_commande} :hasOrderItem data:salesOrderItem/{rowid} . 
+source		SELECT * FROM llx_commandedet
+
+mappingId	salesOrderHasProduct
+target		data:salesOrder/{fk_commande} :hasProduct data:product/{fk_product} . 
+source		SELECT fk_commande, fk_product FROM llx_commandedet
+
+mappingId	hasInvoice
+target		data:coustomer/{coustomerId} :hasInvoice data:invoice/{invoiceId} ; :create data:salesOrder/{orderId} . 
+source		SELECT DISTINCT f.fk_soc AS coustomerId,f.rowid AS invoiceId,c.rowid AS orderId FROM llx_facture f left join llx_commande c
+			on f.fk_soc = c.fk_soc
+
+mappingId	payTo
+target		data:payment/{paymentId} :payTo data:salesOrder/{oid} ; :payDate {payDate}^^xsd:dateTime . 
+source		SELECT DISTINCT pf.fk_paiement AS paymentId, c.rowid AS oid, s.rowid as customerId, p.tms AS payDate from llx_paiement_facture pf left join llx_facture f
+			on pf.fk_facture = f.rowid left join llx_commande c
+			on c.fk_soc = f.fk_soc  left join llx_societe s
+			on f.fk_soc = s.rowid  left join llx_paiement p
+			on pf.fk_paiement = p.rowid
+
+mappingId	shipTo
+target		data:shipment/{rowid} :shipTo data:customer/{fk_soc} ; :shipDate {date_delivery}^^xsd:dateTime . 
+source		SELECT * FROM llx_expedition
+]]
+

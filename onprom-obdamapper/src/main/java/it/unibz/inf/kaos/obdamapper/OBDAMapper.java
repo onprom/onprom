@@ -156,7 +156,7 @@ public class OBDAMapper {
         String[] secondComponent = annoQ.getSecondComponent();
         IRI targetURI = annoQ.getTargetIRI();
         String query = annoQ.getQuery();
-
+        query = query.replaceAll("<http://www.example.com/dolibarr/","<http://www.example.com/dolibarr#");
         OntopReformulationResult result = reformulate(query);
         Map<String, ImmutableTerm> map = result.substitution;
 
