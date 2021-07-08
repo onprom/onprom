@@ -79,6 +79,7 @@
         <module>onprom-logextractor</module>
         <module>onprom-toolkit</module>
         <module>onprom-plugin</module>
+        <module>onprom-ocel</module>
     </modules>
     <repositories>
         <repository>

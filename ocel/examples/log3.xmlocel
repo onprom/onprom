@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<log>
+	<global scope="event">
+		<string key="activity" value="__INVALID__"/>
+		<string key="omap" value="__INVALID__"/>
+		<string key="id" value="__INVALID__"/>
+		<string key="timestamp" value="__INVALID__"/>
+	</global>
+	<global scope="object">
+		<string key="id" value="__INVALID__"/>
+		<string key="type" value="__INVALID__"/>
+	</global>
+	<global scope="log">
+		<list key="attribute-names">
+			<string key="attribute-name" value="color"/>
+			<string key="attribute-name" value="costs"/>
+			<string key="attribute-name" value="customer"/>
+			<string key="attribute-name" value="prepaid-amount"/>
+			<string key="attribute-name" value="resource"/>
+			<string key="attribute-name" value="size"/>
+			<string key="attribute-name" value="total-weight"/>
+			<string key="attribute-name" value="weight"/>
+		</list>
+		<list key="object-types">
+			<string key="object-type" value="customer"/>
+			<string key="object-type" value="item"/>
+			<string key="object-type" value="order"/>
+			<string key="object-type" value="package"/>
+			<string key="object-type" value="product"/>
+		</list>
+		<string key="version" value="0.1"/>
+		<string key="ordering" value="timestamp"/>
+	</global>
+	<events>
+		<event>
+			<string key="id" value="e1"/>
+			<date key="timestamp" value="2020-07-09T15:20:01.000+08:00"/>
+			<string key="activity" value="place_order"/>
+			<list key="omap">
+				<string key="object-id" value="i1"/>
+				<string key="object-id" value="o1"/>
+				<string key="object-id" value="i2"/>
+			</list>
+			<list key="vmap">
+				<string key="resource" value="Alessandro"/>
+				<string key="prepaid-amount" value="200.0"/>
+			</list>
+		</event>
+		<event>
+			<string key="id" value="e2"/>
+			<date key="timestamp" value="2020-07-09T15:21:01.000+08:00"/>
+			<string key="activity" value="check_availability"/>
+			<list key="omap">
+				<string key="object-id" value="i1"/>
+			</list>
+			<list key="vmap">
+				<string key="resource" value="Anahita"/>
+				<string key="weight" value="10.0"/>
+			</list>
+		</event>
+		<event>
+			<string key="id" value="e3"/>
+			<date key="timestamp" value="2020-07-09T15:22:01.000+08:00"/>
+			<string key="activity" value="load_package"/>
+			<list key="omap">
+				<string key="object-id" value="r1"/>
+				<string key="object-id" value="p1"/>
+			</list>
+			<list key="vmap">
+				<string key="resource" value="Gyunam"/>
+				<string key="total-weight" value="100.0"/>
+			</list>
+		</event>
+	</events>
+	<objects>
+		<object>
+			<string key="id" value="p1"/>
+			<string key="type" value="package"/>
+			<list key="ovmap"/>
+		</object>
+		<object>
+			<string key="id" value="o1"/>
+			<string key="type" value="order"/>
+			<list key="ovmap">
+				<string key="costs" value="3500.0"/>
+				<string key="customer" value="Apple"/>
+			</list>
+		</object>
+		<object>
+			<string key="id" value="i1"/>
+			<string key="type" value="item"/>
+			<list key="ovmap"/>
+		</object>
+		<object>
+			<string key="id" value="i2"/>
+			<string key="type" value="item"/>
+			<list key="ovmap">
+				<string key="color" value="green"/>
+				<string key="size" value="small"/>
+			</list>
+		</object>
+		<object>
+			<string key="id" value="r1"/>
+			<string key="type" value="product"/>
+			<list key="ovmap"/>
+		</object>
+	</objects>
+</log>
