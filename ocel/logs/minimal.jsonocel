@@ -75,8 +75,8 @@
     "i1": {
       "ocel:type": "item",
       "ocel:ovmap": {
-        "color": NaN,
-        "size": NaN
+        "color": "NaN",
+        "size": "NaN"
       }
     },
     "i2": {

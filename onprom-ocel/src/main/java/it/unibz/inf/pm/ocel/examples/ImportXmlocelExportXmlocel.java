@@ -7,11 +7,11 @@ import java.util.Map;
 
 public class ImportXmlocelExportXmlocel {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         try {
             System.out.println("validated input:");
             OcelInitial.validate("ocel/logs/minimal.xmlocel", "ocel/schemas/schema.xml");
-            Map log = OcelInitial.import_log("ocel/logs/minimal.xmlocel");
+            Map log = (Map)OcelInitial.import_log("ocel/logs/minimal.xmlocel");
             OcelInitial.export_log(log,"ocel/examples/log3.xmlocel");
 
             System.out.println("\nvalidated output:");

@@ -1,12 +1,11 @@
 package it.unibz.inf.pm.ocel.exporter;
 
-import java.util.HashMap;
-import java.util.Map;
+import it.unibz.inf.pm.ocel.util.JsonUtil;
 
 public class Oceljson {
-    public static Map apply(String output_path, String ... parameters)
+    public static void apply(Object log, String output_path, String ... parameters)
     {
-        // to be updated...
-        return new HashMap();
+        JsonUtil.saveJson(log,output_path);
+
     }
 }
