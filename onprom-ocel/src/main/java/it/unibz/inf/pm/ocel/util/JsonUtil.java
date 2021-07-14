@@ -82,7 +82,7 @@ public class JsonUtil {
         // gain the jsonObject
         try {
             jsonObject = JSONObject.parseObject(readJson);
-            System.out.println(JSON.toJSONString(jsonObject));
+           // System.out.println(JSON.toJSONString(jsonObject));
         }catch (JSONException e){
             LOGGER.error(e.getMessage());
         }
@@ -123,14 +123,6 @@ public class JsonUtil {
     }
 
     public static Map<String, List<KeyValue>> map = new ConcurrentHashMap<>(28);
-
-
-    public static void main(String[] args) throws IOException {
-        JSONObject jsonObject = readJsonfileToObject("ocel/logs/minimal.jsonocel");
-        System.out.println(jsonObject);
-
-
-    }
 
 
     /**
@@ -205,29 +197,4 @@ public class JsonUtil {
         private String value;
     }
 
-
-
-
-//    public static void main(String[] args) throws Exception {
-//
-//
-//        InputStream inputStream = new FileInputStream("ocel/logs/minimal.jsonocel");
-//        String text = IOUtils.toString(inputStream,"utf8");
-//       // List<OcelEvent> s = JSON.parseArray(text, OcelEvent.class);
-//        System.out.println(getEventListMap(text));
-////        String path  = "sql.txt";
-////        BufferedWriter out = new BufferedWriter(
-////                new OutputStreamWriter(new FileOutputStream(path,true)));
-////        for (OcelEvent d:s) {
-////            //String SQL  = "update HDJC_BASE_MONITOR2 set RTSPURL = '"+d.getRtspUrl()+"',NAME = '"+d.getName()+"',UM = '"+d.getUsername()+"',PW = '"+d.getPassword()+"' where ID = '"+d.getId()+"'";
-////            String SQL = "insert into test (ID,NAME,PASSWORD)";
-//////                    + "VALUES('"+d.getId()+"','"+d.getName()+"','"+d.getPassword()+"')";
-////            System.out.println(SQL);
-////            out.write(SQL);
-////            out.write("\n");
-////            out.flush();
-//       // }
-//        //out.close();
-//
-//    }
 }

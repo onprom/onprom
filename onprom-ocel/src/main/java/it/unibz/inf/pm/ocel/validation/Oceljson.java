@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class Oceljson {
     public static boolean apply(String input_path, String validation_path, String ... parameters) throws IOException {
-        JsonNode jsonNode = JsonSchemaUtil.strToJsonNode(JsonUtil.readJsonfileToObject(input_path).toJSONString());
+        JsonNode jsonNode = JsonSchemaUtil.strToJsonNode(JsonUtil.readJsonFile(input_path));
         JsonNode schemaNode = JsonSchemaUtil.schemaToJsonNode(validation_path);
         if(JsonSchemaUtil.validateJson(jsonNode,schemaNode))
         {

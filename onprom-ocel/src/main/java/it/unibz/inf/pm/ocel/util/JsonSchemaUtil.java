@@ -28,7 +28,6 @@ public class JsonSchemaUtil {
         return jsonNode;
     }
 
-
     /**
      * @param jsonFilePath jsonSchema file path
      */
@@ -50,6 +49,7 @@ public class JsonSchemaUtil {
         //fge validate weather the json data fit json schema
         ProcessingReport report = JsonSchemaFactory.byDefault().getValidator().validateUnchecked(schemaNode, jsonNode);
         if (report.isSuccess()) {
+            System.out.println("True");
             return true;
         } else {
             Iterator<ProcessingMessage> it = report.iterator();
