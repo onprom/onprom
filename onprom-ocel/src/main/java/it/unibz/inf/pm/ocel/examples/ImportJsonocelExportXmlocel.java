@@ -9,7 +9,7 @@ public class ImportJsonocelExportXmlocel {
         try {
             System.out.print("validated input:");
             OcelInitial.validate("ocel/logs/minimal.jsonocel", "ocel/schemas/schema.json");
-            Object log = OcelInitial.import_log("ocel/logs/minimal.jsonocel");
+            Object log = OcelInitial.import_log("ocel/logs/minimal.jsonocel","toXML");
             OcelInitial.export_log(log,"ocel/examples/log1.xmlocel");
 
             System.out.print("\nvalidated output:");

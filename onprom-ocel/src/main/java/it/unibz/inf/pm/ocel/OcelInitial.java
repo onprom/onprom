@@ -14,8 +14,14 @@ public class OcelInitial {
     private static final String _maintainer_email__ = "a.berti@pads.rwth-aachen.de";
 
 
-    public static Object import_log(String log_path) throws DocumentException {
-        return Importer.apply(log_path);
+    public static Object import_log(String log_path,String ... parameters) throws Exception {
+
+        if (parameters.length > 0)
+        {
+            return Importer.apply(log_path,parameters);
+        }else {
+            return Importer.apply(log_path);
+        }
     }
 
     public static void export_log(Object log, String log_path) throws DocumentException {

@@ -28,6 +28,7 @@ public class Ocelxml {
     }
 
 
+
     public static void apply(Map<String,Object> log, String output_path, String ... parameters) throws DocumentException
     {
         String prefix = "ocel:";
@@ -174,10 +175,10 @@ public class Ocelxml {
                             Iterator<String> item = vMap.keySet().iterator();
                             while(item.hasNext()) {
                                 String itemkey = item.next();
-                                String value = vMap.get(itemkey);
+                                Object value = vMap.get(itemkey);
                                 Element event_list_string = eventList.addElement("string");
                                 event_list_string.addAttribute("key", itemkey);
-                                event_list_string.addAttribute("value", value);
+                                event_list_string.addAttribute("value", value.toString());
                                 event_list_string.setName("string");
                             }
                         }else if((prefix +"timestamp").equals(stringkey)){
@@ -185,7 +186,7 @@ public class Ocelxml {
                             Element timestamp = event.addElement("date");
                             timestamp.addAttribute("key", "timestamp");
                             try {
-                                timestamp.addAttribute("value", DateFormatUtil.dealDateFormatReverse(eventMap.get(stringkey).toString()));
+                                timestamp.addAttribute("value", DateFormatUtil.dealDateFormat(eventMap.get(stringkey).toString()));
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
