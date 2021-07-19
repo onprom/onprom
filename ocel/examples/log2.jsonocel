@@ -22,7 +22,7 @@
 	},
 	"ocel:events":{
 		"e1":{
-			"ocel:timestamp":"2020-07-09 15:20:01",
+			"ocel:timestamp":"2020-07-09T09:20:01.527+02:00",
 			"ocel:activity":"place_order",
 			"ocel:omap":[
 				"i1",
@@ -35,7 +35,7 @@
 			}
 		},
 		"e2":{
-			"ocel:timestamp":"2020-07-09 15:21:01",
+			"ocel:timestamp":"2020-07-09T09:21:01.527+02:00",
 			"ocel:activity":"check_availability",
 			"ocel:omap":[
 				"i1"
@@ -46,7 +46,7 @@
 			}
 		},
 		"e3":{
-			"ocel:timestamp":"2020-07-09 15:22:01",
+			"ocel:timestamp":"2020-07-09T09:22:01.527+02:00",
 			"ocel:activity":"load_package",
 			"ocel:omap":[
 				"r1",

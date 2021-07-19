@@ -35,7 +35,7 @@
 	<events>
 		<event>
 			<string key="id" value="e1"/>
-			<date key="timestamp" value="2020-07-09T15:20:01.000+08:00"/>
+			<date key="timestamp" value="2020-07-09T09:20:01.527+02:00"/>
 			<string key="activity" value="place_order"/>
 			<list key="omap">
 				<string key="object-id" value="i1"/>
@@ -49,7 +49,7 @@
 		</event>
 		<event>
 			<string key="id" value="e2"/>
-			<date key="timestamp" value="2020-07-09T15:21:01.000+08:00"/>
+			<date key="timestamp" value="2020-07-09T09:21:01.527+02:00"/>
 			<string key="activity" value="check_availability"/>
 			<list key="omap">
 				<string key="object-id" value="i1"/>
@@ -61,7 +61,7 @@
 		</event>
 		<event>
 			<string key="id" value="e3"/>
-			<date key="timestamp" value="2020-07-09T15:22:01.000+08:00"/>
+			<date key="timestamp" value="2020-07-09T09:22:01.527+02:00"/>
 			<string key="activity" value="load_package"/>
 			<list key="omap">
 				<string key="object-id" value="r1"/>

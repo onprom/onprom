@@ -95,7 +95,7 @@ public class Ocelxml {
                     eventKeyName = event.attribute("value").getValue();
                 }else if("timestamp".equals(keyStr)){
                     try {
-                        eventMap.put("ocel:timestamp", DateFormatUtil.dealDateFormat(event.attribute("value").getValue()));
+                        eventMap.put("ocel:timestamp", DateFormatUtil.dealDateFormatReverse(event.attribute("value").getValue()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

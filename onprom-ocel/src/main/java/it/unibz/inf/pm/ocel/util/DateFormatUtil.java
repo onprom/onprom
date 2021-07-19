@@ -15,7 +15,7 @@ public class DateFormatUtil {
     public static String dealDateFormat(String oldDateStr) throws ParseException {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");  //yyyy-MM-dd'T'HH:mm:ss.SSSZ
         Date date = df.parse(oldDateStr);
-        SimpleDateFormat df1 = new SimpleDateFormat ("EEE MMM dd HH:mm:ss Z yyyy", Locale.UK);
+        SimpleDateFormat df1 = new SimpleDateFormat ("EEE MMM dd HH:mm:ss Z yyyy", Locale.ITALY);
         Date date1 =  df1.parse(date.toString());
         DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return df2.format(date1);
@@ -29,7 +29,7 @@ public class DateFormatUtil {
     public static String dealDateFormatReverse(String oldDateStr) throws ParseException{
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
         DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date1 =  df2.parse(oldDateStr);
+        Date date1 =  df.parse(oldDateStr);
         return df.format(date1);
     }
 }

@@ -27,7 +27,6 @@ public class JsonUtil {
     // save the Nodes into json file
     public static void saveJson(Object jsonDiagram,String filePath){
         String writeString = JSON.toJSONString(jsonDiagram, SerializerFeature.PrettyFormat);
-
         LOGGER.info(writeString);
         BufferedWriter writer = null;
         File file = new File(filePath);
@@ -197,8 +196,6 @@ public class JsonUtil {
         Object globalObject = jsonObject.get("ocel:global-object");
 
         Object events = jsonObject.get("ocel:events");
-
-
         Object objects = jsonObject.get("ocel:objects");
 
         Map globalEventMap = (Map) JSON.parse(globalEvent.toString());
@@ -208,7 +205,7 @@ public class JsonUtil {
         }
         logMap.put("ocel:global-event",tmpMap);
 
-
+        // save the events element
         Map eventsMap = (Map) JSON.parse(events.toString());
         Map allEventsMap = new HashMap();
         tmpMap = new HashMap();
@@ -238,48 +235,45 @@ public class JsonUtil {
                     }
                     tmpMap.put(keyEvent,tmpList);
                 } else {
-                   // System.out.println(((Map.Entry) eventElmt).getKey() + "=" + ((Map.Entry) eventElmt).getValue());
                     tmpMap.put(((Map.Entry)eventElmt).getKey(),((Map.Entry)eventElmt).getValue());
                 }
                 allEventsMap.put(key,tmpMap);
             }
-
-          //  System.out.println(((Map.Entry)map).getKey()+"="+((Map.Entry)map).getValue());
-          //  tmpMap.put(((Map.Entry)map).getKey(),((Map.Entry)map).getValue());
             logMap.put("ocel:events",allEventsMap);
         }
 
+        // save the objects element
+        Map objectsMap = (Map) JSON.parse(objects.toString());
+        Map allObjectsMap = new HashMap();
 
+        for (Object map : objectsMap.entrySet()){
+            tmpMap = new HashMap();
+            String key = (String) ((Map.Entry)map).getKey();
+            Object value = ((Map.Entry)map).getValue();
 
-
-
-
-
-
-
-       // System.out.println(logMap);
-
-//        System.out.println(globalLog);
-//        System.out.println(globalEvent);
-//        System.out.println(globalObject);
-//        System.out.println(objects);
-
-//       // Map globalLogMap = (Map) JSON.parse(globalLog.toString());
-//        //Map globalLogMap = (Map) JSON.parse(jsonString);
-//
-//       // System.out.println(globalLogMap);
-//
-//        Map globalLogMap = (Map) JSON.parse(globalLog.toString());
-//        System.out.println(globalLogMap);
-//        for (Object map : globalLogMap.entrySet()){
-//            System.out.println(((Map.Entry)map).getKey()+"=" + ((Map.Entry)map).getValue());
-//            globalLogMap.put(((Map.Entry)map).getKey(),((Map.Entry)map).getValue());
-//        }
-//        logMap.put("ocel:global-log",globalLogMap);
-//        System.out.println(logMap);
-        System.out.println(logMap);
+            Map ojbectElementMap = (Map) JSON.parse(value.toString());
+            for (Object objectElmt : ojbectElementMap.entrySet())
+            {
+                String keyObject = (String) ((Map.Entry)objectElmt).getKey();
+                Object valueObject = ((Map.Entry)objectElmt).getValue();
+                if("ocel:ovmap".equals(keyObject) )
+                {
+                    Map ovMap = (Map) JSON.parse(valueObject.toString());
+                    Map ovTmpMap = new HashMap();
+                    for (Object ovmapElment : ovMap.entrySet())
+                    {
+                        ovTmpMap.put(((Map.Entry)ovmapElment).getKey(),((Map.Entry)ovmapElment).getValue());
+                    }
+                    tmpMap.put(keyObject,ovTmpMap);
+                    allObjectsMap.put(key,tmpMap);
+                }else {
+                    tmpMap.put(((Map.Entry)objectElmt).getKey(),((Map.Entry)objectElmt).getValue());
+                    allObjectsMap.put(key,tmpMap);
+                }
+            }
+            logMap.put("ocel:objects",allObjectsMap);
+        }
         return logMap;
-
     }
 
     public static JSONObject readJsonfileToObject(String filePath) throws IOException {

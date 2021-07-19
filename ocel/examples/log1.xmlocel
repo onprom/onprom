@@ -12,7 +12,7 @@
 	<events>
 		<event>
 			<string key="id" value="e1"/>
-			<date key="timestamp" value="2020-07-09 15:22:01"/>
+			<date key="timestamp" value="2020-07-09T09:22:01.527+02:00"/>
 			<string key="activity" value="load_package"/>
 			<list key="omap">
 				<string key="object-id" value="r1"/>
@@ -25,7 +25,7 @@
 		</event>
 		<event>
 			<string key="id" value="e2"/>
-			<date key="timestamp" value="2020-07-09 15:22:01"/>
+			<date key="timestamp" value="2020-07-09T09:22:01.527+02:00"/>
 			<string key="activity" value="load_package"/>
 			<list key="omap">
 				<string key="object-id" value="r1"/>
@@ -38,7 +38,7 @@
 		</event>
 		<event>
 			<string key="id" value="e3"/>
-			<date key="timestamp" value="2020-07-09 15:22:01"/>
+			<date key="timestamp" value="2020-07-09T09:22:01.527+02:00"/>
 			<string key="activity" value="load_package"/>
 			<list key="omap">
 				<string key="object-id" value="r1"/>
@@ -50,5 +50,40 @@
 			</list>
 		</event>
 	</events>
-	<objects/>
+	<objects>
+		<object>
+			<string key="id" value="p1"/>
+			<string key="type" value="package"/>
+			<list key="ovmap"/>
+		</object>
+		<object>
+			<string key="id" value="o1"/>
+			<string key="type" value="order"/>
+			<list key="ovmap">
+				<string key="costs" value="3500.0"/>
+				<string key="customer" value="Apple"/>
+			</list>
+		</object>
+		<object>
+			<string key="id" value="i1"/>
+			<string key="type" value="item"/>
+			<list key="ovmap">
+				<string key="color" value="NaN"/>
+				<string key="size" value="NaN"/>
+			</list>
+		</object>
+		<object>
+			<string key="id" value="i2"/>
+			<string key="type" value="item"/>
+			<list key="ovmap">
+				<string key="color" value="green"/>
+				<string key="size" value="small"/>
+			</list>
+		</object>
+		<object>
+			<string key="id" value="r1"/>
+			<string key="type" value="product"/>
+			<list key="ovmap"/>
+		</object>
+	</objects>
 </log>

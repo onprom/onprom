@@ -186,7 +186,7 @@ public class Ocelxml {
                             Element timestamp = event.addElement("date");
                             timestamp.addAttribute("key", "timestamp");
                             try {
-                                timestamp.addAttribute("value", DateFormatUtil.dealDateFormat(eventMap.get(stringkey).toString()));
+                                timestamp.addAttribute("value", DateFormatUtil.dealDateFormatReverse(eventMap.get(stringkey).toString()));
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
@@ -229,7 +229,7 @@ public class Ocelxml {
                             Iterator<String> item = vMap.keySet().iterator();
                             while(item.hasNext()) {
                                 String itemkey = item.next();
-                                String value = vMap.get(itemkey);
+                                String value = String.valueOf(vMap.get(itemkey));
                                 Element event_list_string = eventList.addElement("string");
                                 event_list_string.addAttribute("key", itemkey);
                                 event_list_string.addAttribute("value", value);
