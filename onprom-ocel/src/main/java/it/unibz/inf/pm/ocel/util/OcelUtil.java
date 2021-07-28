@@ -1,9 +1,9 @@
-package it.unibz.inf.pm.ocel;
+package it.unibz.inf.pm.ocel.util;
 
 import java.util.List;
 import java.util.Map;
 
-public class OcelInterface {
+public class OcelUtil {
     public static Map getEvents(Map log) {
         Map<String, Object> eventsMap = (Map<String, Object>) log.get("ocel:events");
         return eventsMap;
@@ -35,4 +35,5 @@ public class OcelInterface {
     public static Map getGlobalEvent(Map log) {
         return (Map<String, Object>) log.get("ocel:global-event");
     }
+
 }

@@ -1,0 +1,74 @@
+[ "java.util.LinkedHashSet", [ {
+  "@class" : "it.unibz.inf.kaos.data.UMLClass",
+  "@id" : "f147efe8-bb6c-457c-a679-2c95cede6052",
+  "startX" : 343,
+  "startY" : 171,
+  "name" : "Attribute",
+  "relations" : [ "java.util.LinkedHashSet", [ {
+    "@class" : "it.unibz.inf.kaos.data.Association",
+    "@id" : "de54fc6d-d755-46c9-b020-bef61d743a31",
+    "startX" : 0,
+    "startY" : 0,
+    "name" : "o-has-a",
+    "firstClass" : {
+      "@class" : "it.unibz.inf.kaos.data.UMLClass",
+      "@id" : "2390f843-b597-4a9e-9d39-5b541a1e566d",
+      "startX" : 94,
+      "startY" : 203,
+      "name" : "Object",
+      "relations" : [ "java.util.LinkedHashSet", [ {
+        "@class" : "it.unibz.inf.kaos.data.Association",
+        "@id" : "f5a28284-8886-47db-a456-de726fa0e7dd",
+        "startX" : 0,
+        "startY" : 0,
+        "name" : "e-containts-o",
+        "firstClass" : {
+          "@class" : "it.unibz.inf.kaos.data.UMLClass",
+          "@id" : "60fd25a0-bf9f-4f72-9257-d7428e61e814",
+          "startX" : 98,
+          "startY" : 28,
+          "name" : "Event",
+          "relations" : [ "java.util.LinkedHashSet", [ "f5a28284-8886-47db-a456-de726fa0e7dd" ] ]
+        },
+        "secondClass" : "2390f843-b597-4a9e-9d39-5b541a1e566d",
+        "firstMultiplicity" : "C1_S",
+        "secondMultiplicity" : "C1_S"
+      }, "de54fc6d-d755-46c9-b020-bef61d743a31" ] ]
+    },
+    "secondClass" : "f147efe8-bb6c-457c-a679-2c95cede6052",
+    "firstMultiplicity" : "C0_S",
+    "secondMultiplicity" : "C0_S"
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.Association",
+    "@id" : "ee229e84-ec33-4f0f-be12-34fcaa1e91aa",
+    "startX" : 0,
+    "startY" : 0,
+    "name" : "e-has-a",
+    "firstClass" : "60fd25a0-bf9f-4f72-9257-d7428e61e814",
+    "secondClass" : "f147efe8-bb6c-457c-a679-2c95cede6052",
+    "anchors" : [ "java.util.ArrayList", [ {
+      "@class" : "it.unibz.inf.kaos.data.RelationAnchor",
+      "@id" : "4e83912e-d339-4866-b408-043e52f111b8",
+      "startX" : 398,
+      "startY" : 49
+    } ] ],
+    "firstMultiplicity" : "C0_S",
+    "secondMultiplicity" : "C0_S"
+  } ] ],
+  "attributes" : [ "java.util.ArrayList", [ {
+    "@class" : "it.unibz.inf.kaos.data.Attribute",
+    "name" : "attKey",
+    "type" : "STRING",
+    "multiplicity" : "C1_1"
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.Attribute",
+    "name" : "attValue",
+    "type" : "STRING",
+    "multiplicity" : "C1_1"
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.Attribute",
+    "name" : "attType",
+    "type" : "STRING",
+    "multiplicity" : "C1_1"
+  } ] ]
+}, "2390f843-b597-4a9e-9d39-5b541a1e566d", "60fd25a0-bf9f-4f72-9257-d7428e61e814", "f5a28284-8886-47db-a456-de726fa0e7dd", "de54fc6d-d755-46c9-b020-bef61d743a31", "ee229e84-ec33-4f0f-be12-34fcaa1e91aa" ] ]
