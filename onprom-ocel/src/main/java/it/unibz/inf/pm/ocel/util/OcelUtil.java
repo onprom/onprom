@@ -36,4 +36,7 @@ public class OcelUtil {
         return (Map<String, Object>) log.get("ocel:global-event");
     }
 
+    public static Map getGlobalObject(Map log) {
+        return (Map<String, Object>) log.get("ocel:global-object");
+    }
 }
