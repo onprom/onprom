@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://onprom.inf.unibz.it/ocel/"
+     xml:base="http://onprom.inf.unibz.it/ocel/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:obda="https://w3id.org/obda/vocabulary#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:onprom="http://kaos.inf.unibz.it/onprom/">
+    <owl:Ontology rdf:about="http://onprom.inf.unibz.it/ocel/"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://kaos.inf.unibz.it/onprom/coordinates -->
+
+    <owl:AnnotationProperty rdf:about="http://kaos.inf.unibz.it/onprom/coordinates"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/e-contains-o -->
+
+    <owl:ObjectProperty rdf:about="http://onprom.inf.unibz.it/ocel/e-contains-o">
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/ocel/Event"/>
+        <rdfs:range rdf:resource="http://onprom.inf.unibz.it/ocel/Object"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/e-has-a -->
+
+    <owl:ObjectProperty rdf:about="http://onprom.inf.unibz.it/ocel/e-has-a">
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/ocel/Event"/>
+        <rdfs:range rdf:resource="http://onprom.inf.unibz.it/ocel/Attribute"/>
+        <onprom:coordinates rdf:datatype="http://www.w3.org/2001/XMLSchema#string">398,56</onprom:coordinates>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/o-has-a -->
+
+    <owl:ObjectProperty rdf:about="http://onprom.inf.unibz.it/ocel/o-has-a">
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/ocel/Object"/>
+        <rdfs:range rdf:resource="http://onprom.inf.unibz.it/ocel/Attribute"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/activity -->
+
+    <owl:DatatypeProperty rdf:about="http://onprom.inf.unibz.it/ocel/activity">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/ocel/Event"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/attKey -->
+
+    <owl:DatatypeProperty rdf:about="http://onprom.inf.unibz.it/ocel/attKey">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/ocel/Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/attType -->
+
+    <owl:DatatypeProperty rdf:about="http://onprom.inf.unibz.it/ocel/attType">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/ocel/Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/attValue -->
+
+    <owl:DatatypeProperty rdf:about="http://onprom.inf.unibz.it/ocel/attValue">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/ocel/Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/eventId -->
+
+    <owl:DatatypeProperty rdf:about="http://onprom.inf.unibz.it/ocel/eventId">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/ocel/Event"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/objectId -->
+
+    <owl:DatatypeProperty rdf:about="http://onprom.inf.unibz.it/ocel/objectId">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/ocel/Object"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/objectType -->
+
+    <owl:DatatypeProperty rdf:about="http://onprom.inf.unibz.it/ocel/objectType">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/ocel/Object"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/timestamp -->
+
+    <owl:DatatypeProperty rdf:about="http://onprom.inf.unibz.it/ocel/timestamp">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://onprom.inf.unibz.it/ocel/Event"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/Attribute -->
+
+    <owl:Class rdf:about="http://onprom.inf.unibz.it/ocel/Attribute">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://onprom.inf.unibz.it/ocel/attKey"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://onprom.inf.unibz.it/ocel/attType"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://onprom.inf.unibz.it/ocel/attValue"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <onprom:coordinates rdf:datatype="http://www.w3.org/2001/XMLSchema#string">318,246</onprom:coordinates>
+    </owl:Class>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/Event -->
+
+    <owl:Class rdf:about="http://onprom.inf.unibz.it/ocel/Event">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://onprom.inf.unibz.it/ocel/activity"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://onprom.inf.unibz.it/ocel/eventId"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://onprom.inf.unibz.it/ocel/timestamp"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <onprom:coordinates rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0,0</onprom:coordinates>
+    </owl:Class>
+    
+
+
+    <!-- http://onprom.inf.unibz.it/ocel/Object -->
+
+    <owl:Class rdf:about="http://onprom.inf.unibz.it/ocel/Object">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty>
+                    <rdf:Description>
+                        <owl:inverseOf rdf:resource="http://onprom.inf.unibz.it/ocel/e-contains-o"/>
+                    </rdf:Description>
+                </owl:onProperty>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://onprom.inf.unibz.it/ocel/objectId"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://onprom.inf.unibz.it/ocel/objectType"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <onprom:coordinates rdf:datatype="http://www.w3.org/2001/XMLSchema#string">9,257</onprom:coordinates>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+
