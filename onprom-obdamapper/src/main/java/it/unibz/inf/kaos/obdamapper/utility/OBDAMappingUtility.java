@@ -70,7 +70,6 @@ public class OBDAMappingUtility {
     }
 
     public static OWLEntity getOWLTargetEntity(OWLOntology targetOntology, IRI targetIRI) throws Exception {
-
         Set<OWLEntity> owlTargetEntities = targetOntology.getEntitiesInSignature(targetIRI);
         int numOfOWLEntities = owlTargetEntities.size();
 

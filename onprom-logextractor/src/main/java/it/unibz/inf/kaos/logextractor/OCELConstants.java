@@ -33,19 +33,21 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import java.io.InputStream;
 
 /**
- * This class provides some constants declaration related to the XES Event Ontology
+ * This class provides some constants declaration related to the Ocel Event Ontology
  *
  * @author Ario Santoso (santoso.ario@gmail.com / santoso@inf.unibz.it)
  */
-public class XESConstants {
+public class OCELConstants {
 
     //Event Ontology location
-    static final String eventOntoPath = "/eo-onprom.owl";
+    static final String eventOntoPath = "/ocel-eo.owl";
     static final String qTraceAtt_SimpleAnsVarTrace = "trace";
     static final String qTraceAtt_SimpleAnsVarAtt = "att";
+
     static final String qEvtAtt_SimpleAnsVarEvent = "event";
+    static final String qEvtAtt_SimpleAnsVarObject = "object";
     static final String qEvtAtt_SimpleAnsVarAtt = "att";
-    static final String qAttTypeKeyVal_SimpleAnsVarAtt = "att";
+    static final String qAttTypeKeyVal_SimpleAnsVarAtt = "att";//att
     static final String qAttTypeKeyVal_SimpleAnsVarAttType = "attType";
     static final String qAttTypeKeyVal_SimpleAnsVarAttKey = "attKey";
     static final String qAttTypeKeyVal_SimpleAnsVarAttVal = "attValue";
@@ -55,24 +57,26 @@ public class XESConstants {
 
     //====================================================================================================
     static final String qTraceEvt_SimpleAnsVarTrace = "trace";
-    static final String qTraceEvt_SimpleAnsVarEvent = "event";
-    private static final String eventOntoPrefix = "http://onprom.inf.unibz.it/";
+    static final String qEvt_SimpleAnsVarEvent = "event";
+    static final String qEvt_SimpleAnsVarObject = "object";
+//    private static final String eventOntoPrefix = "http://www.example.com/dolibarr/";
+    private static final String eventOntoPrefix = "http://onprom.inf.unibz.it/ocel/";
     //====================================================================================================
     private static final String ATTRIBUTE_CONCEPT = "<" + eventOntoPrefix + "Attribute" + ">";
     //some vocabularies for role names/object properties
-    private static final String T_CONTAINS_E_ROLE = "<" + eventOntoPrefix + "t-contains-e" + ">";
+    private static final String E_CONTAINS_O_ROLE = "<" + eventOntoPrefix + "e-contains-o" + ">";
     // PREFIX : <http://www.example.org/>
-    // SELECT Distinct ?trace ?event
+    // SELECT Distinct ?event ?obj
     // WHERE {
-    //     ?trace :TcontainsE ?event .
+    //     ?event :EcontainsO ?obj .
     // }
-    static final String qTraceEvt_Simple =
+    static final String qEvtObj_Simple =
             "PREFIX : <" + eventOntoPrefix + "> \n" +
-                    "SELECT Distinct ?trace ?event \n" +
+                    "SELECT Distinct ?event ?obj \n" +
                     "WHERE { "
-                    + "?trace " + T_CONTAINS_E_ROLE + " ?event . "
+                    + "?event " + E_CONTAINS_O_ROLE + " ?obj . "
                     + "}";
-    private static final String T_CONTAINS_A_ROLE = "<" + eventOntoPrefix + "t-has-a" + ">";
+    private static final String T_CONTAINS_A_ROLE = "<" + eventOntoPrefix + "o-has-a" + ">";
     //====================================================================================================
     // Query for retrieving  the information about the association between a trace and its attributes.
     //
@@ -81,11 +85,11 @@ public class XESConstants {
     // WHERE {
     //   ?trace :TcontainsA ?att .
     // }
-    static final String qTraceAtt_Simple =
+    static final String qObjectAtt_Simple =
             "PREFIX : <" + eventOntoPrefix + "> \n" +
-                    "SELECT Distinct ?trace ?att \n" +
+                    "SELECT Distinct ?obj ?att \n" +
                     "WHERE { "
-                    + "?trace " + T_CONTAINS_A_ROLE + " ?att . "
+                    + "?obj " + T_CONTAINS_A_ROLE + " ?att . "
                     + "}";
     private static final String E_CONTAINS_A_ROLE = "<" + eventOntoPrefix + "e-has-a" + ">";
     //====================================================================================================
@@ -126,6 +130,6 @@ public class XESConstants {
     }
 
     public static synchronized InputStream getDefaultEventLogStream() {
-        return XESConstants.class.getResourceAsStream(XESConstants.eventOntoPath);
+        return OCELConstants.class.getResourceAsStream(OCELConstants.eventOntoPath);
     }
 }

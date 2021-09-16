@@ -53,10 +53,11 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.slf4j.LoggerFactory;
 import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl;
 
-import java.lang.reflect.Array;
-import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -153,10 +154,11 @@ public class OBDAMapper {
 
     private void addMapping(BinaryAnnotationQuery annoQ) {
         String[] firstComponent = annoQ.getFirstComponent();
+
         String[] secondComponent = annoQ.getSecondComponent();
         IRI targetURI = annoQ.getTargetIRI();
         String query = annoQ.getQuery();
-        query = query.replaceAll("<http://www.example.com/dolibarr/","<http://www.example.com/dolibarr#");
+
         OntopReformulationResult result = reformulate(query);
         Map<String, ImmutableTerm> map = result.substitution;
 
@@ -166,13 +168,11 @@ public class OBDAMapper {
         }
 
         OWLEntity targetEntity;
-
         OWLDatatype dataType = null;
         OWLDatatype defaultDataType = new OWLDatatypeImpl(OWL2Datatype.RDFS_LITERAL.getIRI());
 
         try {
             targetEntity = OBDAMappingUtility.getOWLTargetEntity(targetOntology, targetURI);
-
             if (targetEntity.isOWLDataProperty()) {
                 if (secondComponent.length > 1) {
                     logger.error(

@@ -26,7 +26,6 @@
 
 package it.unibz.inf.kaos.logextractor;
 
-import it.unibz.inf.kaos.logextractor.util.ToolUtil;
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.ontop.injection.OntopSQLOWLAPIConfiguration;
 import it.unibz.inf.ontop.owlapi.OntopOWLFactory;
@@ -46,7 +45,10 @@ import org.deckfour.xes.model.impl.XTraceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 class SimpleEBDAReasoner {
     private static final Logger logger = LoggerFactory.getLogger(SimpleEBDAReasoner.class);
@@ -111,7 +113,6 @@ class SimpleEBDAReasoner {
             long start = System.currentTimeMillis();
             TupleOWLResultSet resultSet = st.executeSelectQuery(XESConstants.qAttTypeKeyVal_Simple);
             logger.info("Finished executing attributes query in " + (System.currentTimeMillis() - start) + "ms");
-
             start = System.currentTimeMillis();
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
@@ -155,6 +156,7 @@ class SimpleEBDAReasoner {
                 OWLBindingSet result = resultSet.next();
                 try {
                     String eventKey = result.getOWLObject(XESConstants.qEvtAtt_SimpleAnsVarEvent).toString();
+                    System.out.println("eventKey in conference。。。。。。。。。。。。。。"+eventKey);
                     XEvent event = events.get(eventKey);
                     if (event == null) {
                         event = new XEventImpl();

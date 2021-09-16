@@ -165,13 +165,13 @@ public class Ocelxml {
         return value;
     }
 
-    public static void main(String[] args) {
-        try {
-            System.out.println(Ocelxml.apply("minimal.xmlocel"));
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        try {
+//            System.out.println(Ocelxml.apply("minimal.xmlocel"));
+//        } catch (DocumentException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 }
