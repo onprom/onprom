@@ -34,6 +34,8 @@ import java.util.Set;
  * Created by T. E. Kalayci on 01-Feb-2018.
  */
 public class ClassAttribute extends NavigationalAttribute {
+    
+    public ClassAttribute(){}
 
     public ClassAttribute(UMLClass _cls) {
         this(_cls, null);

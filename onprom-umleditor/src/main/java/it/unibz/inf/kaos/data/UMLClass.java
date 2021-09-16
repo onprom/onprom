@@ -48,96 +48,96 @@ public class UMLClass extends AbstractDiagramShape<UMLDiagram> {
     private final Set<Relationship> relations = Sets.newLinkedHashSet();
     private List<Attribute> attributes = Lists.newLinkedList();
 
-  public UMLClass() {
-    this("Class");
-  }
+    public UMLClass() {
+        this("Class");
+    }
 
-  public UMLClass(String _name) {
-    this(_name, null);
-  }
+    public UMLClass(String _name) {
+        this(_name, null);
+    }
 
-  public UMLClass(String _name, String _longName) {
-    super(_name, _longName);
-  }
+    public UMLClass(String _name, String _longName) {
+        super(_name, _longName);
+    }
 
     public UMLClass(String n, int x, int y) {
         super(n, x, y);
     }
 
-  public void addRelation(Relationship relation) {
-    relations.add(relation);
-  }
-
-  public void removeRelation(Relationship relation) {
-    relations.remove(relation);
-  }
-
-  public Set<Relationship> getRelations() {
-    return relations;
-  }
-
-  public int getRelationCount() {
-    return relations.size();
-  }
-
-  public void addAttribute(Attribute attr) {
-    attributes.add(attr);
-  }
-
-  public boolean isRelationExist(UMLClass secondClass, Class type) {
-    for (Relationship relation : relations) {
-      if (relation.getFirstClass().equals(secondClass) || relation.getSecondClass().equals(secondClass)) {
-        if (relation.getClass().equals(type)) {
-          return true;
-        }
-      }
+    public void addRelation(Relationship relation) {
+        relations.add(relation);
     }
-    return false;
-  }
+
+    public void removeRelation(Relationship relation) {
+        relations.remove(relation);
+    }
+
+    public Set<Relationship> getRelations() {
+        return relations;
+    }
+
+    public int getRelationCount() {
+        return relations.size();
+    }
+
+    public void addAttribute(Attribute attr) {
+        attributes.add(attr);
+    }
+
+    public boolean isRelationExist(UMLClass secondClass, Class type) {
+        for (Relationship relation : relations) {
+            if (relation.getFirstClass().equals(secondClass) || relation.getSecondClass().equals(secondClass)) {
+                if (relation.getClass().equals(type)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public List<Attribute> getAttributes() {
-    return attributes;
-  }
+        return attributes;
+    }
 
     public void setAttributes(List<Attribute> attributes) {
-    this.attributes = attributes;
-  }
+        this.attributes = attributes;
+    }
 
-  public int getAttributeCount() {
-    return attributes != null ? attributes.size() : 0;
-  }
+    public int getAttributeCount() {
+        return attributes != null ? attributes.size() : 0;
+    }
 
-  public boolean equals(Object object) {
-      return object instanceof UMLClass && getName().equals(((UMLClass) object).getName());
-  }
+    public boolean equals(Object object) {
+        return object instanceof UMLClass && getName().equals(((UMLClass) object).getName());
+    }
 
-  @Override
-  protected Object clone() throws CloneNotSupportedException {
-    UMLClass clone = (UMLClass) super.clone();
-    clone.setAttributes(cloneAttributes());
-    return clone;
-  }
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        UMLClass clone = (UMLClass) super.clone();
+        clone.setAttributes(cloneAttributes());
+        return clone;
+    }
 
-  public String toString() {
-    return getName();
-  }
+    public String toString() {
+        return getName();
+    }
 
-  public String getCoordinates() {
-    return String.format("%d,%d", getStartX(), getStartY());
-  }
+    public String getCoordinates() {
+        return String.format("%d,%d", getStartX(), getStartY());
+    }
 
-  public void setCoordinates(String coordinates) {
-    if (coordinates == null || coordinates.isEmpty())
-      return;
-    String[] results = coordinates.split(",");
-    setStartX(Integer.parseInt(results[0]));
-    setStartY(Integer.parseInt(results[1]));
-  }
+    public void setCoordinates(String coordinates) {
+        if (coordinates == null || coordinates.isEmpty())
+            return;
+        String[] results = coordinates.split(",");
+        setStartX(Integer.parseInt(results[0]));
+        setStartY(Integer.parseInt(results[1]));
+    }
 
     @Nonnull
     public Optional<Attribute> getClickedAttribute(int x, int y) {
         return attributes.stream().filter(attribute -> attribute.contains(x, y)).findFirst();
-  }
+    }
 
     @Nonnull
     public List<Attribute> cloneAttributes() {
@@ -147,67 +147,67 @@ public class UMLClass extends AbstractDiagramShape<UMLDiagram> {
     }
 
     public void calculateEndCoordinates(Graphics g2d) {
-    Font oldFont = g2d.getFont();
+        Font oldFont = g2d.getFont();
         g2d.setFont(DrawingUtility.CLASS_NAME_FONT);
-    int fontWidth = g2d.getFontMetrics().stringWidth(getName());
-    int fontHeight = g2d.getFontMetrics().getHeight();
+        int fontWidth = g2d.getFontMetrics().stringWidth(getName());
+        int fontHeight = g2d.getFontMetrics().getHeight();
         g2d.setFont(DrawingUtility.ATTRIBUTE_NAME_FONT);
-    int attrHeight = g2d.getFontMetrics().getHeight();
-    for (Attribute attr : attributes) {
-      int attrWidth = g2d.getFontMetrics().stringWidth(attr.toString());
-      if (attrWidth > fontWidth) {
-        fontWidth = attrWidth;
-      }
+        int attrHeight = g2d.getFontMetrics().getHeight();
+        for (Attribute attr : attributes) {
+            int attrWidth = g2d.getFontMetrics().stringWidth(attr.toString());
+            if (attrWidth > fontWidth) {
+                fontWidth = attrWidth;
+            }
+        }
+        int boxHeight = fontHeight + attrHeight * (attributes.size() + 1);
+        setEndX(getStartX() + fontWidth + DrawingUtility.MARGIN * 2);
+        setEndY(getStartY() + boxHeight);
+        g2d.setFont(oldFont);
     }
-    int boxHeight = fontHeight + attrHeight * (attributes.size() + 1);
-      setEndX(getStartX() + fontWidth + DrawingUtility.MARGIN * 2);
-      setEndY(getStartY() + boxHeight);
-    g2d.setFont(oldFont);
-  }
 
     public boolean equalsOrInherits(UMLClass secondClass) {
         return equals(secondClass) || isRelationExist(secondClass, Inheritance.class);
     }
 
-  public void draw(Graphics2D g2d) {
-    //store previous font, stroke and color
-      final Font oldFont = g2d.getFont();
-      final Stroke oldStroke = g2d.getStroke();
-      final Color oldColor = g2d.getColor();
-    //set default color
-      g2d.setColor(DrawingUtility.BACKGROUND);
-    final int width = getEndX() - getStartX();
-    final int height = getEndY() - getStartY();
-    // draw class box first
-    g2d.fill(new Rectangle2D.Double(getStartX(), getStartY(), width, height));
-    g2d.setColor(oldColor);
-    // draw class box
-    g2d.setColor(getState().getColor());
-    g2d.draw(new Rectangle2D.Double(getStartX(), getStartY(), width, height));
-    // draw class name
-      g2d.setFont(DrawingUtility.CLASS_NAME_FONT);
-      final int fontHeight = g2d.getFontMetrics().getHeight();
-      final int classNameWidth = g2d.getFontMetrics().stringWidth(getName());
-    drawLabel(g2d, getName(), getStartX() + ((width - classNameWidth) / 2), getStartY() + (fontHeight / 2) + DrawingUtility.MARGIN, false);
-    // draw line after class name
-    g2d.draw(new Line2D.Float(getStartX(), getStartY() + fontHeight, getEndX(), getStartY() + fontHeight));
-    int currentY = getStartY() + fontHeight;
-    // draw class attributes
-      g2d.setFont(DrawingUtility.ATTRIBUTE_NAME_FONT);
-      final int attrHeight = g2d.getFontMetrics().getHeight();
-    for (Attribute attr : attributes) {
-      currentY = currentY + attrHeight;
-      g2d.setColor(attr.getState().getColor());
-      drawLabel(g2d, attr.toString(), getStartX() + DrawingUtility.MARGIN, currentY, false);
-      attr.setBounds(getStringBounds(g2d, attr.toString(), getStartX() + DrawingUtility.MARGIN, currentY));
+    public void draw(Graphics2D g2d) {
+        //store previous font, stroke and color
+        final Font oldFont = g2d.getFont();
+        final Stroke oldStroke = g2d.getStroke();
+        final Color oldColor = g2d.getColor();
+        //set default color
+        g2d.setColor(DrawingUtility.BACKGROUND);
+        final int width = getEndX() - getStartX();
+        final int height = getEndY() - getStartY();
+        // draw class box first
+        g2d.fill(new Rectangle2D.Double(getStartX(), getStartY(), width, height));
+        g2d.setColor(oldColor);
+        // draw class box
+        g2d.setColor(getState().getColor());
+        g2d.draw(new Rectangle2D.Double(getStartX(), getStartY(), width, height));
+        // draw class name
+        g2d.setFont(DrawingUtility.CLASS_NAME_FONT);
+        final int fontHeight = g2d.getFontMetrics().getHeight();
+        final int classNameWidth = g2d.getFontMetrics().stringWidth(getName());
+        drawLabel(g2d, getName(), getStartX() + ((width - classNameWidth) / 2), getStartY() + (fontHeight / 2) + DrawingUtility.MARGIN, false);
+        // draw line after class name
+        g2d.draw(new Line2D.Float(getStartX(), getStartY() + fontHeight, getEndX(), getStartY() + fontHeight));
+        int currentY = getStartY() + fontHeight;
+        // draw class attributes
+        g2d.setFont(DrawingUtility.ATTRIBUTE_NAME_FONT);
+        final int attrHeight = g2d.getFontMetrics().getHeight();
+        for (Attribute attr : attributes) {
+            currentY = currentY + attrHeight;
+            g2d.setColor(attr.getState().getColor());
+            drawLabel(g2d, attr.toString(), getStartX() + DrawingUtility.MARGIN, currentY, false);
+            attr.setBounds(getStringBounds(g2d, attr.toString(), getStartX() + DrawingUtility.MARGIN, currentY));
+        }
+        // draw line after attributes
+        g2d.setColor(getState().getColor());
+        g2d.draw(new Line2D.Float(getStartX(), currentY + DrawingUtility.MARGIN, getEndX(), currentY + DrawingUtility.MARGIN));
+        g2d.setFont(oldFont);
+        g2d.setColor(oldColor);
+        g2d.setStroke(oldStroke);
     }
-    // draw line after attributes
-    g2d.setColor(getState().getColor());
-    g2d.draw(new Line2D.Float(getStartX(), currentY + DrawingUtility.MARGIN, getEndX(), currentY + DrawingUtility.MARGIN));
-    g2d.setFont(oldFont);
-    g2d.setColor(oldColor);
-    g2d.setStroke(oldStroke);
-  }
 
     @Override
     public Optional<JPanel> getForm(UMLDiagram panel) {

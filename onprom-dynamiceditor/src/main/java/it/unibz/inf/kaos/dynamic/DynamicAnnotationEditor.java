@@ -110,10 +110,12 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
     private void loadAnnotationTypes(OWLOntology upperOntology) {
         annotations.clear();
         if (upperOntology != null) {
-            new AnnotationSelectionDialog(OWLImporter.getShapes(upperOntology).stream()
-                    .filter(UMLClass.class::isInstance).map(UMLClass.class::cast)).getSelectedClasses().forEach(
-                    umlClass -> annotations.put(umlClass.getName(), umlClass)
-            );
+            new AnnotationSelectionDialog(
+                    OWLImporter.getShapes(upperOntology).stream()
+                            .filter(UMLClass.class::isInstance)
+                            .map(UMLClass.class::cast))
+                    .getSelectedClasses()
+                    .forEach(umlClass -> annotations.put(umlClass.getName(), umlClass));
             setTitle("Annotation Editor for " + upperOntology.toString());
         } else {
             OWLUtility.loadOntologyFromStream(DynamicAnnotationEditor.class.getResourceAsStream("/default-eo.owl"))
