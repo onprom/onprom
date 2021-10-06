@@ -190,12 +190,13 @@ SELECT  ?Customer ?Invoice
 WHERE
   { ?Invoice  <http://www.example.com/dolibarr/invoiceTo>  ?Customer}
 [QueryItem="e-contains-o"]
-SELECT  ?Customer ?Order ("customer" AS ?_L_1234456398) ?_I1_1234456398 ("order" AS ?_L_267449831) ?_I2_267449831 ?_I3_267449831
+SELECT  ?Product ?Order ("product" AS ?_L_1182276546) ?_I1_1182276546 ("order" AS ?_L_176633060) ?_I2_176633060 ?_I3_176633060
 WHERE
-  { ?Customer  <http://www.example.com/dolibarr/createOrder>  ?Order ;
-              <http://www.example.com/dolibarr/customerId>  ?_I1_1234456398
-    BIND(?Customer AS ?_I2_1234456398)
-    BIND(?Order AS ?_I1_267449831)
-    ?Order  <http://www.example.com/dolibarr/orderDate>  ?_I2_267449831 ;
-            <http://www.example.com/dolibarr/orderId>  ?_I3_267449831
+  { ?OrderItem  <http://www.example.com/dolibarr/hasProduct>  ?Product ;
+              <http://www.example.com/dolibarr/relatedOrder>  ?Order .
+    ?Product  <http://www.example.com/dolibarr/productId>  ?_I1_1182276546
+    BIND(?Product AS ?_I2_1182276546)
+    BIND(?Order AS ?_I1_176633060)
+    ?Order  <http://www.example.com/dolibarr/orderDate>  ?_I2_176633060 ;
+            <http://www.example.com/dolibarr/orderId>  ?_I3_176633060
   }

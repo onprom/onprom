@@ -1,6 +1,8 @@
 package it.unibz.inf.kaos.logextractor.util;
 
 import org.deckfour.xes.model.XTrace;
+
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Comparator;
@@ -23,4 +25,71 @@ public class ToolUtil {
         );
         return collection;
     }
+
+    /*
+      File I/O
+     */
+    //create File
+    public static void createFile(File filename) {
+        try {
+            if(!filename.exists()) {
+                filename.createNewFile();
+            }
+        }catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+    }
+    //write to file, append
+    public static boolean fileChaseWrite(String content,String filePath) {
+        boolean flag = false;
+        try {
+            FileWriter fw = new FileWriter(filePath,true);
+            fw.write(content);
+            fw.flush();
+            fw.close();
+            flag=true;
+        }catch (Exception e) {
+            //
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
+
+    //write to file, overwrite
+    public static boolean writeToFile(String content,String filePath) {
+        boolean flag = false;
+        try {
+            //file path
+            PrintWriter pw = new PrintWriter(filePath);
+            //content will be written
+            pw.write(content);
+            pw.flush();
+            pw.close();
+            flag = true;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
+    //read the conent from file
+    public static String readFromFile(File file) {
+        String sResult = "";
+        try {
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(file),"utf-8");
+            BufferedReader br = new BufferedReader(reader);
+            String s = null;
+            while((s=br.readLine()) != null) {
+               sResult += s +"\n";
+//                System.out.println(s);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sResult;
+    }
+
+
 }

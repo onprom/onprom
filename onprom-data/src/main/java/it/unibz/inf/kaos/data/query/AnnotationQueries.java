@@ -53,11 +53,18 @@ public class AnnotationQueries {
   }
 
   public <T extends AnnotationQuery> Set<T> getQueries(Class<T> type) {
-    return queries.stream().filter(type::isInstance).map(type::cast).collect(Collectors.toSet());
+    return queries.stream()
+            .filter(type::isInstance)
+            .map(type::cast)
+            .collect(Collectors.toSet());
   }
 
   public <T extends AnnotationQuery> T getQuery(Class<T> type) {
-    return queries.stream().filter(type::isInstance).findFirst().map(type::cast).orElse(null);
+    return queries.stream()
+            .filter(type::isInstance)
+            .findFirst()
+            .map(type::cast)
+            .orElse(null);
   }
 
   public void addQuery(AnnotationQuery query) {

@@ -123,6 +123,7 @@ public class OBDAMapper {
         } catch (OWLException e) {
             throw new IllegalArgumentException(e);
         }
+
         String sqlQuery = ((NativeNode) executableQuery.getTree().getChildren().get(0)).getNativeQueryString();
         logger.info("######################\nBODY:" + sqlQuery + "\n######################");
 
@@ -243,6 +244,8 @@ public class OBDAMapper {
                         return "{" + ((Variable) term).getName() + "}";
                     } else if (term instanceof RDFConstant) {
                         return (((RDFConstant) term).getValue());
+                    } else if (term == null) {
+                        return "__null__";
                     } else {
                         throw new IllegalArgumentException("unknown type: " + term);
                     }

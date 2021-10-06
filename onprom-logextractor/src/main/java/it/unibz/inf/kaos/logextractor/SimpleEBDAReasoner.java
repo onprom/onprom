@@ -156,7 +156,6 @@ class SimpleEBDAReasoner {
                 OWLBindingSet result = resultSet.next();
                 try {
                     String eventKey = result.getOWLObject(XESConstants.qEvtAtt_SimpleAnsVarEvent).toString();
-                    System.out.println("eventKey in conference。。。。。。。。。。。。。。"+eventKey);
                     XEvent event = events.get(eventKey);
                     if (event == null) {
                         event = new XEventImpl();

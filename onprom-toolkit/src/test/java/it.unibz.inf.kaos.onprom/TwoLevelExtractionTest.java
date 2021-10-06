@@ -28,6 +28,7 @@ package it.unibz.inf.kaos.onprom;
 
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
+import it.unibz.inf.kaos.logextractor.util.ToolUtil;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
@@ -81,8 +82,10 @@ public class TwoLevelExtractionTest {
                         //generate final mapping
                         OBDAModel firstMapping = new OBDAMapper(domainOntology, eventOntology, obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
                         OntopUtility.saveModel(firstMapping, firstMappingsFile);
+                        ToolUtil.writeToFile(ToolUtil.readFromFile(firstMappingsFile).replaceAll("\t\t\t\n",""),firstMappingsFile.getPath());
                         OBDAModel finalMapping = new OBDAMapper(eventOntology, onpromOntology, firstMapping, dataSourceProperties, secondLevel).getOBDAModel();
                         OntopUtility.saveModel(finalMapping, finalMappingsFile);
+                        ToolUtil.writeToFile(ToolUtil.readFromFile(finalMappingsFile).replaceAll("\t\t\t\n",""),finalMappingsFile.getPath());
                         XLog xTraces = new SimpleXESLogExtractor().extractXESLog(finalMapping, dataSourceProperties);
                         // extract log
                         new XesXmlGZIPSerializer().serialize(xTraces, new FileOutputStream(output));
