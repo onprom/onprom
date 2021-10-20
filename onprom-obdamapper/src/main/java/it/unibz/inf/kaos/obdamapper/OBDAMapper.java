@@ -235,12 +235,7 @@ public class OBDAMapper {
     }
 
     private String getComponentTemplate(String[] uriComponent, Map<String, ImmutableTerm> map) {
-        System.out.println("我的uriComponent:");
-        for (int i = 0; i < uriComponent.length; i++) {
-            System.out.print(uriComponent[i]+"\t");
-        }
-        System.out.println("\n我的map:"+map);
-        return Arrays.stream(uriComponent)
+         return Arrays.stream(uriComponent)
                 .map(map::get)
                 .map(term -> {
                     if (term instanceof Variable) {
@@ -248,11 +243,6 @@ public class OBDAMapper {
                     } else if (term instanceof RDFConstant) {
                         return (((RDFConstant) term).getValue());
                     } else if (term == null) {
-                        System.out.println("有错的uriComponent:");
-                        for (int i = 0; i < uriComponent.length; i++) {
-                            System.out.print(uriComponent[i]+"\t");
-                        }
-                        System.out.println("\n有错的map:"+map);
                         return "__null__";
                     } else {
                         throw new IllegalArgumentException("unknown type: " + term);
