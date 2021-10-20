@@ -168,6 +168,7 @@ public class DynamicAnnotation extends Annotation {
         queries.add(getAnnotationInstanceQuery());
         attributeValues.forEach((key, value) -> queries.add(getAttributeQuery(key, value)));
         relationValues.forEach((key, value) -> queries.add(getRelationQuery(key, value)));
+
         return queries;
     }
 

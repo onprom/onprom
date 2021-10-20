@@ -137,7 +137,7 @@ public class OBDAMapper {
                 .map(e -> new SimpleEntry<>(
                         e.getKey(),
                         e.getValue().getVariableStream().collect(Collectors.toList())))
-                .filter(e -> e.getValue().size() == 1)
+                //.filter(e -> e.getValue().size() == 1)
                 .map(e -> new SimpleEntry<>(
                         e.getKey().getName(),
                         e.getValue().get(0)));
@@ -155,7 +155,6 @@ public class OBDAMapper {
 
     private void addMapping(BinaryAnnotationQuery annoQ) {
         String[] firstComponent = annoQ.getFirstComponent();
-
         String[] secondComponent = annoQ.getSecondComponent();
         IRI targetURI = annoQ.getTargetIRI();
         String query = annoQ.getQuery();
@@ -236,7 +235,11 @@ public class OBDAMapper {
     }
 
     private String getComponentTemplate(String[] uriComponent, Map<String, ImmutableTerm> map) {
-
+        System.out.println("我的uriComponent:");
+        for (int i = 0; i < uriComponent.length; i++) {
+            System.out.print(uriComponent[i]+"\t");
+        }
+        System.out.println("\n我的map:"+map);
         return Arrays.stream(uriComponent)
                 .map(map::get)
                 .map(term -> {
@@ -245,6 +248,11 @@ public class OBDAMapper {
                     } else if (term instanceof RDFConstant) {
                         return (((RDFConstant) term).getValue());
                     } else if (term == null) {
+                        System.out.println("有错的uriComponent:");
+                        for (int i = 0; i < uriComponent.length; i++) {
+                            System.out.print(uriComponent[i]+"\t");
+                        }
+                        System.out.println("\n有错的map:"+map);
                         return "__null__";
                     } else {
                         throw new IllegalArgumentException("unknown type: " + term);

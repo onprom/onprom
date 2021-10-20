@@ -27,6 +27,7 @@ package it.unibz.inf.kaos.annotation;
 
 import it.unibz.inf.kaos.data.*;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
+import it.unibz.inf.kaos.data.query.AnnotationQuery;
 import it.unibz.inf.kaos.interfaces.*;
 import it.unibz.inf.kaos.owl.OWLImporter;
 import it.unibz.inf.kaos.ui.action.DiagramPanelAction;
@@ -40,6 +41,7 @@ import javax.swing.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Graphical editor for annotating ontologies with XES standard using UML class diagram
@@ -106,6 +108,19 @@ public class AnnotationEditor extends UMLEditor {
                         .filter(annotation -> !annotation.isDisabled())
                         .map(Annotation::getQuery)
                         .forEach(annotationsQueries::addQuery);
+                /**
+                 * 临时添加
+                 */
+                int i = 0;
+                Set<AnnotationQuery> allQueries = annotationsQueries.getAllQueries();
+                for (AnnotationQuery aq :  allQueries ) {
+                    System.out.println("\n我测试的annotationsQueries_"+(i++)+": "+ aq );
+                    System.out.println("\t\t|--" + aq.getQuery());
+                }
+                /**
+                 * 临时添加结束
+                 */
+
                 if (annotationsQueries.getQueryCount() > 0) {
                     new QueryEditor(annotationsQueries);
                     if (listener != null) {

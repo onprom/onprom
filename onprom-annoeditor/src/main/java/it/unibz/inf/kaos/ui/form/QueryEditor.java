@@ -59,7 +59,7 @@ public class QueryEditor extends JDialog {
     gridBagConstraints.weighty = 1.0;
 
     //list to display all queries
-        DefaultListModel<AnnotationQuery> mdlQueries = new DefaultListModel<>();
+    DefaultListModel<AnnotationQuery> mdlQueries = new DefaultListModel<>();
 
     //add all the queries to allow editing
     _queries.getAllQueries().forEach(q -> {
@@ -76,24 +76,24 @@ public class QueryEditor extends JDialog {
       }
     });
 
-        JList<AnnotationQuery> lstQueries = new JList<>(mdlQueries);
+    JList<AnnotationQuery> lstQueries = new JList<>(mdlQueries);
     lstQueries.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
     lstQueries.setLayoutOrientation(JList.VERTICAL);
     JScrollPane listScroller = new JScrollPane(lstQueries);
-        listScroller.setPreferredSize(BOX_SIZE);
-        add(listScroller, gridBagConstraints);
+    listScroller.setPreferredSize(BOX_SIZE);
+    add(listScroller, gridBagConstraints);
 
     gridBagConstraints.gridy++;
     //editor to display the query selected from the list
     JEditorPane edtQuery = new JEditorPane();
     JScrollPane scrollPane = new JScrollPane(edtQuery);
-        scrollPane.setPreferredSize(BOX_SIZE);
+    scrollPane.setPreferredSize(BOX_SIZE);
     add(scrollPane, gridBagConstraints);
 
-        gridBagConstraints.gridwidth = 1;
-        gridBagConstraints.fill = GridBagConstraints.NONE;
-        gridBagConstraints.gridy++;
-        gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridwidth = 1;
+    gridBagConstraints.fill = GridBagConstraints.NONE;
+    gridBagConstraints.gridy++;
+    gridBagConstraints.gridx = 1;
     //button to save the changes over the selected query
     JButton btn = UIUtility.createButton(AnnotationEditorButtons.SAVE, e -> {
       String query = edtQuery.getText();
