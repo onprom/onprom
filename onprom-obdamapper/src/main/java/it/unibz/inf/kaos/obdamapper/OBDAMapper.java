@@ -137,7 +137,7 @@ public class OBDAMapper {
                 .map(e -> new SimpleEntry<>(
                         e.getKey(),
                         e.getValue().getVariableStream().collect(Collectors.toList())))
-                //.filter(e -> e.getValue().size() == 1)
+                .filter(e -> e.getValue().size() == 1)
                 .map(e -> new SimpleEntry<>(
                         e.getKey().getName(),
                         e.getValue().get(0)));
