@@ -37,6 +37,7 @@ import it.unibz.inf.kaos.ui.action.DiagramPanelAction;
 import it.unibz.inf.kaos.ui.action.ToolbarAction;
 import it.unibz.inf.kaos.ui.form.AnnotationSelectionDialog;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,7 +117,8 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
                             .map(UMLClass.class::cast))
                     .getSelectedClasses()
                     .forEach(umlClass -> annotations.put(umlClass.getName(), umlClass));
-            setTitle("Annotation Editor for " + upperOntology.toString());
+            //setTitle("Annotation Editor for " + upperOntology.toString());
+            setTitle("Annotation Editor for " + upperOntology.getOntologyID().getOntologyIRI().or(IRI.create("")));
         } else {
             OWLUtility.loadOntologyFromStream(DynamicAnnotationEditor.class.getResourceAsStream("/default-eo.owl"))
                     .ifPresent(defaultOntology -> OWLImporter.getShapes(defaultOntology).stream()

@@ -57,7 +57,8 @@ public class OneLevelExtractionTest {
             File domainOntologyFile = new File(folder + "conference.owl");
             File queriesFile = new File(folder + "conference.aqr");
             // generate output file names
-            String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName() + System.currentTimeMillis();
+            //String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName() + System.currentTimeMillis();
+            String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName();
             // redirect console output to a text file
 //            PrintStream out = new PrintStream(new FileOutputStream(outputFileName + ".txt"));
 //            System.setOut(out);
@@ -71,6 +72,7 @@ public class OneLevelExtractionTest {
             OWLOntology domainOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(domainOntologyFile);
             OWLOntology onpromOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(OneLevelExtractionTest.class.getResourceAsStream("/eo-onprom.owl"));
             // start extraction process
+            output.delete();
             if (output.createNewFile()) {
                 IOUtility.readJSON(queriesFile, AnnotationQueries.class).ifPresent(firstLevel -> {
                     try {

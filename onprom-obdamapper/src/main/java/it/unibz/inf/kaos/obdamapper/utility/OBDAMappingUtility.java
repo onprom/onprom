@@ -42,26 +42,20 @@ public class OBDAMappingUtility {
         return !(answerVar.charAt(0) == '{' && answerVar.charAt(answerVar.length() - 1) == '}');
     }
 
-    public static OWLDatatype getDataType(OWLOntology targetOntology, OWLDataProperty dataProperty) throws Exception {
+    public static OWLDatatype getDataType(OWLOntology targetOntology, OWLDataProperty dataProperty) {
 
         Set<OWLDataPropertyRangeAxiom> datPropRangeAxioms = targetOntology.getDataPropertyRangeAxioms(dataProperty);
         int numOfDatPropRangeAxioms = datPropRangeAxioms.size();
 
         if (numOfDatPropRangeAxioms > 1) {
-
-            throw new Exception("Invalid data type");
-
+            throw new IllegalArgumentException("Invalid data type");
         } else if (numOfDatPropRangeAxioms == 1) {
-
             Set<OWLDatatype> datTypeSet = datPropRangeAxioms.iterator().next().getDatatypesInSignature();
             int numOfDatTypeSet = datTypeSet.size();
 
             if (numOfDatTypeSet > 1) {
-
-                throw new Exception("Invalid data type");
-
+                throw new IllegalArgumentException("Invalid data type");
             } else if (numOfDatTypeSet == 1) {
-
                 return datTypeSet.iterator().next();
             }
         }
@@ -69,20 +63,20 @@ public class OBDAMappingUtility {
         return new OWLDatatypeImpl(OWL2Datatype.RDFS_LITERAL.getIRI());
     }
 
-    public static OWLEntity getOWLTargetEntity(OWLOntology targetOntology, IRI targetIRI) throws Exception {
+    public static OWLEntity getOWLTargetEntity(OWLOntology targetOntology, IRI targetIRI) {
         Set<OWLEntity> owlTargetEntities = targetOntology.getEntitiesInSignature(targetIRI);
         int numOfOWLEntities = owlTargetEntities.size();
 
         if (numOfOWLEntities > 1) {
-            throw new Exception("ambiguous target entity - too much matching target entity for " + targetIRI.toString());
+            throw new IllegalArgumentException("ambiguous target entity - too much matching target entity for " + targetIRI);
         } else if (numOfOWLEntities < 1) {
-            throw new Exception("unknown target entity (possibly wrong target ontology entity) - no matching target entity for " + targetIRI.toString());
+            throw new IllegalArgumentException("unknown target entity (possibly wrong target ontology entity) - no matching target entity for " + targetIRI);
         }
 
         OWLEntity targetEntity = owlTargetEntities.iterator().next();
 
         if (targetEntity == null)
-            throw new Exception("unknown target entity");
+            throw new IllegalArgumentException("unknown target entity");
 
         return targetEntity;
     }

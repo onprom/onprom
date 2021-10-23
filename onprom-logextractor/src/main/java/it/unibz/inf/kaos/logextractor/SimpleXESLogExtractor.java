@@ -67,8 +67,8 @@ public class SimpleXESLogExtractor {
     }
 
     public XLog extractXESLog(OBDAModel ebdaModel, Properties dataSourceProperties) {
-        try {
-            if (ebdaModel != null) {
+//        try {
+//            if (ebdaModel != null) {
                 SimpleXESFactory factory = new SimpleXESFactory();
                 logger.info("Factory in use: " + factory.getDescription());
                 XFactoryRegistry.instance().setCurrentDefault(factory);
@@ -88,12 +88,13 @@ public class SimpleXESLogExtractor {
                     return xlog;
                 } else {
                     logger.error("Can't unfold queries, something is wrong, please check logs");
+                    return null;
                 }
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return null;
+//            }
+//        } catch (Exception e) {
+//            logger.error(e.getMessage(), e);
+//        }
+//        return null;
     }
 
     public XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, Properties dataSourceProperties, AnnotationQueries annotation) {

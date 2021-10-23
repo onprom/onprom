@@ -97,5 +97,13 @@
             <version>2.3.0</version>
             <scope>compile</scope>
         </dependency>
+        
+<!--        Caused by: java.lang.ClassNotFoundException: org.w3c.dom.ElementTraversal-->
+
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.4.01</version>
+        </dependency>
     </dependencies>
 </project>
