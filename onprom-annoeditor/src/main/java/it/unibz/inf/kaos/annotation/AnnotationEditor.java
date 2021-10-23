@@ -106,6 +106,7 @@ public class AnnotationEditor extends UMLEditor {
                         .filter(annotation -> !annotation.isDisabled())
                         .map(Annotation::getQuery)
                         .forEach(annotationsQueries::addQuery);
+                
                 if (annotationsQueries.getQueryCount() > 0) {
                     new QueryEditor(annotationsQueries);
                     if (listener != null) {

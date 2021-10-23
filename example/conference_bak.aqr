@@ -1,0 +1,496 @@
+{
+  "@class" : "it.unibz.inf.kaos.data.query.AnnotationQueries",
+  "queries" : [ "java.util.LinkedHashSet", [ {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_value (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Paper  <http://www.example.com/title>  ?_value}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-has-a",
+    "firstComponent" : [ "Paper" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_value (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Paper  <http://www.example.com/title>  ?_value}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_value (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Paper  <http://www.example.com/title>  ?_value}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_value (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Paper  <http://www.example.com/title>  ?_value}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"ReviewAcceptance\" AS ?_value) (\"ReviewAcceptance\" AS ?_label) ?Paper\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Paper" ],
+    "secondComponent" : [ "_label", "Assignment" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"ReviewAcceptance\" AS ?_value) (\"ReviewAcceptance\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Assignment" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"ReviewAcceptance\" AS ?_value) (\"ReviewAcceptance\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"ReviewAcceptance\" AS ?_value) (\"ReviewAcceptance\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"ReviewAcceptance\" AS ?_value) (\"ReviewAcceptance\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_value (\"ReviewAcceptance\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/accTime>  ?_value ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Assignment" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_value (\"ReviewAcceptance\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/accTime>  ?_value ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_value (\"ReviewAcceptance\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/accTime>  ?_value ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_value (\"ReviewAcceptance\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/accTime>  ?_value ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Complete\" AS ?_value) (\"ReviewAcceptance\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Assignment" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Complete\" AS ?_value) (\"ReviewAcceptance\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Complete\" AS ?_value) (\"ReviewAcceptance\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Complete\" AS ?_value) (\"ReviewAcceptance\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"Decision\" AS ?_value) (\"Decision\" AS ?_label)\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "DecidedPaper" ],
+    "secondComponent" : [ "_label", "DecidedPaper" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"Decision\" AS ?_value) (\"Decision\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "DecidedPaper" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"Decision\" AS ?_value) (\"Decision\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"Decision\" AS ?_value) (\"Decision\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"Decision\" AS ?_value) (\"Decision\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?_value (\"Decision\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?DecidedPaper\n              <http://www.example.com/decTime>  ?_value ;\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "DecidedPaper" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?_value (\"Decision\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?DecidedPaper\n              <http://www.example.com/decTime>  ?_value ;\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?_value (\"Decision\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?DecidedPaper\n              <http://www.example.com/decTime>  ?_value ;\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?_value (\"Decision\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?DecidedPaper\n              <http://www.example.com/decTime>  ?_value ;\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"Complete\" AS ?_value) (\"Decision\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "DecidedPaper" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"Complete\" AS ?_value) (\"Decision\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"Complete\" AS ?_value) (\"Decision\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"Complete\" AS ?_value) (\"Decision\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"ReviewCompleted\" AS ?_value) (\"ReviewCompleted\" AS ?_label) ?Paper\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Paper" ],
+    "secondComponent" : [ "_label", "Review" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"ReviewCompleted\" AS ?_value) (\"ReviewCompleted\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Review" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"ReviewCompleted\" AS ?_value) (\"ReviewCompleted\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"ReviewCompleted\" AS ?_value) (\"ReviewCompleted\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"ReviewCompleted\" AS ?_value) (\"ReviewCompleted\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_value (\"ReviewCompleted\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Review   <http://www.example.com/subTime>  ?_value .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Review" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_value (\"ReviewCompleted\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Review   <http://www.example.com/subTime>  ?_value .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_value (\"ReviewCompleted\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Review   <http://www.example.com/subTime>  ?_value .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_value (\"ReviewCompleted\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Review   <http://www.example.com/subTime>  ?_value .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"Complete\" AS ?_value) (\"ReviewCompleted\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Review" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"Complete\" AS ?_value) (\"ReviewCompleted\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"Complete\" AS ?_value) (\"ReviewCompleted\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"Complete\" AS ?_value) (\"ReviewCompleted\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload (\"CameraReady\" AS ?_value) (\"CameraReady\" AS ?_label) ?Paper\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Paper" ],
+    "secondComponent" : [ "_label", "CRUpload" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload (\"CameraReady\" AS ?_value) (\"CameraReady\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "CRUpload" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload (\"CameraReady\" AS ?_value) (\"CameraReady\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload (\"CameraReady\" AS ?_value) (\"CameraReady\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload (\"CameraReady\" AS ?_value) (\"CameraReady\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload ?_value (\"CameraReady\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?CRUpload  <http://www.example.com/uploadTime>  ?_value ;\n              a                     <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "CRUpload" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload ?_value (\"CameraReady\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?CRUpload  <http://www.example.com/uploadTime>  ?_value ;\n              a                     <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload ?_value (\"CameraReady\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?CRUpload  <http://www.example.com/uploadTime>  ?_value ;\n              a                     <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload ?_value (\"CameraReady\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?CRUpload  <http://www.example.com/uploadTime>  ?_value ;\n              a                     <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload (\"Complete\" AS ?_value) (\"CameraReady\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "CRUpload" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload (\"Complete\" AS ?_value) (\"CameraReady\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload (\"Complete\" AS ?_value) (\"CameraReady\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload (\"Complete\" AS ?_value) (\"CameraReady\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) ?Paper\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Paper" ],
+    "secondComponent" : [ "_label", "Creation" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Creation" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation ?_value (\"Creation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Creation  <http://www.example.com/uploadTime>  ?_value ;\n              a                     <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Creation" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation ?_value (\"Creation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Creation  <http://www.example.com/uploadTime>  ?_value ;\n              a                     <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation ?_value (\"Creation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Creation  <http://www.example.com/uploadTime>  ?_value ;\n              a                     <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation ?_value (\"Creation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Creation  <http://www.example.com/uploadTime>  ?_value ;\n              a                     <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation (\"Complete\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Creation" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation (\"Complete\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation (\"Complete\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation (\"Complete\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"ReviewInvitation\" AS ?_value) (\"ReviewInvitation\" AS ?_label) ?Paper\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "Paper" ],
+    "secondComponent" : [ "_label", "Assignment" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"ReviewInvitation\" AS ?_value) (\"ReviewInvitation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Assignment" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"ReviewInvitation\" AS ?_value) (\"ReviewInvitation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"ReviewInvitation\" AS ?_value) (\"ReviewInvitation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"ReviewInvitation\" AS ?_value) (\"ReviewInvitation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_value (\"ReviewInvitation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/invTime>  ?_value ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Assignment" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_value (\"ReviewInvitation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/invTime>  ?_value ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_value (\"ReviewInvitation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/invTime>  ?_value ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_value (\"ReviewInvitation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/invTime>  ?_value ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Complete\" AS ?_value) (\"ReviewInvitation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Assignment" ],
+    "secondComponent" : [ "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Complete\" AS ?_value) (\"ReviewInvitation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Complete\" AS ?_value) (\"ReviewInvitation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Complete\" AS ?_value) (\"ReviewInvitation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Assignment  <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  } ] ]
+}

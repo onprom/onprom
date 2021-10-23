@@ -169,12 +169,6 @@ public class DynamicAnnotation extends Annotation {
         attributeValues.forEach((key, value) -> queries.add(getAttributeQuery(key, value)));
         relationValues.forEach((key, value) -> queries.add(getRelationQuery(key, value)));
         
-        if(queries.stream().anyMatch(q -> {
-            //return q.toString().matches("endTS.*endTS");
-            return q.getQuery().replace("\n","").matches(".*endTS.*endTS.*");
-        })) 
-            return queries;
-        
         return queries;
     }
 

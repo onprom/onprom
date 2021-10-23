@@ -148,7 +148,7 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     this.getContentPane().add(splitPane, BorderLayout.CENTER);
     this.pack();
     this.setVisible(true);
-      diagramPanel.clear(true);
+    diagramPanel.clear(true);
   }
 
   @Override
