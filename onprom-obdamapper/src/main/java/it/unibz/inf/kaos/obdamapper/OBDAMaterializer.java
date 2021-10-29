@@ -34,6 +34,7 @@ import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
 import it.unibz.inf.ontop.owlapi.resultset.OWLBindingSet;
 import it.unibz.inf.ontop.owlapi.resultset.TupleOWLResultSet;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 
@@ -44,7 +45,7 @@ public class OBDAMaterializer {
     private static final OWLOntologyManager OWL_ONTOLOGY_MANAGER = OWLManager.createOWLOntologyManager();
     private static final OWLDataFactory OWL_DATA_FACTORY = OWL_ONTOLOGY_MANAGER.getOWLDataFactory();
 
-    public static OWLOntology getMaterializedOWLOntology(OWLOntology targetOntology, OBDAModel obdaModel, Properties datasourceProperties) {
+    public static OWLOntology getMaterializedOWLOntology(OWLOntology targetOntology, SQLPPMapping obdaModel, Properties datasourceProperties) {
         try {
             OntopSQLOWLAPIConfiguration config = OntopUtility.getConfiguration(targetOntology, obdaModel, datasourceProperties);
             OntopOWLReasoner reasoner = OntopOWLFactory.defaultFactory().createReasoner(config);

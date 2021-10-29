@@ -33,6 +33,7 @@ import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.out.XesXmlGZIPSerializer;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -69,8 +70,11 @@ public class TwoLevelExtractionTest {
         File firstMappingsFile = new File(outputFileName + "_lvl1.obda");
         File output = new File(outputFileName + ".xes.gz");
         // load mappings
-        Properties dataSourceProperties = OntopUtility.getDataSourceProperties(domainMappingsFile);
-        OBDAModel obdaModel = OntopUtility.getOBDAModel(domainMappingsFile, dataSourceProperties);
+        //Properties dataSourceProperties = OntopUtility.getDataSourceProperties(domainMappingsFile);
+        Properties dataSourceProperties = new Properties();
+        dataSourceProperties.load(new FileReader(folder + "conference.properties"));
+
+        SQLPPMapping obdaModel = OntopUtility.getOBDAModel(domainMappingsFile, dataSourceProperties);
         // load ontologies
         OWLOntology domainOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(domainOntologyFile);
         OWLOntology eventOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(eventOntologyFile);
@@ -83,11 +87,11 @@ public class TwoLevelExtractionTest {
 
         //generate final mapping
         OBDAMapper firstOBDAMapper = new OBDAMapper(domainOntology, eventOntology, obdaModel, dataSourceProperties, firstLevel);
-        OBDAModel firstMapping = firstOBDAMapper.getOBDAModel();
+        SQLPPMapping firstMapping = firstOBDAMapper.getOBDAModel();
         OntopUtility.saveModel(firstMapping, firstMappingsFile);
         // ToolUtil.writeToFile(ToolUtil.readFromFile(firstMappingsFile).replaceAll("\t\t\t\n",""),firstMappingsFile.getPath());
         OBDAMapper secondOBDAMapper = new OBDAMapper(eventOntology, onpromOntology, firstMapping, dataSourceProperties, secondLevel);
-        OBDAModel finalMapping = secondOBDAMapper.getOBDAModel();
+        SQLPPMapping finalMapping = secondOBDAMapper.getOBDAModel();
         OntopUtility.saveModel(finalMapping, finalMappingsFile);
         // ToolUtil.writeToFile(ToolUtil.readFromFile(finalMappingsFile).replaceAll("\t\t\t\n",""),finalMappingsFile.getPath());
         XLog xTraces = new SimpleXESLogExtractor().extractXESLog(finalMapping, dataSourceProperties);

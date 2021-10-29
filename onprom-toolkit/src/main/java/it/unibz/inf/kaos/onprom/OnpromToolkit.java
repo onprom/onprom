@@ -44,6 +44,7 @@ import it.unibz.inf.kaos.uml.UMLEditor;
 import it.unibz.inf.kaos.utility.ToolkitMessages;
 import it.unibz.inf.kaos.utility.VersionUtility;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -284,7 +285,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         TreePath[] paths = objects.getSelectionPaths();
         if (paths != null) {
             OWLOntology ontology = null;
-            OBDAModel model = null;
+            SQLPPMapping model = null;
             AnnotationQueries queries = null;
             Properties properties = null;
             for (TreePath path : paths) {
@@ -295,8 +296,8 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                 if (object instanceof Properties) {
                     properties = (Properties) object;
                 }
-                if (object instanceof OBDAModel) {
-                    model = (OBDAModel) object;
+                if (object instanceof SQLPPMapping) {
+                    model = (SQLPPMapping) object;
                 }
                 if (object instanceof AnnotationQueries) {
                     queries = (AnnotationQueries) object;

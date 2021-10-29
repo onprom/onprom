@@ -29,6 +29,7 @@ package it.unibz.inf.kaos.logextractor;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import it.unibz.ocel.factory.OcelFactoryRegistry;
 import it.unibz.ocel.model.OcelAttribute;
 import it.unibz.ocel.model.OcelEvent;
@@ -44,9 +45,9 @@ import java.util.Properties;
 public class SimpleOCELLogExtractor {
     private static final Logger logger = LoggerFactory.getLogger(SimpleOCELLogExtractor.class);
 
-    public OcelLog extractOCELLog(OWLOntology domainOnto, OBDAModel obdaModel, Properties dataSourceProperties, AnnotationQueries firstAnnoQueries, OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries) {
+    public OcelLog extractOCELLog(OWLOntology domainOnto, SQLPPMapping obdaModel, Properties dataSourceProperties, AnnotationQueries firstAnnoQueries, OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries) {
         try {
-            OBDAModel obdaMapping = new OBDAMapper(domainOnto, eventOntoVariant, obdaModel, dataSourceProperties, firstAnnoQueries).getOBDAModel();
+            SQLPPMapping obdaMapping = new OBDAMapper(domainOnto, eventOntoVariant, obdaModel, dataSourceProperties, firstAnnoQueries).getOBDAModel();
             if (obdaMapping != null) {
                 return extractOCELLog(eventOntoVariant, obdaMapping, dataSourceProperties, secondAnnoQueries);
             } else {
@@ -64,7 +65,7 @@ public class SimpleOCELLogExtractor {
         );
     }
 
-    public OcelLog extractOCELLog(OBDAModel ebdaModel, Properties dataSourceProperties) {
+    public OcelLog extractOCELLog(SQLPPMapping ebdaModel, Properties dataSourceProperties) {
         try {
             if (ebdaModel != null) {
                 SimpleOCELFactory factory = new SimpleOCELFactory();
@@ -99,10 +100,10 @@ public class SimpleOCELLogExtractor {
         return null;
     }
 
-    public OcelLog extractOCELLog(OWLOntology domainOntology, OBDAModel obdaModel, Properties dataSourceProperties, AnnotationQueries annotation) {
+    public OcelLog extractOCELLog(OWLOntology domainOntology, SQLPPMapping obdaModel, Properties dataSourceProperties, AnnotationQueries annotation) {
         try {
             logger.info("Constructing EBDA Mapping");
-            OBDAModel ebdaModel = new OBDAMapper(domainOntology,
+            SQLPPMapping ebdaModel = new OBDAMapper(domainOntology,
                     getDefaultEventOntology(),
                     obdaModel,
                     dataSourceProperties,

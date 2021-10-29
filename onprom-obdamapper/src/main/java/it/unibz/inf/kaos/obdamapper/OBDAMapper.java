@@ -28,10 +28,13 @@ package it.unibz.inf.kaos.obdamapper;
 
 import ch.qos.logback.classic.Logger;
 import com.google.common.collect.*;
+import com.google.inject.Injector;
 import it.unibz.inf.kaos.data.query.*;
 import it.unibz.inf.kaos.obdamapper.utility.OBDAMappingUtility;
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.ontop.injection.OntopSQLOWLAPIConfiguration;
+import it.unibz.inf.ontop.injection.SQLPPMappingFactory;
+import it.unibz.inf.ontop.injection.TargetQueryParserFactory;
 import it.unibz.inf.ontop.iq.IQ;
 import it.unibz.inf.ontop.iq.node.ConstructionNode;
 import it.unibz.inf.ontop.iq.node.NativeNode;
@@ -43,8 +46,11 @@ import it.unibz.inf.ontop.owlapi.OntopOWLFactory;
 import it.unibz.inf.ontop.owlapi.OntopOWLReasoner;
 import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.PrefixManager;
 import it.unibz.inf.ontop.spec.mapping.SQLPPSourceQueryFactory;
 import it.unibz.inf.ontop.spec.mapping.parser.TargetQueryParser;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPTriplesMap;
 import it.unibz.inf.ontop.spec.mapping.pp.impl.OntopNativeSQLPPTriplesMap;
 import it.unibz.inf.ontop.substitution.ImmutableSubstitution;
 import org.semanticweb.owlapi.model.*;
@@ -52,12 +58,9 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.slf4j.LoggerFactory;
 import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl;
 
+import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -68,19 +71,29 @@ public class OBDAMapper {
     private static final String conceptTripleTemplate = " <http://onprom.inf.unibz.it/%s> a %s . "; //<[Object]> rdf:type <[Class]>
 
     private final OWLOntology targetOntology;
-    private final OBDAModel obdaModel;
+    //private final SQLPPMapping obdaModel;
+    
+    private final List<OntopNativeSQLPPTriplesMap> triplesMaps;
+    private final PrefixManager prefixManager;
     private OntopOWLStatement statement;
     private final TargetQueryParser textParser;
     private final SQLPPSourceQueryFactory sourceQueryFactory;
+    private SQLPPMappingFactory ppMappingFactory;
 
     public OBDAMapper(
-            OWLOntology sourceOntology, OWLOntology targetOntology, OBDAModel sourceObdaModel, Properties dataSourceProperties, AnnotationQueries annotationQueries) {
+            OWLOntology sourceOntology, OWLOntology targetOntology, SQLPPMapping sourceObdaModel, Properties dataSourceProperties, AnnotationQueries annotationQueries) {
         this.targetOntology = targetOntology;
         OntopSQLOWLAPIConfiguration config = OntopUtility.getConfiguration(sourceOntology, sourceObdaModel, dataSourceProperties);
-        this.obdaModel = OntopUtility.emptyOBDAModel(config);
-        this.textParser = obdaModel.createTargetQueryParser();
-        this.sourceQueryFactory = obdaModel.getSourceQueryFactory();
-
+        //this.obdaModel = OntopUtility.emptyOBDAModel(config);
+        Injector injector = config.getInjector();
+//        this.textParser = obdaModel.createTargetQueryParser();
+//        this.sourceQueryFactory = obdaModel.getSourceQueryFactory();
+        //this.textParser = injector.getInstance()
+        this.prefixManager = sourceObdaModel.getPrefixManager();
+        this.textParser = config.getInjector().getInstance(TargetQueryParserFactory.class).createParser(prefixManager);
+        this.sourceQueryFactory = config.getInjector().getInstance(SQLPPSourceQueryFactory.class);
+        this.ppMappingFactory = config.getInjector().getInstance(SQLPPMappingFactory.class);
+        this.triplesMaps = new ArrayList<>();
         try {
             OntopOWLReasoner reasoner = OntopOWLFactory.defaultFactory().createReasoner(config);
             this.statement = reasoner.getConnection().createStatement();
@@ -88,31 +101,35 @@ public class OBDAMapper {
             reasoner.close();
             reasoner.dispose();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+        
     }
 
-    public OBDAModel getOBDAModel() {
-        return obdaModel;
+    public SQLPPMapping getOBDAModel() {
+        ImmutableList<SQLPPTriplesMap> collect = triplesMaps.stream().collect(ImmutableList.toImmutableList());
+        return ppMappingFactory.createSQLPreProcessedMapping(collect, this.prefixManager);
     }
 
     private void startMapping(AnnotationQueries annotationQueries) {
         AnnotationQueriesProcessor mappingAdder = new AnnotationQueriesProcessor();
         for (AnnotationQuery aq : annotationQueries.getAllQueries()) {
-            if (aq != null) aq.accept(mappingAdder);
+            aq.accept(mappingAdder);
         }
     }
 
     private void addMapping(String source, String target) {
+        //String newId = "ONPROM_MAPPING_" + obdaModel.getMapping(obdaModel.getDatasource().getSourceID()).size();
+        String newId = "ONPROM_MAPPING_" + triplesMaps.size() + 1;
+        logger.info("######################\nID:" + newId + "\nTARGET:" + target + "\nSOURCE:" + source + "\n######################");
         try {
-            String newId = "ONPROM_MAPPING_" + obdaModel.getMapping(obdaModel.getDatasource().getSourceID()).size();
-            logger.info("######################\nID:" + newId + "\nTARGET:" + target + "\nSOURCE:" + source + "\n######################");
-
-            obdaModel.addTriplesMap(new OntopNativeSQLPPTriplesMap(newId,
+            OntopNativeSQLPPTriplesMap triplesMap = new OntopNativeSQLPPTriplesMap(newId,
                     sourceQueryFactory.createSourceQuery(source),
-                    textParser.parse(target)), false);
+                    textParser.parse(target));
+            triplesMaps.add(triplesMap);
+            //obdaModel.addTriplesMap(triplesMap, false);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException(e);
         }
     }
 
@@ -138,6 +155,8 @@ public class OBDAMapper {
                 .filter(e -> !(e.getValue() instanceof RDFLiteralConstant))
                 .map(e -> new SimpleEntry<>(
                         e.getKey().getName(),
+                        // TODO: we may need to consider the full IRI
+                        // TODO: we might need to worry about the order
                         e.getValue().getVariableStream().collect(Collectors.toList())));
 //                .filter(e -> e.getValue().size() == 1)
 //                .map(e -> new SimpleEntry<>(
@@ -151,8 +170,8 @@ public class OBDAMapper {
 
         Map<String, List<ImmutableTerm>> m =
                 Streams.concat(m1, m2).collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-        
-        return new OntopReformulationResult(sqlQuery,m);
+
+        return new OntopReformulationResult(sqlQuery, m);
     }
 
     private void addMapping(BinaryAnnotationQuery annoQ) {
@@ -164,65 +183,65 @@ public class OBDAMapper {
 
         OntopReformulationResult result = reformulate(query);
         Map<String, List<ImmutableTerm>> map = result.substitution;
-        
+
         OWLEntity targetEntity;
         OWLDatatype dataType = null;
         OWLDatatype defaultDataType = new OWLDatatypeImpl(OWL2Datatype.RDFS_LITERAL.getIRI());
 
-        
-            targetEntity = OBDAMappingUtility.getOWLTargetEntity(targetOntology, targetURI);
-            if (targetEntity.isOWLDataProperty()) {
-                if (secondComponent.length > 1) {
-                    throw new IllegalArgumentException(
-                            "wrong annotation - for the mapping to data property"
-                                    + "the second component must contain exactly one answer variable/constant");
-                }
 
-                dataType = OBDAMappingUtility.getDataType(this.targetOntology, targetEntity.asOWLDataProperty());
-
-                if (dataType == null)
-                    dataType = defaultDataType;
+        targetEntity = OBDAMappingUtility.getOWLTargetEntity(targetOntology, targetURI);
+        if (targetEntity.isOWLDataProperty()) {
+            if (secondComponent.length > 1) {
+                throw new IllegalArgumentException(
+                        "wrong annotation - for the mapping to data property"
+                                + "the second component must contain exactly one answer variable/constant");
             }
 
-            String targetQuery = "";
+            dataType = OBDAMappingUtility.getDataType(this.targetOntology, targetEntity.asOWLDataProperty());
 
-            String firstURITemplate = getComponentTemplate(firstComponent, map);
-            StringBuilder secondURITemplate = new StringBuilder(getComponentTemplate(secondComponent, map));
-            
+            if (dataType == null)
+                dataType = defaultDataType;
+        }
 
-            logger.info("firstURITemplate: " + firstURITemplate);
-            logger.info("secondURITemplate: " + secondURITemplate);
+        String targetQuery = "";
 
-            if (targetEntity.isOWLObjectProperty()) {
-                logger.info("Add a mapping to an OBJECT PROPERTY");
+        String firstURITemplate = getComponentTemplate(firstComponent, map);
+        StringBuilder secondURITemplate = new StringBuilder(getComponentTemplate(secondComponent, map));
 
-                targetQuery = String.format(objPropTripleTemplate,
-                        OBDAMappingUtility.cleanURI(firstURITemplate.toString()),
-                        targetEntity.toString(),
-                        OBDAMappingUtility.cleanURI(secondURITemplate.toString()));
 
-            } else if (targetEntity.isOWLDataProperty()) {
-                logger.info("Add a mapping to a DATA PROPERTY");
+        logger.info("firstURITemplate: " + firstURITemplate);
+        logger.info("secondURITemplate: " + secondURITemplate);
 
-                if (OBDAMappingUtility.isConstant(secondURITemplate.toString())) {
-                    secondURITemplate.insert(0, "\"");
-                    secondURITemplate.append("\"");
-                }
+        if (targetEntity.isOWLObjectProperty()) {
+            logger.info("Add a mapping to an OBJECT PROPERTY");
 
-                //append data type
-                secondURITemplate.append("^^");
-                secondURITemplate.append(dataType);
+            targetQuery = String.format(objPropTripleTemplate,
+                    OBDAMappingUtility.cleanURI(firstURITemplate.toString()),
+                    targetEntity.toString(),
+                    OBDAMappingUtility.cleanURI(secondURITemplate.toString()));
 
-                targetQuery = String.format(dataPropTripleTemplate,
-                        OBDAMappingUtility.cleanURI(firstURITemplate.toString()),
-                        targetEntity.toString(),
-                        secondURITemplate);
+        } else if (targetEntity.isOWLDataProperty()) {
+            logger.info("Add a mapping to a DATA PROPERTY");
+
+            if (OBDAMappingUtility.isConstant(secondURITemplate.toString())) {
+                secondURITemplate.insert(0, "\"");
+                secondURITemplate.append("\"");
             }
-            if (!query.equals("") &&
-                    targetQuery != null && !targetQuery.equals("")) {
-                this.addMapping(result.sqlString, targetQuery);
-            }
-        
+
+            //append data type
+            secondURITemplate.append("^^");
+            secondURITemplate.append(dataType);
+
+            targetQuery = String.format(dataPropTripleTemplate,
+                    OBDAMappingUtility.cleanURI(firstURITemplate.toString()),
+                    targetEntity.toString(),
+                    secondURITemplate);
+        }
+        if (!query.equals("") &&
+                targetQuery != null && !targetQuery.equals("")) {
+            this.addMapping(result.sqlString, targetQuery);
+        }
+
     }
 
     private String getComponentTemplate(String[] uriComponent, Map<String, List<ImmutableTerm>> map) {
@@ -235,7 +254,7 @@ public class OBDAMapper {
     private String formatTerms(List<ImmutableTerm> terms) {
         return terms.stream().map(this::formatTerm).collect(Collectors.joining("/"));
     }
-    
+
     private String formatTerm(ImmutableTerm term) {
         if (term instanceof Variable) {
             return "{" + ((Variable) term).getName() + "}";

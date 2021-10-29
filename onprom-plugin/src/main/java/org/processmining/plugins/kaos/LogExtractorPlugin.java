@@ -33,6 +33,7 @@ import it.unibz.inf.kaos.logextractor.XESConstants;
 import it.unibz.inf.kaos.logextractor.XOToXESLogConverter;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
@@ -120,7 +121,7 @@ public class LogExtractorPlugin {
     )
     @PluginVariant(requiredParameterLabels = {0, 1, 2, 3})
     public XLog extractXESLog(final UIPluginContext context,
-                              OWLOntology ontology, OBDAModel obdaModel, Properties properties, AnnotationQueries annotationQueries) {
+                              OWLOntology ontology, SQLPPMapping obdaModel, Properties properties, AnnotationQueries annotationQueries) {
 
         XLog xlog = null;
 
@@ -153,11 +154,11 @@ public class LogExtractorPlugin {
     )
     @PluginVariant(requiredParameterLabels = {0, 1, 2, 3})
     public Object[] extractXESLog2(final UIPluginContext context,
-                                   OWLOntology ontology, OBDAModel obdaModel, Properties datasourceProperties, AnnotationQueries annotationQueries) {
+                                   OWLOntology ontology, SQLPPMapping obdaModel, Properties datasourceProperties, AnnotationQueries annotationQueries) {
 
         context.getProgress().setIndeterminate(true);
         XLog xlog = null;
-        OBDAModel ebdaMapping = null;
+        SQLPPMapping ebdaMapping = null;
 
         try {
             ebdaMapping = new OBDAMapper(ontology,
@@ -192,7 +193,7 @@ public class LogExtractorPlugin {
             website = "http://onprom.inf.unibz.it"
     )
     @PluginVariant(requiredParameterLabels = {0, 1})
-    public XLog extractXESLog(final UIPluginContext context, OBDAModel ebdaMapping, Properties datasourceProperties) {
+    public XLog extractXESLog(final UIPluginContext context, SQLPPMapping ebdaMapping, Properties datasourceProperties) {
 
         XLog xlog = null;
 
@@ -230,7 +231,7 @@ public class LogExtractorPlugin {
     @PluginVariant(requiredParameterLabels = {0, 1, 2, 3, 4, 5})
     public XLog extractXESLog(final UIPluginContext context,
                               OWLOntology domainOnto,
-                              OBDAModel obdaModel,
+                              SQLPPMapping obdaModel,
                               Properties datasourceProperties,
                               AnnotationQueries firstAnnoQueries,
                               OWLOntology eventOntoVariant,

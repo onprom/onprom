@@ -35,6 +35,7 @@ import it.unibz.inf.kaos.ui.component.TreeNode;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorButtons;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import it.unibz.inf.ontop.spec.mapping.serializer.impl.OntopNativeMappingSerializer;
 import org.deckfour.xes.model.XLog;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -125,7 +126,7 @@ public class ExtractionPanel extends JPanel {
                     } else {
                         xlog = new SimpleXESLogExtractor().extractXESLog(
                                 (OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(),
-                                (OBDAModel) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
+                                (SQLPPMapping) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
                                 (Properties) cmbDSProperties.getItemAt(cmbDSProperties.getSelectedIndex()).getUserObject(),
                                 (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject(),
                                 (OWLOntology) cmbEventOntology.getItemAt(cmbEventOntology.getSelectedIndex()).getUserObject(),
@@ -135,7 +136,7 @@ public class ExtractionPanel extends JPanel {
                 } else if (cmbDomainOntology.getSelectedIndex() < -1 || cmbMappings.getSelectedIndex() < -1 || cmbDSProperties.getSelectedIndex() < -1 || cmbEventAnnotations.getSelectedIndex() < -1) {
                     UIUtility.error("Please select domain ontology, OBDA mappings, Datasource properties, custom event ontology, domain to event ontology annotations and event to XES ontology annotations!");
                 } else {
-                    xlog = new SimpleXESLogExtractor().extractXESLog((OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(), (OBDAModel) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
+                    xlog = new SimpleXESLogExtractor().extractXESLog((OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(), (SQLPPMapping) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
                             (Properties) cmbDSProperties.getItemAt(cmbDSProperties.getSelectedIndex()).getUserObject(),
                             (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject());
                 }
@@ -164,16 +165,16 @@ public class ExtractionPanel extends JPanel {
                 if (cmbDomainOntology.getSelectedIndex() < -1 || cmbEventOntology.getSelectedIndex() < -1 || cmbMappings.getSelectedIndex() < -1 || cmbDSProperties.getSelectedIndex() < -1 || cmbEventAnnotations.getSelectedIndex() < -1) {
                     UIUtility.error("Please select domain ontology, OBDA mappings, custom event ontology and domain to event ontology annotations!");
                 } else {
-                    OBDAModel model = new OBDAMapper(
+                    SQLPPMapping model = new OBDAMapper(
                             (OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(),
                             (OWLOntology) cmbEventOntology.getItemAt(cmbEventOntology.getSelectedIndex()).getUserObject(),
-                            (OBDAModel) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
+                            (SQLPPMapping) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
                             (Properties) cmbDSProperties.getItemAt(cmbDSProperties.getSelectedIndex()).getUserObject(),
                             (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject()
                     ).getOBDAModel();
                     UIUtility.selectFileToOpen(FileType.MAPPING).ifPresent(file -> {
                         try {
-                            new OntopNativeMappingSerializer(model.generatePPMapping()).save(file);
+                            new OntopNativeMappingSerializer().write(file, model);
                         } catch (IOException e) {
                             logger.error(e.getMessage(), e);
                             UIUtility.error(e.getMessage());

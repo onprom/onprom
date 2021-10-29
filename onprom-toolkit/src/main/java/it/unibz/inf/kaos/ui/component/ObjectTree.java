@@ -34,6 +34,7 @@ import it.unibz.inf.kaos.ui.form.InformationDialog;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.apache.commons.io.FilenameUtils;
 import org.deckfour.xes.in.XesXmlParser;
 import org.deckfour.xes.model.XLog;
@@ -148,12 +149,13 @@ public class ObjectTree {
                 case MAPPING:
                     try {
                         Properties dsProperties = OntopUtility.getDataSourceProperties(selectedFile);
-                        if (dsProperties != null && dsProperties.size() > 0) {
-                            addObject(selectedFile.getName() + ".properties", FileType.DS_PROPERTIES, OntopUtility.getDataSourceProperties(selectedFile));
+                        //FIXME:
+//                        if (dsProperties != null && dsProperties.size() > 0) {
+//                            addObject(selectedFile.getName() + ".properties", FileType.DS_PROPERTIES, OntopUtility.getDataSourceProperties(selectedFile));
                             addObject(selectedFile.getName(), FileType.MAPPING, OntopUtility.getOBDAModel(selectedFile, dsProperties));
-                        } else {
-                            addObject(selectedFile.getName(), FileType.MAPPING, OntopUtility.getOBDAModel(selectedFile));
-                        }
+//                        } else {
+                            //addObject(selectedFile.getName(), FileType.MAPPING, OntopUtility.getOBDAModel(selectedFile));
+                        //}
                     } catch (Exception e) {
                         logError(e);
                     }
@@ -226,7 +228,7 @@ public class ObjectTree {
         switch (type) {
             case MAPPING:
                 try {
-                    OntopUtility.saveModel((OBDAModel) object, new File(filePath));
+                    OntopUtility.saveModel((SQLPPMapping) object, new File(filePath));
                 } catch (Exception e) {
                     logError(e);
                 }

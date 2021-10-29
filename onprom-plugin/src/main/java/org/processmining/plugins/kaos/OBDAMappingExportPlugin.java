@@ -28,6 +28,7 @@ package org.processmining.plugins.kaos;
 
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.processmining.contexts.uitopia.annotations.UIExportPlugin;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.plugin.PluginContext;
@@ -50,7 +51,7 @@ public class OBDAMappingExportPlugin {
             website = "http://onprom.inf.unibz.it"
     )
     @PluginVariant(requiredParameterLabels = {0, 1})
-    public void export(PluginContext context, OBDAModel model, File file) {
+    public void export(PluginContext context, SQLPPMapping model, File file) {
         try {
             OntopUtility.saveModel(model, file);
             context.log("Succesfully exported mapping to the file:" + file.getName());

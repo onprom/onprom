@@ -35,6 +35,7 @@ import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
 import it.unibz.inf.ontop.owlapi.resultset.OWLBindingSet;
 import it.unibz.inf.ontop.owlapi.resultset.TupleOWLResultSet;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
@@ -42,6 +43,7 @@ import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.model.impl.XAttributeMapImpl;
 import org.deckfour.xes.model.impl.XEventImpl;
 import org.deckfour.xes.model.impl.XTraceImpl;
+import org.semanticweb.owlapi.model.OWLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,22 +59,20 @@ class SimpleEBDAReasoner {
     private SimpleXESFactory factory;
     private OntopOWLConnection connection;
 
-    SimpleEBDAReasoner(OBDAModel obdaModel, Properties dataSourceProperties, SimpleXESFactory factory) {
+    SimpleEBDAReasoner(SQLPPMapping obdaModel, Properties dataSourceProperties, SimpleXESFactory factory) {
         try {
             this.factory = factory;
-
             OntopSQLOWLAPIConfiguration config = OntopUtility.getConfiguration(
                     XESConstants.getDefaultEventOntology(),
                     obdaModel,
                     dataSourceProperties
             );
-
             this.reasoner = OntopOWLFactory.defaultFactory().createReasoner(config);
             this.connection = this.reasoner.getConnection();
             // fix for large query results
             this.connection.setAutoCommit(false);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+        } catch (OWLException e) {
+            throw new RuntimeException(e);
         }
     }
 

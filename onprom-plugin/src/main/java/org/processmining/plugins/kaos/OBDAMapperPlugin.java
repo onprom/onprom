@@ -29,6 +29,7 @@ import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.OBDAMaterializer;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.plugin.annotations.Plugin;
@@ -58,16 +59,16 @@ public class OBDAMapperPlugin {
             website = "http://onprom.inf.unibz.it"
     )
     @PluginVariant(requiredParameterLabels = {0, 1, 2, 3, 4})
-    public OBDAModel createOBDAMapping(final UIPluginContext context,
+    public SQLPPMapping createOBDAMapping(final UIPluginContext context,
                                        OWLOntology sourceOnto,
                                        OWLOntology targetOnto,
-                                       OBDAModel sourceObdaModel,
+                                          SQLPPMapping sourceObdaModel,
                                        Properties datasourceProperties,
                                        AnnotationQueries annotationQueries) {
 
         context.getProgress().setIndeterminate(true);
 
-        OBDAModel obdaMapping = null;
+        SQLPPMapping obdaMapping = null;
         try {
 
             obdaMapping = new OBDAMapper(sourceOnto,
@@ -102,7 +103,7 @@ public class OBDAMapperPlugin {
             website = "http://onprom.inf.unibz.it"
     )
     @PluginVariant(requiredParameterLabels = {0, 1, 2})
-    public OWLOntology createOBDAMapping(final UIPluginContext context, OWLOntology targetOntology, OBDAModel obdaMapping, Properties datasourceProperties) {
+    public OWLOntology createOBDAMapping(final UIPluginContext context, OWLOntology targetOntology, SQLPPMapping obdaMapping, Properties datasourceProperties) {
 
         context.getProgress().setIndeterminate(true);
 

@@ -29,6 +29,7 @@ package org.processmining.plugins.kaos;
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.processmining.contexts.uitopia.annotations.UIImportPlugin;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.abstractplugins.AbstractImportPlugin;
@@ -59,7 +60,7 @@ public class OBDAMappingImportPlugin extends AbstractImportPlugin {
     protected Object[] importFromStream(final PluginContext context, final InputStream input, final String filename, final long fileSizeInBytes) {
         try {
             Properties properties = OntopUtility.getDataSourceProperties(getFile());
-            OBDAModel obdaModel = OntopUtility.getOBDAModel(getFile(), properties);
+            SQLPPMapping obdaModel = OntopUtility.getOBDAModel(getFile());
             context.getFutureResult(0).setLabel("OBDA Mapping (" + filename + " ) " + UIUtility.getCurrentDateTime());
             return new Object[]{obdaModel, properties};
         } catch (Exception e) {

@@ -31,7 +31,7 @@ import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
-import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.out.XesXmlGZIPSerializer;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -39,7 +39,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.FileReader;
 import java.util.Properties;
 
 public class OneLevelExtractionTest {
@@ -54,6 +54,7 @@ public class OneLevelExtractionTest {
             }
             String folder = args[0];
             File domainMappingsFile = new File(folder + "conference.obda");
+            File propertiesFile = new File(folder + "conference.properties");
             File domainOntologyFile = new File(folder + "conference.owl");
             File queriesFile = new File(folder + "conference.aqr");
             // generate output file names
@@ -66,8 +67,11 @@ public class OneLevelExtractionTest {
             File generatedMappingsFile = new File(outputFileName + "_generated.obda");
             File output = new File(outputFileName + ".xes.gz");
             // load mappings
-            Properties dataSourceProperties = OntopUtility.getDataSourceProperties(domainMappingsFile);
-            OBDAModel obdaModel = OntopUtility.getOBDAModel(domainMappingsFile, dataSourceProperties);
+            //Properties dataSourceProperties = OntopUtility.getDataSourceProperties(domainMappingsFile);
+            Properties dataSourceProperties = new Properties();
+            dataSourceProperties.load(new FileReader(propertiesFile));
+            //Properties dataSourceProperties = OntopUtility.getDataSourceProperties(domainMappingsFile);
+            SQLPPMapping obdaModel = OntopUtility.getOBDAModel(domainMappingsFile, propertiesFile);
             // load ontologies
             OWLOntology domainOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(domainOntologyFile);
             OWLOntology onpromOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(OneLevelExtractionTest.class.getResourceAsStream("/eo-onprom.owl"));
@@ -77,7 +81,7 @@ public class OneLevelExtractionTest {
                 IOUtility.readJSON(queriesFile, AnnotationQueries.class).ifPresent(firstLevel -> {
                     try {
                         //generate final mapping
-                        OBDAModel firstMapping = new OBDAMapper(domainOntology, SimpleXESLogExtractor.getDefaultEventOntology(), obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
+                        SQLPPMapping firstMapping = new OBDAMapper(domainOntology, SimpleXESLogExtractor.getDefaultEventOntology(), obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
                         OntopUtility.saveModel(firstMapping, generatedMappingsFile);
                         XLog xTraces = new SimpleXESLogExtractor().extractXESLog(firstMapping, dataSourceProperties);
                         // extract log

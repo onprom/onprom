@@ -35,6 +35,7 @@ import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
 import it.unibz.inf.ontop.owlapi.resultset.OWLBindingSet;
 import it.unibz.inf.ontop.owlapi.resultset.TupleOWLResultSet;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import it.unibz.ocel.extension.OcelExtension;
 import it.unibz.ocel.model.OcelAttribute;
 import it.unibz.ocel.model.OcelEvent;
@@ -55,7 +56,7 @@ class SimpleOCELEBDAReasoner {
     private SimpleOCELFactory factory;
     private OntopOWLConnection connection;
 
-    SimpleOCELEBDAReasoner(OBDAModel obdaModel, Properties dataSourceProperties, SimpleOCELFactory factory) {
+    SimpleOCELEBDAReasoner(SQLPPMapping obdaModel, Properties dataSourceProperties, SimpleOCELFactory factory) {
         try {
             this.factory = factory;
             OntopSQLOWLAPIConfiguration config = OntopUtility.getConfiguration(

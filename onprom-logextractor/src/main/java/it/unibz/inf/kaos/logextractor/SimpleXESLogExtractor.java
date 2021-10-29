@@ -29,6 +29,7 @@ package it.unibz.inf.kaos.logextractor;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
@@ -46,9 +47,9 @@ import java.util.Properties;
 public class SimpleXESLogExtractor {
     private static final Logger logger = LoggerFactory.getLogger(SimpleXESLogExtractor.class);
 
-    public XLog extractXESLog(OWLOntology domainOnto, OBDAModel obdaModel, Properties dataSourceProperties, AnnotationQueries firstAnnoQueries, OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries) {
+    public XLog extractXESLog(OWLOntology domainOnto, SQLPPMapping obdaModel, Properties dataSourceProperties, AnnotationQueries firstAnnoQueries, OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries) {
         try {
-            OBDAModel obdaMapping = new OBDAMapper(domainOnto, eventOntoVariant, obdaModel, dataSourceProperties, firstAnnoQueries).getOBDAModel();
+            SQLPPMapping obdaMapping = new OBDAMapper(domainOnto, eventOntoVariant, obdaModel, dataSourceProperties, firstAnnoQueries).getOBDAModel();
             if (obdaMapping != null) {
                 return extractXESLog(eventOntoVariant, obdaMapping, dataSourceProperties, secondAnnoQueries);
             } else {
@@ -66,7 +67,7 @@ public class SimpleXESLogExtractor {
         );
     }
 
-    public XLog extractXESLog(OBDAModel ebdaModel, Properties dataSourceProperties) {
+    public XLog extractXESLog(SQLPPMapping ebdaModel, Properties dataSourceProperties) {
 //        try {
 //            if (ebdaModel != null) {
                 SimpleXESFactory factory = new SimpleXESFactory();
@@ -97,10 +98,10 @@ public class SimpleXESLogExtractor {
 //        return null;
     }
 
-    public XLog extractXESLog(OWLOntology domainOntology, OBDAModel obdaModel, Properties dataSourceProperties, AnnotationQueries annotation) {
+    public XLog extractXESLog(OWLOntology domainOntology, SQLPPMapping obdaModel, Properties dataSourceProperties, AnnotationQueries annotation) {
         try {
             logger.info("Constructing EBDA Mapping");
-            OBDAModel ebdaModel = new OBDAMapper(domainOntology,
+            SQLPPMapping ebdaModel = new OBDAMapper(domainOntology,
                     getDefaultEventOntology(),
                     obdaModel,
                     dataSourceProperties,
