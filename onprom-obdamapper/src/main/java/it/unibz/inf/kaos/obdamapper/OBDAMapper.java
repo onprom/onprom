@@ -27,7 +27,9 @@
 package it.unibz.inf.kaos.obdamapper;
 
 import ch.qos.logback.classic.Logger;
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Streams;
 import com.google.inject.Injector;
 import it.unibz.inf.kaos.data.query.*;
 import it.unibz.inf.kaos.obdamapper.utility.OBDAMappingUtility;
@@ -45,7 +47,6 @@ import it.unibz.inf.ontop.model.term.Variable;
 import it.unibz.inf.ontop.owlapi.OntopOWLFactory;
 import it.unibz.inf.ontop.owlapi.OntopOWLReasoner;
 import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
-import it.unibz.inf.ontop.protege.core.OBDAModel;
 import it.unibz.inf.ontop.spec.mapping.PrefixManager;
 import it.unibz.inf.ontop.spec.mapping.SQLPPSourceQueryFactory;
 import it.unibz.inf.ontop.spec.mapping.parser.TargetQueryParser;
@@ -58,8 +59,8 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.slf4j.LoggerFactory;
 import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl;
 
-import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -120,7 +121,7 @@ public class OBDAMapper {
 
     private void addMapping(String source, String target) {
         //String newId = "ONPROM_MAPPING_" + obdaModel.getMapping(obdaModel.getDatasource().getSourceID()).size();
-        String newId = "ONPROM_MAPPING_" + triplesMaps.size() + 1;
+        String newId = "ONPROM_MAPPING_" + (triplesMaps.size() + 1);
         logger.info("######################\nID:" + newId + "\nTARGET:" + target + "\nSOURCE:" + source + "\n######################");
         try {
             OntopNativeSQLPPTriplesMap triplesMap = new OntopNativeSQLPPTriplesMap(newId,
