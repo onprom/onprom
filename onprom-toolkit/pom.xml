@@ -30,23 +30,16 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>onprom-toolkit</artifactId>
     <name>Integrated onprom Toolkit</name>
+
     <parent>
         <artifactId>onprom</artifactId>
         <groupId>it.unibz.inf.kaos</groupId>
-        <version>2.3.0</version>
+        <version>2.4.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.version}</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
             <!-- Generate large JAR with dependencies-->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -96,7 +89,7 @@
         <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
-            <version>1.5.0</version>
+            <version>1.5.3</version>
         </dependency>
         <dependency>
             <groupId>com.vdurmont</groupId>
@@ -106,13 +99,13 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model</artifactId>
-            <version>3.6.3</version>
+            <version>3.8.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>it.unibz.inf.kaos</groupId>
             <artifactId>onprom-ocel</artifactId>
-            <version>2.3.0</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

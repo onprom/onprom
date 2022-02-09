@@ -60,7 +60,7 @@ public class OBDAMappingImportPlugin extends AbstractImportPlugin {
     protected Object[] importFromStream(final PluginContext context, final InputStream input, final String filename, final long fileSizeInBytes) {
         try {
             Properties properties = OntopUtility.getDataSourceProperties(getFile());
-            SQLPPMapping obdaModel = OntopUtility.getOBDAModel(getFile());
+            SQLPPMapping obdaModel = OntopUtility.getOBDAModel(getFile(), properties);
             context.getFutureResult(0).setLabel("OBDA Mapping (" + filename + " ) " + UIUtility.getCurrentDateTime());
             return new Object[]{obdaModel, properties};
         } catch (Exception e) {

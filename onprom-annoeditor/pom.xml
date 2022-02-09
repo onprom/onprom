@@ -29,23 +29,16 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>onprom-annoeditor</artifactId>
     <name>Default Annotation Editor</name>
+
     <parent>
         <groupId>it.unibz.inf.kaos</groupId>
         <artifactId>onprom</artifactId>
-        <version>2.3.0</version>
+        <version>2.4.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.version}</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -75,6 +68,7 @@
             </plugin>
         </plugins>
     </build>
+
     <dependencies>
         <dependency>
             <artifactId>onprom-data</artifactId>
@@ -89,12 +83,12 @@
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-querybuilder</artifactId>
-            <version>3.16.0</version>
+            <version>4.4.0</version>
         </dependency>
         <dependency>
             <groupId>it.unibz.inf.kaos</groupId>
             <artifactId>onprom-logextractor</artifactId>
-            <version>2.3.0</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         

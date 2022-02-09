@@ -27,7 +27,6 @@
 package org.processmining.plugins.kaos;
 
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
-import it.unibz.inf.ontop.protege.core.OBDAModel;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.processmining.contexts.uitopia.annotations.UIExportPlugin;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
