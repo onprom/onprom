@@ -33,7 +33,6 @@ import it.unibz.inf.kaos.onprom.OnpromToolkit;
 import it.unibz.inf.kaos.ui.form.InformationDialog;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
-import it.unibz.inf.ontop.protege.core.OBDAModel;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.apache.commons.io.FilenameUtils;
 import org.deckfour.xes.in.XesXmlParser;
@@ -53,9 +52,11 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by T. E. Kalayci on 15-Nov-2017.
@@ -148,14 +149,18 @@ public class ObjectTree {
                     break;
                 case MAPPING:
                     try {
-                        Properties dsProperties = OntopUtility.getDataSourceProperties(selectedFile);
-                        //FIXME:
-//                        if (dsProperties != null && dsProperties.size() > 0) {
-//                            addObject(selectedFile.getName() + ".properties", FileType.DS_PROPERTIES, OntopUtility.getDataSourceProperties(selectedFile));
-                            addObject(selectedFile.getName(), FileType.MAPPING, OntopUtility.getOBDAModel(selectedFile, dsProperties));
-//                        } else {
-                            //addObject(selectedFile.getName(), FileType.MAPPING, OntopUtility.getOBDAModel(selectedFile));
-                        //}
+                        //check if corresponding properties available
+                        List<TreeNode<Object>> allProperties = objects.getAllNodes().stream().filter(objectTreeNode -> objectTreeNode.getType() == FileType.DS_PROPERTIES).collect(Collectors.toList());
+                        if (allProperties.size() < 1) {
+                            InformationDialog.display("Please load database connection properties file first! Please note that utility currently assumes that database properties and OBDA file has same name!");
+                        } else {
+                            Optional<TreeNode<Object>> property = allProperties.stream().filter(p -> IOUtility.getFileName(p.getTitle()).equals(IOUtility.getFileName(selectedFile))).findFirst();
+                            if (property.isPresent()) {
+                                addObject(selectedFile.getName(), FileType.MAPPING, OntopUtility.getOBDAModel(selectedFile, (Properties) property.get().getUserObject()));
+                            } else {
+                                InformationDialog.display("Please load database connection properties file first! Please note that utility currently assumes that database properties and OBDA file has same name!");
+                            }
+                        }
                     } catch (Exception e) {
                         logError(e);
                     }

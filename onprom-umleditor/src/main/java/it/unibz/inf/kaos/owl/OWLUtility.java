@@ -168,10 +168,7 @@ public class OWLUtility {
     }
 
     public static String getDocumentIRI(@Nonnull OWLOntology ontology) {
-        com.google.common.base.Optional<IRI> ontologyIRI = ontology.getOntologyID().getOntologyIRI();
-        if (ontologyIRI.isPresent()) {
-            return ontologyIRI.get().toString();
-        }
-        return "http://www.example.com/example.owl";
+        Optional<IRI> ontologyIRI = ontology.getOntologyID().getOntologyIRI();
+        return ontologyIRI.map(IRI::toString).orElse("http://www.example.com/example.owl");
     }
 }

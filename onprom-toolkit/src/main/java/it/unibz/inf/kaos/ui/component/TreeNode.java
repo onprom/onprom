@@ -103,6 +103,10 @@ public class TreeNode<T> extends DefaultMutableTreeNode {
         return Integer.toString(id);
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     String getIcon() {
         return type.getDefaultExtension();
     }

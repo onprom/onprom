@@ -32,15 +32,15 @@
     <version>2.4.0</version>
     <packaging>pom</packaging>
     <name>onprom - Parent Project of onprom Tools</name>
-    <url>http://onprom.inf.unibz.it</url>
+    <url>https://onprom.inf.unibz.it</url>
     <organization>
         <name>KRDB - Free University of Bozen-Bolzano</name>
-        <url>http://www.inf.unibz.it/krdb/</url>
+        <url>https://www.inf.unibz.it/krdb/</url>
     </organization>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
     <scm>
@@ -52,11 +52,11 @@
     <developers>
         <developer>
             <id>ghxiao</id>
-            <name>G. Xiao</name>
+            <name>G. XIAO</name>
         </developer>
         <developer>
             <id>jxiong</id>
-            <name>J. Xiong</name>
+            <name>J. XIONG</name>
         </developer>
         <developer>
             <id>tekrei</id>
@@ -72,7 +72,7 @@
         <logback.version>1.2.10</logback.version>
         <jaxb.version>2.3.1</jaxb.version>
         <maven.assembly.version>3.3.0</maven.assembly.version>
-        <owlapi.version>4.5.9</owlapi.version>
+        <owlapi.version>5.1.19</owlapi.version>
         <ontop.version>4.1.1</ontop.version>
         <local.repository>file://${basedir}/../onprom-maven</local.repository>
     </properties>

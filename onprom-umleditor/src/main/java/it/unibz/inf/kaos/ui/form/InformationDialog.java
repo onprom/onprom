@@ -44,14 +44,12 @@ import java.awt.*;
 public class InformationDialog extends JDialog {
     private static final Logger logger = LoggerFactory.getLogger(InformationDialog.class.getName());
 
-    private final JEditorPane editorPane;
-
     private InformationDialog(String message, String title) {
         setModal(true);
         setTitle(title);
         setLayout(new BorderLayout());
 
-        editorPane = new JEditorPane();
+        JEditorPane editorPane = new JEditorPane();
         editorPane.setContentType("text/html");
         editorPane.setEditable(false);
         editorPane.setBackground(UIManager.getColor("Panel.background"));
@@ -75,6 +73,7 @@ public class InformationDialog extends JDialog {
         JButton ok = UIUtility.createButton(UMLEditorButtons.OK, e -> setVisible(false));
         add(ok, BorderLayout.SOUTH);
         pack();
+        setMinimumSize(new Dimension(200, 200));
         setLocationRelativeTo(null);
     }
 

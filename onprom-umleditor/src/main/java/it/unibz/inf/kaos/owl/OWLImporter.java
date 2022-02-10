@@ -37,6 +37,7 @@ import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.search.EntitySearcher;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class used to import OWL ontologies to the tool.
@@ -164,15 +165,15 @@ public class OWLImporter extends OWLUtility {
       String attrName = dataProperty.getIRI().getShortForm();
       Attribute attr = new Attribute(attrName);
       attr.setLongName(dataProperty.getIRI().toString());
-      final Collection<OWLClassExpression> domains = EntitySearcher.getDomains(dataProperty, ontology);
+      final Collection<OWLClassExpression> domains = EntitySearcher.getDomains(dataProperty, ontology).collect(Collectors.toList());
       if (domains.size() > 1) {
-        messages.add("Multiple domains are found for for <em>" + attrName + "</em> " + domains.toString());
+        messages.add("Multiple domains are found for for <em>" + attrName + "</em> " + domains);
       }
       domains.forEach(owlClassExpression -> {
           if (owlClassExpression instanceof OWLClass) {
               UMLClass domainClass = umlClasses.get(owlClassExpression.asOWLClass());
               if (domainClass != null) {
-                  OWLDataRange range = EntitySearcher.getRanges(dataProperty, ontology).stream().findFirst().orElse(null);
+                OWLDataRange range = EntitySearcher.getRanges(dataProperty, ontology).findFirst().orElse(null);
                   if (range != null) {
                       attr.setType(DataType.get(range.toString()));
                   } else {
@@ -200,7 +201,7 @@ public class OWLImporter extends OWLUtility {
 
       final IRI objectPropertyIRI = objectProperty.getIRI();
 
-      OWLClassExpression domainClassExpression = EntitySearcher.getDomains(objectProperty, ontology).stream().findFirst().orElse(null);
+      OWLClassExpression domainClassExpression = EntitySearcher.getDomains(objectProperty, ontology).findFirst().orElse(null);
         if (domainClassExpression instanceof OWLClass) {
             domainClass = umlClasses.get(domainClassExpression.asOWLClass());
       } else {
@@ -209,7 +210,7 @@ public class OWLImporter extends OWLUtility {
             messages.add("No domain is found for " + objectPropertyIRI + " setting Thing as domain class (" + domainClassExpression + ")");
       }
 
-      OWLClassExpression rangeClassExpression = EntitySearcher.getRanges(objectProperty, ontology).stream().findFirst().orElse(null);
+      OWLClassExpression rangeClassExpression = EntitySearcher.getRanges(objectProperty, ontology).findFirst().orElse(null);
         if (rangeClassExpression instanceof OWLClass) {
         rangeClass = umlClasses.get(rangeClassExpression.asOWLClass());
       } else {

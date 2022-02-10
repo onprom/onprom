@@ -118,7 +118,7 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
                     .getSelectedClasses()
                     .forEach(umlClass -> annotations.put(umlClass.getName(), umlClass));
             //setTitle("Annotation Editor for " + upperOntology.toString());
-            setTitle("Annotation Editor for " + upperOntology.getOntologyID().getOntologyIRI().or(IRI.create("")));
+            setTitle("Annotation Editor for " + upperOntology.getOntologyID().getOntologyIRI().orElse(IRI.create("")));
         } else {
             OWLUtility.loadOntologyFromStream(DynamicAnnotationEditor.class.getResourceAsStream("/default-eo.owl"))
                     .ifPresent(defaultOntology -> OWLImporter.getShapes(defaultOntology).stream()
@@ -155,10 +155,7 @@ public class DynamicAnnotationEditor extends AnnotationEditor {
         }) {
             @Override
             public void execute() {
-                UIUtility.selectFileToOpen(FileType.ONTOLOGY)
-                        .ifPresent(file -> OWLUtility.loadOntologyFromFile(file)
-                                .ifPresent(ontology -> loadAnnotationTypes(ontology))
-                        );
+                UIUtility.selectFileToOpen(FileType.ONTOLOGY).flatMap(OWLUtility::loadOntologyFromFile).ifPresent(ontology -> loadAnnotationTypes(ontology));
             }
         };
     }

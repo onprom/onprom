@@ -190,7 +190,19 @@ public class IOUtility {
     }
 
     public static String getFileExtension(@Nonnull File file) {
-        return FilenameUtils.getExtension(file.getName());
+        return getFileExtension(file.getName());
+    }
+
+    public static String getFileExtension(@Nonnull String fileName) {
+        return FilenameUtils.getExtension(fileName);
+    }
+
+    public static String getFileName(@Nonnull File file) {
+        return getFileName(file.getName());
+    }
+
+    public static String getFileName(@Nonnull String fileName) {
+        return FilenameUtils.removeExtension(fileName);
     }
 
     public static Optional<URL> getImageURL(String imageName) {
