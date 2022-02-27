@@ -52,10 +52,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -137,6 +134,18 @@ public class ObjectTree {
     }
 
     public void openFiles(@Nonnull File[] files) {
+        List<File> propertiesFiles = Arrays.stream(files).filter(file -> IOUtility.getFileType(file) == FileType.DS_PROPERTIES).collect(Collectors.toList());
+        for (File properties : propertiesFiles) {
+            try {
+                Properties dsProperties = new Properties();
+                dsProperties.load(new FileInputStream(properties));
+                addObject(properties.getName(), FileType.DS_PROPERTIES, dsProperties);
+            } catch (Exception e) {
+                logError(e);
+            }
+            break;
+        }
+        List<File> otherFiles = Arrays.stream(files).filter(file -> IOUtility.getFileType(file) != FileType.DS_PROPERTIES).collect(Collectors.toList());
         for (File selectedFile : files) {
             switch (IOUtility.getFileType(selectedFile)) {
                 case ONTOLOGY:
@@ -161,15 +170,6 @@ public class ObjectTree {
                                 InformationDialog.display("Please load database connection properties file first! Please note that utility currently assumes that database properties and OBDA file has same name!");
                             }
                         }
-                    } catch (Exception e) {
-                        logError(e);
-                    }
-                    break;
-                case DS_PROPERTIES:
-                    try {
-                        Properties dsProperties = new Properties();
-                        dsProperties.load(new FileInputStream(selectedFile));
-                        addObject(selectedFile.getName(), FileType.DS_PROPERTIES, dsProperties);
                     } catch (Exception e) {
                         logError(e);
                     }

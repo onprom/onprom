@@ -24,17 +24,12 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.logextractor;
+package it.unibz.inf.kaos.logextractor.ocel;
 
-import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
-import it.unibz.inf.ontop.injection.OntopSQLOWLAPIConfiguration;
-import it.unibz.inf.ontop.owlapi.OntopOWLFactory;
-import it.unibz.inf.ontop.owlapi.OntopOWLReasoner;
-import it.unibz.inf.ontop.owlapi.connection.OntopOWLConnection;
+import it.unibz.inf.kaos.logextractor.EBDAReasoner;
 import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
 import it.unibz.inf.ontop.owlapi.resultset.OWLBindingSet;
 import it.unibz.inf.ontop.owlapi.resultset.TupleOWLResultSet;
-import it.unibz.inf.ontop.protege.core.OBDAModel;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import it.unibz.ocel.extension.OcelExtension;
 import it.unibz.ocel.model.OcelAttribute;
@@ -42,69 +37,35 @@ import it.unibz.ocel.model.OcelEvent;
 import it.unibz.ocel.model.OcelObject;
 import it.unibz.ocel.model.impl.OcelEventImpl;
 import it.unibz.ocel.model.impl.OcelObjectImpl;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-class SimpleOCELEBDAReasoner {
-    private static final Logger logger = LoggerFactory.getLogger(SimpleOCELEBDAReasoner.class);
+class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject> {
+    private static final Logger logger = LoggerFactory.getLogger(OCELEBDAReasoner.class);
 
-    private OntopOWLReasoner reasoner;
-    private SimpleOCELFactory factory;
-    private OntopOWLConnection connection;
+    private final OCELFactory factory;
 
-    SimpleOCELEBDAReasoner(SQLPPMapping obdaModel, Properties dataSourceProperties, SimpleOCELFactory factory) {
-        try {
-            this.factory = factory;
-            OntopSQLOWLAPIConfiguration config = OntopUtility.getConfiguration(
-                    OCELConstants.getDefaultEventOntology(),
-                    obdaModel,
-                    dataSourceProperties
-            );
-
-            this.reasoner = OntopOWLFactory.defaultFactory().createReasoner(config);
-            this.connection = this.reasoner.getConnection();
-            // fix for large query results
-            this.connection.setAutoCommit(false);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    private OntopOWLStatement getStatement() throws Exception {
-        // fix for large query results
-        // st.setFetchSize(1000000);
-        return connection.createStatement();
+    OCELEBDAReasoner(SQLPPMapping obdaModel, Properties dataSourceProperties, OCELFactory factory) throws OWLOntologyCreationException {
+        super(obdaModel, dataSourceProperties, OCELConstants.getDefaultEventOntology());
+        this.factory = factory;
     }
 
     boolean printUnfoldedQueries() {
-        try {
-            OntopOWLStatement st = getStatement();
-            // Unfold queries
-            st.getRewritingRendering(OCELConstants.qAttTypeKeyVal_Simple);
-            st.getRewritingRendering(OCELConstants.qEvtAtt_Simple);
-            st.getRewritingRendering(OCELConstants.qObjectAtt_Simple);
-            st.getRewritingRendering(OCELConstants.qEvtObj_Simple);
-            return true;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return false;
-        }
+        return super.printUnfoldedQueries(new String[]{
+                OCELConstants.qAttTypeKeyVal_Simple,
+                OCELConstants.qEvtAtt_Simple,
+                OCELConstants.qObjectAtt_Simple,
+                OCELConstants.qEvtObj_Simple
+        });
     }
 
-    void dispose() {
-        try {
-            connection.close();
-            reasoner.dispose();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    Map<String, OcelAttribute> getAttributes() {
+    protected Map<String, OcelAttribute> getAttributes() {
         Map<String, OcelAttribute> attributes = new HashMap<>();
         try {
             OntopOWLStatement st = getStatement();
@@ -123,8 +84,8 @@ class SimpleOCELEBDAReasoner {
                     String key = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
                     String value = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
                     if (!attributes.containsKey(attributeKey)) {
-                        OcelExtension extension = factory.getPredefinedOcelExtension(key);
-                        OcelAttribute attribute = factory.createOcelAttribute(type, key, value, extension);
+                        OcelExtension extension = factory.getPredefinedExtension(key);
+                        OcelAttribute attribute = factory.createAttribute(type, key, value, extension);
                         if (attribute != null) {
                             attributes.put(attributeKey, attribute);
                         }
@@ -143,7 +104,7 @@ class SimpleOCELEBDAReasoner {
         return attributes;
     }
 
-    Map<String, OcelEvent> getEvents(Map<String, OcelAttribute> attributes) {
+    public Map<String, OcelEvent> getEvents(Map<String, OcelAttribute> attributes) {
         Map<String, OcelEvent> events = new HashMap<>();
         try {
             OntopOWLStatement st = getStatement();
@@ -185,7 +146,7 @@ class SimpleOCELEBDAReasoner {
         return events;
     }
 
-    Map<String, OcelObject> getObjects(Map<String, OcelAttribute> attributes) {
+    protected Collection<OcelObject> getObjects(Map<String, OcelEvent> events, Map<String, OcelAttribute> attributes) {
         Map<String, OcelObject> objects = new HashMap<>();
         try {
             OntopOWLStatement st = getStatement();
@@ -223,7 +184,7 @@ class SimpleOCELEBDAReasoner {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        return objects;
+        return objects.values();
     }
 
 //    Collection<OcelTrace> getTraces(Map<String, OcelEvent> events, Map<String, OcelAttribute> attributes) {

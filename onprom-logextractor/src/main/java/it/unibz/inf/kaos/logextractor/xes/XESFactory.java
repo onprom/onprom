@@ -24,8 +24,9 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.logextractor;
+package it.unibz.inf.kaos.logextractor.xes;
 
+import it.unibz.inf.kaos.logextractor.Factory;
 import org.deckfour.xes.classification.XEventAttributeClassifier;
 import org.deckfour.xes.classification.XEventLifeTransClassifier;
 import org.deckfour.xes.classification.XEventNameClassifier;
@@ -44,15 +45,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class SimpleXESFactory extends XFactoryLiteImpl {
+public class XESFactory extends XFactoryLiteImpl implements Factory<XAttribute, XExtension, XLog> {
     SimpleDateFormat WITH_T = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     SimpleDateFormat WITHOUT_T = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat ONLY_DATE = new SimpleDateFormat("yyyy-MM-dd");
 
-    public XAttribute createXAttribute(String type, String key, String value, XExtension extension) throws ParseException {
+    @Override
+    public XAttribute createAttribute(String type, String key, String value, XExtension extension) throws ParseException {
 
         if (type != null && key != null && value != null) {
-            if (type.toLowerCase().equals("timestamp")) {
+            if (type.equalsIgnoreCase("timestamp")) {
                 // we assume that the timestamp is in format yyyy-[m]m-[d]d hh:mm:ss[.f...].
                 // The fractional seconds may be omitted. The leading zero for mm and dd may also be omitted.
                 Date date;
@@ -73,7 +75,8 @@ public class SimpleXESFactory extends XFactoryLiteImpl {
         return null;
     }
 
-    public XExtension getPredefinedXExtension(String key) {
+    @Override
+    public XExtension getPredefinedExtension(String key) {
         if (key != null) {
             switch (key.toLowerCase()) {
                 case "time:timestamp":
@@ -89,6 +92,7 @@ public class SimpleXESFactory extends XFactoryLiteImpl {
         return null;
     }
 
+    @Override
     public void addDefaultExtensions(XLog xlog) {
         try {
             xlog.getGlobalTraceAttributes().add(createAttributeLiteral("concept:name", "DEFAULT", null));

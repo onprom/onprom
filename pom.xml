@@ -72,7 +72,7 @@
         <logback.version>1.2.10</logback.version>
         <jaxb.version>2.3.1</jaxb.version>
         <maven.assembly.version>3.3.0</maven.assembly.version>
-        <owlapi.version>5.1.19</owlapi.version>
+        <owlapi.version>4.5.19</owlapi.version>
         <ontop.version>4.1.1</ontop.version>
         <local.repository>file://${basedir}/../onprom-maven</local.repository>
     </properties>
@@ -112,17 +112,12 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
+            <version>4.13.2</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>31.0.1-jre</version>
         </dependency>
     </dependencies>
 </project>

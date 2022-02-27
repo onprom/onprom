@@ -27,12 +27,10 @@
 package it.unibz.inf.kaos.onprom;
 
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
-import it.unibz.inf.kaos.logextractor.util.ToolUtil;
+import it.unibz.inf.kaos.logextractor.xes.XESLogExtractor;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
-import it.unibz.inf.ontop.protege.core.OBDAModel;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.out.XesXmlGZIPSerializer;
@@ -40,8 +38,10 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
-import java.io.*;
-import java.util.Optional;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Properties;
 
 public class TwoLevelExtractionTest {
@@ -94,7 +94,7 @@ public class TwoLevelExtractionTest {
         SQLPPMapping finalMapping = secondOBDAMapper.getOBDAModel();
         OntopUtility.saveModel(finalMapping, finalMappingsFile);
         // ToolUtil.writeToFile(ToolUtil.readFromFile(finalMappingsFile).replaceAll("\t\t\t\n",""),finalMappingsFile.getPath());
-        XLog xTraces = new SimpleXESLogExtractor().extractXESLog(finalMapping, dataSourceProperties);
+        XLog xTraces = new XESLogExtractor().extractLog(finalMapping, dataSourceProperties);
         // extract log
         new XesXmlGZIPSerializer().serialize(xTraces, new FileOutputStream(output));
         System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) / 1000 + "s");

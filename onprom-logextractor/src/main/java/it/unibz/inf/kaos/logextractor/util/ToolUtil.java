@@ -4,6 +4,7 @@ import org.deckfour.xes.model.XTrace;
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Comparator;
 
@@ -32,24 +33,25 @@ public class ToolUtil {
     //create File
     public static void createFile(File filename) {
         try {
-            if(!filename.exists()) {
+            if (!filename.exists()) {
                 filename.createNewFile();
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
         }
     }
+
     //write to file, append
-    public static boolean fileChaseWrite(String content,String filePath) {
+    public static boolean fileChaseWrite(String content, String filePath) {
         boolean flag = false;
         try {
-            FileWriter fw = new FileWriter(filePath,true);
+            FileWriter fw = new FileWriter(filePath, true);
             fw.write(content);
             fw.flush();
             fw.close();
-            flag=true;
-        }catch (Exception e) {
+            flag = true;
+        } catch (Exception e) {
             //
             e.printStackTrace();
         }
@@ -58,7 +60,7 @@ public class ToolUtil {
 
 
     //write to file, overwrite
-    public static boolean writeToFile(String content,String filePath) {
+    public static boolean writeToFile(String content, String filePath) {
         boolean flag = false;
         try {
             //file path
@@ -68,7 +70,7 @@ public class ToolUtil {
             pw.flush();
             pw.close();
             flag = true;
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return flag;
@@ -76,19 +78,19 @@ public class ToolUtil {
 
     //read the conent from file
     public static String readFromFile(File file) {
-        String sResult = "";
+        StringBuilder sResult = new StringBuilder();
         try {
-            InputStreamReader reader = new InputStreamReader(new FileInputStream(file),"utf-8");
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
             BufferedReader br = new BufferedReader(reader);
-            String s = null;
-            while((s=br.readLine()) != null) {
-               sResult += s +"\n";
+            String s;
+            while ((s = br.readLine()) != null) {
+                sResult.append(s).append("\n");
 //                System.out.println(s);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return sResult;
+        return sResult.toString();
     }
 
 

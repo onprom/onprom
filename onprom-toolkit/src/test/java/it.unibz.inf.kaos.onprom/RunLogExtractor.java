@@ -27,11 +27,10 @@
 package it.unibz.inf.kaos.onprom;
 
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
+import it.unibz.inf.kaos.logextractor.xes.XESLogExtractor;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
-import it.unibz.inf.ontop.protege.core.OBDAModel;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.deckfour.xes.out.XesXmlGZIPSerializer;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -81,7 +80,7 @@ public class RunLogExtractor {
                         SQLPPMapping finalMapping = new OBDAMapper(eventOntology, onpromOntology, firstMapping, dataSourceProperties, secondLevel).getOBDAModel();
                         // extract log
                         new XesXmlGZIPSerializer().serialize(
-                                new SimpleXESLogExtractor().extractXESLog(domainOntology, finalMapping, dataSourceProperties, firstLevel, eventOntology, secondLevel),
+                                new XESLogExtractor().extractLog(domainOntology, finalMapping, dataSourceProperties, firstLevel, eventOntology, secondLevel),
                                 new FileOutputStream(output)
                         );
                     } catch (Exception e) {

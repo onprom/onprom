@@ -26,10 +26,11 @@
 
 package it.unibz.inf.kaos.logextractor;
 
+import it.unibz.inf.kaos.logextractor.ocel.OCELFactory;
 import it.unibz.ocel.model.OcelAttribute;
+import it.unibz.ocel.model.OcelEvent;
 import it.unibz.ocel.model.OcelLog;
 import it.unibz.ocel.model.OcelTrace;
-import it.unibz.ocel.model.OcelEvent;
 import org.semanticweb.owlapi.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,7 @@ import java.util.Set;
  */
 public class EOToOCELLogConverter {
     private static final Logger logger = LoggerFactory.getLogger(EOToOCELLogConverter.class);
-    private final SimpleOCELFactory factory = new SimpleOCELFactory();
+    private final OCELFactory factory = new OCELFactory();
 
     public OcelLog convertToOCELLog(OWLOntology ontology) {
         HashMap<String, OcelAttribute> attributes = getAttributes(ontology);
@@ -94,7 +95,7 @@ public class EOToOCELLogConverter {
                 }
             }
             try {
-                attributes.put(individual.toString(), factory.createOcelAttribute(type, key, value, factory.getPredefinedOcelExtension(key)));
+                attributes.put(individual.toString(), factory.createAttribute(type, key, value, factory.getPredefinedExtension(key)));
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }

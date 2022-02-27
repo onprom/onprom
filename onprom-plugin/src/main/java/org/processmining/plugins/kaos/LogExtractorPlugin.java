@@ -28,9 +28,9 @@ package org.processmining.plugins.kaos;
 
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
 import it.unibz.inf.kaos.logextractor.EOToXESLogConverter;
-import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
-import it.unibz.inf.kaos.logextractor.XESConstants;
 import it.unibz.inf.kaos.logextractor.XOToXESLogConverter;
+import it.unibz.inf.kaos.logextractor.xes.XESConstants;
+import it.unibz.inf.kaos.logextractor.xes.XESLogExtractor;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.ontop.protege.core.OBDAModel;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
@@ -127,7 +127,7 @@ public class LogExtractorPlugin {
 
         try {
             context.getProgress().setIndeterminate(true);
-            xlog = new SimpleXESLogExtractor().extractXESLog(ontology, obdaModel, properties, annotationQueries);
+            xlog = new XESLogExtractor().extractLog(ontology, obdaModel, properties, annotationQueries);
             context.getFutureResult(0).setLabel("XES log extracted from DB");
         } catch (Exception e) {
             context.log(e);
@@ -167,7 +167,7 @@ public class LogExtractorPlugin {
                     datasourceProperties,
                     annotationQueries
             ).getOBDAModel();
-            xlog = new SimpleXESLogExtractor().extractXESLog(ebdaMapping, datasourceProperties);
+            xlog = new XESLogExtractor().extractLog(ebdaMapping, datasourceProperties);
             context.getFutureResult(0).setLabel("XES log extracted from DB");
         } catch (Exception e) {
             context.log(e);
@@ -199,7 +199,7 @@ public class LogExtractorPlugin {
 
         try {
             context.getProgress().setIndeterminate(true);
-            xlog = new SimpleXESLogExtractor().extractXESLog(ebdaMapping, datasourceProperties);
+            xlog = new XESLogExtractor().extractLog(ebdaMapping, datasourceProperties);
             context.getFutureResult(0).setLabel("XES log extracted from DB");
         } catch (Exception e) {
             context.log(e);
@@ -240,10 +240,10 @@ public class LogExtractorPlugin {
         context.getProgress().setIndeterminate(true);
 
         XLog xlog = null;
-        SimpleXESLogExtractor logExtractor = new SimpleXESLogExtractor();
+        XESLogExtractor logExtractor = new XESLogExtractor();
 
         try {
-            xlog = logExtractor.extractXESLog(
+            xlog = logExtractor.extractLog(
                     domainOnto, obdaModel, datasourceProperties, firstAnnoQueries, eventOntoVariant, secondAnnoQueries);
 
         } catch (Exception e) {

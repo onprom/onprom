@@ -28,13 +28,14 @@ package it.unibz.inf.kaos.ui.panel;
 
 import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
+import it.unibz.inf.kaos.logextractor.Extractor;
+import it.unibz.inf.kaos.logextractor.ocel.OCELLogExtractor;
+import it.unibz.inf.kaos.logextractor.xes.XESLogExtractor;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.onprom.OnpromToolkit;
 import it.unibz.inf.kaos.ui.component.TreeNode;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorButtons;
-import it.unibz.inf.ontop.protege.core.OBDAModel;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import it.unibz.inf.ontop.spec.mapping.serializer.impl.OntopNativeMappingSerializer;
 import org.deckfour.xes.model.XLog;
@@ -58,6 +59,10 @@ public class ExtractionPanel extends JPanel {
     }
 
     private void initUI(OnpromToolkit toolkit) {
+        Extractor[] finalOutputs = {
+                new XESLogExtractor(),
+                new OCELLogExtractor()
+        };
         Set<TreeNode<Object>> resources = toolkit.getResourceNodes();
         setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
@@ -75,7 +80,7 @@ public class ExtractionPanel extends JPanel {
         add(UIUtility.createLabel("OBDA mappings:", null), gridBagConstraints);
         gridBagConstraints.gridx = 1;
         JComboBox<TreeNode<Object>> cmbMappings = UIUtility.createWideComboBox(resources.stream().filter(a ->
-                a.getUserObject() instanceof OBDAModel), CMB_DIMENSION, null, false, true);
+                a.getUserObject() instanceof SQLPPMapping), CMB_DIMENSION, null, false, true);
         add(cmbMappings, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
@@ -89,27 +94,34 @@ public class ExtractionPanel extends JPanel {
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        add(UIUtility.createLabel("Custom event ontology:", null), gridBagConstraints);
+        add(UIUtility.createLabel("Domain ontology Annotations:", null), gridBagConstraints);
         gridBagConstraints.gridx = 1;
-        JComboBox<TreeNode<Object>> cmbEventOntology = UIUtility.createWideComboBox(resources.stream().filter(a ->
+        JComboBox<TreeNode<Object>> cmbDomainAnnotations = UIUtility.createWideComboBox(resources.stream().filter(a ->
+                a.getUserObject() instanceof AnnotationQueries), CMB_DIMENSION, null, false, true);
+        add(cmbDomainAnnotations, gridBagConstraints);
+
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        add(UIUtility.createLabel("Custom target ontology:", null), gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        JComboBox<TreeNode<Object>> cmbTargetOntology = UIUtility.createWideComboBox(resources.stream().filter(a ->
                 a.getUserObject() instanceof OWLOntology), CMB_DIMENSION, null, false, true);
-        add(cmbEventOntology, gridBagConstraints);
+        add(cmbTargetOntology, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        add(UIUtility.createLabel("Domain to event ontology Annotations:", null), gridBagConstraints);
+        add(UIUtility.createLabel("Target ontology annotations:", null), gridBagConstraints);
         gridBagConstraints.gridx = 1;
-        JComboBox<TreeNode<Object>> cmbEventAnnotations = UIUtility.createWideComboBox(resources.stream().filter(a ->
+        JComboBox<TreeNode<Object>> cmbTargetAnnotations = UIUtility.createWideComboBox(resources.stream().filter(a ->
                 a.getUserObject() instanceof AnnotationQueries), CMB_DIMENSION, null, false, true);
-        add(cmbEventAnnotations, gridBagConstraints);
+        add(cmbTargetAnnotations, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        add(UIUtility.createLabel("Event to XES ontology annotations:", null), gridBagConstraints);
+        add(UIUtility.createLabel("Final output target:", null), gridBagConstraints);
         gridBagConstraints.gridx = 1;
-        JComboBox<TreeNode<Object>> cmbXESAnnotations = UIUtility.createWideComboBox(resources.stream().filter(a ->
-                a.getUserObject() instanceof AnnotationQueries), CMB_DIMENSION, null, false, true);
-        add(cmbXESAnnotations, gridBagConstraints);
+        JComboBox<Extractor> cmbFinalOutput = UIUtility.createWideComboBox(finalOutputs, CMB_DIMENSION, null, false, false);
+        add(cmbFinalOutput, gridBagConstraints);
 
         JPanel buttonPanel = new JPanel();
         gridBagConstraints.gridx = 0;
@@ -120,25 +132,28 @@ public class ExtractionPanel extends JPanel {
             try {
                 XLog xlog = null;
                 long start = System.currentTimeMillis();
-                if (cmbEventOntology.getSelectedIndex() > -1) {
-                    if (cmbDomainOntology.getSelectedIndex() < -1 || cmbEventOntology.getSelectedIndex() < -1 || cmbMappings.getSelectedIndex() < -1 || cmbDSProperties.getSelectedIndex() < -1 || cmbEventAnnotations.getSelectedIndex() < -1 || cmbXESAnnotations.getSelectedIndex() < -1) {
-                        UIUtility.error("Please select domain ontology, OBDA mappings, Datasource Properties, custom event ontology, domain to event ontology annotations and event to XES ontology annotations!");
+                if (cmbTargetOntology.getSelectedIndex() > -1) {
+                    if (cmbDomainOntology.getSelectedIndex() < -0 || cmbTargetOntology.getSelectedIndex() < 0 || cmbMappings.getSelectedIndex() < 0 || cmbDSProperties.getSelectedIndex() < 0 || cmbDomainAnnotations.getSelectedIndex() < 0 || cmbTargetAnnotations.getSelectedIndex() < 0) {
+                        UIUtility.error("Please select domain ontology, OBDA mappings, Datasource Properties, target ontology, domain ontology annotations and target ontology annotations!");
                     } else {
-                        xlog = new SimpleXESLogExtractor().extractXESLog(
+                        xlog = (XLog) cmbFinalOutput.getItemAt(cmbFinalOutput.getSelectedIndex()).extractLog(
                                 (OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(),
                                 (SQLPPMapping) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
                                 (Properties) cmbDSProperties.getItemAt(cmbDSProperties.getSelectedIndex()).getUserObject(),
-                                (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject(),
-                                (OWLOntology) cmbEventOntology.getItemAt(cmbEventOntology.getSelectedIndex()).getUserObject(),
-                                (AnnotationQueries) cmbXESAnnotations.getItemAt(cmbXESAnnotations.getSelectedIndex()).getUserObject()
+                                (AnnotationQueries) cmbDomainAnnotations.getItemAt(cmbDomainAnnotations.getSelectedIndex()).getUserObject(),
+                                (OWLOntology) cmbTargetOntology.getItemAt(cmbTargetOntology.getSelectedIndex()).getUserObject(),
+                                (AnnotationQueries) cmbTargetAnnotations.getItemAt(cmbTargetAnnotations.getSelectedIndex()).getUserObject()
                         );
                     }
-                } else if (cmbDomainOntology.getSelectedIndex() < -1 || cmbMappings.getSelectedIndex() < -1 || cmbDSProperties.getSelectedIndex() < -1 || cmbEventAnnotations.getSelectedIndex() < -1) {
+                } else if (cmbDomainOntology.getSelectedIndex() < 0 || cmbMappings.getSelectedIndex() < 0 || cmbDSProperties.getSelectedIndex() < 0 || cmbDomainAnnotations.getSelectedIndex() < 0) {
                     UIUtility.error("Please select domain ontology, OBDA mappings, Datasource properties, custom event ontology, domain to event ontology annotations and event to XES ontology annotations!");
                 } else {
-                    xlog = new SimpleXESLogExtractor().extractXESLog((OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(), (SQLPPMapping) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
+                    xlog = (XLog) cmbFinalOutput.getItemAt(cmbFinalOutput.getSelectedIndex()).extractLog(
+                            (OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(),
+                            (SQLPPMapping) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
                             (Properties) cmbDSProperties.getItemAt(cmbDSProperties.getSelectedIndex()).getUserObject(),
-                            (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject());
+                            (AnnotationQueries) cmbDomainAnnotations.getItemAt(cmbDomainAnnotations.getSelectedIndex()).getUserObject()
+                    );
                 }
                 if (xlog != null) {
                     logger.debug(String.format("EXTRACTION TOOK %s SECONDS", (System.currentTimeMillis() - start) / 1000));
@@ -152,9 +167,9 @@ public class ExtractionPanel extends JPanel {
         buttonPanel.add(UIUtility.createButton(UMLEditorButtons.RESET, e -> {
             cmbDomainOntology.setSelectedIndex(-1);
             cmbMappings.setSelectedIndex(-1);
-            cmbEventOntology.setSelectedIndex(-1);
-            cmbEventAnnotations.setSelectedIndex(-1);
-            cmbXESAnnotations.setSelectedIndex(-1);
+            cmbTargetOntology.setSelectedIndex(-1);
+            cmbDomainAnnotations.setSelectedIndex(-1);
+            cmbTargetAnnotations.setSelectedIndex(-1);
             removeAll();
             initUI(toolkit);
             revalidate();
@@ -162,15 +177,15 @@ public class ExtractionPanel extends JPanel {
         }, null), gridBagConstraints);
         buttonPanel.add(UIUtility.createButton(UMLEditorButtons.EXPORT_OBDA, event -> {
             try {
-                if (cmbDomainOntology.getSelectedIndex() < -1 || cmbEventOntology.getSelectedIndex() < -1 || cmbMappings.getSelectedIndex() < -1 || cmbDSProperties.getSelectedIndex() < -1 || cmbEventAnnotations.getSelectedIndex() < -1) {
-                    UIUtility.error("Please select domain ontology, OBDA mappings, custom event ontology and domain to event ontology annotations!");
+                if (cmbDomainOntology.getSelectedIndex() < 0 || cmbTargetOntology.getSelectedIndex() < 0 || cmbMappings.getSelectedIndex() < 0 || cmbDSProperties.getSelectedIndex() < 0 || cmbDomainAnnotations.getSelectedIndex() < 0) {
+                    UIUtility.error("Please select domain ontology, OBDA mappings, Datasource properties, target ontology and target ontology annotations!");
                 } else {
                     SQLPPMapping model = new OBDAMapper(
                             (OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(),
-                            (OWLOntology) cmbEventOntology.getItemAt(cmbEventOntology.getSelectedIndex()).getUserObject(),
+                            (OWLOntology) cmbTargetOntology.getItemAt(cmbTargetOntology.getSelectedIndex()).getUserObject(),
                             (SQLPPMapping) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
                             (Properties) cmbDSProperties.getItemAt(cmbDSProperties.getSelectedIndex()).getUserObject(),
-                            (AnnotationQueries) cmbEventAnnotations.getItemAt(cmbEventAnnotations.getSelectedIndex()).getUserObject()
+                            (AnnotationQueries) cmbDomainAnnotations.getItemAt(cmbDomainAnnotations.getSelectedIndex()).getUserObject()
                     ).getOBDAModel();
                     UIUtility.selectFileToOpen(FileType.MAPPING).ifPresent(file -> {
                         try {

@@ -24,7 +24,7 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.logextractor;
+package it.unibz.inf.kaos.logextractor.ocel;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -59,7 +59,7 @@ public class OCELConstants {
     static final String qTraceEvt_SimpleAnsVarTrace = "trace";
     static final String qEvt_SimpleAnsVarEvent = "event";
     static final String qEvt_SimpleAnsVarObject = "object";
-//    private static final String eventOntoPrefix = "http://www.example.com/dolibarr/";
+    //    private static final String eventOntoPrefix = "http://www.example.com/dolibarr/";
     private static final String eventOntoPrefix = "http://onprom.inf.unibz.it/ocel/";
     //====================================================================================================
     private static final String ATTRIBUTE_CONCEPT = "<" + eventOntoPrefix + "Attribute" + ">";

@@ -27,7 +27,7 @@
 package it.unibz.inf.kaos.onprom;
 
 import it.unibz.inf.kaos.data.query.AnnotationQueries;
-import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
+import it.unibz.inf.kaos.logextractor.xes.XESLogExtractor;
 import it.unibz.inf.kaos.obdamapper.OBDAMapper;
 import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
@@ -81,9 +81,9 @@ public class OneLevelExtractionTest {
                 IOUtility.readJSON(queriesFile, AnnotationQueries.class).ifPresent(firstLevel -> {
                     try {
                         //generate final mapping
-                        SQLPPMapping firstMapping = new OBDAMapper(domainOntology, SimpleXESLogExtractor.getDefaultEventOntology(), obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
+                        SQLPPMapping firstMapping = new OBDAMapper(domainOntology, XESLogExtractor.getDefaultEventOntology(), obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
                         OntopUtility.saveModel(firstMapping, generatedMappingsFile);
-                        XLog xTraces = new SimpleXESLogExtractor().extractXESLog(firstMapping, dataSourceProperties);
+                        XLog xTraces = new XESLogExtractor().extractLog(firstMapping, dataSourceProperties);
                         // extract log
                         new XesXmlGZIPSerializer().serialize(xTraces, new FileOutputStream(output));
                     } catch (Exception e) {

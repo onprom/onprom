@@ -24,17 +24,12 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.logextractor;
+package it.unibz.inf.kaos.logextractor.xes;
 
-import it.unibz.inf.kaos.obdamapper.utility.OntopUtility;
-import it.unibz.inf.ontop.injection.OntopSQLOWLAPIConfiguration;
-import it.unibz.inf.ontop.owlapi.OntopOWLFactory;
-import it.unibz.inf.ontop.owlapi.OntopOWLReasoner;
-import it.unibz.inf.ontop.owlapi.connection.OntopOWLConnection;
+import it.unibz.inf.kaos.logextractor.EBDAReasoner;
 import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
 import it.unibz.inf.ontop.owlapi.resultset.OWLBindingSet;
 import it.unibz.inf.ontop.owlapi.resultset.TupleOWLResultSet;
-import it.unibz.inf.ontop.protege.core.OBDAModel;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.model.XAttribute;
@@ -43,7 +38,7 @@ import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.model.impl.XAttributeMapImpl;
 import org.deckfour.xes.model.impl.XEventImpl;
 import org.deckfour.xes.model.impl.XTraceImpl;
-import org.semanticweb.owlapi.model.OWLException;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,61 +47,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-class SimpleEBDAReasoner {
-    private static final Logger logger = LoggerFactory.getLogger(SimpleEBDAReasoner.class);
+class XESEBDAReasoner extends EBDAReasoner<XAttribute, XEvent, XTrace> {
+    private static final Logger logger = LoggerFactory.getLogger(XESEBDAReasoner.class);
 
-    private OntopOWLReasoner reasoner;
-    private SimpleXESFactory factory;
-    private OntopOWLConnection connection;
+    private final XESFactory factory;
 
-    SimpleEBDAReasoner(SQLPPMapping obdaModel, Properties dataSourceProperties, SimpleXESFactory factory) {
-        try {
-            this.factory = factory;
-            OntopSQLOWLAPIConfiguration config = OntopUtility.getConfiguration(
-                    XESConstants.getDefaultEventOntology(),
-                    obdaModel,
-                    dataSourceProperties
-            );
-            this.reasoner = OntopOWLFactory.defaultFactory().createReasoner(config);
-            this.connection = this.reasoner.getConnection();
-            // fix for large query results
-            this.connection.setAutoCommit(false);
-        } catch (OWLException e) {
-            throw new RuntimeException(e);
-        }
+    XESEBDAReasoner(SQLPPMapping obdaModel, Properties dataSourceProperties, XESFactory factory) throws OWLOntologyCreationException {
+        super(obdaModel, dataSourceProperties, XESConstants.getDefaultEventOntology());
+        this.factory = factory;
     }
 
-    private OntopOWLStatement getStatement() throws Exception {
-        // fix for large query results
-        // st.setFetchSize(1000000);
-        return connection.createStatement();
+    public boolean printUnfoldedQueries() {
+        return super.printUnfoldedQueries(new String[]{
+                XESConstants.qAttTypeKeyVal_Simple,
+                XESConstants.qEvtAtt_Simple,
+                XESConstants.qTraceAtt_Simple,
+                XESConstants.qTraceEvt_Simple
+        });
     }
 
-    boolean printUnfoldedQueries() {
-        try {
-            OntopOWLStatement st = getStatement();
-            // Unfold queries
-            st.getRewritingRendering(XESConstants.qAttTypeKeyVal_Simple);
-            st.getRewritingRendering(XESConstants.qEvtAtt_Simple);
-            st.getRewritingRendering(XESConstants.qTraceAtt_Simple);
-            st.getRewritingRendering(XESConstants.qTraceEvt_Simple);
-            return true;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return false;
-        }
-    }
 
-    void dispose() {
-        try {
-            connection.close();
-            reasoner.dispose();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    Map<String, XAttribute> getAttributes() {
+    @Override
+    protected Map<String, XAttribute> getAttributes() {
         Map<String, XAttribute> attributes = new HashMap<>();
         try {
             OntopOWLStatement st = getStatement();
@@ -123,8 +85,8 @@ class SimpleEBDAReasoner {
                     String value = result.getOWLLiteral(XESConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
 
                     if (!attributes.containsKey(attributeKey)) {
-                        XExtension extension = factory.getPredefinedXExtension(key);
-                        XAttribute attribute = factory.createXAttribute(type, key, value, extension);
+                        XExtension extension = factory.getPredefinedExtension(key);
+                        XAttribute attribute = factory.createAttribute(type, key, value, extension);
                         if (attribute != null) {
                             attributes.put(attributeKey, attribute);
                         }
@@ -143,7 +105,8 @@ class SimpleEBDAReasoner {
         return attributes;
     }
 
-    Map<String, XEvent> getEvents(Map<String, XAttribute> attributes) {
+    @Override
+    protected Map<String, XEvent> getEvents(Map<String, XAttribute> attributes) {
         Map<String, XEvent> events = new HashMap<>();
         try {
             OntopOWLStatement st = getStatement();
@@ -184,7 +147,8 @@ class SimpleEBDAReasoner {
         return events;
     }
 
-    Collection<XTrace> getTraces(Map<String, XEvent> events, Map<String, XAttribute> attributes) {
+    @Override
+    protected Collection<XTrace> getObjects(Map<String, XEvent> events, Map<String, XAttribute> attributes) {
         Map<String, XTrace> traces = new HashMap<>();
         try {
             OntopOWLStatement st = getStatement();
@@ -258,10 +222,10 @@ class SimpleEBDAReasoner {
         }
 
 
-      //  Collection<XTrace> sortedTraces = ToolUtil.sortTrace(traces.values(), "time:timestamp");
+        //  Collection<XTrace> sortedTraces = ToolUtil.sortTrace(traces.values(), "time:timestamp");
 
         return traces.values();
-      //  return sortedTraces;
+        //  return sortedTraces;
     }
 
 }

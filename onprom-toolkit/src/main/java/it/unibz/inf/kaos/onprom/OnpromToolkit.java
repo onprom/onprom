@@ -33,7 +33,6 @@ import it.unibz.inf.kaos.dynamic.DynamicAnnotationEditor;
 import it.unibz.inf.kaos.interfaces.AnnotationEditorListener;
 import it.unibz.inf.kaos.interfaces.Diagram;
 import it.unibz.inf.kaos.interfaces.DiagramShape;
-import it.unibz.inf.kaos.logextractor.SimpleXESLogExtractor;
 import it.unibz.inf.kaos.ui.component.*;
 import it.unibz.inf.kaos.ui.form.InformationDialog;
 import it.unibz.inf.kaos.ui.panel.DatasourcePropertiesPanel;
@@ -43,8 +42,6 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.uml.UMLEditor;
 import it.unibz.inf.kaos.utility.ToolkitMessages;
 import it.unibz.inf.kaos.utility.VersionUtility;
-import it.unibz.inf.ontop.protege.core.OBDAModel;
-import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -55,7 +52,6 @@ import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
-import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
@@ -197,11 +193,8 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         JMenuItem dynamicItem = new JMenuItem("Open Dynamic Annotation Editor", KeyEvent.VK_D);
         dynamicItem.addActionListener(e -> UIUtility.executeInBackground(this::displayDynamicAnnotationEditor, progressBar));
         mnTools.add(dynamicItem);
-        JMenuItem exportItem = new JMenuItem("Export Log", KeyEvent.VK_E);
-        exportItem.addActionListener(e -> UIUtility.executeInBackground(this::exportLog, progressBar));
-        mnTools.add(exportItem);
-        JMenuItem showExportItem = new JMenuItem("Advanced Export", KeyEvent.VK_D);
-        showExportItem.addActionListener(e -> UIUtility.executeInBackground(this::showExportDiagram, progressBar));
+        JMenuItem showExportItem = new JMenuItem("Export Log", KeyEvent.VK_E);
+        showExportItem.addActionListener(e -> UIUtility.executeInBackground(this::showExportPanel, progressBar));
         mnTools.add(showExportItem);
         menuBar.add(mnTools);
 
@@ -261,7 +254,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         );
     }
 
-    private void showExportDiagram() {
+    private void showExportPanel() {
         showInternalFrame(new InternalFrame(new ExtractionPanel(this)));
     }
 
@@ -281,44 +274,6 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         windows.add(internalFrame.getTitle(), FileType.OTHER, internalFrame);
     }
 
-    private void exportLog() {
-        TreePath[] paths = objects.getSelectionPaths();
-        if (paths != null) {
-            OWLOntology ontology = null;
-            SQLPPMapping model = null;
-            AnnotationQueries queries = null;
-            Properties properties = null;
-            for (TreePath path : paths) {
-                Object object = ((TreeNode) path.getLastPathComponent()).getUserObject();
-                if (object instanceof OWLOntology) {
-                    ontology = (OWLOntology) object;
-                }
-                if (object instanceof Properties) {
-                    properties = (Properties) object;
-                }
-                if (object instanceof SQLPPMapping) {
-                    model = (SQLPPMapping) object;
-                }
-                if (object instanceof AnnotationQueries) {
-                    queries = (AnnotationQueries) object;
-                }
-            }
-            if (ontology != null && model != null && queries != null && properties != null) {
-                try {
-                    long start = System.currentTimeMillis();
-                    XLog xlog = new SimpleXESLogExtractor().extractXESLog(ontology, model,
-                            properties,
-                            queries);
-                    logger.debug(String.format("EXTRACTION TOOK %s SECONDS", (System.currentTimeMillis() - start) / 1000));
-                    displayLogSummary(xlog);
-                } catch (Exception e) {
-                    logError(e);
-                }
-            } else {
-                InformationDialog.display("Please select Ontology, Mapping and Queries to start log exporting!");
-            }
-        }
-    }
 
     public void displayLogSummary(XLog xlog) {
         displayLogSummary(objects.addObject("Extracted Log", FileType.XLOG, xlog));

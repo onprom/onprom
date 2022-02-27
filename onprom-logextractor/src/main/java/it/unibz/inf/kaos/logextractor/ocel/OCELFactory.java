@@ -24,8 +24,9 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.kaos.logextractor;
+package it.unibz.inf.kaos.logextractor.ocel;
 
+import it.unibz.inf.kaos.logextractor.Factory;
 import it.unibz.ocel.extension.OcelExtension;
 import it.unibz.ocel.extension.std.OcelConceptExtension;
 import it.unibz.ocel.extension.std.OcelTimeExtension;
@@ -38,15 +39,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class SimpleOCELFactory extends OcelFactoryLiteImpl {
+public class OCELFactory extends OcelFactoryLiteImpl implements Factory<OcelAttribute, OcelExtension, OcelLog> {
     SimpleDateFormat WITH_T = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     SimpleDateFormat WITHOUT_T = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat ONLY_DATE = new SimpleDateFormat("yyyy-MM-dd");
 
-    public OcelAttribute createOcelAttribute(String type, String key, String value, OcelExtension extension) throws ParseException {
+    public OcelAttribute createAttribute(String type, String key, String value, OcelExtension extension) throws ParseException {
 
         if (type != null && key != null && value != null) {
-            if (type.toLowerCase().equals("timestamp")) {
+            if (type.equalsIgnoreCase("timestamp")) {
                 // we assume that the timestamp is in format yyyy-[m]m-[d]d hh:mm:ss[.f...].
                 // The fractional seconds may be omitted. The leading zero for mm and dd may also be omitted.
                 Date date;
@@ -67,7 +68,7 @@ public class SimpleOCELFactory extends OcelFactoryLiteImpl {
         return null;
     }
 
-    public OcelExtension getPredefinedOcelExtension(String key) {
+    public OcelExtension getPredefinedExtension(String key) {
         if (key != null) {
             switch (key.toLowerCase()) {
                 case "timestamp":

@@ -26,6 +26,7 @@
 
 package it.unibz.inf.kaos.logextractor;
 
+import it.unibz.inf.kaos.logextractor.xes.XESFactory;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
@@ -40,7 +41,7 @@ import java.util.Set;
 
 public class XOToXESLogConverter {
     private static final Logger logger = LoggerFactory.getLogger(XOToXESLogConverter.class);
-    private final SimpleXESFactory factory = new SimpleXESFactory();
+    private final XESFactory factory = new XESFactory();
 
     public XLog convertToXESLog(OWLOntology ontology) {
         HashMap<String, XAttribute> attributes = getAttributes(ontology);
@@ -88,7 +89,7 @@ public class XOToXESLogConverter {
                 }
             }
             try {
-                attributes.put(individual.toString(), factory.createXAttribute(type, key, value, factory.getPredefinedXExtension(key)));
+                attributes.put(individual.toString(), factory.createAttribute(type, key, value, factory.getPredefinedExtension(key)));
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }

@@ -29,7 +29,6 @@ package it.unibz.inf.kaos.obdamapper;
 import ch.qos.logback.classic.Logger;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Streams;
 import com.google.inject.Injector;
 import it.unibz.inf.kaos.data.query.*;
 import it.unibz.inf.kaos.obdamapper.utility.OBDAMappingUtility;
@@ -76,10 +75,10 @@ public class OBDAMapper {
     
     private final List<OntopNativeSQLPPTriplesMap> triplesMaps;
     private final PrefixManager prefixManager;
-    private OntopOWLStatement statement;
+    private final OntopOWLStatement statement;
     private final TargetQueryParser textParser;
     private final SQLPPSourceQueryFactory sourceQueryFactory;
-    private SQLPPMappingFactory ppMappingFactory;
+    private final SQLPPMappingFactory ppMappingFactory;
 
     public OBDAMapper(
             OWLOntology sourceOntology, OWLOntology targetOntology, SQLPPMapping sourceObdaModel, Properties dataSourceProperties, AnnotationQueries annotationQueries) {
@@ -108,7 +107,7 @@ public class OBDAMapper {
     }
 
     public SQLPPMapping getOBDAModel() {
-        ImmutableList<SQLPPTriplesMap> collect = triplesMaps.stream().collect(ImmutableList.toImmutableList());
+        ImmutableList<SQLPPTriplesMap> collect = ImmutableList.copyOf(triplesMaps);
         return ppMappingFactory.createSQLPreProcessedMapping(collect, this.prefixManager);
     }
 
@@ -169,8 +168,7 @@ public class OBDAMapper {
                 .filter(e -> e.getValue() instanceof RDFLiteralConstant)
                 .map(e -> new SimpleEntry<>(e.getKey().getName(), ImmutableList.of(e.getValue())));
 
-        Map<String, List<ImmutableTerm>> m =
-                Streams.concat(m1, m2).collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+        Map<String, List<ImmutableTerm>> m = Stream.concat(m1, m2).collect(Collectors.toMap(Entry::getKey, Entry::getValue));
 
         return new OntopReformulationResult(sqlQuery, m);
     }
@@ -217,8 +215,8 @@ public class OBDAMapper {
             logger.info("Add a mapping to an OBJECT PROPERTY");
 
             targetQuery = String.format(objPropTripleTemplate,
-                    OBDAMappingUtility.cleanURI(firstURITemplate.toString()),
-                    targetEntity.toString(),
+                    OBDAMappingUtility.cleanURI(firstURITemplate),
+                    targetEntity,
                     OBDAMappingUtility.cleanURI(secondURITemplate.toString()));
 
         } else if (targetEntity.isOWLDataProperty()) {
@@ -234,8 +232,8 @@ public class OBDAMapper {
             secondURITemplate.append(dataType);
 
             targetQuery = String.format(dataPropTripleTemplate,
-                    OBDAMappingUtility.cleanURI(firstURITemplate.toString()),
-                    targetEntity.toString(),
+                    OBDAMappingUtility.cleanURI(firstURITemplate),
+                    targetEntity,
                     secondURITemplate);
         }
         if (!query.equals("") &&
@@ -293,7 +291,7 @@ public class OBDAMapper {
         logger.info("Add a mapping to a CONCEPT");
 
         String targetQuery = String.format(conceptTripleTemplate,
-                OBDAMappingUtility.cleanURI(uriTemplate.toString()), targetEntity.toString());
+                OBDAMappingUtility.cleanURI(uriTemplate), targetEntity);
 
         if (!query.equals("") && targetQuery != null && !targetQuery.equals("")) {
             this.addMapping(result.sqlString, targetQuery);
