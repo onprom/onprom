@@ -2,8 +2,7 @@ name: Development release
 
 on:
   push:
-    branches:
-      - develop
+    branches: [ $default-branch ]
 
 jobs:
   build:
@@ -17,7 +16,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
-    - name: Build project with Maven
+        cache: maven
+    - name: Build project
       run: mvn clean install
     - name: Get version
       id: project
