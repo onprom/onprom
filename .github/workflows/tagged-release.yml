@@ -7,8 +7,9 @@ on:
 
 jobs:
   build:
-    name: Build tagged release
+  
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
