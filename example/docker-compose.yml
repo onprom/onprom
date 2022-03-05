@@ -9,9 +9,8 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: conference
     volumes:
-      - ./conference.sql.tar.gz:/docker-entrypoint-initdb.d/0-database.sql.tar.gz
-      # Uncomment the following line to persist
-      #- ./postgresql-data:/var/lib/postgresql/data
+      - ./conference.sql.gz:/docker-entrypoint-initdb.d/0-conference.sql.gz
+      - ./postgresql-data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres", "||", "exit", "1" ]
       timeout: 30s

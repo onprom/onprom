@@ -3,8 +3,9 @@
 ## Initialization
 
 1. Start PostgreSQL database by one the following options:
-   1. Start a Docker container with [Docker Compose](https://docs.docker.com/compose/) using [docker-compose.yml](./docker-compose.yml) file
-   2. Restore the database in your database using [conference.sql.tar.gz](./conference.sql.tar.gz) file
+   1. Start a Docker container with [Docker Compose](https://docs.docker.com/compose/)
+      using [docker-compose.yml](./docker-compose.yml) file
+   2. Restore the database in your database using [conference.sql.gz](./conference.sql.gz) file
 2. Run onprom toolkit using the following command: `java -jar onprom-toolkit-2.0.jar` (you can also start from [onprom-toolkit](../onprom-toolkit) module)
 
 ## Extraction using Default XES Event Ontology
