@@ -227,7 +227,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     public void displayPropertiesEditor(TreeNode<Object> node) {
         node.getUserObjectProvider().ifPresent(selectedObject -> {
             if (selectedObject instanceof Properties) {
-                showInternalFrame(new InternalFrame(new DatasourcePropertiesPanel((Properties) selectedObject)));
+                showInternalFrame(new InternalFrame("Database Properties", new DatasourcePropertiesPanel((Properties) selectedObject)));
             }
         });
     }
@@ -255,7 +255,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     }
 
     private void showExportPanel() {
-        showInternalFrame(new InternalFrame(new ExtractionPanel(this)));
+        showInternalFrame(new InternalFrame("Log Extraction", new ExtractionPanel(this)));
     }
 
     private void showInternalFrame(JInternalFrame internalFrame) {

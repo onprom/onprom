@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+
+  database:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: conference
+    volumes:
+      - ./conference.sql.tar.gz:/docker-entrypoint-initdb.d/0-database.sql.tar.gz
+      # Uncomment the following line to persist
+      #- ./postgresql-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres", "||", "exit", "1" ]
+      timeout: 30s
+      interval: 60s
+    ports:
+      - "5432:5432"

@@ -29,8 +29,8 @@ package it.unibz.inf.kaos.ui.component;
 import javax.swing.*;
 
 public class InternalFrame extends JInternalFrame {
-    public InternalFrame(JPanel panel) {
-        super("", true, true, true, true);
+    public InternalFrame(String title, JPanel panel) {
+        super(title, true, true, true, true);
         setContentPane(panel);
         this.pack();
         this.setVisible(true);
