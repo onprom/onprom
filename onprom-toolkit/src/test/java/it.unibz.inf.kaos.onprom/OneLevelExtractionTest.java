@@ -44,58 +44,39 @@ import java.util.Properties;
 
 public class OneLevelExtractionTest {
 
-    public static void main(String[] args) {
-        try {
-            long start = System.currentTimeMillis();
-            // prepare files
-            if (args.length < 1) {
-                System.out.println("Please use by providing folder of the files");
-                System.exit(-1);
-            }
-            String folder = args[0];
-            File domainMappingsFile = new File(folder + "conference.obda");
-            File propertiesFile = new File(folder + "conference.properties");
-            File domainOntologyFile = new File(folder + "conference.owl");
-            File queriesFile = new File(folder + "conference.aqr");
-            // generate output file names
-            //String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName() + System.currentTimeMillis();
-            String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName();
-            // redirect console output to a text file
-//            PrintStream out = new PrintStream(new FileOutputStream(outputFileName + ".txt"));
-//            System.setOut(out);
-            // prepare XES log output file
-            File generatedMappingsFile = new File(outputFileName + "_generated.obda");
-            File output = new File(outputFileName + ".xes.gz");
-            // load mappings
-            //Properties dataSourceProperties = OntopUtility.getDataSourceProperties(domainMappingsFile);
-            Properties dataSourceProperties = new Properties();
-            dataSourceProperties.load(new FileReader(propertiesFile));
-            //Properties dataSourceProperties = OntopUtility.getDataSourceProperties(domainMappingsFile);
-            SQLPPMapping obdaModel = OntopUtility.getOBDAModel(domainMappingsFile, propertiesFile);
-            // load ontologies
-            OWLOntology domainOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(domainOntologyFile);
-            OWLOntology onpromOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(OneLevelExtractionTest.class.getResourceAsStream("/eo-onprom.owl"));
-            // start extraction process
-            output.delete();
-            if (output.createNewFile()) {
-                IOUtility.readJSON(queriesFile, AnnotationQueries.class).ifPresent(firstLevel -> {
-                    try {
-                        //generate final mapping
-                        SQLPPMapping firstMapping = new OBDAMapper(domainOntology, XESLogExtractor.getDefaultEventOntology(), obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
-                        OntopUtility.saveModel(firstMapping, generatedMappingsFile);
-                        XLog xTraces = new XESLogExtractor().extractLog(firstMapping, dataSourceProperties);
-                        // extract log
-                        new XesXmlGZIPSerializer().serialize(xTraces, new FileOutputStream(output));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
-            System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) / 1000 + "s");
-            System.exit(0);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
+    public static void main(String[] args) throws Exception {
+        long start = System.currentTimeMillis();
+        // Assuming script is started in project folder
+        String folder = new File("./example/").getCanonicalPath() + "/";
+        if (args.length > 0) {
+            // It is possible to give a different folder
+            folder = args[0];
         }
+        // prepare files
+        File domainMappingsFile = new File(folder + "conference.obda");
+        File propertiesFile = new File(folder + "conference.properties");
+        File domainOntologyFile = new File(folder + "conference.owl");
+        File queriesFile = new File(folder + "conference.aqr");
+        // prepare output files
+        String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName();
+        File generatedMappingsFile = new File(outputFileName + "_generated.obda");
+        File output = new File(outputFileName + ".xes.gz");
+        // load mappings
+        Properties dataSourceProperties = new Properties();
+        dataSourceProperties.load(new FileReader(propertiesFile));
+        SQLPPMapping obdaModel = OntopUtility.getOBDAModel(domainMappingsFile, propertiesFile);
+        // load domain ontology
+        OWLOntology domainOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(domainOntologyFile);
+        // load annotation queries
+        AnnotationQueries firstLevel = IOUtility.readJSON(queriesFile, AnnotationQueries.class)
+                .orElseThrow(IllegalArgumentException::new);
+        // generate new mapping
+        SQLPPMapping newMapping = new OBDAMapper(domainOntology, XESLogExtractor.getDefaultEventOntology(), obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
+        OntopUtility.saveModel(newMapping, generatedMappingsFile);
+        // extract log
+        XLog xTraces = new XESLogExtractor().extractLog(newMapping, dataSourceProperties);
+        // serialize extracted log
+        new XesXmlGZIPSerializer().serialize(xTraces, new FileOutputStream(output));
+        System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) / 1000 + "s");
     }
 }

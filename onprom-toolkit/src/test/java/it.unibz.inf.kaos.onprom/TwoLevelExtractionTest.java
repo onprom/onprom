@@ -36,69 +36,54 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.out.XesXmlGZIPSerializer;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.Properties;
 
 public class TwoLevelExtractionTest {
 
-    public static void main(String[] args) throws OWLOntologyCreationException, IOException {
+    public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
-        // prepare files
-        if (args.length < 1) {
-            System.out.println("Please use by providing folder of the files");
-            System.exit(-1);
+        // Assuming script is started in project folder
+        String folder = new File("./example/").getCanonicalPath() + "/";
+        if (args.length > 0) {
+            // It is possible to give a different folder
+            folder = args[0];
         }
-        String folder = args[0];
+        // prepare files
         File domainMappingsFile = new File(folder + "conference.obda");
         File domainOntologyFile = new File(folder + "conference.owl");
         File eventOntologyFile = new File(folder + "custom-eo.owl");
-        File firstLevelFile = new File(folder + "level1.aqr");
-        File secondLevelFile = new File(folder + "level2.aqr");
-        // generate output file names
-        //String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName() + System.currentTimeMillis();
+        File firstLevelFile = new File(folder + "conference-lvl1.aqr");
+        File secondLevelFile = new File(folder + "conference-lvl2.aqr");
+        // prepare output files
         String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName();
-        // redirect console output to a text file
-//            PrintStream out = new PrintStream(new FileOutputStream(outputFileName + ".txt"));
-//            System.setOut(out);
-        // prepare XES log output file
-        File finalMappingsFile = new File(outputFileName + "_lvl2.obda");
-        File firstMappingsFile = new File(outputFileName + "_lvl1.obda");
+        File finalMappingsFile = new File(outputFileName + "_lvl2_generated.obda");
+        File firstMappingsFile = new File(outputFileName + "_lvl1_generated.obda");
         File output = new File(outputFileName + ".xes.gz");
         // load mappings
-        //Properties dataSourceProperties = OntopUtility.getDataSourceProperties(domainMappingsFile);
         Properties dataSourceProperties = new Properties();
         dataSourceProperties.load(new FileReader(folder + "conference.properties"));
-
         SQLPPMapping obdaModel = OntopUtility.getOBDAModel(domainMappingsFile, dataSourceProperties);
         // load ontologies
         OWLOntology domainOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(domainOntologyFile);
         OWLOntology eventOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(eventOntologyFile);
-        OWLOntology onpromOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(TwoLevelExtractionTest.class.getResourceAsStream("/eo-onprom.owl"));
-
+        // load annotation queries
         AnnotationQueries firstLevel = IOUtility.readJSON(firstLevelFile, AnnotationQueries.class)
                 .orElseThrow(IllegalArgumentException::new);
         AnnotationQueries secondLevel = IOUtility.readJSON(secondLevelFile, AnnotationQueries.class)
                 .orElseThrow(IllegalArgumentException::new);
-
-        //generate final mapping
-        OBDAMapper firstOBDAMapper = new OBDAMapper(domainOntology, eventOntology, obdaModel, dataSourceProperties, firstLevel);
-        SQLPPMapping firstMapping = firstOBDAMapper.getOBDAModel();
+        //generate mappings
+        SQLPPMapping firstMapping = new OBDAMapper(domainOntology, eventOntology, obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
         OntopUtility.saveModel(firstMapping, firstMappingsFile);
-        // ToolUtil.writeToFile(ToolUtil.readFromFile(firstMappingsFile).replaceAll("\t\t\t\n",""),firstMappingsFile.getPath());
-        OBDAMapper secondOBDAMapper = new OBDAMapper(eventOntology, onpromOntology, firstMapping, dataSourceProperties, secondLevel);
-        SQLPPMapping finalMapping = secondOBDAMapper.getOBDAModel();
+        SQLPPMapping finalMapping = new OBDAMapper(eventOntology, XESLogExtractor.getDefaultEventOntology(), firstMapping, dataSourceProperties, secondLevel).getOBDAModel();
         OntopUtility.saveModel(finalMapping, finalMappingsFile);
-        // ToolUtil.writeToFile(ToolUtil.readFromFile(finalMappingsFile).replaceAll("\t\t\t\n",""),finalMappingsFile.getPath());
-        XLog xTraces = new XESLogExtractor().extractLog(finalMapping, dataSourceProperties);
         // extract log
+        XLog xTraces = new XESLogExtractor().extractLog(finalMapping, dataSourceProperties);
+        // serialize extracted log
         new XesXmlGZIPSerializer().serialize(xTraces, new FileOutputStream(output));
         System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) / 1000 + "s");
-        System.exit(0);
-
     }
 }
