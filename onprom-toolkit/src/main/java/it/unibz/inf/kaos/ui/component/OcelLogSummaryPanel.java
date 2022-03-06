@@ -27,10 +27,9 @@
 package it.unibz.inf.kaos.ui.component;
 
 import it.unibz.inf.kaos.ui.utility.UIUtility;
-import org.deckfour.xes.classification.XEventClass;
-import org.deckfour.xes.classification.XEventClasses;
-import org.deckfour.xes.info.XLogInfo;
-import org.deckfour.xes.model.XAttributeMap;
+import it.unibz.ocel.classification.OcelEventClass;
+import it.unibz.ocel.classification.OcelEventClasses;
+import it.unibz.ocel.info.OcelLogInfo;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.PlotOrientation;
@@ -38,36 +37,27 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 /**
  * Frame showing log summary
  * <p>
  *
- * @author T. E. Kalayci on 04-Jul-2017
+ * @author T. E. Kalayci on 06-Mar-2022
  */
-public class LogSummaryPanel extends JInternalFrame {
+public class OcelLogSummaryPanel extends JInternalFrame {
     private static final Dimension TXT_SIZE = new Dimension(375, 25);
     private static final Dimension CHART_SIZE = new Dimension(800, 300);
-    private final XLogInfo info;
 
-    public LogSummaryPanel(XLogInfo _info) {
+    public OcelLogSummaryPanel(OcelLogInfo info) {
         super("Log Summary", true, true, true, true);
-        info = _info;
-        initUI();
-    }
-
-    private void initUI() {
         this.getContentPane().setLayout(new BorderLayout());
-        JScrollPane scrollPane = new JScrollPane(createPanel());
+        JScrollPane scrollPane = new JScrollPane(createPanel(info));
         this.getContentPane().add(scrollPane, BorderLayout.CENTER);
         this.pack();
         this.setVisible(true);
     }
 
-
-    private JPanel createPanel() {
+    private JPanel createPanel(OcelLogInfo info) {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
 
@@ -82,10 +72,10 @@ public class LogSummaryPanel extends JInternalFrame {
         gridBagConstraints.gridx = 1;
         panel.add(UIUtility.createLabel("End: " + info.getLogTimeBoundaries().getEndDate(), TXT_SIZE), gridBagConstraints);
 
-        XEventClasses eventClasses = info.getEventClasses();
+        OcelEventClasses eventClasses = info.getEventClasses();
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (int i = 0; i < eventClasses.size(); i++) {
-            XEventClass eventClass = eventClasses.getByIndex(i);
+            OcelEventClass eventClass = eventClasses.getByIndex(i);
             dataset.addValue(eventClass.size(), eventClass.getId(), "");
         }
         gridBagConstraints.gridy++;
@@ -96,31 +86,27 @@ public class LogSummaryPanel extends JInternalFrame {
         chartPanel.setPreferredSize(CHART_SIZE);
         panel.add(chartPanel, gridBagConstraints);
 
-        gridBagConstraints.gridy++;
-        DefaultListModel<String> listModel = new DefaultListModel<>();
-        JList<String> list = new JList<>(listModel);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
-        info.getLog().forEach(trace -> {
-            StringBuilder events = new StringBuilder();
-            if (!trace.getAttributes().isEmpty() && trace.getAttributes().get("concept:name") != null) {
-                events.append(trace.getAttributes().get("concept:name").toString());
-            }
-            events.append(" ⇨");
-
-//            trace.sort((e1,e2)->{
-//                return e1.getAttributes().get("time:timestamp").toString().compareTo(e2.getAttributes().get("time:timestamp").toString());
+//        gridBagConstraints.gridy++;
+//        DefaultListModel<String> listModel = new DefaultListModel<>();
+//        JList<String> list = new JList<>(listModel);
+//        info.getLog().forEach(trace -> {
+//            StringBuilder events = new StringBuilder();
+//            if (!trace.getAttributes().isEmpty() && trace.getAttributes().get("concept:name") != null) {
+//                events.append(trace.getAttributes().get("concept:name").toString());
+//            }
+//            events.append(" ⇨");
+//
+//
+//            trace.forEach(event -> {
+//                if(event.getAttributes()!=null && event.getAttributes().get("concept:name")!=null) {
+//                    events.append(" ").append(event.getAttributes().get("concept:name").toString()).append(" →");
+//                }
 //            });
-
-            trace.forEach(event -> {
-                if(event.getAttributes()!=null && event.getAttributes().get("concept:name")!=null) {
-                    events.append(" ").append(event.getAttributes().get("concept:name").toString()).append(" →");
-                }
-            });
-            listModel.addElement(events.substring(0, events.length() - 1));
-        });
-        final JScrollPane jScrollPane = new JScrollPane(list);
-        jScrollPane.setPreferredSize(CHART_SIZE);
-        panel.add(jScrollPane, gridBagConstraints);
+//            listModel.addElement(events.substring(0, events.length() - 1));
+//        });
+//        final JScrollPane jScrollPane = new JScrollPane(list);
+//        jScrollPane.setPreferredSize(CHART_SIZE);
+//        panel.add(jScrollPane, gridBagConstraints);
         return panel;
     }
 }

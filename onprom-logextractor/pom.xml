@@ -80,6 +80,11 @@
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <artifactId>onprom-ocel</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- OTHER -->
         <dependency>
             <groupId>deckfour</groupId>
@@ -112,12 +117,6 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>${jaxb.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>it.unibz.inf.kaos</groupId>
-            <artifactId>onprom-ocel</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

@@ -44,6 +44,7 @@ public enum FileType {
     JSON("JSON files (*.json)", "json"),
     IMAGE("Supported Image Files (*.png, *.jpg, *.jpeg, *.gif, *.svg)", "png", "jpg", "jpeg", "gif", "svg", "pdf"),
     XLOG("XES Log File (*.xes)", "xes"),
+    OCEL("OCEL Log File (*.ocel)", "ocel"),
     OTHER("Unsupported Files");
 
     private final String[] extensions;

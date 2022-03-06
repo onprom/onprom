@@ -80,6 +80,7 @@ public class ObjectTree {
                     case DS_PROPERTIES:
                         toolkit.displayPropertiesEditor(selectedNode);
                         break;
+                    case OCEL:
                     case XLOG:
                         toolkit.displayLogSummary(selectedNode);
                         break;

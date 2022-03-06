@@ -38,7 +38,6 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.ui.utility.UMLEditorButtons;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import it.unibz.inf.ontop.spec.mapping.serializer.impl.OntopNativeMappingSerializer;
-import org.deckfour.xes.model.XLog;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,13 +129,13 @@ public class ExtractionPanel extends JPanel {
 
         buttonPanel.add(UIUtility.createButton(UMLEditorButtons.EXPORT, event -> UIUtility.executeInBackground(() -> {
             try {
-                XLog xlog = null;
+                Object extractedLog = null;
                 long start = System.currentTimeMillis();
                 if (cmbTargetOntology.getSelectedIndex() > -1) {
                     if (cmbDomainOntology.getSelectedIndex() < -0 || cmbTargetOntology.getSelectedIndex() < 0 || cmbMappings.getSelectedIndex() < 0 || cmbDSProperties.getSelectedIndex() < 0 || cmbDomainAnnotations.getSelectedIndex() < 0 || cmbTargetAnnotations.getSelectedIndex() < 0) {
                         UIUtility.error("Please select domain ontology, OBDA mappings, Datasource Properties, target ontology, domain ontology annotations and target ontology annotations!");
                     } else {
-                        xlog = (XLog) cmbFinalOutput.getItemAt(cmbFinalOutput.getSelectedIndex()).extractLog(
+                        extractedLog = cmbFinalOutput.getItemAt(cmbFinalOutput.getSelectedIndex()).extractLog(
                                 (OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(),
                                 (SQLPPMapping) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
                                 (Properties) cmbDSProperties.getItemAt(cmbDSProperties.getSelectedIndex()).getUserObject(),
@@ -148,16 +147,16 @@ public class ExtractionPanel extends JPanel {
                 } else if (cmbDomainOntology.getSelectedIndex() < 0 || cmbMappings.getSelectedIndex() < 0 || cmbDSProperties.getSelectedIndex() < 0 || cmbDomainAnnotations.getSelectedIndex() < 0) {
                     UIUtility.error("Please select domain ontology, OBDA mappings, Datasource properties, custom event ontology, domain to event ontology annotations and event to XES ontology annotations!");
                 } else {
-                    xlog = (XLog) cmbFinalOutput.getItemAt(cmbFinalOutput.getSelectedIndex()).extractLog(
+                    extractedLog = cmbFinalOutput.getItemAt(cmbFinalOutput.getSelectedIndex()).extractLog(
                             (OWLOntology) cmbDomainOntology.getItemAt(cmbDomainOntology.getSelectedIndex()).getUserObject(),
                             (SQLPPMapping) cmbMappings.getItemAt(cmbMappings.getSelectedIndex()).getUserObject(),
                             (Properties) cmbDSProperties.getItemAt(cmbDSProperties.getSelectedIndex()).getUserObject(),
                             (AnnotationQueries) cmbDomainAnnotations.getItemAt(cmbDomainAnnotations.getSelectedIndex()).getUserObject()
                     );
                 }
-                if (xlog != null) {
+                if (extractedLog != null) {
                     logger.debug(String.format("EXTRACTION TOOK %s SECONDS", (System.currentTimeMillis() - start) / 1000));
-                    toolkit.displayLogSummary(xlog);
+                    toolkit.displayLogSummary(extractedLog);
                 }
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -170,6 +169,7 @@ public class ExtractionPanel extends JPanel {
             cmbTargetOntology.setSelectedIndex(-1);
             cmbDomainAnnotations.setSelectedIndex(-1);
             cmbTargetAnnotations.setSelectedIndex(-1);
+            cmbFinalOutput.setSelectedIndex(0);
             removeAll();
             initUI(toolkit);
             revalidate();

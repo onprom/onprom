@@ -42,6 +42,7 @@ import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.kaos.uml.UMLEditor;
 import it.unibz.inf.kaos.utility.ToolkitMessages;
 import it.unibz.inf.kaos.utility.VersionUtility;
+import it.unibz.ocel.model.OcelLog;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -275,26 +276,38 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     }
 
 
-    public void displayLogSummary(XLog xlog) {
-        displayLogSummary(objects.addObject("Extracted Log", FileType.XLOG, xlog));
+    public void displayLogSummary(Object extractedLog) {
+        if (extractedLog instanceof XLog) {
+            displayLogSummary(objects.addObject("Extracted Log", FileType.XLOG, extractedLog));
+        } else if (extractedLog instanceof OcelLog) {
+            displayLogSummary(objects.addObject("Extracted Log", FileType.OCEL, extractedLog));
+        }
     }
 
     public void displayLogSummary(TreeNode<Object> node) {
         node.getUserObjectProvider().ifPresent(selectedObject -> {
-            JInternalFrame infoFrame = new LogSummaryPanel(XLogInfoFactory.createLogInfo((XLog) selectedObject));
-            infoFrame.addInternalFrameListener(new InternalFrameAdapter() {
-                @Override
-                public void internalFrameClosed(InternalFrameEvent e) {
-                    windows.removeNodeWithObject(e.getInternalFrame());
-                }
-            });
-            desktop.add(infoFrame, BorderLayout.CENTER);
             try {
-                infoFrame.setMaximum(true);
+                JInternalFrame infoFrame = null;
+                if (node.getType() == FileType.XLOG)
+                    infoFrame = new XesLogSummaryPanel(XLogInfoFactory.createLogInfo((XLog) selectedObject));
+                else if (node.getType() == FileType.OCEL) {
+                    OcelLog log = (OcelLog) selectedObject;
+                    infoFrame = new OcelLogSummaryPanel(log.getInfo(log.getClassifiers().get(0)));
+                }
+                if (infoFrame != null) {
+                    infoFrame.addInternalFrameListener(new InternalFrameAdapter() {
+                        @Override
+                        public void internalFrameClosed(InternalFrameEvent e) {
+                            windows.removeNodeWithObject(e.getInternalFrame());
+                        }
+                    });
+                    desktop.add(infoFrame, BorderLayout.CENTER);
+                    infoFrame.setMaximum(true);
+                    windows.add(infoFrame.getTitle(), FileType.OTHER, infoFrame);
+                }
             } catch (Exception e) {
                 logError(e);
             }
-            windows.add(infoFrame.getTitle(), FileType.OTHER, infoFrame);
         });
     }
 
