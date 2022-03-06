@@ -34,6 +34,8 @@ import it.unibz.inf.kaos.ui.form.InformationDialog;
 import it.unibz.inf.kaos.ui.utility.IOUtility;
 import it.unibz.inf.kaos.ui.utility.UIUtility;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
+import it.unibz.ocel.model.OcelLog;
+import it.unibz.ocel.out.OcelXmlSerializer;
 import org.apache.commons.io.FilenameUtils;
 import org.deckfour.xes.in.XesXmlParser;
 import org.deckfour.xes.model.XLog;
@@ -55,13 +57,11 @@ import java.io.FileOutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Created by T. E. Kalayci on 15-Nov-2017.
- */
 public class ObjectTree {
     private static final Logger logger = LoggerFactory.getLogger(ObjectTree.class.getSimpleName());
     private static final XesXmlParser XES_PARSER = new XesXmlParser();
     private static final XesXmlSerializer XES_SERIALIZER = new XesXmlSerializer();
+    private static final OcelXmlSerializer OCEL_SERIALIZER = new OcelXmlSerializer();
     private final OnpromToolkit toolkit;
     private final CustomTree<Object> objects = new CustomTree<>(new TreeNode<>(-1, "Objects", FileType.OTHER, null));
 
@@ -257,6 +257,13 @@ public class ObjectTree {
             case QUERIES:
             case UML:
                 IOUtility.exportJSON(new File(filePath), object);
+                break;
+            case OCEL:
+                try {
+                    OCEL_SERIALIZER.serialize((OcelLog) object, new FileOutputStream(filePath));
+                } catch (Exception e) {
+                    logError(e);
+                }
                 break;
             case XLOG:
                 try {
