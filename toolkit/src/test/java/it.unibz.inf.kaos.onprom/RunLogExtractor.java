@@ -1,0 +1,98 @@
+/*
+ * onprom-toolkit
+ *
+ * RunLogExtractor.java
+ *
+ * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package it.unibz.inf.onprom.onprom;
+
+import it.unibz.inf.onprom.data.query.AnnotationQueries;
+import it.unibz.inf.onprom.logextractor.xes.XESLogExtractor;
+import it.unibz.inf.onprom.obdamapper.OBDAMapper;
+import it.unibz.inf.onprom.obdamapper.utility.OntopUtility;
+import it.unibz.inf.onprom.ui.utility.IOUtility;
+import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
+import org.deckfour.xes.model.XLog;
+import org.deckfour.xes.out.XesXmlGZIPSerializer;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.OWLOntology;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.Properties;
+
+public class RunLogExtractor {
+
+    public static void main(String[] args) {
+        if (args.length < 5) {
+            System.out.println("Usage: RunLogExtractor domain_ontology domain_mappings event_ontology first_level_mappings second_level_mappings");
+            return;
+        }
+        try {
+            long start = System.currentTimeMillis();
+            // prepare files
+            File domainOntologyFile = new File(args[0]);
+            File domainMappingsFile = new File(args[1]);
+            File eventOntologyFile = new File(args[2]);
+            File firstLevelFile = new File(args[3]);
+            File secondLevelFile = new File(args[4]);
+            File propertiesFile = new File(args[5]);
+            // generate output file names
+            String outputFileName = domainOntologyFile.getParent() + "/" + firstLevelFile.getName() + System.currentTimeMillis();
+            // redirect console output to a text file
+            PrintStream out = new PrintStream(new FileOutputStream(outputFileName + ".txt"));
+            System.setOut(out);
+            // prepare XES log output file
+            File finalMappingsFile = new File(outputFileName + ".obda");
+            File output = new File(outputFileName + ".xes.gz");
+            Properties dataSourceProperties = OntopUtility.getDataSourceProperties(domainMappingsFile);
+            SQLPPMapping obdaModel = OntopUtility.getOBDAModel(domainMappingsFile, propertiesFile);
+            XESLogExtractor extractor = new XESLogExtractor();
+            // load ontologies
+            OWLOntology domainOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(domainOntologyFile);
+            OWLOntology eventOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(eventOntologyFile);
+            // start extraction process
+            if (output.createNewFile()) {
+                IOUtility.readJSON(firstLevelFile, AnnotationQueries.class).ifPresent(firstLevel -> IOUtility.readJSON(secondLevelFile, AnnotationQueries.class).ifPresent(secondLevel -> {
+                    try {
+                        //generate final mapping
+                        SQLPPMapping firstMapping = new OBDAMapper(domainOntology, eventOntology, obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
+                        SQLPPMapping finalMapping = new OBDAMapper(eventOntology, extractor.getOntology(), firstMapping, dataSourceProperties, secondLevel).getOBDAModel();
+                        // extract log
+                        XLog xTraces = extractor.extractLog(finalMapping, dataSourceProperties);
+                        // serialize extracted log
+                        new XesXmlGZIPSerializer().serialize(xTraces, new FileOutputStream(output));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }));
+            }
+            System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) / 1000 + "s");
+            System.exit(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+}

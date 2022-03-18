@@ -1,0 +1,448 @@
+[ "java.util.LinkedHashSet", [ {
+  "@class" : "it.unibz.inf.kaos.data.UMLClass",
+  "@id" : "57162189-97a3-4500-829d-8b5ff825659c",
+  "startX" : 30,
+  "startY" : 507,
+  "name" : "DecidedPaper",
+  "longName" : "http://www.example.com/DecidedPaper",
+  "relations" : [ "java.util.LinkedHashSet", [ {
+    "@class" : "it.unibz.inf.kaos.data.Inheritance",
+    "@id" : "f3250d05-5972-4584-b914-495d9c979859",
+    "startX" : 0,
+    "startY" : 0,
+    "firstClass" : {
+      "@class" : "it.unibz.inf.kaos.data.UMLClass",
+      "@id" : "205c818d-f71e-492c-b9bc-131c547201c2",
+      "startX" : 56,
+      "startY" : 257,
+      "name" : "Paper",
+      "longName" : "http://www.example.com/Paper",
+      "relations" : [ "java.util.LinkedHashSet", [ "f3250d05-5972-4584-b914-495d9c979859", {
+        "@class" : "it.unibz.inf.kaos.data.Association",
+        "@id" : "c69d347c-ae34-4bdf-a199-f5282b10da35",
+        "startX" : 0,
+        "startY" : 0,
+        "name" : "Assignment",
+        "longName" : "http://www.example.com/Assignment",
+        "firstClass" : "205c818d-f71e-492c-b9bc-131c547201c2",
+        "secondClass" : {
+          "@class" : "it.unibz.inf.kaos.data.UMLClass",
+          "@id" : "a35fe204-849b-42dd-ab61-abb6d85d423b",
+          "startX" : 630,
+          "startY" : 257,
+          "name" : "Person",
+          "longName" : "http://www.example.com/Person",
+          "relations" : [ "java.util.LinkedHashSet", [ "c69d347c-ae34-4bdf-a199-f5282b10da35", {
+            "@class" : "it.unibz.inf.kaos.data.Association",
+            "@id" : "9e42d7ad-d97c-48f8-b6f4-0b1d0dd681dc",
+            "startX" : 0,
+            "startY" : 0,
+            "name" : "Submission",
+            "longName" : "http://www.example.com/Submission",
+            "firstClass" : "205c818d-f71e-492c-b9bc-131c547201c2",
+            "secondClass" : "a35fe204-849b-42dd-ab61-abb6d85d423b",
+            "associationClass" : {
+              "@class" : "it.unibz.inf.kaos.data.AssociationClass",
+              "@id" : "0e4077ef-038c-4bea-bc2f-c5077ae4ca90",
+              "startX" : 297,
+              "startY" : 343,
+              "name" : "Class",
+              "relations" : [ "java.util.LinkedHashSet", [ {
+                "@class" : "it.unibz.inf.kaos.data.Inheritance",
+                "@id" : "c7403c0c-5246-4189-a81c-6f142d12dfb2",
+                "startX" : 0,
+                "startY" : 0,
+                "firstClass" : "0e4077ef-038c-4bea-bc2f-c5077ae4ca90",
+                "secondClass" : {
+                  "@class" : "it.unibz.inf.kaos.data.UMLClass",
+                  "@id" : "3cc070be-b3c8-41ca-b463-e0c410d318dc",
+                  "startX" : 460,
+                  "startY" : 476,
+                  "name" : "CRUpload",
+                  "longName" : "http://www.example.com/CRUpload",
+                  "relations" : [ "java.util.LinkedHashSet", [ {
+                    "@class" : "it.unibz.inf.kaos.data.Disjoint",
+                    "@id" : "11d5dfda-ceb5-423c-a1ae-5464919bedf0",
+                    "startX" : 0,
+                    "startY" : 0,
+                    "name" : "{disjoint}",
+                    "firstClass" : {
+                      "@class" : "it.unibz.inf.kaos.data.UMLClass",
+                      "@id" : "6635fd8c-f715-43bc-89b4-76c66e20049f",
+                      "startX" : 214,
+                      "startY" : 476,
+                      "name" : "Creation",
+                      "longName" : "http://www.example.com/Creation",
+                      "relations" : [ "java.util.LinkedHashSet", [ "11d5dfda-ceb5-423c-a1ae-5464919bedf0", {
+                        "@class" : "it.unibz.inf.kaos.data.Inheritance",
+                        "@id" : "3fd14c72-c4e3-4b34-aaa7-fa4b167f7690",
+                        "startX" : 0,
+                        "startY" : 0,
+                        "firstClass" : "0e4077ef-038c-4bea-bc2f-c5077ae4ca90",
+                        "secondClass" : "6635fd8c-f715-43bc-89b4-76c66e20049f"
+                      } ] ]
+                    },
+                    "secondClass" : "3cc070be-b3c8-41ca-b463-e0c410d318dc"
+                  }, "c7403c0c-5246-4189-a81c-6f142d12dfb2" ] ]
+                }
+              }, "3fd14c72-c4e3-4b34-aaa7-fa4b167f7690" ] ],
+              "attributes" : [ "java.util.LinkedList", [ {
+                "@class" : "it.unibz.inf.kaos.data.Attribute",
+                "name" : "uploadTime",
+                "longName" : "http://www.example.com/uploadTime",
+                "type" : "DATE_TIME",
+                "multiplicity" : "C1_1"
+              } ] ],
+              "association" : "9e42d7ad-d97c-48f8-b6f4-0b1d0dd681dc"
+            },
+            "firstMultiplicity" : "C0_S",
+            "secondMultiplicity" : "C1_S"
+          }, {
+            "@class" : "it.unibz.inf.kaos.data.Association",
+            "@id" : "b6907794-9dd1-4aa9-a682-0ca710ebf744",
+            "startX" : 0,
+            "startY" : 0,
+            "name" : "chairs",
+            "longName" : "http://www.example.com/chairs",
+            "firstClass" : "a35fe204-849b-42dd-ab61-abb6d85d423b",
+            "secondClass" : {
+              "@class" : "it.unibz.inf.kaos.data.UMLClass",
+              "@id" : "57f17646-1b62-48c5-b87b-306dfb914280",
+              "startX" : 35,
+              "startY" : 7,
+              "name" : "Conference",
+              "longName" : "http://www.example.com/Conference",
+              "relations" : [ "java.util.LinkedHashSet", [ "b6907794-9dd1-4aa9-a682-0ca710ebf744", {
+                "@class" : "it.unibz.inf.kaos.data.Association",
+                "@id" : "4d64cc30-302a-438f-85ce-aa36a4cad8b1",
+                "startX" : 0,
+                "startY" : 0,
+                "name" : "submittedTo",
+                "longName" : "http://www.example.com/submittedTo",
+                "firstClass" : "205c818d-f71e-492c-b9bc-131c547201c2",
+                "secondClass" : "57f17646-1b62-48c5-b87b-306dfb914280",
+                "firstMultiplicity" : "C0_S",
+                "secondMultiplicity" : "C1_1"
+              } ] ],
+              "attributes" : [ "java.util.LinkedList", [ {
+                "@class" : "it.unibz.inf.kaos.data.Attribute",
+                "name" : "cName",
+                "longName" : "http://www.example.com/cName",
+                "type" : "STRING",
+                "multiplicity" : "C1_1"
+              }, {
+                "@class" : "it.unibz.inf.kaos.data.Attribute",
+                "name" : "crTime",
+                "longName" : "http://www.example.com/crTime",
+                "type" : "DATE_TIME",
+                "multiplicity" : "C1_1"
+              } ] ]
+            },
+            "anchors" : [ "java.util.ArrayList", [ {
+              "@class" : "it.unibz.inf.kaos.data.RelationAnchor",
+              "@id" : "f575a019-c8ff-40db-b347-be0b1e9d6196",
+              "startX" : 701,
+              "startY" : 54
+            } ] ],
+            "firstMultiplicity" : "C1_1",
+            "secondMultiplicity" : "C0_S"
+          }, {
+            "@class" : "it.unibz.inf.kaos.data.Association",
+            "@id" : "10156326-135d-408b-be3f-c034aecf40af",
+            "startX" : 0,
+            "startY" : 0,
+            "name" : "notifiedBy",
+            "longName" : "http://www.example.com/notifiedBy",
+            "firstClass" : "57162189-97a3-4500-829d-8b5ff825659c",
+            "secondClass" : "a35fe204-849b-42dd-ab61-abb6d85d423b",
+            "anchors" : [ "java.util.ArrayList", [ {
+              "@class" : "it.unibz.inf.kaos.data.RelationAnchor",
+              "@id" : "e1b576dd-01b9-4496-8a38-c4eb299cc3de",
+              "startX" : 699,
+              "startY" : 553
+            } ] ],
+            "firstMultiplicity" : "C0_S",
+            "secondMultiplicity" : "C1_1"
+          } ] ],
+          "attributes" : [ "java.util.LinkedList", [ {
+            "@class" : "it.unibz.inf.kaos.data.Attribute",
+            "name" : "pName",
+            "longName" : "http://www.example.com/pName",
+            "type" : "STRING",
+            "multiplicity" : "C1_1"
+          }, {
+            "@class" : "it.unibz.inf.kaos.data.Attribute",
+            "name" : "regTime",
+            "longName" : "http://www.example.com/regTime",
+            "type" : "DATE_TIME",
+            "multiplicity" : "C1_1"
+          } ] ]
+        },
+        "associationClass" : {
+          "@class" : "it.unibz.inf.kaos.data.AssociationClass",
+          "@id" : "a1ce1f3c-9389-45b9-b2b1-fa48b2ecb2f2",
+          "startX" : 220,
+          "startY" : 107,
+          "name" : "Class",
+          "relations" : [ "java.util.LinkedHashSet", [ {
+            "@class" : "it.unibz.inf.kaos.data.Association",
+            "@id" : "b88073c6-46b7-4750-ab92-1916b45abf7a",
+            "startX" : 0,
+            "startY" : 0,
+            "name" : "leadsTo",
+            "longName" : "http://www.example.com/leadsTo",
+            "firstClass" : "a1ce1f3c-9389-45b9-b2b1-fa48b2ecb2f2",
+            "secondClass" : {
+              "@class" : "it.unibz.inf.kaos.data.UMLClass",
+              "@id" : "10ded154-4d6b-4c21-8bf3-c96802e767df",
+              "startX" : 529,
+              "startY" : 115,
+              "name" : "Review",
+              "longName" : "http://www.example.com/Review",
+              "relations" : [ "java.util.LinkedHashSet", [ "b88073c6-46b7-4750-ab92-1916b45abf7a" ] ],
+              "attributes" : [ "java.util.LinkedList", [ {
+                "@class" : "it.unibz.inf.kaos.data.Attribute",
+                "name" : "subTime",
+                "longName" : "http://www.example.com/subTime",
+                "type" : "DATE_TIME",
+                "multiplicity" : "C1_1"
+              } ] ]
+            },
+            "firstMultiplicity" : "C1_1",
+            "secondMultiplicity" : "C0_1"
+          } ] ],
+          "attributes" : [ "java.util.LinkedList", [ {
+            "@class" : "it.unibz.inf.kaos.data.Attribute",
+            "name" : "accTime",
+            "longName" : "http://www.example.com/accTime",
+            "type" : "DATE_TIME",
+            "multiplicity" : "C1_1"
+          }, {
+            "@class" : "it.unibz.inf.kaos.data.Attribute",
+            "name" : "invTime",
+            "longName" : "http://www.example.com/invTime",
+            "type" : "DATE_TIME",
+            "multiplicity" : "C1_1"
+          } ] ],
+          "association" : "c69d347c-ae34-4bdf-a199-f5282b10da35"
+        },
+        "firstMultiplicity" : "C0_S",
+        "secondMultiplicity" : "C0_S"
+      }, "9e42d7ad-d97c-48f8-b6f4-0b1d0dd681dc", "4d64cc30-302a-438f-85ce-aa36a4cad8b1" ] ],
+      "attributes" : [ "java.util.LinkedList", [ {
+        "@class" : "it.unibz.inf.kaos.data.Attribute",
+        "name" : "title",
+        "longName" : "http://www.example.com/title",
+        "type" : "STRING",
+        "multiplicity" : "C1_1"
+      }, {
+        "@class" : "it.unibz.inf.kaos.data.Attribute",
+        "name" : "type",
+        "longName" : "http://www.example.com/type",
+        "type" : "STRING",
+        "multiplicity" : "C1_1"
+      } ] ]
+    },
+    "secondClass" : "57162189-97a3-4500-829d-8b5ff825659c"
+  }, "10156326-135d-408b-be3f-c034aecf40af" ] ],
+  "attributes" : [ "java.util.LinkedList", [ {
+    "@class" : "it.unibz.inf.kaos.data.Attribute",
+    "name" : "accepted",
+    "longName" : "http://www.example.com/accepted",
+    "type" : "BOOLEAN",
+    "multiplicity" : "C1_1"
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.Attribute",
+    "name" : "decTime",
+    "longName" : "http://www.example.com/decTime",
+    "type" : "DATE_TIME",
+    "multiplicity" : "C1_1"
+  } ] ]
+}, "205c818d-f71e-492c-b9bc-131c547201c2", "6635fd8c-f715-43bc-89b4-76c66e20049f", "a1ce1f3c-9389-45b9-b2b1-fa48b2ecb2f2", "a35fe204-849b-42dd-ab61-abb6d85d423b", "57f17646-1b62-48c5-b87b-306dfb914280", "10ded154-4d6b-4c21-8bf3-c96802e767df", "3cc070be-b3c8-41ca-b463-e0c410d318dc", "0e4077ef-038c-4bea-bc2f-c5077ae4ca90", "4d64cc30-302a-438f-85ce-aa36a4cad8b1", "c69d347c-ae34-4bdf-a199-f5282b10da35", "b88073c6-46b7-4750-ab92-1916b45abf7a", "9e42d7ad-d97c-48f8-b6f4-0b1d0dd681dc", "10156326-135d-408b-be3f-c034aecf40af", "b6907794-9dd1-4aa9-a682-0ca710ebf744", "c7403c0c-5246-4189-a81c-6f142d12dfb2", "f3250d05-5972-4584-b914-495d9c979859", "11d5dfda-ceb5-423c-a1ae-5464919bedf0", {
+  "@class" : "it.unibz.inf.kaos.data.DynamicAnnotation",
+  "@id" : "b3af34b2-2137-482e-a83a-897b11900589",
+  "startX" : 452,
+  "startY" : 186,
+  "relatedClass" : "a1ce1f3c-9389-45b9-b2b1-fa48b2ecb2f2",
+  "label" : "Acceptance",
+  "attributeValues" : {
+    "@class" : "java.util.LinkedHashMap",
+    "http://onprom.inf.unibz.it/ocel/timestamp" : {
+      "@class" : "it.unibz.inf.kaos.data.DynamicNavigationalAttribute",
+      "partOfURI" : true,
+      "attribute" : {
+        "@class" : "it.unibz.inf.kaos.data.NavigationalAttribute",
+        "path" : [ "java.util.LinkedHashSet", [ "a1ce1f3c-9389-45b9-b2b1-fa48b2ecb2f2" ] ],
+        "umlClass" : "a1ce1f3c-9389-45b9-b2b1-fa48b2ecb2f2",
+        "attribute" : {
+          "@class" : "it.unibz.inf.kaos.data.Attribute",
+          "name" : "accTime",
+          "longName" : "http://www.example.com/accTime",
+          "type" : "DATE_TIME",
+          "multiplicity" : "C1_1"
+        }
+      }
+    }
+  },
+  "annotationClass" : {
+    "@class" : "it.unibz.inf.kaos.data.UMLClass",
+    "@id" : "0d9bdfd7-b09e-41a6-b835-be2c724d9aa7",
+    "startX" : 0,
+    "startY" : 0,
+    "name" : "Event",
+    "longName" : "http://onprom.inf.unibz.it/ocel/Event",
+    "relations" : [ "java.util.LinkedHashSet", [ {
+      "@class" : "it.unibz.inf.kaos.data.Association",
+      "@id" : "650e458e-2ebe-42fe-bdbc-e3921bb2f9b8",
+      "startX" : 0,
+      "startY" : 0,
+      "name" : "e-contains-o",
+      "longName" : "http://onprom.inf.unibz.it/ocel/e-contains-o",
+      "firstClass" : "0d9bdfd7-b09e-41a6-b835-be2c724d9aa7",
+      "secondClass" : {
+        "@class" : "it.unibz.inf.kaos.data.UMLClass",
+        "@id" : "6a45dd4f-246e-4ec8-9d22-2281b051779f",
+        "startX" : 9,
+        "startY" : 257,
+        "name" : "Object",
+        "longName" : "http://onprom.inf.unibz.it/ocel/Object",
+        "relations" : [ "java.util.LinkedHashSet", [ "650e458e-2ebe-42fe-bdbc-e3921bb2f9b8", {
+          "@class" : "it.unibz.inf.kaos.data.Association",
+          "@id" : "19f4f54b-ea45-4adf-a75e-7be023250737",
+          "startX" : 0,
+          "startY" : 0,
+          "name" : "o-has-a",
+          "longName" : "http://onprom.inf.unibz.it/ocel/o-has-a",
+          "firstClass" : "6a45dd4f-246e-4ec8-9d22-2281b051779f",
+          "secondClass" : {
+            "@class" : "it.unibz.inf.kaos.data.UMLClass",
+            "@id" : "1422df9e-2ad4-4281-a5f0-a831c340cc49",
+            "startX" : 318,
+            "startY" : 246,
+            "name" : "Attribute",
+            "longName" : "http://onprom.inf.unibz.it/ocel/Attribute",
+            "relations" : [ "java.util.LinkedHashSet", [ {
+              "@class" : "it.unibz.inf.kaos.data.Association",
+              "@id" : "19d1fa60-ea13-48a6-bfe6-17b83d0a1dcf",
+              "startX" : 0,
+              "startY" : 0,
+              "name" : "e-has-a",
+              "longName" : "http://onprom.inf.unibz.it/ocel/e-has-a",
+              "firstClass" : "0d9bdfd7-b09e-41a6-b835-be2c724d9aa7",
+              "secondClass" : "1422df9e-2ad4-4281-a5f0-a831c340cc49",
+              "anchors" : [ "java.util.ArrayList", [ {
+                "@class" : "it.unibz.inf.kaos.data.RelationAnchor",
+                "@id" : "bb0f21c6-6cbf-45c5-bc95-5cd2fd19e2ea",
+                "startX" : 398,
+                "startY" : 56
+              } ] ],
+              "firstMultiplicity" : "C0_S",
+              "secondMultiplicity" : "C0_S"
+            }, "19f4f54b-ea45-4adf-a75e-7be023250737" ] ],
+            "attributes" : [ "java.util.LinkedList", [ {
+              "@class" : "it.unibz.inf.kaos.data.Attribute",
+              "name" : "attKey",
+              "longName" : "http://onprom.inf.unibz.it/ocel/attKey",
+              "type" : "STRING",
+              "multiplicity" : "C1_1"
+            }, {
+              "@class" : "it.unibz.inf.kaos.data.Attribute",
+              "name" : "attType",
+              "longName" : "http://onprom.inf.unibz.it/ocel/attType",
+              "type" : "STRING",
+              "multiplicity" : "C1_1"
+            }, {
+              "@class" : "it.unibz.inf.kaos.data.Attribute",
+              "name" : "attValue",
+              "longName" : "http://onprom.inf.unibz.it/ocel/attValue",
+              "type" : "STRING",
+              "multiplicity" : "C1_1"
+            } ] ]
+          },
+          "firstMultiplicity" : "C0_S",
+          "secondMultiplicity" : "C0_S"
+        } ] ],
+        "attributes" : [ "java.util.LinkedList", [ {
+          "@class" : "it.unibz.inf.kaos.data.Attribute",
+          "name" : "objectId",
+          "longName" : "http://onprom.inf.unibz.it/ocel/objectId",
+          "type" : "STRING",
+          "multiplicity" : "C1_1"
+        }, {
+          "@class" : "it.unibz.inf.kaos.data.Attribute",
+          "name" : "objectType",
+          "longName" : "http://onprom.inf.unibz.it/ocel/objectType",
+          "type" : "STRING",
+          "multiplicity" : "C1_1"
+        } ] ]
+      },
+      "firstMultiplicity" : "C1_S",
+      "secondMultiplicity" : "C0_S"
+    }, "19d1fa60-ea13-48a6-bfe6-17b83d0a1dcf" ] ],
+    "attributes" : [ "java.util.LinkedList", [ {
+      "@class" : "it.unibz.inf.kaos.data.Attribute",
+      "name" : "activity",
+      "longName" : "http://onprom.inf.unibz.it/ocel/activity",
+      "type" : "STRING",
+      "multiplicity" : "C1_1"
+    }, {
+      "@class" : "it.unibz.inf.kaos.data.Attribute",
+      "name" : "eventId",
+      "longName" : "http://onprom.inf.unibz.it/ocel/eventId",
+      "type" : "STRING",
+      "multiplicity" : "C1_1"
+    }, {
+      "@class" : "it.unibz.inf.kaos.data.Attribute",
+      "name" : "timestamp",
+      "longName" : "http://onprom.inf.unibz.it/ocel/timestamp",
+      "type" : "DATE_TIME",
+      "multiplicity" : "C1_1"
+    } ] ]
+  },
+  "isLabelPartOfIndex" : true
+}, "3fd14c72-c4e3-4b34-aaa7-fa4b167f7690", {
+  "@class" : "it.unibz.inf.kaos.data.DynamicAnnotation",
+  "@id" : "676f3087-70f2-4833-bb64-8c8b4ac1e85b",
+  "startX" : 403,
+  "startY" : 83,
+  "relatedClass" : "a1ce1f3c-9389-45b9-b2b1-fa48b2ecb2f2",
+  "label" : "InvitationTime",
+  "attributeValues" : {
+    "@class" : "java.util.LinkedHashMap",
+    "http://onprom.inf.unibz.it/ocel/attValue" : {
+      "@class" : "it.unibz.inf.kaos.data.DynamicNavigationalAttribute",
+      "partOfURI" : true,
+      "attribute" : {
+        "@class" : "it.unibz.inf.kaos.data.NavigationalAttribute",
+        "path" : [ "java.util.LinkedHashSet", [ "a1ce1f3c-9389-45b9-b2b1-fa48b2ecb2f2" ] ],
+        "umlClass" : "a1ce1f3c-9389-45b9-b2b1-fa48b2ecb2f2",
+        "attribute" : {
+          "@class" : "it.unibz.inf.kaos.data.Attribute",
+          "name" : "invTime",
+          "longName" : "http://www.example.com/invTime",
+          "type" : "DATE_TIME",
+          "multiplicity" : "C1_1"
+        }
+      }
+    },
+    "http://onprom.inf.unibz.it/ocel/attKey" : {
+      "@class" : "it.unibz.inf.kaos.data.DynamicNavigationalAttribute",
+      "partOfURI" : true,
+      "attribute" : {
+        "@class" : "it.unibz.inf.kaos.data.StringAttribute",
+        "value" : "InvitationTime"
+      }
+    }
+  },
+  "relationValues" : {
+    "@class" : "java.util.LinkedHashMap",
+    "http://onprom.inf.unibz.it/ocel/e-has-a" : {
+      "@class" : "it.unibz.inf.kaos.data.DynamicAnnotationAttribute",
+      "annotation" : "b3af34b2-2137-482e-a83a-897b11900589",
+      "path" : [ "java.util.LinkedHashSet", [ "a1ce1f3c-9389-45b9-b2b1-fa48b2ecb2f2" ] ],
+      "partOfURI" : true
+    }
+  },
+  "annotationClass" : "1422df9e-2ad4-4281-a5f0-a831c340cc49",
+  "isLabelPartOfIndex" : true
+} ] ]
