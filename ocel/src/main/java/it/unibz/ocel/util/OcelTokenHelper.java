@@ -1,3 +1,29 @@
+/*
+ * ocel
+ *
+ * OcelTokenHelper.java
+ *
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.unibz.ocel.util;
 
 import java.util.ArrayList;
@@ -13,12 +39,12 @@ public class OcelTokenHelper {
         if (tokens.size() <= 0) {
             return "";
         } else {
-            StringBuffer sb = new StringBuffer();
-            sb.append(formatToken((String)tokens.get(0)));
+            StringBuilder sb = new StringBuilder();
+            sb.append(formatToken(tokens.get(0)));
 
-            for(int i = 1; i < tokens.size(); ++i) {
+            for (int i = 1; i < tokens.size(); ++i) {
                 sb.append(' ');
-                sb.append(formatToken((String)tokens.get(i)));
+                sb.append(formatToken(tokens.get(i)));
             }
 
             return sb.toString();
@@ -30,7 +56,7 @@ public class OcelTokenHelper {
         if (token.indexOf(32) < 0 && token.indexOf(9) < 0) {
             return token;
         } else {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             token = token.replaceAll("'", "\\'");
             sb.append('\'');
             sb.append(token);
@@ -43,19 +69,17 @@ public class OcelTokenHelper {
         List<String> tokens = new ArrayList();
         boolean isEscaped = false;
         boolean isQuoted = false;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         char[] arr$ = tokenString.toCharArray();
-        int len$ = arr$.length;
 
-        for(int i$ = 0; i$ < len$; ++i$) {
-            char c = arr$[i$];
+        for (char c : arr$) {
             if (c == ' ' && !isQuoted && !isEscaped) {
                 String token = sb.toString().trim();
                 if (token.length() > 0) {
                     tokens.add(token);
                 }
 
-                sb = new StringBuffer();
+                sb = new StringBuilder();
             } else if (c == '\\') {
                 isEscaped = true;
             } else if (c == '\'') {

@@ -1,3 +1,29 @@
+/*
+ * ocel
+ *
+ * OcelTraceImpl.java
+ *
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.unibz.ocel.model.impl;
 
 import it.unibz.ocel.extension.OcelExtension;
@@ -39,12 +65,10 @@ public class OcelTraceImpl extends ArrayList<OcelEvent> implements OcelTrace {
     }
 
     public Object clone() {
-        OcelTraceImpl clone = new OcelTraceImpl((OcelAttributeMap)this.attributes.clone(), this.size());
-        Iterator i$ = this.iterator();
+        OcelTraceImpl clone = new OcelTraceImpl((OcelAttributeMap) this.attributes.clone(), this.size());
 
-        while(i$.hasNext()) {
-            OcelEvent event = (OcelEvent)i$.next();
-            clone.add((OcelEvent)event.clone());
+        for (OcelEvent event : this) {
+            clone.add((OcelEvent) event.clone());
         }
 
         return clone;
@@ -55,7 +79,7 @@ public class OcelTraceImpl extends ArrayList<OcelEvent> implements OcelTrace {
             this.add(event);
             return 0;
         } else {
-            OcelAttribute insTsAttr = (OcelAttribute)event.getAttributes().get("timestamp");
+            OcelAttribute insTsAttr = event.getAttributes().get("timestamp");
             if (insTsAttr == null) {
                 this.add(event);
                 return this.size() - 1;
@@ -63,7 +87,7 @@ public class OcelTraceImpl extends ArrayList<OcelEvent> implements OcelTrace {
                 Date insTs = ((OcelAttributeTimestamp)insTsAttr).getValue();
 
                 for(int i = this.size() - 1; i >= 0; --i) {
-                    OcelAttribute refTsAttr = (OcelAttribute)((OcelEvent)this.get(i)).getAttributes().get("timestamp");
+                    OcelAttribute refTsAttr = this.get(i).getAttributes().get("timestamp");
                     if (refTsAttr == null) {
                         this.add(event);
                         return this.size() - 1;

@@ -1,3 +1,29 @@
+/*
+ * ocel
+ *
+ * JsonUtil.java
+ *
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.unibz.inf.pm.ocel.util;
 
 import com.alibaba.fastjson.JSON;
@@ -10,10 +36,9 @@ import lombok.Data;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +65,7 @@ public class JsonUtil {
         }
         //before writing, set the file empty
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,false),"UTF-8"));
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false), StandardCharsets.UTF_8));
             writer.write("");
             writer.write(writeString);
         }catch (IOException e){
@@ -59,15 +84,15 @@ public class JsonUtil {
     // read the JSON file, return the string of JSONObject
     public static String readJsonFile(String filePath){
         BufferedReader reader = null;
-        String readJson = "";
+        StringBuilder readJson = new StringBuilder();
         JSONObject jsonObject = null;
         try {
             FileInputStream fileInputStream = new FileInputStream(filePath);
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream,"UTF-8");
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
             reader = new BufferedReader(inputStreamReader);
             String tempString = null;
             while ((tempString = reader.readLine()) != null){
-                readJson += tempString;
+                readJson.append(tempString);
             }
         }catch (IOException e){
             LOGGER.error(e.getMessage());
@@ -83,8 +108,8 @@ public class JsonUtil {
 
         // gain the jsonObject
         try {
-            jsonObject = JSONObject.parseObject(readJson);
-           // System.out.println(JSON.toJSONString(jsonObject));
+            jsonObject = JSONObject.parseObject(readJson.toString());
+            // System.out.println(JSON.toJSONString(jsonObject));
         }catch (JSONException e){
             LOGGER.error(e.getMessage());
         }
@@ -107,7 +132,6 @@ public class JsonUtil {
             list = JSON.parseArray(jsonstring, cls);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
         }
         return list;
     }
@@ -117,9 +141,9 @@ public class JsonUtil {
         try {
             list = JSON.parseObject(jsonstring,
                     new TypeReference<OcelEvent>() {
-            }.getType());
+                    }.getType());
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
         return list;
     }
@@ -132,9 +156,10 @@ public class JsonUtil {
      */
     public static List<Object> getValuesForKey(String key) throws IOException {
         List<KeyValue> list = getKeyValues(key);
-        if (CollectionUtils.isEmpty(list)) {return null;}
-        List<Object> valueStrings = list.stream().map(s -> s.getValue()).collect(Collectors.toList());
-        return valueStrings;
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        return list.stream().map(KeyValue::getValue).collect(Collectors.toList());
     }
 
     /**
@@ -144,7 +169,9 @@ public class JsonUtil {
     public static Object getValueForKeyAndId(String key,String id) throws IOException {
         List<KeyValue> list = getKeyValues(key);
 
-        if (CollectionUtils.isEmpty(list)) {return null;}
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
 
         for (KeyValue keyValue : list) {
             if (keyValue.getValue() != null) {
@@ -156,13 +183,14 @@ public class JsonUtil {
     }
 
     public static List<KeyValue> getKeyValues(String key) throws IOException {
-        if (StringUtils.isEmpty(key)){return null;}
+        if (key.isEmpty()) {
+            return null;
+        }
 
-        if (CollectionUtils.isEmpty(map)) {
+        if (map.isEmpty()) {
             readJsonData("ocel/logs/minimal.jsonocel");
         }
-        List<KeyValue> list = map.get(key);
-        return list;
+        return map.get(key);
     }
 
     /**
@@ -171,7 +199,7 @@ public class JsonUtil {
      */
     public static void readJsonData(String filepath) throws IOException {
         File file = new File(filepath);
-        String jsonString = FileUtils.readFileToString(file);
+        String jsonString = FileUtils.readFileToString(file, "UTF-8");
 
         JSONObject jsonObject = JSONObject.parseObject(jsonString);
 
@@ -183,12 +211,11 @@ public class JsonUtil {
 //        }
     }
 
-    public static Map readJsonToMap(String filepath) throws IOException
-    {
+    public static Map readJsonToMap(String filepath) throws IOException {
         Map logMap = new HashMap();
         Map tmpMap = null;
         File file = new File(filepath);
-        String jsonString = FileUtils.readFileToString(file);
+        String jsonString = FileUtils.readFileToString(file, "UTF-8");
         JSONObject jsonObject = JSONObject.parseObject(jsonString);
         Object globalLog = jsonObject.get("ocel:global-log");
         Object globalEvent = jsonObject.get("ocel:global-event");
@@ -212,26 +239,18 @@ public class JsonUtil {
             String key = (String) ((Map.Entry)map).getKey();
             Object value = ((Map.Entry)map).getValue();
             Map eventElementMap = (Map) JSON.parse(value.toString());
-            for (Object eventElmt : eventElementMap.entrySet())
-            {
+            for (Object eventElmt : eventElementMap.entrySet()) {
                 String keyEvent = (String) ((Map.Entry)eventElmt).getKey();
                 Object valueEvent = ((Map.Entry)eventElmt).getValue();
-                if("ocel:vmap".equals(keyEvent) )
-                {
+                if("ocel:vmap".equals(keyEvent) ) {
                     Map vMap = (Map) JSON.parse(valueEvent.toString());
                     Map vTmpMap = new HashMap();
-                    for (Object vmapElment : vMap.entrySet())
-                    {
+                    for (Object vmapElment : vMap.entrySet()) {
                         vTmpMap.put(((Map.Entry)vmapElment).getKey(),((Map.Entry)vmapElment).getValue());
                     }
                     tmpMap.put(keyEvent,vTmpMap);
-                }else if("ocel:omap".equals(keyEvent) )
-                {
-                    List<String> tmpList = new ArrayList<>();
-                    List<String> oMapList = (List) ((Map.Entry)eventElmt).getValue();
-                    for (String s : oMapList ) {
-                        tmpList.add(s);
-                    }
+                }else if("ocel:omap".equals(keyEvent) ) {
+                    List<String> tmpList = new ArrayList<>((List) ((Map.Entry) eventElmt).getValue());
                     tmpMap.put(keyEvent,tmpList);
                 } else {
                     tmpMap.put(((Map.Entry)eventElmt).getKey(),((Map.Entry)eventElmt).getValue());
@@ -251,16 +270,13 @@ public class JsonUtil {
             Object value = ((Map.Entry)map).getValue();
 
             Map ojbectElementMap = (Map) JSON.parse(value.toString());
-            for (Object objectElmt : ojbectElementMap.entrySet())
-            {
+            for (Object objectElmt : ojbectElementMap.entrySet()) {
                 String keyObject = (String) ((Map.Entry)objectElmt).getKey();
                 Object valueObject = ((Map.Entry)objectElmt).getValue();
-                if("ocel:ovmap".equals(keyObject) )
-                {
+                if("ocel:ovmap".equals(keyObject) ) {
                     Map ovMap = (Map) JSON.parse(valueObject.toString());
                     Map ovTmpMap = new HashMap();
-                    for (Object ovmapElment : ovMap.entrySet())
-                    {
+                    for (Object ovmapElment : ovMap.entrySet()) {
                         ovTmpMap.put(((Map.Entry)ovmapElment).getKey(),((Map.Entry)ovmapElment).getValue());
                     }
                     tmpMap.put(keyObject,ovTmpMap);
@@ -277,9 +293,8 @@ public class JsonUtil {
 
     public static JSONObject readJsonfileToObject(String filePath) throws IOException {
         File file = new File(filePath);
-        String jsonString = FileUtils.readFileToString(file);
-        JSONObject jsonObject = JSONObject.parseObject(jsonString);
-        return jsonObject;
+        String jsonString = FileUtils.readFileToString(file, "UTF-8");
+        return JSONObject.parseObject(jsonString);
     }
 
     public static void main(String[] args) throws IOException {

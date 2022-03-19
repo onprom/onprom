@@ -1,3 +1,29 @@
+/*
+ * ocel
+ *
+ * OcelAttributeUtils.java
+ *
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.unibz.ocel.util;
 
 import it.unibz.ocel.extension.OcelExtension;
@@ -8,7 +34,6 @@ import it.unibz.ocel.model.*;
 
 import java.text.ParseException;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -89,35 +114,27 @@ public class OcelAttributeUtils {
     public static OcelAttribute composeAttribute(OcelFactory factory, String key, String value, String type, OcelExtension extension) {
         type = type.trim();
         if (type.equalsIgnoreCase("LIST")) {
-            OcelAttributeList attr = factory.createAttributeList(key, extension);
-            return attr;
+            return factory.createAttributeList(key, extension);
         } else if (type.equalsIgnoreCase("CONTAINER")) {
-            OcelAttributeContainer attr = factory.createAttributeContainer(key, extension);
-            return attr;
+            return factory.createAttributeContainer(key, extension);
         } else if (type.equalsIgnoreCase("LITERAL")) {
-            OcelAttributeLiteral attr = factory.createAttributeLiteral(key, value, extension);
-            return attr;
+            return factory.createAttributeLiteral(key, value, extension);
         } else if (type.equalsIgnoreCase("BOOLEAN")) {
-            OcelAttributeBoolean attr = factory.createAttributeBoolean(key, Boolean.parseBoolean(value), extension);
-            return attr;
+            return factory.createAttributeBoolean(key, Boolean.parseBoolean(value), extension);
         } else if (type.equalsIgnoreCase("CONTINUOUS")) {
-            OcelAttributeContinuous attr = factory.createAttributeContinuous(key, Double.parseDouble(value), extension);
-            return attr;
+            return factory.createAttributeContinuous(key, Double.parseDouble(value), extension);
         } else if (type.equalsIgnoreCase("DISCRETE")) {
-            OcelAttributeDiscrete attr = factory.createAttributeDiscrete(key, Long.parseLong(value), extension);
-            return attr;
+            return factory.createAttributeDiscrete(key, Long.parseLong(value), extension);
         } else if (type.equalsIgnoreCase("TIMESTAMP")) {
             try {
                 synchronized(OcelAttributeTimestamp.FORMATTER) {
-                    OcelAttributeTimestamp attr = factory.createAttributeTimestamp(key, OcelAttributeTimestamp.FORMATTER.parseObject(value), extension);
-                    return attr;
+                    return factory.createAttributeTimestamp(key, OcelAttributeTimestamp.FORMATTER.parseObject(value), extension);
                 }
             } catch (ParseException var9) {
                 throw new AssertionError("OpenXES: could not parse date-time attribute. Value: " + value);
             }
         } else if (type.equalsIgnoreCase("ID")) {
-            OcelAttributeID attr = factory.createAttributeID(key, OcelID.parse(value), extension);
-            return attr;
+            return factory.createAttributeID(key, OcelID.parse(value), extension);
         } else {
             throw new AssertionError("Ocel: could not parse attribute type!");
         }
@@ -125,10 +142,8 @@ public class OcelAttributeUtils {
 
     public static Set<OcelExtension> extractExtensions(Map<String, OcelAttribute> attributeMap) {
         HashSet<OcelExtension> extensions = new HashSet();
-        Iterator i$ = attributeMap.values().iterator();
 
-        while(i$.hasNext()) {
-            OcelAttribute attribute = (OcelAttribute)i$.next();
+        for (OcelAttribute attribute : attributeMap.values()) {
             OcelExtension extension = attribute.getExtension();
             if (extension != null) {
                 extensions.add(extension);

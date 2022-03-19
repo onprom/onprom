@@ -1,3 +1,29 @@
+/*
+ * ocel
+ *
+ * OcelEventAttributeClassifier.java
+ *
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.unibz.ocel.classification;
 
 import it.unibz.ocel.model.OcelAttribute;
@@ -22,15 +48,15 @@ public class OcelEventAttributeClassifier implements OcelEventClassifier, Compar
     public String getClassIdentity(OcelEvent event) {
         switch(this.keys.length) {
             case 1:
-                OcelAttribute attr = (OcelAttribute)event.getAttributes().get(this.keys[0]);
+                OcelAttribute attr = event.getAttributes().get(this.keys[0]);
                 if (attr != null) {
                     return attr.toString();
                 }
 
                 return "";
             case 2:
-                OcelAttribute attr1 = (OcelAttribute)event.getAttributes().get(this.keys[0]);
-                OcelAttribute attr2 = (OcelAttribute)event.getAttributes().get(this.keys[1]);
+                OcelAttribute attr1 = event.getAttributes().get(this.keys[0]);
+                OcelAttribute attr2 = event.getAttributes().get(this.keys[1]);
                 if (attr1 != null && attr2 != null) {
                     String val1 = attr1.toString();
                     String val2 = attr2.toString();
@@ -48,9 +74,9 @@ public class OcelEventAttributeClassifier implements OcelEventClassifier, Compar
                 StringBuilder sb = new StringBuilder();
 
                 for(int i = 0; i < this.keys.length; ++i) {
-                    OcelAttribute attribute = (OcelAttribute)event.getAttributes().get(this.keys[i]);
+                    OcelAttribute attribute = event.getAttributes().get(this.keys[i]);
                     if (attribute != null) {
-                        sb.append(attribute.toString());
+                        sb.append(attribute);
                     }
 
                     if (i < this.keys.length - 1) {

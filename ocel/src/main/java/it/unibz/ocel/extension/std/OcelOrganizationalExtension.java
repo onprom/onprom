@@ -1,3 +1,29 @@
+/*
+ * ocel
+ *
+ * OcelOrganizationalExtension.java
+ *
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.unibz.ocel.extension.std;
 
 import it.unibz.ocel.extension.OcelExtension;
@@ -23,7 +49,7 @@ public class OcelOrganizationalExtension extends OcelExtension {
 
     private OcelOrganizationalExtension() {
         super("Organizational", "org", EXTENSION_URI);
-        OcelFactory factory = (OcelFactory) OcelFactoryRegistry.instance().currentDefault();
+        OcelFactory factory = OcelFactoryRegistry.instance().currentDefault();
         ATTR_RESOURCE = factory.createAttributeLiteral("org:resource", "__INVALID__", this);
         ATTR_ROLE = factory.createAttributeLiteral("org:role", "__INVALID__", this);
         ATTR_GROUP = factory.createAttributeLiteral("org:group", "__INVALID__", this);
@@ -56,7 +82,7 @@ public class OcelOrganizationalExtension extends OcelExtension {
     }
 
     public String extractResource(OcelEvent event) {
-        OcelAttribute attribute = (OcelAttribute)event.getAttributes().get("org:resource");
+        OcelAttribute attribute = event.getAttributes().get("org:resource");
         return attribute == null ? null : ((OcelAttributeLiteral)attribute).getValue();
     }
 
@@ -70,7 +96,7 @@ public class OcelOrganizationalExtension extends OcelExtension {
     }
 
     public String extractRole(OcelEvent event) {
-        OcelAttribute attribute = (OcelAttribute)event.getAttributes().get("org:role");
+        OcelAttribute attribute = event.getAttributes().get("org:role");
         return attribute == null ? null : ((OcelAttributeLiteral)attribute).getValue();
     }
 
@@ -84,7 +110,7 @@ public class OcelOrganizationalExtension extends OcelExtension {
     }
 
     public String extractGroup(OcelEvent event) {
-        OcelAttribute attribute = (OcelAttribute)event.getAttributes().get("org:group");
+        OcelAttribute attribute = event.getAttributes().get("org:group");
         return attribute == null ? null : ((OcelAttributeLiteral)attribute).getValue();
     }
 

@@ -1,3 +1,29 @@
+/*
+ * ocel
+ *
+ * OcelLifecycleExtension.java
+ *
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.unibz.ocel.extension.std;
 
 import it.unibz.ocel.extension.OcelExtension;
@@ -24,7 +50,7 @@ public class OcelLifecycleExtension extends OcelExtension {
 
     private OcelLifecycleExtension() {
         super("Lifecycle", "lifecycle", EXTENSION_URI);
-        OcelFactory factory = (OcelFactory) OcelFactoryRegistry.instance().currentDefault();
+        OcelFactory factory = OcelFactoryRegistry.instance().currentDefault();
         ATTR_MODEL = factory.createAttributeLiteral("lifecycle:model", "standard", this);
         ATTR_TRANSITION = factory.createAttributeLiteral("lifecycle:transition", OcelLifecycleExtension.StandardModel.COMPLETE.getEncoding(), this);
         this.logAttributes.add((OcelAttributeLiteral)ATTR_MODEL.clone());
@@ -50,7 +76,7 @@ public class OcelLifecycleExtension extends OcelExtension {
     }
 
     public String extractModel(OcelLog log) {
-        OcelAttribute attribute = (OcelAttribute)log.getAttributes().get("lifecycle:model");
+        OcelAttribute attribute = log.getAttributes().get("lifecycle:model");
         return attribute == null ? null : ((OcelAttributeLiteral)attribute).getValue();
     }
 
@@ -95,7 +121,7 @@ public class OcelLifecycleExtension extends OcelExtension {
         this.assignTransition(event, transition.getEncoding());
     }
 
-    public static enum StandardModel {
+    public enum StandardModel {
         SCHEDULE("schedule"),
         ASSIGN("assign"),
         WITHDRAW("withdraw"),
@@ -112,17 +138,15 @@ public class OcelLifecycleExtension extends OcelExtension {
 
         private final String encoding;
 
-        private StandardModel(String encoding) {
+        StandardModel(String encoding) {
             this.encoding = encoding;
         }
 
         public static OcelLifecycleExtension.StandardModel decode(String encoding) {
             encoding = encoding.trim().toLowerCase();
             OcelLifecycleExtension.StandardModel[] arr$ = values();
-            int len$ = arr$.length;
 
-            for(int i$ = 0; i$ < len$; ++i$) {
-                OcelLifecycleExtension.StandardModel transition = arr$[i$];
+            for (StandardModel transition : arr$) {
                 if (transition.encoding.equals(encoding)) {
                     return transition;
                 }

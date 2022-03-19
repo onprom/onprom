@@ -1,3 +1,29 @@
+/*
+ * ocel
+ *
+ * OcelUtils.java
+ *
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.unibz.ocel.util;
 
 import it.unibz.ocel.extension.std.OcelConceptExtension;
@@ -18,7 +44,7 @@ public final class OcelUtils {
     }
 
     public static OcelAttribute cloneAttributeWithChangedKey(OcelAttribute oldAttribute, String newKey) {
-        return cloneAttributeWithChangedKeyWithFactory(oldAttribute, newKey, (OcelFactory) OcelFactoryRegistry.instance().currentDefault());
+        return cloneAttributeWithChangedKeyWithFactory(oldAttribute, newKey, OcelFactoryRegistry.instance().currentDefault());
     }
 
     public static OcelAttribute cloneAttributeWithChangedKeyWithFactory(OcelAttribute oldAttribute, String newKey, OcelFactory factory) {
@@ -83,14 +109,9 @@ public final class OcelUtils {
 
     public static Set<String> getEventAttributeKeys(Iterable<OcelTrace> traces) {
         Set<String> attributeKeys = new HashSet();
-        Iterator var2 = traces.iterator();
 
-        while(var2.hasNext()) {
-            OcelTrace t = (OcelTrace)var2.next();
-            Iterator var4 = t.iterator();
-
-            while(var4.hasNext()) {
-                OcelEvent e = (OcelEvent)var4.next();
+        for (OcelTrace t : traces) {
+            for (OcelEvent e : t) {
                 attributeKeys.addAll(e.getAttributes().keySet());
             }
         }
@@ -100,18 +121,10 @@ public final class OcelUtils {
 
     public static Map<String, Class<?>> getEventAttributeTypes(Iterable<OcelTrace> traces) {
         Map<String, Class<?>> attributeTypes = new HashMap();
-        Iterator var2 = traces.iterator();
 
-        while(var2.hasNext()) {
-            OcelTrace t = (OcelTrace)var2.next();
-            Iterator var4 = t.iterator();
-
-            while(var4.hasNext()) {
-                OcelEvent e = (OcelEvent)var4.next();
-                Iterator var6 = e.getAttributes().values().iterator();
-
-                while(var6.hasNext()) {
-                    OcelAttribute a = (OcelAttribute)var6.next();
+        for (OcelTrace t : traces) {
+            for (OcelEvent e : t) {
+                for (OcelAttribute a : e.getAttributes().values()) {
                     fillAttributeType(attributeTypes, a);
                 }
             }
@@ -122,10 +135,8 @@ public final class OcelUtils {
 
     public static Set<String> getTraceAttributeKeys(Iterable<OcelTrace> traces) {
         Set<String> attributeKeys = new HashSet();
-        Iterator var2 = traces.iterator();
 
-        while(var2.hasNext()) {
-            OcelTrace t = (OcelTrace)var2.next();
+        for (OcelTrace t : traces) {
             attributeKeys.addAll(t.getAttributes().keySet());
         }
 
@@ -134,14 +145,9 @@ public final class OcelUtils {
 
     public static Map<String, Class<?>> getTraceAttributeTypes(Iterable<OcelTrace> traces) {
         Map<String, Class<?>> attributeTypes = new HashMap();
-        Iterator var2 = traces.iterator();
 
-        while(var2.hasNext()) {
-            OcelTrace t = (OcelTrace)var2.next();
-            Iterator var4 = t.getAttributes().values().iterator();
-
-            while(var4.hasNext()) {
-                OcelAttribute a = (OcelAttribute)var4.next();
+        for (OcelTrace t : traces) {
+            for (OcelAttribute a : t.getAttributes().values()) {
                 fillAttributeType(attributeTypes, a);
             }
         }

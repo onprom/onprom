@@ -1,9 +1,38 @@
+/*
+ * ocel
+ *
+ * OcelGlobalAttributeNameMap.java
+ *
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package it.unibz.ocel.info;
 
 import it.unibz.ocel.info.impl.OcelAttributeNameMapImpl;
 import it.unibz.ocel.model.OcelAttribute;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 
 
 public class OcelGlobalAttributeNameMap implements OcelAttributeNameMap {
@@ -32,13 +61,12 @@ public class OcelGlobalAttributeNameMap implements OcelAttributeNameMap {
     }
 
     public Collection<OcelAttributeNameMap> getAvailableMappings() {
-        HashSet<OcelAttributeNameMap> result = new HashSet();
-        result.addAll(this.mappings.values());
+        HashSet<OcelAttributeNameMap> result = new HashSet(this.mappings.values());
         return Collections.unmodifiableCollection(result);
     }
 
     public OcelAttributeNameMap getMapping(String name) {
-        OcelAttributeNameMapImpl mapping = (OcelAttributeNameMapImpl)this.mappings.get(name);
+        OcelAttributeNameMapImpl mapping = this.mappings.get(name);
         if (mapping == null) {
             mapping = new OcelAttributeNameMapImpl(name);
             this.mappings.put(name, mapping);
@@ -73,11 +101,11 @@ public class OcelGlobalAttributeNameMap implements OcelAttributeNameMap {
     }
 
     public String mapSafely(OcelAttribute attribute, String mappingName) {
-        return this.mapSafely(attribute, (OcelAttributeNameMap)this.mappings.get(mappingName));
+        return this.mapSafely(attribute, this.mappings.get(mappingName));
     }
 
     public String mapSafely(String attributeKey, String mappingName) {
-        return this.mapSafely(attributeKey, (OcelAttributeNameMap)this.mappings.get(mappingName));
+        return this.mapSafely(attributeKey, this.mappings.get(mappingName));
     }
 
     public void registerMapping(String mappingName, String attributeKey, String alias) {
@@ -100,10 +128,8 @@ public class OcelGlobalAttributeNameMap implements OcelAttributeNameMap {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Global attribute name map.\n\nContained maps:\n\n");
-        Iterator i$ = this.mappings.values().iterator();
 
-        while(i$.hasNext()) {
-            OcelAttributeNameMapImpl map = (OcelAttributeNameMapImpl)i$.next();
+        for (OcelAttributeNameMapImpl map : this.mappings.values()) {
             sb.append(map.toString());
             sb.append("\n\n");
         }
