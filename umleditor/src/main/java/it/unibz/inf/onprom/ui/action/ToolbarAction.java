@@ -1,9 +1,9 @@
 /*
- * onprom-umleditor
+ * umleditor
  *
  * ToolbarAction.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -41,8 +41,8 @@ public abstract class ToolbarAction {
         actionType = _action;
     }
 
-    public String getActionName() {
-        return actionType.toString();
+    public String getIcon() {
+        return actionType.getIcon();
     }
 
     public char getMnemonic() {

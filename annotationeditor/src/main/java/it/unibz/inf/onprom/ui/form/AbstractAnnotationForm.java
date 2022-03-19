@@ -1,9 +1,9 @@
 /*
- * onprom-annoeditor
+ * annotationeditor
  *
  * AbstractAnnotationForm.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -26,8 +26,8 @@
 
 package it.unibz.inf.onprom.ui.form;
 
+import it.unibz.inf.onprom.data.Annotation;
 import it.unibz.inf.onprom.data.Attribute;
-import it.unibz.inf.onprom.data.DynamicAnnotation;
 import it.unibz.inf.onprom.data.UMLClass;
 import it.unibz.inf.onprom.interfaces.AnnotationDiagram;
 import it.unibz.inf.onprom.interfaces.DiagramShape;
@@ -50,14 +50,14 @@ public abstract class AbstractAnnotationForm extends JPanel implements Navigatio
     public static final Dimension CHK_SIZE = new Dimension(125, 25);
     public static final Dimension TXT_SIZE = new Dimension(175, 25);
     public static final Dimension DOUBLE_TXT_SIZE = new Dimension(350, 25);
-  final AnnotationDiagram drawingPanel;
-  final DynamicAnnotation annotation;
-  private UpdateListener updateListener;
+    final AnnotationDiagram drawingPanel;
+    final Annotation annotation;
+    private UpdateListener updateListener;
 
-  AbstractAnnotationForm(AnnotationDiagram _drawingPanel, DynamicAnnotation _annotation) {
-    drawingPanel = _drawingPanel;
-    annotation = _annotation;
-  }
+    AbstractAnnotationForm(AnnotationDiagram _drawingPanel, Annotation _annotation) {
+        drawingPanel = _drawingPanel;
+        annotation = _annotation;
+    }
 
   void startNavigation(UpdateListener _updateListener, boolean functional) {
     updateListener = _updateListener;

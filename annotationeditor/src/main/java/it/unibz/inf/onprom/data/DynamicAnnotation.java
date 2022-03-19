@@ -1,9 +1,10 @@
+
 /*
- * onprom-dynamiceditor
+ * annotationeditor
  *
  * DynamicAnnotation.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -38,8 +39,6 @@ import it.unibz.inf.onprom.interfaces.AnnotationDiagram;
 import it.unibz.inf.onprom.interfaces.AnnotationProperties;
 import it.unibz.inf.onprom.io.SimpleQueryExporter;
 import it.unibz.inf.onprom.ui.form.DynamicAnnotationForm;
-import it.unibz.inf.onprom.ui.utility.DrawingUtility;
-import it.unibz.inf.onprom.ui.utility.UIUtility;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.apache.jena.sparql.core.Var;
@@ -47,7 +46,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,40 +53,37 @@ import java.util.Set;
 /**
  * Created by T. E. Kalayci on 13-Oct-2017.
  */
-public class DynamicAnnotation extends AbstractDiagramShape<AnnotationDiagram> {
+public class DynamicAnnotation extends Annotation {
     private static final Logger logger = LoggerFactory.getLogger(DynamicAnnotation.class.getName());
-    @JsonIgnore
-    private static final Font ANNOTATION_FONT = DrawingUtility.getFont("Prompt-Regular", Font.PLAIN, 14f);
     private final Map<String, DynamicNavigationalAttribute> attributeValues = Maps.newLinkedHashMap();
     private final Map<String, DynamicAnnotationAttribute> relationValues = Maps.newLinkedHashMap();
+
+    private Set<DynamicAttribute> externalURIComponents = Sets.newLinkedHashSet();
+
     @JsonIgnore
     private final Set<String> uri = Sets.newLinkedHashSet();
     @JsonIgnore
     private final List<AnnotationQuery> queries = Lists.newLinkedList();
     @JsonIgnore
     private final Map<String, ImmutablePair<String, Object>> uriFields = Maps.newLinkedHashMap();
-    @JsonIgnore
-    AnnotationProperties properties = getClass().getAnnotation(AnnotationProperties.class);
-    UMLClass relatedClass;
-    private Set<DynamicAttribute> externalURIComponents = Sets.newLinkedHashSet();
     private UMLClass annotationClass;
     private boolean isLabelPartOfIndex;
-    private String label;
 
     DynamicAnnotation() {
     }
 
     public DynamicAnnotation(UMLClass _annotationClass, UMLClass _umlClass, AnnotationProperties _properties) {
-        relatedClass = _umlClass;
+        super(_umlClass);
         annotationClass = _annotationClass;
         properties = _properties;
     }
 
+    @Override
     public AnnotationProperties getAnnotationProperties() {
         if (properties == null) {
             properties = AnnotationEditor.getAnnotationProperties(annotationClass);
         }
-        return properties;
+        return super.getAnnotationProperties();
     }
 
     public DynamicNavigationalAttribute getAttributeValue(String name) {
@@ -129,10 +124,11 @@ public class DynamicAnnotation extends AbstractDiagramShape<AnnotationDiagram> {
         return annotationClass;
     }
 
+    @Override
     public List<AnnotationQuery> getQuery() {
         //TODO check cyclic access
         //TODO when to check if visited or not?
-        logger.info("Generating queries for " + this);
+        logger.info("Generating queries for " + toString());
         queries.clear();
         uriFields.clear();
         uri.clear();
@@ -179,7 +175,7 @@ public class DynamicAnnotation extends AbstractDiagramShape<AnnotationDiagram> {
 
     private BinaryAnnotationQuery getAttributeQuery(String key, DynamicNavigationalAttribute value) {
         logger.info("\tgenerating attribute query for " + key);
-        String field = uriFields.containsKey(key) ? uriFields.get(key).left : "_value";
+        String field = uriFields.containsKey(key) ? uriFields.get(key).left : XESConstants.attValue;
         SelectBuilder builder = SimpleQueryExporter.getStringAttributeQueryBuilder(
                 value.getAttribute(), this, null, Var.alloc(field)
         );
@@ -309,95 +305,9 @@ public class DynamicAnnotation extends AbstractDiagramShape<AnnotationDiagram> {
         return uri.toArray(new String[]{});
     }
 
-    public String getName() {
-        return label;
-    }
-
     @Override
-    public String getLongName() {
-        return relatedClass.getLongName();
-    }
-
-    public void draw(Graphics2D g2d) {
-        final Color oldColor = g2d.getColor();
-        final Stroke oldStroke = g2d.getStroke();
-        final Font oldFont = g2d.getFont();
-
-        final int fontHeight = g2d.getFontMetrics().getHeight();
-        final int startX = getStartX();
-        final int startY = getStartY();
-        final String type = getAnnotationProperties().title();
-        final Color bgColor = Color.decode(getAnnotationProperties().color());
-        final String label = getLabel();
-        //calculate box height and width
-        g2d.setFont(ANNOTATION_FONT);
-        int rectangleHeight = fontHeight * 2;
-        int rectangleWidth = g2d.getFontMetrics().stringWidth(type);
-        if (label != null && !label.isEmpty()) {
-            rectangleHeight += fontHeight;
-            if (label.length() > type.length()) {
-                rectangleWidth = g2d.getFontMetrics().stringWidth(label);
-            }
-        }
-        rectangleWidth += 3 * DrawingUtility.MARGIN;
-        //draw a rectangle for the box using font and background color
-        if (this.isDisabled()) {
-            g2d.setColor(Color.GRAY);
-        } else {
-            g2d.setColor(bgColor);
-        }
-        g2d.fillRect(startX, startY, rectangleWidth, rectangleHeight);
-        //draw line between the class and the annotation
-        g2d.drawLine(startX + rectangleWidth / 2, startY + rectangleHeight / 2, getRelatedClass().getCenterX(),
-                getRelatedClass().getCenterY());
-        //draw outline rectangle according to the state of the shape
-        g2d.setColor(getState().getColor());
-        g2d.drawRect(startX, startY, rectangleWidth, rectangleHeight);
-        //draw type of the annotation
-        int fontWidth = g2d.getFontMetrics().stringWidth(type);
-        int typeCoord = startX + (rectangleWidth - fontWidth) / 2;
-        if (UIUtility.isDark(bgColor)) {
-            g2d.setColor(Color.WHITE);
-        }
-        g2d.drawString(type, typeCoord, startY + fontHeight + DrawingUtility.MARGIN);
-        if (label != null && !label.isEmpty()) {
-            //draw label of the annotation if it exists
-            fontWidth = g2d.getFontMetrics().stringWidth(label);
-            typeCoord = startX + (rectangleWidth - fontWidth) / 2;
-            g2d.drawString(label, typeCoord, startY + 2 * fontHeight + DrawingUtility.MARGIN);
-        }
-        //set end coordinates of the annotation
-        setEndX(startX + rectangleWidth);
-        setEndY(startY + rectangleHeight);
-        //load previous properties again
-        g2d.setColor(oldColor);
-        g2d.setStroke(oldStroke);
-        g2d.setFont(oldFont);
-    }
-
-    public String toString() {
-        return properties.title() + (label != null ? " " + label : " ") + " (" + relatedClass.toString() + ")";
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public UMLClass getRelatedClass() {
-        return relatedClass;
-    }
-
-    @Override
-    public String getCleanName() {
-        return relatedClass.getCleanName();
-    }
-
     public String getVarName() {
-        return relatedClass.getCleanName();
+        return relatedClass.getCleanName() /*+ hashCode()*/;
     }
 
     @Override
@@ -405,3 +315,4 @@ public class DynamicAnnotation extends AbstractDiagramShape<AnnotationDiagram> {
         return java.util.Optional.of(new DynamicAnnotationForm(panel, this));
     }
 }
+

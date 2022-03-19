@@ -1,9 +1,9 @@
 /*
- * onprom-annoeditor
+ * annotationeditor
  *
  * AttributeForm.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -56,15 +56,15 @@ class AttributeForm extends AbstractAnnotationForm {
     private JComboBox<String> txtType;
     private JTextField txtValueFilter;
 
-    AttributeForm(AnnotationDiagram _drawingPanel, DynamicAnnotation _annotation) {
+    AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation) {
         this(_drawingPanel, _annotation, true, false, NAMES, TYPES, null);
     }
 
-    AttributeForm(AnnotationDiagram _drawingPanel, DynamicAnnotation _annotation, boolean withFilter, boolean withType, Set<NavigationalAttribute> values) {
+    AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation, boolean withFilter, boolean withType, Set<NavigationalAttribute> values) {
         this(_drawingPanel, _annotation, withFilter, withType, NAMES, TYPES, values);
     }
 
-    private AttributeForm(AnnotationDiagram _drawingPanel, DynamicAnnotation _annotation, boolean withFilter, boolean withType, String[] names, String[] types, Set<NavigationalAttribute> values) {
+    private AttributeForm(AnnotationDiagram _drawingPanel, Annotation _annotation, boolean withFilter, boolean withType, String[] names, String[] types, Set<NavigationalAttribute> values) {
 
         super(_drawingPanel, _annotation);
 
