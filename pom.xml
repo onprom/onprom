@@ -27,11 +27,10 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>it.unibz.inf.kaos</groupId>
+    <groupId>it.unibz.inf.onprom</groupId>
     <artifactId>onprom</artifactId>
     <version>2.4.0</version>
     <packaging>pom</packaging>
-    <name>onprom - Parent Project of onprom Tools</name>
     <url>https://onprom.inf.unibz.it</url>
     <organization>
         <name>KRDB - Free University of Bozen-Bolzano</name>
@@ -91,15 +90,13 @@
     </build>
 
     <modules>
-        <module>onprom-data</module>
-        <module>onprom-umleditor</module>
-        <module>onprom-annoeditor</module>
-        <module>onprom-dynamiceditor</module>
-        <module>onprom-obdamapper</module>
-        <module>onprom-logextractor</module>
-        <module>onprom-ocel</module>
-        <module>onprom-toolkit</module>
-        <module>onprom-plugin</module>
+        <module>data</module>
+        <module>umleditor</module>
+        <module>annotationeditor</module>
+        <module>obdamapper</module>
+        <module>ocel</module>
+        <module>logextractor</module>
+        <module>toolkit</module>
     </modules>
     <repositories>
         <repository>

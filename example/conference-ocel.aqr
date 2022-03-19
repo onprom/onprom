@@ -1,0 +1,38 @@
+{
+  "@class" : "it.unibz.inf.kaos.data.query.AnnotationQueries",
+  "queries" : [ "java.util.LinkedHashSet", [ {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Acceptance\" AS ?_L_1252328914) ?_I1_1252328914\nWHERE\n  { ?Assignment  a                  <http://www.example.com/Assignment> ;\n              <http://www.example.com/accTime>  ?_I1_1252328914}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/Event",
+    "component" : [ "Assignment", "_L_1252328914", "_I1_1252328914" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_I1_1252328914 (\"Acceptance\" AS ?_L_1252328914)\nWHERE\n  { ?Assignment  <http://www.example.com/accTime>  ?_I1_1252328914}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/timestamp",
+    "firstComponent" : [ "Assignment", "_L_1252328914", "_I1_1252328914" ],
+    "secondComponent" : [ "_I1_1252328914" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"InvitationTime\" AS ?_L_538143498) ?_I1_538143498 (\"InvitationTime\" AS ?_I2_538143498)\nWHERE\n  { ?Assignment  a                  <http://www.example.com/Assignment> ;\n              <http://www.example.com/invTime>  ?_I1_538143498}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/Attribute",
+    "component" : [ "Assignment", "_L_538143498", "_I1_538143498", "_I2_538143498" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_I1_538143498 (\"InvitationTime\" AS ?_L_538143498) (\"InvitationTime\" AS ?_I2_538143498)\nWHERE\n  { ?Assignment  <http://www.example.com/invTime>  ?_I1_538143498}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/attValue",
+    "firstComponent" : [ "Assignment", "_L_538143498", "_I1_538143498", "_I2_538143498" ],
+    "secondComponent" : [ "_I1_538143498" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"InvitationTime\" AS ?_I2_538143498) (\"InvitationTime\" AS ?_L_538143498) ?_I1_538143498\nWHERE\n  { ?Assignment  a                  <http://www.example.com/Assignment> ;\n              <http://www.example.com/invTime>  ?_I1_538143498}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/attKey",
+    "firstComponent" : [ "Assignment", "_L_538143498", "_I1_538143498", "_I2_538143498" ],
+    "secondComponent" : [ "_I2_538143498" ]
+  }, {
+    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"InvitationTime\" AS ?_L_538143498) ?_I1_538143498 (\"InvitationTime\" AS ?_I2_538143498) (\"Acceptance\" AS ?_L_1252328914) ?_I1_1252328914\nWHERE\n  { ?Assignment  a                  <http://www.example.com/Assignment> ;\n              <http://www.example.com/invTime>  ?_I1_538143498 ;\n              <http://www.example.com/accTime>  ?_I1_1252328914}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/e-has-a",
+    "firstComponent" : [ "Assignment", "_L_1252328914", "_I1_1252328914" ],
+    "secondComponent" : [ "Assignment", "_L_538143498", "_I1_538143498", "_I2_538143498" ]
+  } ] ]
+}

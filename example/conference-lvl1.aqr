@@ -1,165 +1,165 @@
 {
-  "@class" : "it.unibz.inf.kaos.data.query.AnnotationQueries",
+  "@class" : "it.unibz.inf.onprom.data.query.AnnotationQueries",
   "queries" : [ "java.util.LinkedHashSet", [ {
-    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
-    "query" : "SELECT  ?Assignment ?_I0_1706515769 ?_I1_1706515769 (\"ReviewInvitation\" AS ?_I2_1706515769) ?Review\nWHERE\n  { ?Assignment  a                  <http://www.example.com/Assignment> ;\n              <http://www.example.com/accTime>  ?_I0_1706515769 ;\n              <http://www.example.com/invTime>  ?_I1_1706515769 ;\n              <http://www.example.com/leadsTo>  ?Review}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Creation ?_I0_1418022663 (\"Creation\" AS ?_I1_1418022663) ?Paper\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/uploadTime>  ?_I0_1418022663 ;\n              a                     <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/Event",
-    "component" : [ "Assignment", "_I0_1706515769", "_I1_1706515769", "_I2_1706515769", "Review" ]
+    "component" : [ "Creation", "_I0_1418022663", "_I1_1418022663", "Paper" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Assignment ?_I0_1706515769 ?_I1_1706515769 (\"ReviewInvitation\" AS ?_I2_1706515769) ?Review\nWHERE\n  { ?Assignment  <http://www.example.com/accTime>  ?_I0_1706515769 ;\n              <http://www.example.com/invTime>  ?_I1_1706515769 ;\n              <http://www.example.com/leadsTo>  ?Review}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation ?_I0_1418022663 (\"Creation\" AS ?_I1_1418022663) ?Paper\nWHERE\n  { ?Creation  <http://www.example.com/uploadTime>  ?_I0_1418022663 ;\n              a                     <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/endTS",
-    "firstComponent" : [ "Assignment", "_I0_1706515769", "_I1_1706515769", "_I2_1706515769", "Review" ],
-    "secondComponent" : [ "_I0_1706515769" ]
+    "firstComponent" : [ "Creation", "_I0_1418022663", "_I1_1418022663", "Paper" ],
+    "secondComponent" : [ "_I0_1418022663" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Assignment ?_I1_1706515769 ?_I0_1706515769 (\"ReviewInvitation\" AS ?_I2_1706515769) ?Review\nWHERE\n  { ?Assignment  <http://www.example.com/invTime>  ?_I1_1706515769 ;\n              <http://www.example.com/accTime>  ?_I0_1706515769 ;\n              <http://www.example.com/leadsTo>  ?Review}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/startTS",
-    "firstComponent" : [ "Assignment", "_I0_1706515769", "_I1_1706515769", "_I2_1706515769", "Review" ],
-    "secondComponent" : [ "_I1_1706515769" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Assignment (\"ReviewInvitation\" AS ?_I2_1706515769) ?_I0_1706515769 ?_I1_1706515769 ?Review\nWHERE\n  { ?Assignment  a                  <http://www.example.com/Assignment> ;\n              <http://www.example.com/accTime>  ?_I0_1706515769 ;\n              <http://www.example.com/invTime>  ?_I1_1706515769 ;\n              <http://www.example.com/leadsTo>  ?Review}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation (\"Creation\" AS ?_I1_1418022663) ?_I0_1418022663 ?Paper\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/uploadTime>  ?_I0_1418022663 ;\n              a                     <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/eName",
-    "firstComponent" : [ "Assignment", "_I0_1706515769", "_I1_1706515769", "_I2_1706515769", "Review" ],
-    "secondComponent" : [ "_I2_1706515769" ]
+    "firstComponent" : [ "Creation", "_I0_1418022663", "_I1_1418022663", "Paper" ],
+    "secondComponent" : [ "_I1_1418022663" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Assignment ?Review ?_I0_1706515769 ?_I1_1706515769 (\"ReviewInvitation\" AS ?_I2_1706515769) ?_I0_1014368219 ?Paper\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/accTime>  ?_I0_1706515769 ;\n              <http://www.example.com/invTime>  ?_I1_1706515769 ;\n              <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Person>  ?Person .\n    ?Person   <http://www.example.com/pName>  ?_I0_1014368219 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/s-contains-e",
-    "firstComponent" : [ "Review", "_I0_1014368219", "Paper" ],
-    "secondComponent" : [ "Assignment", "_I0_1706515769", "_I1_1706515769", "_I2_1706515769", "Review" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
-    "query" : "SELECT  ?Paper ?_I0_1142830722\nWHERE\n  { ?Paper  a                     <http://www.example.com/Paper> ;\n            <http://www.example.com/title>  ?_I0_1142830722}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/Case",
-    "component" : [ "Paper", "_I0_1142830722" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Paper ?_I0_1142830722\nWHERE\n  { ?Paper  <http://www.example.com/title>  ?_I0_1142830722}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/cName",
-    "firstComponent" : [ "Paper", "_I0_1142830722" ],
-    "secondComponent" : [ "_I0_1142830722" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
-    "query" : "SELECT  ?Creation ?_I0_992039426 (\"Creation\" AS ?_I1_992039426) ?Paper\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/uploadTime>  ?_I0_992039426 ;\n              a                     <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/Event",
-    "component" : [ "Creation", "_I0_992039426", "_I1_992039426", "Paper" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Creation ?_I0_992039426 (\"Creation\" AS ?_I1_992039426) ?Paper\nWHERE\n  { ?Creation  <http://www.example.com/uploadTime>  ?_I0_992039426 ;\n              a                     <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/endTS",
-    "firstComponent" : [ "Creation", "_I0_992039426", "_I1_992039426", "Paper" ],
-    "secondComponent" : [ "_I0_992039426" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Creation (\"Creation\" AS ?_I1_992039426) ?_I0_992039426 ?Paper\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/uploadTime>  ?_I0_992039426 ;\n              a                     <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/eName",
-    "firstComponent" : [ "Creation", "_I0_992039426", "_I1_992039426", "Paper" ],
-    "secondComponent" : [ "_I1_992039426" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Creation ?Paper ?_I0_992039426 (\"Creation\" AS ?_I1_992039426) ?_I0_1142830722\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper ;\n              <http://www.example.com/uploadTime>  ?_I0_992039426 .\n    ?Paper    <http://www.example.com/title>  ?_I0_1142830722}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Creation ?Paper ?_I0_1418022663 (\"Creation\" AS ?_I1_1418022663) ?_I0_296605651\nWHERE\n  { ?Creation  a                    <http://www.example.com/Creation> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper ;\n              <http://www.example.com/uploadTime>  ?_I0_1418022663 .\n    ?Paper    <http://www.example.com/title>  ?_I0_296605651}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/c-contains-e",
-    "firstComponent" : [ "Paper", "_I0_1142830722" ],
-    "secondComponent" : [ "Creation", "_I0_992039426", "_I1_992039426", "Paper" ]
+    "firstComponent" : [ "Paper", "_I0_296605651" ],
+    "secondComponent" : [ "Creation", "_I0_1418022663", "_I1_1418022663", "Paper" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
-    "query" : "SELECT  ?Review ?_I0_1014368219 ?Paper\nWHERE\n  { ?Review   a                     <http://www.example.com/Review> .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Person>  ?Person .\n    ?Person   <http://www.example.com/pName>  ?_I0_1014368219 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_I0_1239783084 ?Paper\nWHERE\n  { ?Review   a                     <http://www.example.com/Review> .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Person>  ?Person .\n    ?Person   <http://www.example.com/pName>  ?_I0_1239783084 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/SubCase",
-    "component" : [ "Review", "_I0_1014368219", "Paper" ]
+    "component" : [ "Review", "_I0_1239783084", "Paper" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Review ?_I0_1014368219 ?Paper\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Person>  ?Person .\n    ?Person   <http://www.example.com/pName>  ?_I0_1014368219 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_I0_1239783084 ?Paper\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Person>  ?Person .\n    ?Person   <http://www.example.com/pName>  ?_I0_1239783084 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/sName",
-    "firstComponent" : [ "Review", "_I0_1014368219", "Paper" ],
-    "secondComponent" : [ "_I0_1014368219" ]
+    "firstComponent" : [ "Review", "_I0_1239783084", "Paper" ],
+    "secondComponent" : [ "_I0_1239783084" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Review ?Paper ?_I0_1014368219 ?_I0_1142830722\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper ;\n              <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Person>  ?Person .\n    ?Person   <http://www.example.com/pName>  ?_I0_1014368219 .\n    ?Paper    <http://www.example.com/title>  ?_I0_1142830722}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?Paper ?_I0_1239783084 ?_I0_296605651\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper ;\n              <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Person>  ?Person .\n    ?Person   <http://www.example.com/pName>  ?_I0_1239783084 .\n    ?Paper    <http://www.example.com/title>  ?_I0_296605651}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/c-contains-s",
-    "firstComponent" : [ "Paper", "_I0_1142830722" ],
-    "secondComponent" : [ "Review", "_I0_1014368219", "Paper" ]
+    "firstComponent" : [ "Paper", "_I0_296605651" ],
+    "secondComponent" : [ "Review", "_I0_1239783084", "Paper" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
-    "query" : "SELECT  ?CRUpload ?_I0_1086700592 (\"CameraReady\" AS ?_I1_1086700592) ?Paper\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/uploadTime>  ?_I0_1086700592 ;\n              a                     <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_I0_764763161 ?_I1_764763161 (\"Review\" AS ?_I2_764763161)\nWHERE\n  { ?Review   a                     <http://www.example.com/Review> ;\n              <http://www.example.com/subTime>  ?_I0_764763161 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/accTime>  ?_I1_764763161}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/Event",
-    "component" : [ "CRUpload", "_I0_1086700592", "_I1_1086700592", "Paper" ]
+    "component" : [ "Review", "_I0_764763161", "_I1_764763161", "_I2_764763161" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?CRUpload ?_I0_1086700592 (\"CameraReady\" AS ?_I1_1086700592) ?Paper\nWHERE\n  { ?CRUpload  <http://www.example.com/uploadTime>  ?_I0_1086700592 ;\n              a                     <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_I0_764763161 ?_I1_764763161 (\"Review\" AS ?_I2_764763161)\nWHERE\n  { ?Review   <http://www.example.com/subTime>  ?_I0_764763161 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/accTime>  ?_I1_764763161}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/endTS",
-    "firstComponent" : [ "CRUpload", "_I0_1086700592", "_I1_1086700592", "Paper" ],
-    "secondComponent" : [ "_I0_1086700592" ]
+    "firstComponent" : [ "Review", "_I0_764763161", "_I1_764763161", "_I2_764763161" ],
+    "secondComponent" : [ "_I0_764763161" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?CRUpload (\"CameraReady\" AS ?_I1_1086700592) ?_I0_1086700592 ?Paper\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/uploadTime>  ?_I0_1086700592 ;\n              a                     <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/eName",
-    "firstComponent" : [ "CRUpload", "_I0_1086700592", "_I1_1086700592", "Paper" ],
-    "secondComponent" : [ "_I1_1086700592" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?CRUpload ?Paper ?_I0_1086700592 (\"CameraReady\" AS ?_I1_1086700592) ?_I0_1142830722\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper ;\n              <http://www.example.com/uploadTime>  ?_I0_1086700592 .\n    ?Paper    <http://www.example.com/title>  ?_I0_1142830722}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/c-contains-e",
-    "firstComponent" : [ "Paper", "_I0_1142830722" ],
-    "secondComponent" : [ "CRUpload", "_I0_1086700592", "_I1_1086700592", "Paper" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
-    "query" : "SELECT  ?Review ?_I0_238995906 ?_I1_238995906 (\"Review\" AS ?_I2_238995906)\nWHERE\n  { ?Review   a                     <http://www.example.com/Review> ;\n              <http://www.example.com/subTime>  ?_I0_238995906 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/accTime>  ?_I1_238995906}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/Event",
-    "component" : [ "Review", "_I0_238995906", "_I1_238995906", "_I2_238995906" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Review ?_I0_238995906 ?_I1_238995906 (\"Review\" AS ?_I2_238995906)\nWHERE\n  { ?Review   <http://www.example.com/subTime>  ?_I0_238995906 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/accTime>  ?_I1_238995906}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/endTS",
-    "firstComponent" : [ "Review", "_I0_238995906", "_I1_238995906", "_I2_238995906" ],
-    "secondComponent" : [ "_I0_238995906" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Review ?_I1_238995906 ?_I0_238995906 (\"Review\" AS ?_I2_238995906)\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/accTime>  ?_I1_238995906 .\n    ?Review   <http://www.example.com/subTime>  ?_I0_238995906}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_I1_764763161 ?_I0_764763161 (\"Review\" AS ?_I2_764763161)\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/accTime>  ?_I1_764763161 .\n    ?Review   <http://www.example.com/subTime>  ?_I0_764763161}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/startTS",
-    "firstComponent" : [ "Review", "_I0_238995906", "_I1_238995906", "_I2_238995906" ],
-    "secondComponent" : [ "_I1_238995906" ]
+    "firstComponent" : [ "Review", "_I0_764763161", "_I1_764763161", "_I2_764763161" ],
+    "secondComponent" : [ "_I1_764763161" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Review (\"Review\" AS ?_I2_238995906) ?_I0_238995906 ?_I1_238995906\nWHERE\n  { ?Review   a                     <http://www.example.com/Review> ;\n              <http://www.example.com/subTime>  ?_I0_238995906 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/accTime>  ?_I1_238995906}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"Review\" AS ?_I2_764763161) ?_I0_764763161 ?_I1_764763161\nWHERE\n  { ?Review   a                     <http://www.example.com/Review> ;\n              <http://www.example.com/subTime>  ?_I0_764763161 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/accTime>  ?_I1_764763161}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/eName",
-    "firstComponent" : [ "Review", "_I0_238995906", "_I1_238995906", "_I2_238995906" ],
-    "secondComponent" : [ "_I2_238995906" ]
+    "firstComponent" : [ "Review", "_I0_764763161", "_I1_764763161", "_I2_764763161" ],
+    "secondComponent" : [ "_I2_764763161" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Review ?_I0_238995906 ?_I1_238995906 (\"Review\" AS ?_I2_238995906) ?_I0_1014368219 ?Paper\nWHERE\n  { ?Review   a                     <http://www.example.com/Review> ;\n              <http://www.example.com/subTime>  ?_I0_238995906 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/accTime>  ?_I1_238995906 ;\n              <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Person>  ?Person .\n    ?Person   <http://www.example.com/pName>  ?_I0_1014368219 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_I0_764763161 ?_I1_764763161 (\"Review\" AS ?_I2_764763161) ?_I0_1239783084 ?Paper\nWHERE\n  { ?Review   a                     <http://www.example.com/Review> ;\n              <http://www.example.com/subTime>  ?_I0_764763161 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/accTime>  ?_I1_764763161 ;\n              <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Person>  ?Person .\n    ?Person   <http://www.example.com/pName>  ?_I0_1239783084 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/s-contains-e",
-    "firstComponent" : [ "Review", "_I0_1014368219", "Paper" ],
-    "secondComponent" : [ "Review", "_I0_238995906", "_I1_238995906", "_I2_238995906" ]
+    "firstComponent" : [ "Review", "_I0_1239783084", "Paper" ],
+    "secondComponent" : [ "Review", "_I0_764763161", "_I1_764763161", "_I2_764763161" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.UnaryAnnotationQuery",
-    "query" : "SELECT  ?DecidedPaper ?_I0_1677185033 (\"Decision\" AS ?_I1_1677185033) ?_I2_1677185033 ?Paper\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper> ;\n              <http://www.example.com/decTime>  ?_I0_1677185033 ;\n              <http://www.example.com/decTime>  ?_I2_1677185033\n    BIND(?DecidedPaper AS ?Paper)\n  }\n",
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?_I0_1777918886 (\"Decision\" AS ?_I1_1777918886) ?_I2_1777918886 ?Paper\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper> ;\n              <http://www.example.com/decTime>  ?_I0_1777918886 ;\n              <http://www.example.com/decTime>  ?_I2_1777918886\n    BIND(?DecidedPaper AS ?Paper)\n  }\n",
     "targetIRI" : "http://onprom.inf.unibz.it/Event",
-    "component" : [ "DecidedPaper", "_I0_1677185033", "_I1_1677185033", "_I2_1677185033", "Paper" ]
+    "component" : [ "DecidedPaper", "_I0_1777918886", "_I1_1777918886", "_I2_1777918886", "Paper" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?DecidedPaper ?_I0_1677185033 (\"Decision\" AS ?_I1_1677185033) ?_I2_1677185033 ?Paper\nWHERE\n  { ?DecidedPaper\n              <http://www.example.com/decTime>  ?_I0_1677185033 ;\n              <http://www.example.com/decTime>  ?_I2_1677185033\n    BIND(?DecidedPaper AS ?Paper)\n  }\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?_I0_1777918886 (\"Decision\" AS ?_I1_1777918886) ?_I2_1777918886 ?Paper\nWHERE\n  { ?DecidedPaper\n              <http://www.example.com/decTime>  ?_I0_1777918886 ;\n              <http://www.example.com/decTime>  ?_I2_1777918886\n    BIND(?DecidedPaper AS ?Paper)\n  }\n",
     "targetIRI" : "http://onprom.inf.unibz.it/endTS",
-    "firstComponent" : [ "DecidedPaper", "_I0_1677185033", "_I1_1677185033", "_I2_1677185033", "Paper" ],
-    "secondComponent" : [ "_I0_1677185033" ]
+    "firstComponent" : [ "DecidedPaper", "_I0_1777918886", "_I1_1777918886", "_I2_1777918886", "Paper" ],
+    "secondComponent" : [ "_I0_1777918886" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?DecidedPaper (\"Decision\" AS ?_I1_1677185033) ?_I0_1677185033 ?_I2_1677185033 ?Paper\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper> ;\n              <http://www.example.com/decTime>  ?_I0_1677185033 ;\n              <http://www.example.com/decTime>  ?_I2_1677185033\n    BIND(?DecidedPaper AS ?Paper)\n  }\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"Decision\" AS ?_I1_1777918886) ?_I0_1777918886 ?_I2_1777918886 ?Paper\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.com/DecidedPaper> ;\n              <http://www.example.com/decTime>  ?_I0_1777918886 ;\n              <http://www.example.com/decTime>  ?_I2_1777918886\n    BIND(?DecidedPaper AS ?Paper)\n  }\n",
     "targetIRI" : "http://onprom.inf.unibz.it/eName",
-    "firstComponent" : [ "DecidedPaper", "_I0_1677185033", "_I1_1677185033", "_I2_1677185033", "Paper" ],
-    "secondComponent" : [ "_I1_1677185033" ]
+    "firstComponent" : [ "DecidedPaper", "_I0_1777918886", "_I1_1777918886", "_I2_1777918886", "Paper" ],
+    "secondComponent" : [ "_I1_1777918886" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?DecidedPaper ?_I2_1677185033 ?_I0_1677185033 (\"Decision\" AS ?_I1_1677185033) ?Paper\nWHERE\n  { ?DecidedPaper\n              <http://www.example.com/decTime>  ?_I2_1677185033 ;\n              <http://www.example.com/decTime>  ?_I0_1677185033\n    BIND(?DecidedPaper AS ?Paper)\n  }\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?_I2_1777918886 ?_I0_1777918886 (\"Decision\" AS ?_I1_1777918886) ?Paper\nWHERE\n  { ?DecidedPaper\n              <http://www.example.com/decTime>  ?_I2_1777918886 ;\n              <http://www.example.com/decTime>  ?_I0_1777918886\n    BIND(?DecidedPaper AS ?Paper)\n  }\n",
     "targetIRI" : "http://onprom.inf.unibz.it/startTS",
-    "firstComponent" : [ "DecidedPaper", "_I0_1677185033", "_I1_1677185033", "_I2_1677185033", "Paper" ],
-    "secondComponent" : [ "_I2_1677185033" ]
+    "firstComponent" : [ "DecidedPaper", "_I0_1777918886", "_I1_1777918886", "_I2_1777918886", "Paper" ],
+    "secondComponent" : [ "_I2_1777918886" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?DecidedPaper ?Paper ?_I0_1677185033 (\"Decision\" AS ?_I1_1677185033) ?_I2_1677185033 ?_I0_1142830722\nWHERE\n  { ?DecidedPaper\n              a  <http://www.example.com/DecidedPaper>\n    BIND(?DecidedPaper AS ?Paper)\n    ?DecidedPaper\n              <http://www.example.com/decTime>  ?_I0_1677185033 ;\n              <http://www.example.com/decTime>  ?_I2_1677185033 .\n    ?Paper    <http://www.example.com/title>  ?_I0_1142830722\n  }\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?Paper ?_I0_1777918886 (\"Decision\" AS ?_I1_1777918886) ?_I2_1777918886 ?_I0_296605651\nWHERE\n  { ?DecidedPaper\n              a  <http://www.example.com/DecidedPaper>\n    BIND(?DecidedPaper AS ?Paper)\n    ?DecidedPaper\n              <http://www.example.com/decTime>  ?_I0_1777918886 ;\n              <http://www.example.com/decTime>  ?_I2_1777918886 .\n    ?Paper    <http://www.example.com/title>  ?_I0_296605651\n  }\n",
     "targetIRI" : "http://onprom.inf.unibz.it/c-contains-e",
-    "firstComponent" : [ "Paper", "_I0_1142830722" ],
-    "secondComponent" : [ "DecidedPaper", "_I0_1677185033", "_I1_1677185033", "_I2_1677185033", "Paper" ]
+    "firstComponent" : [ "Paper", "_I0_296605651" ],
+    "secondComponent" : [ "DecidedPaper", "_I0_1777918886", "_I1_1777918886", "_I2_1777918886", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_I0_964292574 ?_I1_964292574 (\"ReviewInvitation\" AS ?_I2_964292574) ?Review\nWHERE\n  { ?Assignment  a                  <http://www.example.com/Assignment> ;\n              <http://www.example.com/accTime>  ?_I0_964292574 ;\n              <http://www.example.com/invTime>  ?_I1_964292574 ;\n              <http://www.example.com/leadsTo>  ?Review}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Event",
+    "component" : [ "Assignment", "_I0_964292574", "_I1_964292574", "_I2_964292574", "Review" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_I0_964292574 ?_I1_964292574 (\"ReviewInvitation\" AS ?_I2_964292574) ?Review\nWHERE\n  { ?Assignment  <http://www.example.com/accTime>  ?_I0_964292574 ;\n              <http://www.example.com/invTime>  ?_I1_964292574 ;\n              <http://www.example.com/leadsTo>  ?Review}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/endTS",
+    "firstComponent" : [ "Assignment", "_I0_964292574", "_I1_964292574", "_I2_964292574", "Review" ],
+    "secondComponent" : [ "_I0_964292574" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_I1_964292574 ?_I0_964292574 (\"ReviewInvitation\" AS ?_I2_964292574) ?Review\nWHERE\n  { ?Assignment  <http://www.example.com/invTime>  ?_I1_964292574 ;\n              <http://www.example.com/accTime>  ?_I0_964292574 ;\n              <http://www.example.com/leadsTo>  ?Review}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/startTS",
+    "firstComponent" : [ "Assignment", "_I0_964292574", "_I1_964292574", "_I2_964292574", "Review" ],
+    "secondComponent" : [ "_I1_964292574" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"ReviewInvitation\" AS ?_I2_964292574) ?_I0_964292574 ?_I1_964292574 ?Review\nWHERE\n  { ?Assignment  a                  <http://www.example.com/Assignment> ;\n              <http://www.example.com/accTime>  ?_I0_964292574 ;\n              <http://www.example.com/invTime>  ?_I1_964292574 ;\n              <http://www.example.com/leadsTo>  ?Review}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/eName",
+    "firstComponent" : [ "Assignment", "_I0_964292574", "_I1_964292574", "_I2_964292574", "Review" ],
+    "secondComponent" : [ "_I2_964292574" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?Review ?_I0_964292574 ?_I1_964292574 (\"ReviewInvitation\" AS ?_I2_964292574) ?_I0_1239783084 ?Paper\nWHERE\n  { ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/accTime>  ?_I0_964292574 ;\n              <http://www.example.com/invTime>  ?_I1_964292574 ;\n              <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Person>  ?Person .\n    ?Person   <http://www.example.com/pName>  ?_I0_1239783084 .\n    ?Assignment  <http://www.example.com/leadsTo>  ?Review ;\n              <http://www.example.com/Assignment_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/s-contains-e",
+    "firstComponent" : [ "Review", "_I0_1239783084", "Paper" ],
+    "secondComponent" : [ "Assignment", "_I0_964292574", "_I1_964292574", "_I2_964292574", "Review" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload ?_I0_196463194 (\"CameraReady\" AS ?_I1_196463194) ?Paper\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/uploadTime>  ?_I0_196463194 ;\n              a                     <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Event",
+    "component" : [ "CRUpload", "_I0_196463194", "_I1_196463194", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload ?_I0_196463194 (\"CameraReady\" AS ?_I1_196463194) ?Paper\nWHERE\n  { ?CRUpload  <http://www.example.com/uploadTime>  ?_I0_196463194 ;\n              a                     <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/endTS",
+    "firstComponent" : [ "CRUpload", "_I0_196463194", "_I1_196463194", "Paper" ],
+    "secondComponent" : [ "_I0_196463194" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload (\"CameraReady\" AS ?_I1_196463194) ?_I0_196463194 ?Paper\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/uploadTime>  ?_I0_196463194 ;\n              a                     <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/eName",
+    "firstComponent" : [ "CRUpload", "_I0_196463194", "_I1_196463194", "Paper" ],
+    "secondComponent" : [ "_I1_196463194" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?CRUpload ?Paper ?_I0_196463194 (\"CameraReady\" AS ?_I1_196463194) ?_I0_296605651\nWHERE\n  { ?CRUpload  a                    <http://www.example.com/CRUpload> ;\n              <http://www.example.com/Submission_2_Paper>  ?Paper ;\n              <http://www.example.com/uploadTime>  ?_I0_196463194 .\n    ?Paper    <http://www.example.com/title>  ?_I0_296605651}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/c-contains-e",
+    "firstComponent" : [ "Paper", "_I0_296605651" ],
+    "secondComponent" : [ "CRUpload", "_I0_196463194", "_I1_196463194", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_I0_296605651\nWHERE\n  { ?Paper  a                     <http://www.example.com/Paper> ;\n            <http://www.example.com/title>  ?_I0_296605651}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/Case",
+    "component" : [ "Paper", "_I0_296605651" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_I0_296605651\nWHERE\n  { ?Paper  <http://www.example.com/title>  ?_I0_296605651}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/cName",
+    "firstComponent" : [ "Paper", "_I0_296605651" ],
+    "secondComponent" : [ "_I0_296605651" ]
   } ] ]
 }
