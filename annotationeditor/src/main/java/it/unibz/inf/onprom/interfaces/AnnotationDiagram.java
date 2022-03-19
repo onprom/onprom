@@ -1,9 +1,9 @@
 /*
- * onprom-annoeditor
+ * annotationeditor
  *
  * AnnotationDiagram.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -26,8 +26,8 @@
 
 package it.unibz.inf.onprom.interfaces;
 
+import it.unibz.inf.onprom.data.Annotation;
 import it.unibz.inf.onprom.data.DataType;
-import it.unibz.inf.onprom.data.DynamicAnnotation;
 import it.unibz.inf.onprom.data.NavigationalAttribute;
 import it.unibz.inf.onprom.data.UMLClass;
 
@@ -40,9 +40,9 @@ import java.util.Collection;
  * @author T. E. Kalayci on 04-Apr-2017.
  */
 public interface AnnotationDiagram extends Diagram {
-    void addAnnotation(DynamicAnnotation annotation);
+    void addAnnotation(Annotation annotation);
 
-    void removeAnnotation(DynamicAnnotation annotation);
+    void removeAnnotation(Annotation annotation);
 
     void startNavigation(NavigationListener _navigationListener);
 
@@ -54,5 +54,5 @@ public interface AnnotationDiagram extends Diagram {
 
     Collection<NavigationalAttribute> findAttributes(UMLClass startNode, boolean functional, DataType... types);
 
-    <T extends DynamicAnnotation> Collection<T> findAnnotations(UMLClass startNode, boolean functional, Class<T> type);
+    <T extends Annotation> Collection<T> findAnnotations(UMLClass startNode, boolean functional, Class<T> type);
 }

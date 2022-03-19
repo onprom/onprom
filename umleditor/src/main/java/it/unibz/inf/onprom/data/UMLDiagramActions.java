@@ -1,9 +1,9 @@
 /*
- * onprom-umleditor
+ * umleditor
  *
  * UMLDiagramActions.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -67,11 +67,11 @@ public enum UMLDiagramActions implements ActionType {
   private final String tooltip;
   private final String title;
 
-    UMLDiagramActions(final String text, char _mnemonic, String _tooltip, String _text) {
-    this.actionCommand = text;
+  UMLDiagramActions(final String _actionCommand, char _mnemonic, String _tooltip, String _title) {
+    this.actionCommand = _actionCommand;
     this.mnemonic = _mnemonic;
     this.tooltip = _tooltip;
-    this.title = _text;
+    this.title = _title;
   }
 
   @Override
@@ -90,7 +90,8 @@ public enum UMLDiagramActions implements ActionType {
   }
 
   @Override
-  public String toString() {
+  public String getIcon() {
     return actionCommand;
   }
+
 }

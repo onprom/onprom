@@ -1,7 +1,7 @@
 /*
  * annotationeditor
  *
- * AnnotationFactory.java
+ * TransactionalLifecycle.java
  *
  * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
@@ -23,20 +23,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package it.unibz.inf.onprom.interfaces;
-
-import it.unibz.inf.onprom.data.Annotation;
-import it.unibz.inf.onprom.data.UMLClass;
+package it.unibz.inf.onprom.data;
 
 /**
- * Created by T. E. Kalayci on 19-Sep-2017.
+ * All states in transactional life-cycle from XES standard
+ * <p>
+ *
+ * @author T. E. Kalayci on 22/11/16.
  */
-@FunctionalInterface
-public interface AnnotationFactory {
-    java.util.Optional<Annotation> createAnnotation(AnnotationDiagram panel, ActionType currentAction, UMLClass selectedCls);
+public enum TransactionalLifecycle {
+    COMPLETE("Complete"),
+    SCHEDULE("Schedule"),
+    ASSIGN("Assign"),
+    REASSIGN("Reassign"),
+    START("Start"),
+    SUSPEND("Suspend"),
+    RESUME("Resume"),
+    ABORT_ACTIVITY("Abort Activity"),
+    ABORT_CASE("Abort Case"),
+    SUCCESSFUL_TERMINATION("Successful Termination"),
+    AUTOSKIP("Auto Skip"),
+    UNSUCCESSFUL_TERMINATION("Unsuccessful Termination"),
+    MANUALSKIP("Manual Skip"),
+    WITHDRAW("Withdraw");
 
-    default boolean checkRemoval(AnnotationDiagram panel, Annotation annotation) {
-        return true;
+    private final String state;
+
+    TransactionalLifecycle(String _state) {
+        this.state = _state;
+    }
+
+    public String toString() {
+        return state;
     }
 }

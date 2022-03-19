@@ -1,9 +1,9 @@
 /*
- * onprom-annoeditor
+ * annotationeditor
  *
  * SimpleQueryExporter.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -143,7 +143,7 @@ public class SimpleQueryExporter {
         return last;
     }
 
-    public static SelectBuilder getStringAttributeQueryBuilder(NavigationalAttribute navigationalAttribute, DynamicAnnotation relatedAnnotation, Set<DiagramShape> casePath, Var nameVar) {
+    public static SelectBuilder getStringAttributeQueryBuilder(NavigationalAttribute navigationalAttribute, Annotation relatedAnnotation, Set<DiagramShape> casePath, Var nameVar) {
         final Var classVar = Var.alloc(relatedAnnotation.getVarName());
         final String classIRI = "<" + relatedAnnotation.getLongName() + ">";
         SelectBuilder builder = new SelectBuilder();
@@ -161,7 +161,7 @@ public class SimpleQueryExporter {
         return builder;
     }
 
-    private static void addNavigationalAttribute(SelectBuilder builder, NavigationalAttribute navigationalAttribute, DynamicAnnotation relatedAnnotation, Var nameVar) {
+    private static void addNavigationalAttribute(SelectBuilder builder, NavigationalAttribute navigationalAttribute, Annotation relatedAnnotation, Var nameVar) {
         builder.addVar(nameVar);
         addJoin(builder, navigationalAttribute.getPath());
         if (navigationalAttribute.getUmlClass().equalsOrInherits(relatedAnnotation.getRelatedClass())) {

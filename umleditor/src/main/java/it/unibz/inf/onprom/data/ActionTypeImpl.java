@@ -1,9 +1,9 @@
 /*
- * onprom-umleditor
+ * umleditor
  *
- * AbstractActionType.java
+ * ActionTypeImpl.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -31,21 +31,44 @@ import it.unibz.inf.onprom.interfaces.ActionType;
 /**
  * Created by T. E. Kalayci on 19-Dec-2017.
  */
-public abstract class AbstractActionType implements ActionType {
+public class ActionTypeImpl implements ActionType {
 
-    @Override
-    public String toString() {
-        return getTitle();
+    private final String title;
+    private final String tooltip;
+    private final String icon;
+    private final char mnemonic;
+
+    public ActionTypeImpl(String title, String tooltip, String icon, char mnemonic) {
+        this.title = title;
+        this.tooltip = tooltip;
+        this.icon = icon;
+        this.mnemonic = mnemonic;
+    }
+
+    public ActionTypeImpl(String title, String tooltip, String icon) {
+        this.title = title;
+        this.tooltip = tooltip;
+        this.icon = icon;
+        this.mnemonic = title.charAt(0);
     }
 
     @Override
     public char getMnemonic() {
-        return getTitle().charAt(0);
+        return mnemonic;
     }
 
     @Override
-    public abstract String getTooltip();
+    public String getTooltip() {
+        return tooltip;
+    }
 
     @Override
-    public abstract String getTitle();
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public String getIcon() {
+        return icon;
+    }
 }

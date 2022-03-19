@@ -1,9 +1,9 @@
 /*
- * onprom-umleditor
+ * umleditor
  *
  * UMLEditor.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -280,17 +280,17 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
     return toolBar;
   }
 
-  private JMenuBar createMenuBar() {
-    JMenuBar menuBar = new JMenuBar();
-    JMenu mnFile = new JMenu("File");
-    mnFile.setMnemonic('f');
-    mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.newdiagram, this, diagramPanel)));
-    mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.open, this)));
-    mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.save, this)));
-    mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.saveas, this)));
-    mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.export, this)));
-    mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.image, this, diagramPanel)));
-    mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.print, this, diagramPanel)));
+  protected JMenuBar createMenuBar() {
+      JMenuBar menuBar = new JMenuBar();
+      JMenu mnFile = new JMenu("File");
+      mnFile.setMnemonic('f');
+      mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.newdiagram, this, diagramPanel)));
+      mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.open, this)));
+      mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.save, this)));
+      mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.saveas, this)));
+      mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.export, this)));
+      mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.image, this, diagramPanel)));
+      mnFile.add(UIUtility.createMenuItem(new DiagramPanelAction(UMLDiagramActions.print, this, diagramPanel)));
     mnFile.add(UIUtility.createMenuItem(new DiagramEditorAction(UMLDiagramActions.close, this)));
     menuBar.add(mnFile);
 

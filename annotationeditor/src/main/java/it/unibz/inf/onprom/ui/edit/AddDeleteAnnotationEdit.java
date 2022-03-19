@@ -1,9 +1,9 @@
 /*
- * onprom-annoeditor
+ * annotationeditor
  *
  * AddDeleteAnnotationEdit.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -26,7 +26,7 @@
 
 package it.unibz.inf.onprom.ui.edit;
 
-import it.unibz.inf.onprom.data.DynamicAnnotation;
+import it.unibz.inf.onprom.data.Annotation;
 import it.unibz.inf.onprom.interfaces.AnnotationDiagram;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -37,16 +37,16 @@ import javax.swing.undo.AbstractUndoableEdit;
  * @author T. E. Kalayci on 16/11/16.
  */
 public class AddDeleteAnnotationEdit extends AbstractUndoableEdit {
-  private final AnnotationDiagram drawingPanel;
-  private final DynamicAnnotation cls;
-  // true for adding, false for deletion
-  private final boolean adding;
+    private final AnnotationDiagram drawingPanel;
+    private final Annotation cls;
+    // true for adding, false for deletion
+    private final boolean adding;
 
-  public AddDeleteAnnotationEdit(AnnotationDiagram _panel, DynamicAnnotation _cls, boolean _adding) {
-    this.drawingPanel = _panel;
-    this.cls = _cls;
-    this.adding = _adding;
-  }
+    public AddDeleteAnnotationEdit(AnnotationDiagram _panel, Annotation _cls, boolean _adding) {
+        this.drawingPanel = _panel;
+        this.cls = _cls;
+        this.adding = _adding;
+    }
 
   @Override
   public void undo() {

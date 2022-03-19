@@ -1,9 +1,9 @@
 /*
- * onprom-dynamiceditor
+ * annotationeditor
  *
- * DynamicAnnotationEditor.java
+ * AnnotationEditor.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -28,9 +28,7 @@ package it.unibz.inf.onprom;
 
 import it.unibz.inf.onprom.data.*;
 import it.unibz.inf.onprom.data.query.AnnotationQueries;
-import it.unibz.inf.onprom.interfaces.AnnotationEditorListener;
-import it.unibz.inf.onprom.interfaces.AnnotationFactory;
-import it.unibz.inf.onprom.interfaces.AnnotationProperties;
+import it.unibz.inf.onprom.interfaces.*;
 import it.unibz.inf.onprom.logextractor.ocel.OCELLogExtractor;
 import it.unibz.inf.onprom.logextractor.xes.XESLogExtractor;
 import it.unibz.inf.onprom.owl.OWLImporter;
@@ -40,19 +38,14 @@ import it.unibz.inf.onprom.ui.action.ToolbarAction;
 import it.unibz.inf.onprom.ui.form.AnnotationSelectionDialog;
 import it.unibz.inf.onprom.ui.form.QueryEditor;
 import it.unibz.inf.onprom.ui.panel.AnnotationDiagramPanel;
-import it.unibz.inf.onprom.ui.utility.IOUtility;
-import it.unibz.inf.onprom.ui.utility.UIUtility;
-import it.unibz.inf.onprom.ui.utility.UMLEditorMessages;
+import it.unibz.inf.onprom.ui.utility.*;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -66,7 +59,7 @@ public class AnnotationEditor extends UMLEditor {
         super(domainOntology);
         supportedFormats = new FileType[]{FileType.ONTOLOGY, FileType.UML, FileType.ANNOTATION};
         listener = _listener;
-        diagramPanel = new AnnotationDiagramPanel(this, getAnnotationFactory());
+        diagramPanel = new AnnotationDiagramPanel(this);
         initUI();
         if (ontology != null) {
             diagramPanel.load(OWLImporter.getShapes(ontology));
@@ -81,18 +74,18 @@ public class AnnotationEditor extends UMLEditor {
 
     public AnnotationEditor(AnnotationEditorListener _listener) {
         this(null, _listener);
-        loadDefault(XESLogExtractor.getOntology());
+        loadDefault(null);
     }
 
     public AnnotationEditor() {
         this(null, null);
-        loadDefault(XESLogExtractor.getOntology());
+        loadDefault(null);
     }
 
-    private static AnnotationFactory getAnnotationFactory() {
+    private static AnnotationFactory getDynamicFactory() {
         return (panel, currentAction, selectedCls) -> {
             try {
-                UMLClass annotationClass = annotations.get(currentAction.toString());
+                UMLClass annotationClass = annotations.get(currentAction.getTitle());
                 if (annotationClass != null) {
                     return Optional.of(new DynamicAnnotation(annotationClass, selectedCls, getAnnotationProperties(annotationClass)));
                 }
@@ -100,6 +93,37 @@ public class AnnotationEditor extends UMLEditor {
                 logger.error(String.format("A runtime exception occurred: %s", e.getMessage()));
             }
             return Optional.empty();
+        };
+    }
+
+    private static AnnotationFactory getDefaultFactory() {
+        return new AnnotationFactory() {
+            @Override
+            public Optional<Annotation> createAnnotation(AnnotationDiagram panel, ActionType currentAction, UMLClass selectedCls) {
+                CaseAnnotation caseAnnotation = panel.findFirst(CaseAnnotation.class);
+
+                if (currentAction.toString().equals(CaseAnnotation.class.getAnnotation(AnnotationProperties.class).title())) {
+                    if (caseAnnotation == null || UIUtility.confirm(AnnotationEditorMessages.CHANGE_CASE)) {
+                        return Optional.of(new CaseAnnotation(selectedCls));
+                    }
+                } else if (currentAction.toString().equals(EventAnnotation.class.getAnnotation(AnnotationProperties.class).title())) {
+                    if (caseAnnotation == null) {
+                        UIUtility.error(AnnotationEditorMessages.SELECT_CASE);
+                    } else {
+                        if (!NavigationUtility.isConnected(selectedCls, caseAnnotation.getRelatedClass(), false)) {
+                            UIUtility.error("Event class is not connected to Trace class!");
+                        } else {
+                            return Optional.of(new EventAnnotation("event" + panel.count(EventAnnotation.class), caseAnnotation, selectedCls));
+                        }
+                    }
+                }
+                return Optional.empty();
+            }
+
+            @Override
+            public boolean checkRemoval(AnnotationDiagram panel, Annotation annotation) {
+                return !(annotation instanceof CaseAnnotation) || panel.count(Annotation.class) < 2 || UIUtility.confirm(AnnotationEditorMessages.CASE_DELETE_CONFIRMATION);
+            }
         };
     }
 
@@ -144,9 +168,9 @@ public class AnnotationEditor extends UMLEditor {
                 loadedFile = IOUtility.exportJSON(FileType.ANNOTATION, diagramPanel.getShapes(true));
             } else {
                 AnnotationQueries annotationsQueries = new AnnotationQueries();
-                diagramPanel.getAll(DynamicAnnotation.class)
+                diagramPanel.getAll(Annotation.class)
                         .filter(annotation -> !annotation.isDisabled())
-                        .map(DynamicAnnotation::getQuery)
+                        .map(Annotation::getQuery)
                         .forEach(annotationsQueries::addQuery);
 
                 if (annotationsQueries.getQueryCount() > 0) {
@@ -192,8 +216,13 @@ public class AnnotationEditor extends UMLEditor {
                             .map(UMLClass.class::cast))
                     .getSelectedClasses()
                     .forEach(umlClass -> annotations.put(umlClass.getName(), umlClass));
-            System.out.println(upperOntology.getOntologyID());
             setTitle("Annotation Editor for " + upperOntology.getOntologyID().getOntologyIRI().or(IRI.create("")));
+            ((AnnotationDiagramPanel) diagramPanel).setFactory(getDynamicFactory());
+            initUI();
+        } else {
+            annotations.clear();
+            setTitle("Default Annotation Editor");
+            ((AnnotationDiagramPanel) diagramPanel).setFactory(getDefaultFactory());
             initUI();
         }
     }
@@ -207,9 +236,39 @@ public class AnnotationEditor extends UMLEditor {
                     .forEach(
                             umlClass -> annotations.put(umlClass.getName(), umlClass)
                     );
-            System.out.println(upperOntology.getOntologyID());
             setTitle("Annotation Editor for " + upperOntology.getOntologyID().getOntologyIRI().or(IRI.create("")));
+            ((AnnotationDiagramPanel) diagramPanel).setFactory(getDynamicFactory());
             initUI();
+        } else {
+            annotations.clear();
+            setTitle("Default Annotation Editor");
+            ((AnnotationDiagramPanel) diagramPanel).setFactory(getDefaultFactory());
+            initUI();
+        }
+    }
+
+    @Override
+    protected JMenuBar createMenuBar() {
+        JMenuBar menuBar = super.createMenuBar();
+        JMenu ontologies = new JMenu("Upper Ontology");
+        ontologies.setMnemonic('u');
+        ontologies.add(UIUtility.createMenuItem(getDefaultAction()));
+        ontologies.add(UIUtility.createMenuItem(getXESOntologyAction()));
+        ontologies.add(UIUtility.createMenuItem(getOCELOntologyAction()));
+        ontologies.add(UIUtility.createMenuItem(getCustomUpperOntologyAction()));
+        menuBar.add(ontologies);
+        return menuBar;
+    }
+
+    protected Collection<AnnotationProperties> getAnnotationProperties() {
+        if (annotations.isEmpty()) {
+            return Arrays.asList(
+                    CaseAnnotation.class.getAnnotation(AnnotationProperties.class),
+                    EventAnnotation.class.getAnnotation(AnnotationProperties.class)
+            );
+        } else {
+            return annotations.values().stream().map(AnnotationEditor::getAnnotationProperties)
+                    .collect(Collectors.toList());
         }
     }
 
@@ -217,40 +276,21 @@ public class AnnotationEditor extends UMLEditor {
     protected JToolBar createToolbar() {
         JToolBar toolBar = createMainToolbar();
         toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(UMLDiagramActions.disable, this, diagramPanel)));
-        toolBar.add(UIUtility.createToolbarButton(loadXESOntology()));
-        toolBar.add(UIUtility.createToolbarButton(loadOCELOntology()));
-        toolBar.add(UIUtility.createToolbarButton(selectCustomUpperOntology()));
-        getAnnotationProperties().forEach(annotationProperties -> toolBar.add(UIUtility.createToolbarButton(new DiagramPanelAction(new AbstractActionType() {
-            @Override
-            public char getMnemonic() {
-                return annotationProperties.mnemonic();
-            }
-
-            @Override
-            public String getTooltip() {
-                return annotationProperties.tooltip();
-            }
-
-            @Override
-            public String getTitle() {
-                return annotationProperties.title();
-            }
-        }, this, diagramPanel))));
+        toolBar.add(UIUtility.createToolbarButton(getDefaultAction()));
+        toolBar.add(UIUtility.createToolbarButton(getXESOntologyAction()));
+        toolBar.add(UIUtility.createToolbarButton(getOCELOntologyAction()));
+        toolBar.add(UIUtility.createToolbarButton(getCustomUpperOntologyAction()));
+        getAnnotationProperties().forEach(annotationProperties -> toolBar.add(UIUtility.createToolbarButton(
+                        new DiagramPanelAction(
+                                new ActionTypeImpl(annotationProperties.title(), annotationProperties.tooltip(), annotationProperties.title(), annotationProperties.mnemonic()),
+                                this, diagramPanel))
+                )
+        );
         return toolBar;
     }
 
-    private ToolbarAction selectCustomUpperOntology() {
-        return new ToolbarAction(new AbstractActionType() {
-            @Override
-            public String getTooltip() {
-                return "Select Custom Upper Ontology";
-            }
-
-            @Override
-            public String getTitle() {
-                return "owl-ontology";
-            }
-        }) {
+    private ToolbarAction getCustomUpperOntologyAction() {
+        return new ToolbarAction(new ActionTypeImpl("Custom Upper Ontology", "Select Custom Upper Ontology", "owl-ontology")) {
             @Override
             public void execute() {
                 UIUtility.selectFileToOpen(FileType.ONTOLOGY).flatMap(OWLUtility::loadOntologyFromFile).ifPresent(ontology -> load(ontology));
@@ -258,18 +298,17 @@ public class AnnotationEditor extends UMLEditor {
         };
     }
 
-    private ToolbarAction loadXESOntology() {
-        return new ToolbarAction(new AbstractActionType() {
+    private ToolbarAction getDefaultAction() {
+        return new ToolbarAction(new ActionTypeImpl("XES Case-Event Ontology", "XES ontology derived from standard", "xes-ontology")) {
             @Override
-            public String getTooltip() {
-                return "XES Ontology";
+            public void execute() {
+                loadDefault(null);
             }
+        };
+    }
 
-            @Override
-            public String getTitle() {
-                return "xes-ontology";
-            }
-        }) {
+    private ToolbarAction getXESOntologyAction() {
+        return new ToolbarAction(new ActionTypeImpl("XES Standard Ontology", "XES ontology containing predefined attributes", "xes-ontology")) {
             @Override
             public void execute() {
                 loadDefault(XESLogExtractor.getOntology());
@@ -277,28 +316,12 @@ public class AnnotationEditor extends UMLEditor {
         };
     }
 
-    private ToolbarAction loadOCELOntology() {
-        return new ToolbarAction(new AbstractActionType() {
-            @Override
-            public String getTooltip() {
-                return "OCEL Ontology";
-            }
-
-            @Override
-            public String getTitle() {
-                return "ocel-ontology";
-            }
-        }) {
+    private ToolbarAction getOCELOntologyAction() {
+        return new ToolbarAction(new ActionTypeImpl("OCEL Ontology", "OCEL ontology derived from OCEL standard", "ocel-ontology")) {
             @Override
             public void execute() {
                 loadDefault(OCELLogExtractor.getOntology());
             }
         };
     }
-
-    protected Collection<AnnotationProperties> getAnnotationProperties() {
-        return annotations.values().stream().map(AnnotationEditor::getAnnotationProperties)
-                .collect(Collectors.toList());
-    }
-
 }

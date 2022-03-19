@@ -1,9 +1,9 @@
 /*
- * onprom-umleditor
+ * umleditor
  *
  * ActionType.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -37,6 +37,5 @@ public interface ActionType {
 
     String getTitle();
 
-    @Override
-    String toString();
+    String getIcon();
 }

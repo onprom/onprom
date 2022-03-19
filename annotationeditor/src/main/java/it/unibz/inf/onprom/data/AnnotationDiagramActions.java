@@ -1,9 +1,9 @@
 /*
- * onprom-annoeditor
+ * annotationeditor
  *
  * AnnotationDiagramActions.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -50,7 +50,7 @@ public enum AnnotationDiagramActions implements ActionType {
 
   @Override
   public char getMnemonic() {
-    return this.mnemonic;
+    return mnemonic;
   }
 
   @Override
@@ -60,6 +60,11 @@ public enum AnnotationDiagramActions implements ActionType {
 
   @Override
   public String getTitle() {
+    return title;
+  }
+
+  @Override
+  public String getIcon() {
     return title;
   }
 

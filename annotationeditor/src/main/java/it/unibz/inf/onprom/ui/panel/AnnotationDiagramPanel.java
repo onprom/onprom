@@ -1,9 +1,9 @@
 /*
- * onprom-annoeditor
+ * annotationeditor
  *
  * AnnotationDiagramPanel.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -48,17 +48,16 @@ import java.util.stream.Stream;
  * <p>
  */
 public class AnnotationDiagramPanel extends UMLDiagramPanel implements AnnotationDiagram {
-    private final AnnotationFactory factory;
+    private AnnotationFactory factory;
     private final DiagramNavigator diagramNavigator = new DiagramNavigator(this);
 
-    public AnnotationDiagramPanel(DiagramEditor editor, AnnotationFactory _factory) {
+    public AnnotationDiagramPanel(DiagramEditor editor) {
         super(editor);
-        factory = _factory;
         isUpdateAllowed = false;
         shapes = new Shapes() {
             @Override
             protected DiagramShape getFirstShapeAt(int x, int y) {
-                DynamicAnnotation _selected = super.getAll(DynamicAnnotation.class).filter(shape -> shape.over(x, y)).findFirst().orElse(null);
+                Annotation _selected = super.getAll(Annotation.class).filter(shape -> shape.over(x, y)).findFirst().orElse(null);
                 return _selected != null ? _selected : super.getFirstShapeAt(x, y);
             }
         };
@@ -78,7 +77,7 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
                     if (_selected != null) {
                         if (_selected instanceof UMLClass) {
                             createAnnotation((UMLClass) _selected, x, y);
-                        } else if (e.getClickCount() == 2 && _selected instanceof DynamicAnnotation) {
+                        } else if (e.getClickCount() == 2 && _selected instanceof Annotation) {
                             _selected.getForm(AnnotationDiagramPanel.this).ifPresent(form ->
                                     diagramEditor.loadForm((JPanel) form));
                             return;
@@ -88,6 +87,10 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
                 }
             }
         };
+    }
+
+    public void setFactory(AnnotationFactory factory) {
+        this.factory = factory;
     }
 
     public void startNavigation(NavigationListener navigationListener) {
@@ -115,9 +118,9 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
 
     @Override
     public boolean removeShape(DiagramShape<? extends Diagram> selected) {
-        if (selected instanceof DynamicAnnotation) {
+        if (selected instanceof Annotation) {
             if (UIUtility.confirm(AnnotationEditorMessages.DELETE_CONFIRMATION)) {
-                DynamicAnnotation annotation = (DynamicAnnotation) selected;
+                Annotation annotation = (Annotation) selected;
                 if (factory.checkRemoval(this, annotation)) {
                     removeAnnotation(annotation);
                     DiagramUndoManager.addEdit(new AddDeleteAnnotationEdit(this, annotation, false));
@@ -133,17 +136,17 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        shapes.getAll(DynamicAnnotation.class).forEach(shape -> shape.draw((Graphics2D) g));
+        shapes.getAll(Annotation.class).forEach(shape -> shape.draw((Graphics2D) g));
     }
 
     @Override
-    public void addAnnotation(DynamicAnnotation annotation) {
+    public void addAnnotation(Annotation annotation) {
         shapes.add(annotation);
         diagramEditor.unloadForm();
     }
 
     @Override
-    public void removeAnnotation(DynamicAnnotation annotation) {
+    public void removeAnnotation(Annotation annotation) {
         shapes.remove(annotation);
         diagramEditor.unloadForm();
     }
@@ -174,10 +177,10 @@ public class AnnotationDiagramPanel extends UMLDiagramPanel implements Annotatio
     }
 
     @Override
-    public <T extends DynamicAnnotation> Collection<T> findAnnotations(UMLClass startNode, boolean functional, Class<T> type) {
+    public <T extends Annotation> Collection<T> findAnnotations(UMLClass startNode, boolean functional, Class<T> type) {
         return shapes.getAll(type).
                 filter(annotation -> NavigationUtility.isConnected(startNode, annotation.getRelatedClass(), functional))
-                .sorted(Comparator.comparing(DynamicAnnotation::toString))
+                .sorted(Comparator.comparing(Annotation::toString))
                 .collect(Collectors.toList());
     }
 }

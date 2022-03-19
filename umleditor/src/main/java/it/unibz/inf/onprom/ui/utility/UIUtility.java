@@ -1,9 +1,9 @@
 /*
- * onprom-umleditor
+ * umleditor
  *
  * UIUtility.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -323,7 +323,7 @@ public class UIUtility {
         button.setToolTipText(String.format(HTML_STRING, action.getTooltip()));
         button.addActionListener(e -> action.execute());
         button.setMnemonic(action.getMnemonic());
-        Optional<URL> imageUrlProvider = IOUtility.getImageURL(action.getActionName().toLowerCase());
+        Optional<URL> imageUrlProvider = IOUtility.getImageURL(action.getIcon());
         if (imageUrlProvider.isPresent()) {
             button.setIcon(new ImageIcon(imageUrlProvider.get(), action.getTitle()));
         } else {
@@ -337,7 +337,7 @@ public class UIUtility {
         JMenuItem menuItem = new JMenuItem(action.getTitle(), action.getMnemonic());
         menuItem.getAccessibleContext().setAccessibleDescription(action.getTooltip());
         menuItem.addActionListener(e -> action.execute());
-        IOUtility.getImageURL(action.getActionName()).ifPresent(imageUrl -> menuItem.setIcon(new ImageIcon(imageUrl)));
+        IOUtility.getImageURL(action.getIcon()).ifPresent(imageUrl -> menuItem.setIcon(new ImageIcon(imageUrl)));
         return menuItem;
     }
 
