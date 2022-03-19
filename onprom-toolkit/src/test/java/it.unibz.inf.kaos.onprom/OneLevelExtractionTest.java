@@ -68,8 +68,10 @@ public class OneLevelExtractionTest {
         // load domain ontology
         OWLOntology domainOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(domainOntologyFile);
         // load annotation queries
-        AnnotationQueries firstLevel = IOUtility.readJSON(queriesFile, AnnotationQueries.class)
+        AnnotationQueries firstLevel = IOUtility.readYAML(queriesFile, AnnotationQueries.class)
                 .orElseThrow(IllegalArgumentException::new);
+//        AnnotationQueries firstLevel = IOUtility.readJSON(queriesFile, AnnotationQueries.class)
+//                .orElseThrow(IllegalArgumentException::new);
         // generate new mapping
         SQLPPMapping newMapping = new OBDAMapper(domainOntology, XESLogExtractor.getDefaultEventOntology(), obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
         OntopUtility.saveModel(newMapping, generatedMappingsFile);

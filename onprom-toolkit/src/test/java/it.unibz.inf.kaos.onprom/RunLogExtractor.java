@@ -73,7 +73,8 @@ public class RunLogExtractor {
             OWLOntology onpromOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(RunLogExtractor.class.getResourceAsStream("/eo-onprom.owl"));
             // start extraction process
             if (output.createNewFile()) {
-                IOUtility.readJSON(firstLevelFile, AnnotationQueries.class).ifPresent(firstLevel -> IOUtility.readJSON(secondLevelFile, AnnotationQueries.class).ifPresent(secondLevel -> {
+                IOUtility.readYAML(firstLevelFile, AnnotationQueries.class).ifPresent(firstLevel -> IOUtility.readYAML(secondLevelFile, AnnotationQueries.class).ifPresent(secondLevel -> {
+//                IOUtility.readJSON(firstLevelFile, AnnotationQueries.class).ifPresent(firstLevel -> IOUtility.readJSON(secondLevelFile, AnnotationQueries.class).ifPresent(secondLevel -> {
                     try {
                         //generate final mapping
                         SQLPPMapping firstMapping = new OBDAMapper(domainOntology, eventOntology, obdaModel, dataSourceProperties, firstLevel).getOBDAModel();

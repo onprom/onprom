@@ -32,6 +32,8 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import it.unibz.inf.kaos.data.EditorObjects;
 import it.unibz.inf.kaos.data.FileType;
 import it.unibz.inf.kaos.interfaces.Diagram;
@@ -59,6 +61,7 @@ import java.util.Set;
 public class IOUtility {
     private static final Logger LOGGER = LoggerFactory.getLogger(IOUtility.class.getName());
     private static final ObjectMapper OBJECT_MAPPER;
+    private static final ObjectMapper YAML_OBJECT_MAPPER;
 
     static {
         OBJECT_MAPPER = new ObjectMapper();
@@ -73,6 +76,20 @@ public class IOUtility {
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNRESOLVED_OBJECT_IDS, false);
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
+
+        //YAML
+        YAML_OBJECT_MAPPER = new ObjectMapper(new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
+        YAML_OBJECT_MAPPER.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+        //use all fields
+        YAML_OBJECT_MAPPER.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        //only include not null & non empty fields
+        YAML_OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        //store type of classess
+        YAML_OBJECT_MAPPER.enableDefaultTypingAsProperty(ObjectMapper.DefaultTyping.NON_FINAL, "@class");
+        //ignore unknown properties
+        YAML_OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        YAML_OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNRESOLVED_OBJECT_IDS, false);
+        YAML_OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
     }
 
     public static File exportJSON(FileType fileType, Set<DiagramShape<? extends Diagram>> allShapes) {
@@ -97,6 +114,30 @@ public class IOUtility {
         }
     }
 
+    public static File exportYAML(FileType fileType, Set<DiagramShape<? extends Diagram>> allShapes) {
+        Optional<File> fileProvider = UIUtility.selectFileToSave(fileType);
+        if (fileProvider.isPresent()) {
+            File file = fileProvider.get();
+            exportYAML(file, allShapes);
+            return file;
+        }
+        return null;
+    }
+
+    public static void exportYAML(FileType fileType, Object object) {
+        UIUtility.selectFileToSave(fileType).ifPresent(file -> exportYAML(file, object));
+    }
+
+    public static void exportYAML(File file, Object object){
+        try {
+            YAML_OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValue(file,object);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+
+
     public static <T> Optional<T> readJSON(java.io.InputStream input, Class<T> cls) {
         try {
             return Optional.of(OBJECT_MAPPER.readValue(input, cls));
@@ -109,6 +150,24 @@ public class IOUtility {
     public static <T> Optional<T> readJSON(java.io.File file, Class<T> cls) {
         try {
             return Optional.of(OBJECT_MAPPER.readValue(file, cls));
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return Optional.empty();
+    }
+
+    public static <T> Optional<T> readYAML(java.io.InputStream input, Class<T> cls) {
+        try {
+            return Optional.of(YAML_OBJECT_MAPPER.readValue(input, cls));
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return Optional.empty();
+    }
+
+    public static <T> Optional<T> readYAML(java.io.File file, Class<T> cls) {
+        try {
+            return Optional.of(YAML_OBJECT_MAPPER.readValue(file, cls));
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }

@@ -54,7 +54,8 @@ public class AnnotationQueriesImportPlugin extends AbstractImportPlugin {
                                                  final long fileSizeInBytes) {
         try {
             context.getFutureResult(0).setLabel("Queries (" + filename + ") " + UIUtility.getCurrentDateTime());
-            return IOUtility.readJSON(input, AnnotationQueries.class).orElse(null);
+            return IOUtility.readYAML(input, AnnotationQueries.class).orElse(null);
+//            return IOUtility.readJSON(input, AnnotationQueries.class).orElse(null);
         } catch (Exception e) {
             context.log(e);
         }

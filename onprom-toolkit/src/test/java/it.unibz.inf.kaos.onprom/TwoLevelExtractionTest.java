@@ -71,10 +71,14 @@ public class TwoLevelExtractionTest {
         OWLOntology domainOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(domainOntologyFile);
         OWLOntology eventOntology = OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(eventOntologyFile);
         // load annotation queries
-        AnnotationQueries firstLevel = IOUtility.readJSON(firstLevelFile, AnnotationQueries.class)
+        AnnotationQueries firstLevel = IOUtility.readYAML(firstLevelFile, AnnotationQueries.class)
                 .orElseThrow(IllegalArgumentException::new);
-        AnnotationQueries secondLevel = IOUtility.readJSON(secondLevelFile, AnnotationQueries.class)
+        AnnotationQueries secondLevel = IOUtility.readYAML(secondLevelFile, AnnotationQueries.class)
                 .orElseThrow(IllegalArgumentException::new);
+//        AnnotationQueries firstLevel = IOUtility.readJSON(firstLevelFile, AnnotationQueries.class)
+//                .orElseThrow(IllegalArgumentException::new);
+//        AnnotationQueries secondLevel = IOUtility.readJSON(secondLevelFile, AnnotationQueries.class)
+//                .orElseThrow(IllegalArgumentException::new);
         //generate mappings
         SQLPPMapping firstMapping = new OBDAMapper(domainOntology, eventOntology, obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
         OntopUtility.saveModel(firstMapping, firstMappingsFile);

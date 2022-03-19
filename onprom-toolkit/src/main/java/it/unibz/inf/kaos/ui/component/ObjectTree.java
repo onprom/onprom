@@ -175,7 +175,9 @@ public class ObjectTree {
                     }
                     break;
                 case QUERIES:
-                    IOUtility.readJSON(selectedFile, AnnotationQueries.class).ifPresent(
+//                    IOUtility.readJSON(selectedFile, AnnotationQueries.class).ifPresent(
+//                            q -> addObject(selectedFile.getName(), FileType.QUERIES, q));
+                    IOUtility.readYAML(selectedFile, AnnotationQueries.class).ifPresent(
                             q -> addObject(selectedFile.getName(), FileType.QUERIES, q));
                     break;
                 case ANNOTATION:
@@ -254,6 +256,8 @@ public class ObjectTree {
                 break;
             case ANNOTATION:
             case QUERIES:
+                IOUtility.exportYAML(new File(filePath), object);
+                break;
             case UML:
                 IOUtility.exportJSON(new File(filePath), object);
                 break;
