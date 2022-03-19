@@ -26,6 +26,7 @@
 
 package it.unibz.inf.onprom.ui.action;
 
+import it.unibz.inf.onprom.UMLEditor;
 import it.unibz.inf.onprom.data.UMLDiagramActions;
 import it.unibz.inf.onprom.interfaces.ActionType;
 import it.unibz.inf.onprom.ui.form.ObjectList;
@@ -34,7 +35,6 @@ import it.unibz.inf.onprom.ui.utility.DiagramUndoManager;
 import it.unibz.inf.onprom.ui.utility.DrawingUtility;
 import it.unibz.inf.onprom.ui.utility.UIUtility;
 import it.unibz.inf.onprom.ui.utility.UMLEditorMessages;
-import it.unibz.inf.onprom.uml.UMLEditor;
 
 /**
  * Default drawing action class to transfer action to the drawing panel

@@ -46,7 +46,7 @@ import java.util.Properties;
 public class OCELLogExtractor implements Extractor<OcelLog> {
     private static final Logger logger = LoggerFactory.getLogger(OCELLogExtractor.class);
 
-    public OWLOntology getOntology() {
+    public static OWLOntology getOntology() {
         try {
             return OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(
                     OCELLogExtractor.class.getResourceAsStream(OCELConstants.eventOntoPath)

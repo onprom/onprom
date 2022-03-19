@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+        viewBox="0 0 384 512"
+        version="1.1"
+        id="svg4"
+        sodipodi:docname="file.svg"
+        inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+        inkscape:export-filename="/home/kalayci/projects/UNIBZ/onprom/annotationeditor/src/main/resources/images/ocel-ontology.png"
+        inkscape:export-xdpi="7.8260398"
+        inkscape:export-ydpi="7.8260398"
+        xmlns="http://www.w3.org/2000/svg"
+>
+  <defs
+          id="defs8"/>
+  <sodipodi:namedview
+          id="namedview6"
+          pagecolor="#ffffff"
+          bordercolor="#666666"
+          borderopacity="1.0"
+          inkscape:pageshadow="2"
+          inkscape:pageopacity="0.0"
+          inkscape:pagecheckerboard="0"
+          showgrid="false"
+          inkscape:zoom="1.5976562"
+          inkscape:cx="192.7824"
+          inkscape:cy="256"
+          inkscape:window-width="1920"
+          inkscape:window-height="1024"
+          inkscape:window-x="0"
+          inkscape:window-y="0"
+          inkscape:window-maximized="1"
+          inkscape:current-layer="svg4"/>
+  <!--! Font Awesome Free 6.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+  <path
+          d="M 0,64 C 0,28.65 28.65,0 64,0 h 165.5 c 17,0 33.2,6.743 45.2,18.75 l 90.6,90.55 c 12,12 18.7,28.2 18.7,45.2 V 448 c 0,35.3 -28.7,64 -64,64 H 64 C 28.65,512 0,483.3 0,448 Z"
+          id="path2"
+          style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+          sodipodi:nodetypes="sssccssssss"/>
+  <text
+          xml:space="preserve"
+          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:128px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none"
+          x="13.5625"
+          y="394.82825"
+          id="text1156"><tspan
+       sodipodi:role="line"
+       id="tspan1154"
+       x="13.5625"
+       y="394.82825">OCEL</tspan></text>
+</svg>

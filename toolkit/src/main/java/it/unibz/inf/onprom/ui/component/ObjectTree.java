@@ -97,11 +97,8 @@ public class ObjectTree {
                 menuItem.addActionListener(e -> UIUtility.executeInBackground(ObjectTree.this::saveSelected,
                         toolkit.getProgressBar()));
                 add(menuItem);
-                menuItem = new JMenuItem("Open with Default Annotation Editor", KeyEvent.VK_A);
+                menuItem = new JMenuItem("Open with Annotation Editor", KeyEvent.VK_A);
                 menuItem.addActionListener(e -> toolkit.displayAnnotationEditor());
-                add(menuItem);
-                menuItem = new JMenuItem("Open with Dynamic Annotation Editor", KeyEvent.VK_E);
-                menuItem.addActionListener(e -> toolkit.displayDynamicAnnotationEditor());
                 add(menuItem);
             }
         });

@@ -26,9 +26,9 @@
 
 package org.processmining.plugins.kaos;
 
+import it.unibz.inf.onprom.UMLEditor;
 import it.unibz.inf.onprom.interfaces.UMLEditorListener;
 import it.unibz.inf.onprom.ui.utility.UIUtility;
-import it.unibz.inf.onprom.uml.UMLEditor;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.plugin.annotations.Plugin;

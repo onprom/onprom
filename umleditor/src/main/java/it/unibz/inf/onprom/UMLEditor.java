@@ -24,7 +24,7 @@
  * limitations under the License.
  */
 
-package it.unibz.inf.onprom.uml;
+package it.unibz.inf.onprom;
 
 import it.unibz.inf.onprom.data.FileType;
 import it.unibz.inf.onprom.data.UMLDiagramActions;
@@ -67,23 +67,32 @@ public class UMLEditor extends JInternalFrame implements DiagramEditor {
   protected String identifier;
   private JSplitPane splitPane;
 
-    protected UMLEditor(OWLOntology _ontology) {
-    super("", true, true, true, true);
-    ontology = _ontology;
-  }
-
   public UMLEditor(OWLOntology _ontology, UMLEditorListener _listener) {
-    this(_ontology);
-    listener = _listener;
+    super("", true, true, true, true);
     supportedFormats = new FileType[]{FileType.ONTOLOGY, FileType.UML};
     diagramPanel = new UMLDiagramPanel(this);
     initUI();
-      loadOntology(null, ontology);
     setTitle("UML Editor");
+    ontology = _ontology;
+    listener = _listener;
+    loadOntology(null, ontology);
   }
 
-    public static void main(String[] args) {
-    new UMLEditor(null, null).display();
+  protected UMLEditor() {
+    this(null, null);
+  }
+
+  protected UMLEditor(OWLOntology _ontology) {
+    this(_ontology, null);
+  }
+
+  public UMLEditor(UMLEditorListener _listener) {
+    this(null, _listener);
+  }
+
+  public static void main(String[] args) {
+    System.setProperty("sun.java2d.opengl", "True");
+    new UMLEditor().display();
   }
 
   protected JToolBar createMainToolbar() {

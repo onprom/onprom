@@ -37,7 +37,6 @@ import it.unibz.inf.onprom.ui.panel.DatasourcePropertiesPanel;
 import it.unibz.inf.onprom.ui.panel.ExtractionPanel;
 import it.unibz.inf.onprom.ui.utility.DrawingUtility;
 import it.unibz.inf.onprom.ui.utility.UIUtility;
-import it.unibz.inf.onprom.uml.UMLEditor;
 import it.unibz.inf.onprom.utility.ToolkitMessages;
 import it.unibz.inf.onprom.utility.VersionUtility;
 import it.unibz.ocel.model.OcelLog;
@@ -189,9 +188,6 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
         JMenuItem annoItem = new JMenuItem("Open Annotation Editor", KeyEvent.VK_A);
         annoItem.addActionListener(e -> UIUtility.executeInBackground(this::displayAnnotationEditor, progressBar));
         mnTools.add(annoItem);
-        JMenuItem dynamicItem = new JMenuItem("Open Dynamic Annotation Editor", KeyEvent.VK_D);
-        dynamicItem.addActionListener(e -> UIUtility.executeInBackground(this::displayDynamicAnnotationEditor, progressBar));
-        mnTools.add(dynamicItem);
         JMenuItem showExportItem = new JMenuItem("Export Log", KeyEvent.VK_E);
         showExportItem.addActionListener(e -> UIUtility.executeInBackground(this::showExportPanel, progressBar));
         mnTools.add(showExportItem);
@@ -216,11 +212,11 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
     }
 
     public void displayUMLEditor() {
-        displayEditor(new UMLEditor(null, this));
+        displayEditor(new UMLEditor(this));
     }
 
     public void displayAnnotationEditor() {
-        displayEditor(new AnnotationEditor(null, this));
+        displayEditor(new AnnotationEditor(this));
     }
 
     public void displayPropertiesEditor(TreeNode<Object> node) {
@@ -229,10 +225,6 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                 showInternalFrame(new InternalFrame("Database Properties", new DatasourcePropertiesPanel((Properties) selectedObject)));
             }
         });
-    }
-
-    public void displayDynamicAnnotationEditor() {
-        displayEditor(new AnnotationEditor(null, null, this));
     }
 
     private void displayEditor(UMLEditor editor) {

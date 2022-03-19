@@ -48,7 +48,7 @@ import java.util.Properties;
 public class XESLogExtractor implements Extractor<XLog> {
     private static final Logger logger = LoggerFactory.getLogger(XESLogExtractor.class);
 
-    public OWLOntology getOntology() {
+    public static OWLOntology getOntology() {
         try {
             return OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(
                     XESLogExtractor.class.getResourceAsStream(XESConstants.eventOntoPath)

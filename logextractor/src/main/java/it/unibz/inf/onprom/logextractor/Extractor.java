@@ -7,8 +7,6 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import java.util.Properties;
 
 public interface Extractor<L> {
-    OWLOntology getOntology();
-
     L extractLog(SQLPPMapping ebdaModel, Properties dataSourceProperties);
 
     L extractLog(OWLOntology domainOntology, SQLPPMapping obdaModel, Properties dataSourceProperties, AnnotationQueries annotation);

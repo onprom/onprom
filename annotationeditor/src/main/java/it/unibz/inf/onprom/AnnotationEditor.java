@@ -43,13 +43,11 @@ import it.unibz.inf.onprom.ui.panel.AnnotationDiagramPanel;
 import it.unibz.inf.onprom.ui.utility.IOUtility;
 import it.unibz.inf.onprom.ui.utility.UIUtility;
 import it.unibz.inf.onprom.ui.utility.UMLEditorMessages;
-import it.unibz.inf.onprom.uml.UMLEditor;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.Collection;
 import java.util.HashMap;
@@ -64,7 +62,7 @@ public class AnnotationEditor extends UMLEditor {
     private static final Logger logger = LoggerFactory.getLogger(AnnotationEditor.class.getName());
     private static final Map<String, UMLClass> annotations = new HashMap<>();
 
-    public AnnotationEditor(OWLOntology upperOntology, OWLOntology domainOntology, AnnotationEditorListener _listener) {
+    private AnnotationEditor(OWLOntology domainOntology, AnnotationEditorListener _listener) {
         super(domainOntology);
         supportedFormats = new FileType[]{FileType.ONTOLOGY, FileType.UML, FileType.ANNOTATION};
         listener = _listener;
@@ -74,11 +72,21 @@ public class AnnotationEditor extends UMLEditor {
             diagramPanel.load(OWLImporter.getShapes(ontology));
         }
         setTitle("Annotation Editor");
-        loadAnnotationTypes(upperOntology);
     }
 
-    public AnnotationEditor(OWLOntology domainOntology, AnnotationEditorListener _listener) {
-        this(new XESLogExtractor().getOntology(), domainOntology, _listener);
+    public AnnotationEditor(OWLOntology upperOntology, OWLOntology domainOntology, AnnotationEditorListener _listener) {
+        this(domainOntology, _listener);
+        load(upperOntology);
+    }
+
+    public AnnotationEditor(AnnotationEditorListener _listener) {
+        this(null, _listener);
+        loadDefault(XESLogExtractor.getOntology());
+    }
+
+    public AnnotationEditor() {
+        this(null, null);
+        loadDefault(XESLogExtractor.getOntology());
     }
 
     private static AnnotationFactory getAnnotationFactory() {
@@ -96,7 +104,8 @@ public class AnnotationEditor extends UMLEditor {
     }
 
     public static void main(String[] a) {
-        new AnnotationEditor(new XESLogExtractor().getOntology(), null, null).display();
+        System.setProperty("sun.java2d.opengl", "True");
+        new AnnotationEditor().display();
     }
 
     public static AnnotationProperties getAnnotationProperties(final UMLClass annotationClass) {
@@ -174,16 +183,34 @@ public class AnnotationEditor extends UMLEditor {
         }, progressBar);
     }
 
-    private void loadAnnotationTypes(@Nonnull OWLOntology upperOntology) {
-        annotations.clear();
-        new AnnotationSelectionDialog(
-                OWLImporter.getShapes(upperOntology).stream()
-                        .filter(UMLClass.class::isInstance)
-                        .map(UMLClass.class::cast))
-                .getSelectedClasses()
-                .forEach(umlClass -> annotations.put(umlClass.getName(), umlClass));
-        setTitle("Annotation Editor for " + upperOntology.getOntologyID().getOntologyIRI().or(IRI.create("")));
-        initUI();
+    private void load(OWLOntology upperOntology) {
+        if (upperOntology != null) {
+            annotations.clear();
+            new AnnotationSelectionDialog(
+                    OWLImporter.getShapes(upperOntology).stream()
+                            .filter(UMLClass.class::isInstance)
+                            .map(UMLClass.class::cast))
+                    .getSelectedClasses()
+                    .forEach(umlClass -> annotations.put(umlClass.getName(), umlClass));
+            System.out.println(upperOntology.getOntologyID());
+            setTitle("Annotation Editor for " + upperOntology.getOntologyID().getOntologyIRI().or(IRI.create("")));
+            initUI();
+        }
+    }
+
+    private void loadDefault(OWLOntology upperOntology) {
+        if (upperOntology != null) {
+            annotations.clear();
+            OWLImporter.getShapes(upperOntology).stream()
+                    .filter(UMLClass.class::isInstance)
+                    .map(UMLClass.class::cast)
+                    .forEach(
+                            umlClass -> annotations.put(umlClass.getName(), umlClass)
+                    );
+            System.out.println(upperOntology.getOntologyID());
+            setTitle("Annotation Editor for " + upperOntology.getOntologyID().getOntologyIRI().or(IRI.create("")));
+            initUI();
+        }
     }
 
     @Override
@@ -221,12 +248,12 @@ public class AnnotationEditor extends UMLEditor {
 
             @Override
             public String getTitle() {
-                return "import";
+                return "owl-ontology";
             }
         }) {
             @Override
             public void execute() {
-                UIUtility.selectFileToOpen(FileType.ONTOLOGY).flatMap(OWLUtility::loadOntologyFromFile).ifPresent(ontology -> loadAnnotationTypes(ontology));
+                UIUtility.selectFileToOpen(FileType.ONTOLOGY).flatMap(OWLUtility::loadOntologyFromFile).ifPresent(ontology -> load(ontology));
             }
         };
     }
@@ -245,7 +272,7 @@ public class AnnotationEditor extends UMLEditor {
         }) {
             @Override
             public void execute() {
-                loadAnnotationTypes(new XESLogExtractor().getOntology());
+                loadDefault(XESLogExtractor.getOntology());
             }
         };
     }
@@ -264,7 +291,7 @@ public class AnnotationEditor extends UMLEditor {
         }) {
             @Override
             public void execute() {
-                loadAnnotationTypes(new OCELLogExtractor().getOntology());
+                loadDefault(OCELLogExtractor.getOntology());
             }
         };
     }
