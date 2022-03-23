@@ -1,0 +1,230 @@
+!<java.util.LinkedHashSet>
+- !<it.unibz.inf.kaos.data.UMLClass>
+  &98650af0-58ab-48b6-9412-905c90c2f305 startX: 529
+  startY: 115
+  name: "Review"
+  longName: "http://www.example.com/Review"
+  relations: !<java.util.LinkedHashSet>
+  - !<it.unibz.inf.kaos.data.Association>
+    &0f063265-15fb-4bb1-b4c5-01a68185a1fe startX: 0
+    startY: 0
+    name: "leadsTo"
+    longName: "http://www.example.com/leadsTo"
+    firstClass: !<it.unibz.inf.kaos.data.AssociationClass>
+      &cdd738dc-0b5f-4f08-8560-21fb5a18a277 startX: 220
+      startY: 107
+      name: "Class"
+      relations: !<java.util.LinkedHashSet>
+      - *0f063265-15fb-4bb1-b4c5-01a68185a1fe
+      attributes: !<java.util.LinkedList>
+      - !<it.unibz.inf.kaos.data.Attribute>
+        name: "accTime"
+        longName: "http://www.example.com/accTime"
+        type: "DATE_TIME"
+        multiplicity: "C1_1"
+      - !<it.unibz.inf.kaos.data.Attribute>
+        name: "invTime"
+        longName: "http://www.example.com/invTime"
+        type: "DATE_TIME"
+        multiplicity: "C1_1"
+      association: !<it.unibz.inf.kaos.data.Association>
+        &8c560554-bf06-4553-9e54-7e1ca10b06fc startX: 0
+        startY: 0
+        name: "Assignment"
+        longName: "http://www.example.com/Assignment"
+        firstClass: !<it.unibz.inf.kaos.data.UMLClass>
+          &a6ebc9a8-ece6-441d-8abb-7b9fa9a36c8b startX: 56
+          startY: 257
+          name: "Paper"
+          longName: "http://www.example.com/Paper"
+          relations: !<java.util.LinkedHashSet>
+          - !<it.unibz.inf.kaos.data.Inheritance>
+            &50af85fd-4f4d-4480-b4df-9df5eff0df03 startX: 0
+            startY: 0
+            firstClass: *a6ebc9a8-ece6-441d-8abb-7b9fa9a36c8b
+            secondClass: !<it.unibz.inf.kaos.data.UMLClass>
+              &8eb3de9d-5f99-49f1-9925-1a2a9575fb8b startX: 30
+              startY: 507
+              name: "DecidedPaper"
+              longName: "http://www.example.com/DecidedPaper"
+              relations: !<java.util.LinkedHashSet>
+              - *50af85fd-4f4d-4480-b4df-9df5eff0df03
+              - !<it.unibz.inf.kaos.data.Association>
+                &9f69c560-b04e-478c-a591-34d8ef45b413 startX: 0
+                startY: 0
+                name: "notifiedBy"
+                longName: "http://www.example.com/notifiedBy"
+                firstClass: *8eb3de9d-5f99-49f1-9925-1a2a9575fb8b
+                secondClass: !<it.unibz.inf.kaos.data.UMLClass>
+                  &d026e448-370e-4f1b-bfbb-8b047bb5b6e8 startX: 630
+                  startY: 257
+                  name: "Person"
+                  longName: "http://www.example.com/Person"
+                  relations: !<java.util.LinkedHashSet>
+                  - *8c560554-bf06-4553-9e54-7e1ca10b06fc
+                  - *9f69c560-b04e-478c-a591-34d8ef45b413
+                  - !<it.unibz.inf.kaos.data.Association>
+                    &d0358dfa-fc05-485f-aeeb-883972e6b9fd startX: 0
+                    startY: 0
+                    name: "chairs"
+                    longName: "http://www.example.com/chairs"
+                    firstClass: *d026e448-370e-4f1b-bfbb-8b047bb5b6e8
+                    secondClass: !<it.unibz.inf.kaos.data.UMLClass>
+                      &7e80d677-d02e-4d37-bea7-6baef4596a10 startX: 35
+                      startY: 7
+                      name: "Conference"
+                      longName: "http://www.example.com/Conference"
+                      relations: !<java.util.LinkedHashSet>
+                      - !<it.unibz.inf.kaos.data.Association>
+                        &1813ec94-95cd-4e4b-8a39-1c477e8ccfc4 startX: 0
+                        startY: 0
+                        name: "submittedTo"
+                        longName: "http://www.example.com/submittedTo"
+                        firstClass: *a6ebc9a8-ece6-441d-8abb-7b9fa9a36c8b
+                        secondClass: *7e80d677-d02e-4d37-bea7-6baef4596a10
+                        firstMultiplicity: "C0_S"
+                        secondMultiplicity: "C1_1"
+                      - *d0358dfa-fc05-485f-aeeb-883972e6b9fd
+                      attributes: !<java.util.LinkedList>
+                      - !<it.unibz.inf.kaos.data.Attribute>
+                        name: "crTime"
+                        longName: "http://www.example.com/crTime"
+                        type: "DATE_TIME"
+                        multiplicity: "C1_1"
+                      - !<it.unibz.inf.kaos.data.Attribute>
+                        name: "cName"
+                        longName: "http://www.example.com/cName"
+                        type: "STRING"
+                        multiplicity: "C1_1"
+                    anchors: !<java.util.ArrayList>
+                    - !<it.unibz.inf.kaos.data.RelationAnchor>
+                      &bf64c17d-ba61-4530-a6ea-51567f709edc startX: 701
+                      startY: 54
+                    firstMultiplicity: "C1_1"
+                    secondMultiplicity: "C0_S"
+                  - !<it.unibz.inf.kaos.data.Association>
+                    &08740476-032f-49b7-94a8-28a8d3777411 startX: 0
+                    startY: 0
+                    name: "Submission"
+                    longName: "http://www.example.com/Submission"
+                    firstClass: *a6ebc9a8-ece6-441d-8abb-7b9fa9a36c8b
+                    secondClass: *d026e448-370e-4f1b-bfbb-8b047bb5b6e8
+                    associationClass: !<it.unibz.inf.kaos.data.AssociationClass>
+                      &c5c589b5-748f-43ba-815a-e3320bd09537 startX: 297
+                      startY: 343
+                      name: "Class"
+                      relations: !<java.util.LinkedHashSet>
+                      - !<it.unibz.inf.kaos.data.Inheritance>
+                        &ce84f73c-d121-46fc-b271-513f43cd9bce startX: 0
+                        startY: 0
+                        firstClass: *c5c589b5-748f-43ba-815a-e3320bd09537
+                        secondClass: !<it.unibz.inf.kaos.data.UMLClass>
+                          &c8946a91-337d-4459-8d1e-bb9cc07d7cc2 startX: 460
+                          startY: 476
+                          name: "CRUpload"
+                          longName: "http://www.example.com/CRUpload"
+                          relations: !<java.util.LinkedHashSet>
+                          - !<it.unibz.inf.kaos.data.Disjoint>
+                            &1ef8a22c-b766-480c-8191-0c3e468fe7d9 startX: 0
+                            startY: 0
+                            name: "{disjoint}"
+                            firstClass: !<it.unibz.inf.kaos.data.UMLClass>
+                              &6d929e92-ac50-4c46-9637-11cd50643953 startX: 214
+                              startY: 476
+                              name: "Creation"
+                              longName: "http://www.example.com/Creation"
+                              relations: !<java.util.LinkedHashSet>
+                              - *1ef8a22c-b766-480c-8191-0c3e468fe7d9
+                              - !<it.unibz.inf.kaos.data.Inheritance>
+                                &25dcb50d-cfee-4144-99f3-59818151e2e4 startX: 0
+                                startY: 0
+                                firstClass: *c5c589b5-748f-43ba-815a-e3320bd09537
+                                secondClass: *6d929e92-ac50-4c46-9637-11cd50643953
+                            secondClass: *c8946a91-337d-4459-8d1e-bb9cc07d7cc2
+                          - *ce84f73c-d121-46fc-b271-513f43cd9bce
+                      - *25dcb50d-cfee-4144-99f3-59818151e2e4
+                      attributes: !<java.util.LinkedList>
+                      - !<it.unibz.inf.kaos.data.Attribute>
+                        name: "uploadTime"
+                        longName: "http://www.example.com/uploadTime"
+                        type: "DATE_TIME"
+                        multiplicity: "C1_1"
+                      association: *08740476-032f-49b7-94a8-28a8d3777411
+                    firstMultiplicity: "C0_S"
+                    secondMultiplicity: "C1_S"
+                  attributes: !<java.util.LinkedList>
+                  - !<it.unibz.inf.kaos.data.Attribute>
+                    name: "regTime"
+                    longName: "http://www.example.com/regTime"
+                    type: "DATE_TIME"
+                    multiplicity: "C1_1"
+                  - !<it.unibz.inf.kaos.data.Attribute>
+                    name: "pName"
+                    longName: "http://www.example.com/pName"
+                    type: "STRING"
+                    multiplicity: "C1_1"
+                anchors: !<java.util.ArrayList>
+                - !<it.unibz.inf.kaos.data.RelationAnchor>
+                  &a05d7957-4c4b-4e17-988d-f1ce5e201831 startX: 699
+                  startY: 553
+                firstMultiplicity: "C0_S"
+                secondMultiplicity: "C1_1"
+              attributes: !<java.util.LinkedList>
+              - !<it.unibz.inf.kaos.data.Attribute>
+                name: "accepted"
+                longName: "http://www.example.com/accepted"
+                type: "BOOLEAN"
+                multiplicity: "C1_1"
+              - !<it.unibz.inf.kaos.data.Attribute>
+                name: "decTime"
+                longName: "http://www.example.com/decTime"
+                type: "DATE_TIME"
+                multiplicity: "C1_1"
+          - *08740476-032f-49b7-94a8-28a8d3777411
+          - *1813ec94-95cd-4e4b-8a39-1c477e8ccfc4
+          - *8c560554-bf06-4553-9e54-7e1ca10b06fc
+          attributes: !<java.util.LinkedList>
+          - !<it.unibz.inf.kaos.data.Attribute>
+            name: "title"
+            longName: "http://www.example.com/title"
+            type: "STRING"
+            multiplicity: "C1_1"
+          - !<it.unibz.inf.kaos.data.Attribute>
+            name: "type"
+            longName: "http://www.example.com/type"
+            type: "STRING"
+            multiplicity: "C1_1"
+        secondClass: *d026e448-370e-4f1b-bfbb-8b047bb5b6e8
+        anchors: !<java.util.ArrayList>
+        - !<it.unibz.inf.kaos.data.RelationAnchor>
+          &cd9b97ed-e67a-4caa-82f0-d4bdd83ad8f2 startX: 412
+          startY: 192
+        associationClass: *cdd738dc-0b5f-4f08-8560-21fb5a18a277
+        firstMultiplicity: "C0_S"
+        secondMultiplicity: "C0_S"
+    secondClass: *98650af0-58ab-48b6-9412-905c90c2f305
+    firstMultiplicity: "C1_1"
+    secondMultiplicity: "C0_1"
+  attributes: !<java.util.LinkedList>
+  - !<it.unibz.inf.kaos.data.Attribute>
+    name: "subTime"
+    longName: "http://www.example.com/subTime"
+    type: "DATE_TIME"
+    multiplicity: "C1_1"
+- *c8946a91-337d-4459-8d1e-bb9cc07d7cc2
+- *d026e448-370e-4f1b-bfbb-8b047bb5b6e8
+- *8eb3de9d-5f99-49f1-9925-1a2a9575fb8b
+- *a6ebc9a8-ece6-441d-8abb-7b9fa9a36c8b
+- *6d929e92-ac50-4c46-9637-11cd50643953
+- *c5c589b5-748f-43ba-815a-e3320bd09537
+- *7e80d677-d02e-4d37-bea7-6baef4596a10
+- *cdd738dc-0b5f-4f08-8560-21fb5a18a277
+- *08740476-032f-49b7-94a8-28a8d3777411
+- *1813ec94-95cd-4e4b-8a39-1c477e8ccfc4
+- *9f69c560-b04e-478c-a591-34d8ef45b413
+- *0f063265-15fb-4bb1-b4c5-01a68185a1fe
+- *8c560554-bf06-4553-9e54-7e1ca10b06fc
+- *d0358dfa-fc05-485f-aeeb-883972e6b9fd
+- null
+- *25dcb50d-cfee-4144-99f3-59818151e2e4
+- *1ef8a22c-b766-480c-8191-0c3e468fe7d9

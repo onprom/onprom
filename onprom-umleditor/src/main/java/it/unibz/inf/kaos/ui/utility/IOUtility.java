@@ -123,7 +123,7 @@ public class IOUtility {
         }
         return null;
     }
-
+    
     public static void exportYAML(FileType fileType, Object object) {
         UIUtility.selectFileToSave(fileType).ifPresent(file -> exportYAML(file, object));
     }
@@ -135,8 +135,6 @@ public class IOUtility {
             LOGGER.error(e.getMessage(), e);
         }
     }
-
-
 
     public static <T> Optional<T> readJSON(java.io.InputStream input, Class<T> cls) {
         try {
