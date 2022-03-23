@@ -27,6 +27,6 @@ jobs:
         prerelease: true
         title: "Development Build v${{ steps.project.outputs.version }}"
         files: |
-          onprom-toolkit/target/onprom-toolkit-${{ steps.currenttag.outputs.version }}.jar
+          toolkit/target/toolkit-${{ steps.currenttag.outputs.version }}.jar
           LICENSE.txt
           README.md
