@@ -39,6 +39,8 @@ import it.unibz.inf.onprom.ui.utility.UIUtility;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by T. E. Kalayci on 25-Oct-2017.
@@ -49,7 +51,7 @@ public class DynamicAssociationPanel extends JPanel {
     private final JComboBox<Set<DiagramShape>> cmbPath;
     private final JCheckBox chkIndex;
     private JComboBox<DynamicAnnotationAttribute> cmbAnnotationAttributes;
-    private boolean isManyToMany = false;
+    private final boolean isManyToMany;
 
     public DynamicAssociationPanel(DynamicAnnotationForm _form, Association association) {
         isManyToMany = association.isManyToMany();
@@ -65,36 +67,38 @@ public class DynamicAssociationPanel extends JPanel {
         cmbPath = UIUtility.createWideComboBox(AbstractAnnotationForm.TXT_SIZE, null, true, true);
         add(cmbPath);
 
-        //if(isManyToMany) {
-        add(UIUtility.createSmallButton(AnnotationEditorButtons.ADD, e -> {
-            if (cmbAnnotations.getSelectedItem() != null && cmbAnnotations.getSelectedItem() instanceof DynamicAttribute) {
-                DynamicAnnotationAttribute annotation = (DynamicAnnotationAttribute) cmbAnnotations.getSelectedItem();
-                if (annotation != null) {
-                    if (cmbPath.getSelectedIndex() > -1) {
-                        annotation.setPath(cmbPath.getItemAt(cmbPath.getSelectedIndex()));
+        if (isManyToMany) {
+            add(UIUtility.createSmallButton(AnnotationEditorButtons.ADD, e -> {
+                if (cmbAnnotations.getSelectedItem() != null && cmbAnnotations.getSelectedItem() instanceof DynamicAttribute) {
+                    DynamicAnnotationAttribute annotation = (DynamicAnnotationAttribute) cmbAnnotations.getSelectedItem();
+                    if (annotation != null) {
+                        if (cmbPath.getSelectedIndex() > -1) {
+                            annotation.setPath(cmbPath.getItemAt(cmbPath.getSelectedIndex()));
+                        }
+                        annotation.setPartOfURI(chkIndex.isSelected());
                     }
-                    annotation.setPartOfURI(chkIndex.isSelected());
+                    boolean exists = false;
+                    for (int i = 0; i < cmbAnnotationAttributes.getItemCount(); i++) {
+                        DynamicAnnotationAttribute current = cmbAnnotationAttributes.getItemAt(i);
+                        if (current.equals(annotation)) {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if (!exists) {
+                        cmbAnnotationAttributes.addItem(annotation);
+                    }
                 }
-                cmbAnnotationAttributes.addItem(annotation);
-            }
 
-        }));
-        cmbAnnotationAttributes = UIUtility.createWideComboBox(AbstractAnnotationForm.TXT_SIZE, null, true, false);
-        add(cmbAnnotationAttributes);
-        add(UIUtility.createSmallButton(AnnotationEditorButtons.REMOVE, e -> {
-            if (cmbAnnotationAttributes.getSelectedIndex() > -1) {
-                cmbAnnotationAttributes.removeItemAt(cmbAnnotationAttributes.getSelectedIndex());
-            }
-        }));
-        //}
-
-        /*JButton btnNavigation = UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> form.startNavigation(new UpdateListener() {
-            @Override
-            public void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute) {
-                cmbPath.setSelectedItem(new NavigationalAttribute(path, selectedClass, selectedAttribute));
-            }
-        }, false));
-        add(btnNavigation);*/
+            }));
+            cmbAnnotationAttributes = UIUtility.createWideComboBox(AbstractAnnotationForm.TXT_SIZE, null, true, false);
+            add(cmbAnnotationAttributes);
+            add(UIUtility.createSmallButton(AnnotationEditorButtons.REMOVE, e -> {
+                if (cmbAnnotationAttributes.getSelectedIndex() > -1) {
+                    cmbAnnotationAttributes.removeItemAt(cmbAnnotationAttributes.getSelectedIndex());
+                }
+            }));
+        }
     }
 
     private void populatePath() {
@@ -104,9 +108,7 @@ public class DynamicAssociationPanel extends JPanel {
     public Set<DynamicAnnotationAttribute> getValue() {
         Set<DynamicAnnotationAttribute> selectedAttributes = Sets.newLinkedHashSet();
         if (isManyToMany) {
-            for (int i = 0; i < cmbAnnotationAttributes.getItemCount(); i++) {
-                selectedAttributes.add(cmbAnnotationAttributes.getItemAt(i));
-            }
+            selectedAttributes = IntStream.range(0, cmbAnnotationAttributes.getItemCount()).mapToObj(cmbAnnotationAttributes::getItemAt).collect(Collectors.toCollection(Sets::newLinkedHashSet));
         } else {
             if (cmbAnnotations.getSelectedItem() != null) {
                 DynamicAnnotationAttribute annotation = (DynamicAnnotationAttribute) cmbAnnotations.getSelectedItem();
@@ -122,11 +124,16 @@ public class DynamicAssociationPanel extends JPanel {
         return selectedAttributes;
     }
 
-    public void setValue(DynamicAnnotationAttribute dynamicAnnotationAttribute) {
-        if (dynamicAnnotationAttribute != null) {
-            chkIndex.setSelected(dynamicAnnotationAttribute.isPartOfURI());
-            cmbAnnotations.setSelectedItem(dynamicAnnotationAttribute);
-            cmbPath.setSelectedItem(dynamicAnnotationAttribute.getPath());
+    public void setValue(Set<DynamicAnnotationAttribute> dynamicAnnotationAttributes) {
+        if (dynamicAnnotationAttributes != null && dynamicAnnotationAttributes.size() > 0) {
+            DynamicAnnotationAttribute selected = dynamicAnnotationAttributes.stream().findFirst().get();
+            chkIndex.setSelected(selected.isPartOfURI());
+            if (isManyToMany) {
+                dynamicAnnotationAttributes.forEach(cmbAnnotationAttributes::addItem);
+            } else {
+                cmbAnnotations.setSelectedItem(selected);
+                cmbPath.setSelectedItem(selected.getPath());
+            }
         }
     }
 

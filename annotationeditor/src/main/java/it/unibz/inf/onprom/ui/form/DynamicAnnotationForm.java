@@ -116,10 +116,7 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
         add(UIUtility.createButton(AnnotationEditorButtons.SAVE, e -> {
             attributes.forEach((key, value) -> annotation.setAttributeValue(key, value.getValue()));
             associations.forEach((key, value) -> {
-                //TODO How to distinguish many-to-many, separate keys or other way?
-                value.getValue().forEach(dynamicAnnotationAttribute -> {
-                    annotation.setRelationValue(key, dynamicAnnotationAttribute);
-                });
+                annotation.setRelationValue(key, value.getValue());
             });
             annotation.setLabel(txtLabel.getText());
             annotation.setLabelPartOfIndex(chkLabel.isSelected());

@@ -56,7 +56,7 @@ import java.util.Set;
 public class DynamicAnnotation extends Annotation {
     private static final Logger logger = LoggerFactory.getLogger(DynamicAnnotation.class.getName());
     private final Map<String, DynamicNavigationalAttribute> attributeValues = Maps.newLinkedHashMap();
-    private final Map<String, DynamicAnnotationAttribute> relationValues = Maps.newLinkedHashMap();
+    private final Map<String, Set<DynamicAnnotationAttribute>> relationValues = Maps.newLinkedHashMap();
 
     private Set<DynamicAttribute> externalURIComponents = Sets.newLinkedHashSet();
 
@@ -90,7 +90,7 @@ public class DynamicAnnotation extends Annotation {
         return attributeValues.get(name);
     }
 
-    public DynamicAnnotationAttribute getRelationValue(String name) {
+    public Set<DynamicAnnotationAttribute> getRelationValue(String name) {
         return relationValues.get(name);
     }
 
@@ -106,7 +106,7 @@ public class DynamicAnnotation extends Annotation {
         setValue(attributeValues, name, value);
     }
 
-    public void setRelationValue(String name, DynamicAnnotationAttribute value) {
+    public void setRelationValue(String name, Set<DynamicAnnotationAttribute> value) {
         setValue(relationValues, name, value);
     }
 
@@ -128,7 +128,7 @@ public class DynamicAnnotation extends Annotation {
     public List<AnnotationQuery> getQuery() {
         //TODO check cyclic access
         //TODO when to check if visited or not?
-        logger.info("Generating queries for " + toString());
+        logger.info("Generating queries for " + this);
         queries.clear();
         uriFields.clear();
         uri.clear();
@@ -159,16 +159,22 @@ public class DynamicAnnotation extends Annotation {
         });
 
         relationValues.forEach((key, value) -> {
-            if (value.isPartOfURI()) {
-                String id = value.getVarName();
-                uriFields.put(key, ImmutablePair.of(id, value));
-                uri.add(id);
-            }
+            value.forEach(dynamicAnnotationAttribute -> {
+                if (dynamicAnnotationAttribute.isPartOfURI()) {
+                    String id = dynamicAnnotationAttribute.getVarName();
+                    uriFields.put(key, ImmutablePair.of(id, value));
+                    uri.add(id);
+                }
+            });
         });
 
         queries.add(getAnnotationInstanceQuery());
         attributeValues.forEach((key, value) -> queries.add(getAttributeQuery(key, value)));
-        relationValues.forEach((key, value) -> queries.add(getRelationQuery(key, value)));
+        relationValues.forEach((key, value) -> {
+            value.forEach(dynamicAnnotationAttribute -> {
+                queries.add(getRelationQuery(key, dynamicAnnotationAttribute));
+            });
+        });
 
         return queries;
     }
