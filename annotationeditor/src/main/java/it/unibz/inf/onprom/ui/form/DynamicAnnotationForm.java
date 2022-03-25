@@ -1,9 +1,9 @@
 /*
- * onprom-dynamiceditor
+ * annotationeditor
  *
  * DynamicAnnotationForm.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -115,7 +115,12 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
         gridBagConstraints.gridy = 0;
         add(UIUtility.createButton(AnnotationEditorButtons.SAVE, e -> {
             attributes.forEach((key, value) -> annotation.setAttributeValue(key, value.getValue()));
-            associations.forEach((key, value) -> annotation.setRelationValue(key, value.getValue()));
+            associations.forEach((key, value) -> {
+                //TODO How to distinguish many-to-many, separate keys or other way?
+                value.getValue().forEach(dynamicAnnotationAttribute -> {
+                    annotation.setRelationValue(key, dynamicAnnotationAttribute);
+                });
+            });
             annotation.setLabel(txtLabel.getText());
             annotation.setLabelPartOfIndex(chkLabel.isSelected());
             Set<DynamicAttribute> selectedURIComponents = Sets.newLinkedHashSet();
