@@ -9,13 +9,6 @@ obda:		https://w3id.org/obda/vocabulary#
 rdfs:		http://www.w3.org/2000/01/rdf-schema#
 onprom:		http://kaos.inf.unibz.it/onprom/
 
-[SourceDeclaration]
-sourceUri	datasource1
-connectionUrl	jdbc:mysql://localhost:13306/dolibarr
-username	root
-password    root
-driverClass	com.mysql.jdbc.Driver
-
 [MappingDeclaration] @collection [[
 mappingId	product
 target		data:product/{rowid} a :Product . 
