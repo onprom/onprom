@@ -173,8 +173,6 @@ public class ObjectTree {
                     }
                     break;
                 case QUERIES:
-//                    IOUtility.readJSON(selectedFile, AnnotationQueries.class).ifPresent(
-//                            q -> addObject(selectedFile.getName(), FileType.QUERIES, q));
                     IOUtility.readYAML(selectedFile, AnnotationQueries.class).ifPresent(
                             q -> addObject(selectedFile.getName(), FileType.QUERIES, q));
                     break;

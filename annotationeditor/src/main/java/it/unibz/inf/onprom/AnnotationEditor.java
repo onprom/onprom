@@ -183,7 +183,7 @@ public class AnnotationEditor extends UMLEditor {
                         ((AnnotationEditorListener) listener).store(title, annotationsQueries);
                     }
                     if (UIUtility.confirm(UMLEditorMessages.SAVE_FILE)) {
-                        IOUtility.exportJSON(FileType.QUERIES, annotationsQueries); //save as *.aqr
+                        IOUtility.exportYAML(FileType.QUERIES, annotationsQueries); //save as *.aqr
                     }
                 }
             }
