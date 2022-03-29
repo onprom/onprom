@@ -73,6 +73,7 @@
         <maven.assembly.version>3.3.0</maven.assembly.version>
         <owlapi.version>4.5.19</owlapi.version>
         <ontop.version>4.2.0</ontop.version>
+        <local.repository>file://${basedir}/../libraries</local.repository>
     </properties>
 
     <build>
@@ -99,9 +100,8 @@
     </modules>
     <repositories>
         <repository>
-            <id>onprom-maven</id>
-            <name>onprom Maven Repository</name>
-            <url>file://${basedir}/libraries</url>
+            <id>libraries</id>
+            <url>${local.repository}</url>
         </repository>
     </repositories>
     <dependencies>
