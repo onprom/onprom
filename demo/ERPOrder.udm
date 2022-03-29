@@ -1,0 +1,266 @@
+[ "java.util.LinkedHashSet", [ {
+  "@class" : "it.unibz.inf.onprom.data.UMLClass",
+  "@id" : "443872e5-a49f-4105-8d30-cd6912443087",
+  "startX" : 256,
+  "startY" : 42,
+  "name" : "Payment",
+  "longName" : "http://www.example.com/dolibarr#Payment",
+  "relations" : [ "java.util.LinkedHashSet", [ {
+    "@class" : "it.unibz.inf.onprom.data.Association",
+    "@id" : "32b225b2-ee65-4673-8bb1-d64769ebcbee",
+    "startX" : 0,
+    "startY" : 0,
+    "name" : "hasPaymentItem",
+    "longName" : "http://www.example.com/dolibarr#hasPaymentItem",
+    "firstClass" : "443872e5-a49f-4105-8d30-cd6912443087",
+    "secondClass" : {
+      "@class" : "it.unibz.inf.onprom.data.UMLClass",
+      "@id" : "0a65783a-ffbd-493b-b10c-8eb55508e6f7",
+      "startX" : 44,
+      "startY" : 53,
+      "name" : "PaymentItem",
+      "longName" : "http://www.example.com/dolibarr#PaymentItem",
+      "relations" : [ "java.util.LinkedHashSet", [ "32b225b2-ee65-4673-8bb1-d64769ebcbee", {
+        "@class" : "it.unibz.inf.onprom.data.Association",
+        "@id" : "bea44482-ffa8-496b-a247-0c7ec8f07aeb",
+        "startX" : 0,
+        "startY" : 0,
+        "name" : "paymentItemInvoice",
+        "longName" : "http://www.example.com/dolibarr#paymentItemInvoice",
+        "firstClass" : "0a65783a-ffbd-493b-b10c-8eb55508e6f7",
+        "secondClass" : {
+          "@class" : "it.unibz.inf.onprom.data.UMLClass",
+          "@id" : "826b11ce-8274-4cc8-b1df-ffb9291d7365",
+          "startX" : 33,
+          "startY" : 167,
+          "name" : "Invoice",
+          "longName" : "http://www.example.com/dolibarr#Invoice",
+          "relations" : [ "java.util.LinkedHashSet", [ {
+            "@class" : "it.unibz.inf.onprom.data.Association",
+            "@id" : "37a849f7-aadf-4ad6-bfe1-1660b6dfe173",
+            "startX" : 0,
+            "startY" : 0,
+            "name" : "hasInvoice",
+            "longName" : "http://www.example.com/dolibarr#hasInvoice",
+            "firstClass" : {
+              "@class" : "it.unibz.inf.onprom.data.UMLClass",
+              "@id" : "0db2df08-5cb2-4d54-aaf3-1e76acf6a63f",
+              "startX" : 48,
+              "startY" : 357,
+              "name" : "Customer",
+              "longName" : "http://www.example.com/dolibarr#Customer",
+              "relations" : [ "java.util.LinkedHashSet", [ {
+                "@class" : "it.unibz.inf.onprom.data.Association",
+                "@id" : "17d63805-af1c-4d00-9d67-bc57e77d266b",
+                "startX" : 0,
+                "startY" : 0,
+                "name" : "create",
+                "longName" : "http://www.example.com/dolibarr#create",
+                "firstClass" : "0db2df08-5cb2-4d54-aaf3-1e76acf6a63f",
+                "secondClass" : {
+                  "@class" : "it.unibz.inf.onprom.data.UMLClass",
+                  "@id" : "70751cc0-9e2b-4bfd-8be3-2c939fb315f1",
+                  "startX" : 272,
+                  "startY" : 242,
+                  "name" : "SalesOrder",
+                  "longName" : "http://www.example.com/dolibarr#SalesOrder",
+                  "relations" : [ "java.util.LinkedHashSet", [ "17d63805-af1c-4d00-9d67-bc57e77d266b", {
+                    "@class" : "it.unibz.inf.onprom.data.Association",
+                    "@id" : "17e8a906-a2dd-4f25-9ae7-e8cc0720def2",
+                    "startX" : 0,
+                    "startY" : 0,
+                    "name" : "hasOrderItem",
+                    "longName" : "http://www.example.com/dolibarr#hasOrderItem",
+                    "firstClass" : "70751cc0-9e2b-4bfd-8be3-2c939fb315f1",
+                    "secondClass" : {
+                      "@class" : "it.unibz.inf.onprom.data.UMLClass",
+                      "@id" : "b536ee5b-63fc-45e2-a6de-52d4c62e6b8c",
+                      "startX" : 555,
+                      "startY" : 253,
+                      "name" : "OrderItem",
+                      "longName" : "http://www.example.com/dolibarr#OrderItem",
+                      "relations" : [ "java.util.LinkedHashSet", [ {
+                        "@class" : "it.unibz.inf.onprom.data.Association",
+                        "@id" : "b5608cc8-9822-4569-902a-5ad3ded9e3bf",
+                        "startX" : 0,
+                        "startY" : 0,
+                        "name" : "assign",
+                        "longName" : "http://www.example.com/dolibarr#assign",
+                        "firstClass" : "b536ee5b-63fc-45e2-a6de-52d4c62e6b8c",
+                        "secondClass" : {
+                          "@class" : "it.unibz.inf.onprom.data.UMLClass",
+                          "@id" : "db152334-8f53-4208-ae13-d622104b2dcc",
+                          "startX" : 541,
+                          "startY" : 528,
+                          "name" : "ShipmentItem",
+                          "longName" : "http://www.example.com/dolibarr#ShipmentItem",
+                          "relations" : [ "java.util.LinkedHashSet", [ "b5608cc8-9822-4569-902a-5ad3ded9e3bf", {
+                            "@class" : "it.unibz.inf.onprom.data.Association",
+                            "@id" : "1e753d7d-2efb-4311-826c-66119863863d",
+                            "startX" : 0,
+                            "startY" : 0,
+                            "name" : "hasShipmentItem",
+                            "longName" : "http://www.example.com/dolibarr#hasShipmentItem",
+                            "firstClass" : {
+                              "@class" : "it.unibz.inf.onprom.data.UMLClass",
+                              "@id" : "5c5dc28e-e987-4872-baee-57505d06a462",
+                              "startX" : 204,
+                              "startY" : 517,
+                              "name" : "Shipment",
+                              "longName" : "http://www.example.com/dolibarr#Shipment",
+                              "relations" : [ "java.util.LinkedHashSet", [ "1e753d7d-2efb-4311-826c-66119863863d", {
+                                "@class" : "it.unibz.inf.onprom.data.Association",
+                                "@id" : "06f9f70f-7dc2-469b-a7d3-160acbf4edaf",
+                                "startX" : 0,
+                                "startY" : 0,
+                                "name" : "shipTo",
+                                "longName" : "http://www.example.com/dolibarr#shipTo",
+                                "firstClass" : "5c5dc28e-e987-4872-baee-57505d06a462",
+                                "secondClass" : "0db2df08-5cb2-4d54-aaf3-1e76acf6a63f",
+                                "firstMultiplicity" : "C1_S",
+                                "secondMultiplicity" : "C0_1"
+                              } ] ],
+                              "attributes" : [ "java.util.LinkedList", [ {
+                                "@class" : "it.unibz.inf.onprom.data.Attribute",
+                                "name" : "shipDate",
+                                "longName" : "http://www.example.com/dolibarr#shipDate",
+                                "type" : "DATE_TIME",
+                                "multiplicity" : "C0_1"
+                              }, {
+                                "@class" : "it.unibz.inf.onprom.data.Attribute",
+                                "name" : "shipName",
+                                "longName" : "http://www.example.com/dolibarr#shipName",
+                                "type" : "STRING",
+                                "multiplicity" : "C0_S"
+                              } ] ]
+                            },
+                            "secondClass" : "db152334-8f53-4208-ae13-d622104b2dcc",
+                            "firstMultiplicity" : "C0_S",
+                            "secondMultiplicity" : "C0_S"
+                          } ] ]
+                        },
+                        "firstMultiplicity" : "C1_S",
+                        "secondMultiplicity" : "C1_S"
+                      }, "17e8a906-a2dd-4f25-9ae7-e8cc0720def2" ] ]
+                    },
+                    "firstMultiplicity" : "C0_S",
+                    "secondMultiplicity" : "C0_S"
+                  }, {
+                    "@class" : "it.unibz.inf.onprom.data.Association",
+                    "@id" : "0afe16dc-f672-4962-a2b8-4af267ab2f68",
+                    "startX" : 0,
+                    "startY" : 0,
+                    "name" : "hasProduct",
+                    "longName" : "http://www.example.com/dolibarr#hasProduct",
+                    "firstClass" : "70751cc0-9e2b-4bfd-8be3-2c939fb315f1",
+                    "secondClass" : {
+                      "@class" : "it.unibz.inf.onprom.data.UMLClass",
+                      "@id" : "e9702470-5a73-48b4-af99-483f2de12784",
+                      "startX" : 773,
+                      "startY" : 242,
+                      "name" : "Product",
+                      "longName" : "http://www.example.com/dolibarr#Product",
+                      "relations" : [ "java.util.LinkedHashSet", [ "0afe16dc-f672-4962-a2b8-4af267ab2f68" ] ],
+                      "attributes" : [ "java.util.LinkedList", [ {
+                        "@class" : "it.unibz.inf.onprom.data.Attribute",
+                        "name" : "pName",
+                        "longName" : "http://www.example.com/dolibarr#pName",
+                        "type" : "STRING",
+                        "multiplicity" : "C1_1"
+                      } ] ]
+                    },
+                    "firstMultiplicity" : "C1_1",
+                    "secondMultiplicity" : "C1_S"
+                  }, {
+                    "@class" : "it.unibz.inf.onprom.data.Association",
+                    "@id" : "e7cbaef2-714e-4110-ae6d-13edd4338ce1",
+                    "startX" : 0,
+                    "startY" : 0,
+                    "name" : "payTo",
+                    "longName" : "http://www.example.com/dolibarr#payTo",
+                    "firstClass" : "443872e5-a49f-4105-8d30-cd6912443087",
+                    "secondClass" : "70751cc0-9e2b-4bfd-8be3-2c939fb315f1",
+                    "firstMultiplicity" : "C0_S",
+                    "secondMultiplicity" : "C0_1"
+                  } ] ],
+                  "attributes" : [ "java.util.LinkedList", [ {
+                    "@class" : "it.unibz.inf.onprom.data.Attribute",
+                    "name" : "createDate",
+                    "longName" : "http://www.example.com/dolibarr#createDate",
+                    "type" : "DATE_TIME",
+                    "multiplicity" : "C0_1"
+                  }, {
+                    "@class" : "it.unibz.inf.onprom.data.Attribute",
+                    "name" : "orderDate",
+                    "longName" : "http://www.example.com/dolibarr#orderDate",
+                    "type" : "DATE",
+                    "multiplicity" : "C0_1"
+                  }, {
+                    "@class" : "it.unibz.inf.onprom.data.Attribute",
+                    "name" : "orderNo",
+                    "longName" : "http://www.example.com/dolibarr#orderNo",
+                    "type" : "STRING",
+                    "multiplicity" : "C0_S"
+                  } ] ]
+                },
+                "firstMultiplicity" : "C0_1",
+                "secondMultiplicity" : "C1_S"
+              }, "37a849f7-aadf-4ad6-bfe1-1660b6dfe173", "06f9f70f-7dc2-469b-a7d3-160acbf4edaf" ] ],
+              "attributes" : [ "java.util.LinkedList", [ {
+                "@class" : "it.unibz.inf.onprom.data.Attribute",
+                "name" : "cName",
+                "longName" : "http://www.example.com/dolibarr#cName",
+                "type" : "STRING",
+                "multiplicity" : "C1_1"
+              } ] ]
+            },
+            "secondClass" : "826b11ce-8274-4cc8-b1df-ffb9291d7365",
+            "firstMultiplicity" : "C0_1",
+            "secondMultiplicity" : "C1_S"
+          }, {
+            "@class" : "it.unibz.inf.onprom.data.Association",
+            "@id" : "f8ea3ca7-3d78-41bc-9200-206b50adaaa4",
+            "startX" : 0,
+            "startY" : 0,
+            "name" : "invoiceToPayment",
+            "longName" : "http://www.example.com/dolibarr#invoiceToPayment",
+            "firstClass" : "826b11ce-8274-4cc8-b1df-ffb9291d7365",
+            "secondClass" : "443872e5-a49f-4105-8d30-cd6912443087",
+            "firstMultiplicity" : "C0_S",
+            "secondMultiplicity" : "C0_S"
+          }, "bea44482-ffa8-496b-a247-0c7ec8f07aeb" ] ],
+          "attributes" : [ "java.util.ArrayList", [ {
+            "@class" : "it.unibz.inf.onprom.data.Attribute",
+            "name" : "invDate",
+            "longName" : "http://www.example.com/dolibarr#invDate",
+            "type" : "DATE_TIME",
+            "multiplicity" : "C1_1"
+          }, {
+            "@class" : "it.unibz.inf.onprom.data.Attribute",
+            "name" : "invNo",
+            "longName" : "http://www.example.com/dolibarr#invNo",
+            "type" : "STRING",
+            "multiplicity" : "C0_S"
+          } ] ]
+        },
+        "firstMultiplicity" : "C1_1",
+        "secondMultiplicity" : "C1_1"
+      } ] ]
+    },
+    "firstMultiplicity" : "C0_S",
+    "secondMultiplicity" : "C0_S"
+  }, "f8ea3ca7-3d78-41bc-9200-206b50adaaa4", "e7cbaef2-714e-4110-ae6d-13edd4338ce1" ] ],
+  "attributes" : [ "java.util.LinkedList", [ {
+    "@class" : "it.unibz.inf.onprom.data.Attribute",
+    "name" : "payDate",
+    "longName" : "http://www.example.com/dolibarr#payDate",
+    "type" : "DATE_TIME",
+    "multiplicity" : "C1_1"
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.Attribute",
+    "name" : "payName",
+    "longName" : "http://www.example.com/dolibarr#payName",
+    "type" : "STRING",
+    "multiplicity" : "C0_S"
+  } ] ]
+}, "b536ee5b-63fc-45e2-a6de-52d4c62e6b8c", "5c5dc28e-e987-4872-baee-57505d06a462", "db152334-8f53-4208-ae13-d622104b2dcc", "0a65783a-ffbd-493b-b10c-8eb55508e6f7", "826b11ce-8274-4cc8-b1df-ffb9291d7365", "e9702470-5a73-48b4-af99-483f2de12784", "0db2df08-5cb2-4d54-aaf3-1e76acf6a63f", "70751cc0-9e2b-4bfd-8be3-2c939fb315f1", "37a849f7-aadf-4ad6-bfe1-1660b6dfe173", "f8ea3ca7-3d78-41bc-9200-206b50adaaa4", "e7cbaef2-714e-4110-ae6d-13edd4338ce1", "06f9f70f-7dc2-469b-a7d3-160acbf4edaf", "32b225b2-ee65-4673-8bb1-d64769ebcbee", "bea44482-ffa8-496b-a247-0c7ec8f07aeb", "b5608cc8-9822-4569-902a-5ad3ded9e3bf", "0afe16dc-f672-4962-a2b8-4af267ab2f68", "17d63805-af1c-4d00-9d67-bc57e77d266b", "1e753d7d-2efb-4311-826c-66119863863d", "17e8a906-a2dd-4f25-9ae7-e8cc0720def2" ] ]

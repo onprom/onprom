@@ -1,15 +1,13 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="http://www.example.com/dolibarr#"
-     xml:base="http://www.example.com/dolibarr"
+<rdf:RDF xmlns="http://www.example.com/dolibarr/"
+     xml:base="http://www.example.com/dolibarr/"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:data="http://www.example.com/dolibarr/data/"
-     xmlns:obda="https://w3id.org/obda/vocabulary#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:onprom="http://kaos.inf.unibz.it/onprom/">
-    <owl:Ontology rdf:about="http://www.example.com/dolibarr"/>
+    <owl:Ontology rdf:about="http://www.example.com/dolibarr/"/>
     
 
 
@@ -58,108 +56,108 @@
     
 
 
-    <!-- http://www.example.com/dolibarr#assign -->
+    <!-- http://www.example.com/dolibarr/assign -->
 
-    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr#assign">
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#OrderItem"/>
-        <rdfs:range rdf:resource="http://www.example.com/dolibarr#ShipmentItem"/>
+    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr/assign">
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/OrderItem"/>
+        <rdfs:range rdf:resource="http://www.example.com/dolibarr/ShipmentItem"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#create -->
+    <!-- http://www.example.com/dolibarr/create -->
 
-    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr#create">
+    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr/create">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Customer"/>
-        <rdfs:range rdf:resource="http://www.example.com/dolibarr#SalesOrder"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Customer"/>
+        <rdfs:range rdf:resource="http://www.example.com/dolibarr/SalesOrder"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#hasInvoice -->
+    <!-- http://www.example.com/dolibarr/hasInvoice -->
 
-    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr#hasInvoice">
+    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr/hasInvoice">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Customer"/>
-        <rdfs:range rdf:resource="http://www.example.com/dolibarr#Invoice"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Customer"/>
+        <rdfs:range rdf:resource="http://www.example.com/dolibarr/Invoice"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#hasOrderItem -->
+    <!-- http://www.example.com/dolibarr/hasOrderItem -->
 
-    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr#hasOrderItem">
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#SalesOrder"/>
-        <rdfs:range rdf:resource="http://www.example.com/dolibarr#OrderItem"/>
+    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr/hasOrderItem">
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/SalesOrder"/>
+        <rdfs:range rdf:resource="http://www.example.com/dolibarr/OrderItem"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#hasPaymentItem -->
+    <!-- http://www.example.com/dolibarr/hasPaymentItem -->
 
-    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr#hasPaymentItem">
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Payment"/>
-        <rdfs:range rdf:resource="http://www.example.com/dolibarr#PaymentItem"/>
+    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr/hasPaymentItem">
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Payment"/>
+        <rdfs:range rdf:resource="http://www.example.com/dolibarr/PaymentItem"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#hasProduct -->
+    <!-- http://www.example.com/dolibarr/hasProduct -->
 
-    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr#hasProduct">
+    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr/hasProduct">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#SalesOrder"/>
-        <rdfs:range rdf:resource="http://www.example.com/dolibarr#Product"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/SalesOrder"/>
+        <rdfs:range rdf:resource="http://www.example.com/dolibarr/Product"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#hasShipmentItem -->
+    <!-- http://www.example.com/dolibarr/hasShipmentItem -->
 
-    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr#hasShipmentItem">
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Shipment"/>
-        <rdfs:range rdf:resource="http://www.example.com/dolibarr#ShipmentItem"/>
+    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr/hasShipmentItem">
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Shipment"/>
+        <rdfs:range rdf:resource="http://www.example.com/dolibarr/ShipmentItem"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#invoiceToPayment -->
+    <!-- http://www.example.com/dolibarr/invoiceToPayment -->
 
-    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr#invoiceToPayment">
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Invoice"/>
-        <rdfs:range rdf:resource="http://www.example.com/dolibarr#Payment"/>
+    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr/invoiceToPayment">
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Invoice"/>
+        <rdfs:range rdf:resource="http://www.example.com/dolibarr/Payment"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#payTo -->
+    <!-- http://www.example.com/dolibarr/payTo -->
 
-    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr#payTo">
+    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr/payTo">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Payment"/>
-        <rdfs:range rdf:resource="http://www.example.com/dolibarr#SalesOrder"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Payment"/>
+        <rdfs:range rdf:resource="http://www.example.com/dolibarr/SalesOrder"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#paymentItemInvoice -->
+    <!-- http://www.example.com/dolibarr/paymentItemInvoice -->
 
-    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr#paymentItemInvoice">
+    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr/paymentItemInvoice">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#PaymentItem"/>
-        <rdfs:range rdf:resource="http://www.example.com/dolibarr#Invoice"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/PaymentItem"/>
+        <rdfs:range rdf:resource="http://www.example.com/dolibarr/Invoice"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#shipTo -->
+    <!-- http://www.example.com/dolibarr/shipTo -->
 
-    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr#shipTo">
+    <owl:ObjectProperty rdf:about="http://www.example.com/dolibarr/shipTo">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Shipment"/>
-        <rdfs:range rdf:resource="http://www.example.com/dolibarr#Customer"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Shipment"/>
+        <rdfs:range rdf:resource="http://www.example.com/dolibarr/Customer"/>
     </owl:ObjectProperty>
     
 
@@ -175,107 +173,107 @@
     
 
 
-    <!-- http://www.example.com/dolibarr#cName -->
+    <!-- http://www.example.com/dolibarr/cName -->
 
-    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr#cName">
+    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr/cName">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Customer"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Customer"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#createDate -->
+    <!-- http://www.example.com/dolibarr/createDate -->
 
-    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr#createDate">
+    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr/createDate">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#SalesOrder"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/SalesOrder"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#invDate -->
+    <!-- http://www.example.com/dolibarr/invDate -->
 
-    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr#invDate">
+    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr/invDate">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Invoice"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Invoice"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.example.com/dolibarr/invNo -->
+
+    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr/invNo">
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Invoice"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.example.com/dolibarr/orderDate -->
+
+    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr/orderDate">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/SalesOrder"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#invNo -->
+    <!-- http://www.example.com/dolibarr/orderNo -->
 
-    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr#invNo">
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Invoice"/>
+    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr/orderNo">
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/SalesOrder"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#orderDate -->
+    <!-- http://www.example.com/dolibarr/pName -->
 
-    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr#orderDate">
+    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr/pName">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#SalesOrder"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.example.com/dolibarr#orderNo -->
-
-    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr#orderNo">
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#SalesOrder"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Product"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#pName -->
+    <!-- http://www.example.com/dolibarr/payDate -->
 
-    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr#pName">
+    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr/payDate">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Product"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.example.com/dolibarr#payDate -->
-
-    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr#payDate">
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Payment"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Payment"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#payName -->
+    <!-- http://www.example.com/dolibarr/payName -->
 
-    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr#payName">
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Payment"/>
+    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr/payName">
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Payment"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#shipDate -->
+    <!-- http://www.example.com/dolibarr/shipDate -->
 
-    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr#shipDate">
+    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr/shipDate">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Shipment"/>
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Shipment"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     </owl:DatatypeProperty>
     
 
 
-    <!-- http://www.example.com/dolibarr#shipName -->
+    <!-- http://www.example.com/dolibarr/shipName -->
 
-    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr#shipName">
-        <rdfs:domain rdf:resource="http://www.example.com/dolibarr#Shipment"/>
+    <owl:DatatypeProperty rdf:about="http://www.example.com/dolibarr/shipName">
+        <rdfs:domain rdf:resource="http://www.example.com/dolibarr/Shipment"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
@@ -292,18 +290,18 @@
     
 
 
-    <!-- http://www.example.com/dolibarr#Customer -->
+    <!-- http://www.example.com/dolibarr/Customer -->
 
-    <owl:Class rdf:about="http://www.example.com/dolibarr#Customer">
+    <owl:Class rdf:about="http://www.example.com/dolibarr/Customer">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.example.com/dolibarr#create"/>
+                <owl:onProperty rdf:resource="http://www.example.com/dolibarr/create"/>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.example.com/dolibarr#hasInvoice"/>
+                <owl:onProperty rdf:resource="http://www.example.com/dolibarr/hasInvoice"/>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -311,7 +309,7 @@
             <owl:Restriction>
                 <owl:onProperty>
                     <rdf:Description>
-                        <owl:inverseOf rdf:resource="http://www.example.com/dolibarr#shipTo"/>
+                        <owl:inverseOf rdf:resource="http://www.example.com/dolibarr/shipTo"/>
                     </rdf:Description>
                 </owl:onProperty>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
@@ -319,7 +317,7 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.example.com/dolibarr#cName"/>
+                <owl:onProperty rdf:resource="http://www.example.com/dolibarr/cName"/>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -328,14 +326,14 @@
     
 
 
-    <!-- http://www.example.com/dolibarr#Invoice -->
+    <!-- http://www.example.com/dolibarr/Invoice -->
 
-    <owl:Class rdf:about="http://www.example.com/dolibarr#Invoice">
+    <owl:Class rdf:about="http://www.example.com/dolibarr/Invoice">
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty>
                     <rdf:Description>
-                        <owl:inverseOf rdf:resource="http://www.example.com/dolibarr#paymentItemInvoice"/>
+                        <owl:inverseOf rdf:resource="http://www.example.com/dolibarr/paymentItemInvoice"/>
                     </rdf:Description>
                 </owl:onProperty>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
@@ -343,7 +341,7 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.example.com/dolibarr#invDate"/>
+                <owl:onProperty rdf:resource="http://www.example.com/dolibarr/invDate"/>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -352,18 +350,12 @@
     
 
 
-    <!-- http://www.example.com/dolibarr#OrderItem -->
+    <!-- http://www.example.com/dolibarr/OrderItem -->
 
-    <owl:Class rdf:about="http://www.example.com/dolibarr#OrderItem">
+    <owl:Class rdf:about="http://www.example.com/dolibarr/OrderItem">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.example.com/dolibarr#assign"/>
-                <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.example.com/dolibarr#hasProduct"/>
+                <owl:onProperty rdf:resource="http://www.example.com/dolibarr/assign"/>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -372,12 +364,12 @@
     
 
 
-    <!-- http://www.example.com/dolibarr#Payment -->
+    <!-- http://www.example.com/dolibarr/Payment -->
 
-    <owl:Class rdf:about="http://www.example.com/dolibarr#Payment">
+    <owl:Class rdf:about="http://www.example.com/dolibarr/Payment">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.example.com/dolibarr#payDate"/>
+                <owl:onProperty rdf:resource="http://www.example.com/dolibarr/payDate"/>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -386,12 +378,12 @@
     
 
 
-    <!-- http://www.example.com/dolibarr#PaymentItem -->
+    <!-- http://www.example.com/dolibarr/PaymentItem -->
 
-    <owl:Class rdf:about="http://www.example.com/dolibarr#PaymentItem">
+    <owl:Class rdf:about="http://www.example.com/dolibarr/PaymentItem">
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.example.com/dolibarr#paymentItemInvoice"/>
+                <owl:onProperty rdf:resource="http://www.example.com/dolibarr/paymentItemInvoice"/>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -400,14 +392,14 @@
     
 
 
-    <!-- http://www.example.com/dolibarr#Product -->
+    <!-- http://www.example.com/dolibarr/Product -->
 
-    <owl:Class rdf:about="http://www.example.com/dolibarr#Product">
+    <owl:Class rdf:about="http://www.example.com/dolibarr/Product">
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty>
                     <rdf:Description>
-                        <owl:inverseOf rdf:resource="http://www.example.com/dolibarr#hasProduct"/>
+                        <owl:inverseOf rdf:resource="http://www.example.com/dolibarr/hasProduct"/>
                     </rdf:Description>
                 </owl:onProperty>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
@@ -415,7 +407,7 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.example.com/dolibarr#pName"/>
+                <owl:onProperty rdf:resource="http://www.example.com/dolibarr/pName"/>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
             </owl:Restriction>
         </rdfs:subClassOf>
@@ -424,30 +416,36 @@
     
 
 
-    <!-- http://www.example.com/dolibarr#SalesOrder -->
+    <!-- http://www.example.com/dolibarr/SalesOrder -->
 
-    <owl:Class rdf:about="http://www.example.com/dolibarr#SalesOrder">
+    <owl:Class rdf:about="http://www.example.com/dolibarr/SalesOrder">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.example.com/dolibarr/hasProduct"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
         <onprom:coordinates rdf:datatype="http://www.w3.org/2001/XMLSchema#string">272,242</onprom:coordinates>
     </owl:Class>
     
 
 
-    <!-- http://www.example.com/dolibarr#Shipment -->
+    <!-- http://www.example.com/dolibarr/Shipment -->
 
-    <owl:Class rdf:about="http://www.example.com/dolibarr#Shipment">
+    <owl:Class rdf:about="http://www.example.com/dolibarr/Shipment">
         <onprom:coordinates rdf:datatype="http://www.w3.org/2001/XMLSchema#string">204,517</onprom:coordinates>
     </owl:Class>
     
 
 
-    <!-- http://www.example.com/dolibarr#ShipmentItem -->
+    <!-- http://www.example.com/dolibarr/ShipmentItem -->
 
-    <owl:Class rdf:about="http://www.example.com/dolibarr#ShipmentItem">
+    <owl:Class rdf:about="http://www.example.com/dolibarr/ShipmentItem">
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty>
                     <rdf:Description>
-                        <owl:inverseOf rdf:resource="http://www.example.com/dolibarr#assign"/>
+                        <owl:inverseOf rdf:resource="http://www.example.com/dolibarr/assign"/>
                     </rdf:Description>
                 </owl:onProperty>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
@@ -459,5 +457,5 @@
 
 
 
-<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+<!-- Generated by the OWL API (version 4.5.19) https://github.com/owlcs/owlapi -->
 

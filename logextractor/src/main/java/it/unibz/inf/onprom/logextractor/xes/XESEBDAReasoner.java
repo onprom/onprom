@@ -27,6 +27,7 @@
 package it.unibz.inf.onprom.logextractor.xes;
 
 import it.unibz.inf.onprom.logextractor.EBDAReasoner;
+import it.unibz.inf.onprom.logextractor.util.ToolUtil;
 import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
 import it.unibz.inf.ontop.owlapi.resultset.OWLBindingSet;
 import it.unibz.inf.ontop.owlapi.resultset.TupleOWLResultSet;
@@ -194,12 +195,6 @@ class XESEBDAReasoner extends EBDAReasoner<XAttribute, XEvent, XTrace> {
                     String eventKey = result.getOWLObject(XESConstants.qTraceEvt_SimpleAnsVarEvent).toString();
 
                     //Process the string into a form that matches the key
-                    // it is not a good solution by using string parsing
-//                    String prefix = "<http://onprom.inf.unibz.it/";
-//                    String tmp = eventKey.substring(prefix.length(),eventKey.length());
-//                    int index1= tmp.indexOf("/");
-//                    String tmp2 = tmp.substring(index1+1,tmp.length());
-//                    String finalEventKey = prefix + tmp2;
 
                     XTrace trace = traces.get(traceKey);
                     if (trace != null) {
@@ -222,10 +217,10 @@ class XESEBDAReasoner extends EBDAReasoner<XAttribute, XEvent, XTrace> {
         }
 
 
-        //  Collection<XTrace> sortedTraces = ToolUtil.sortTrace(traces.values(), "time:timestamp");
+        Collection<XTrace> sortedTraces = ToolUtil.sortTrace(traces.values(), "time:timestamp");
 
-        return traces.values();
-        //  return sortedTraces;
+//        return traces.values();
+        return sortedTraces;
     }
 
 }
