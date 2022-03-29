@@ -116,7 +116,7 @@ public class Association extends Relationship {
 
 
   public boolean isManyToMany() {
-    return firstMultiplicity.isExistential() && secondMultiplicity.isExistential();
+    return !firstMultiplicity.isFunctional() && !secondMultiplicity.isFunctional();
   }
 
   public String getDisplayString() {
