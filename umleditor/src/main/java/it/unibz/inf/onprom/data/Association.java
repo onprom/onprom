@@ -1,9 +1,9 @@
 /*
- * onprom-umleditor
+ * umleditor
  *
  * Association.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -104,32 +104,6 @@ public class Association extends Relationship {
     return secondMultiplicity.toString();
   }
 
-  public String getDisplayString() {
-      if (associationClass == null) {
-          return getName() + getDirectionTriangle();
-      } else {
-      return "";
-      }
-  }
-
-  @Override
-  public void draw(Graphics2D g2d) {
-    super.draw(g2d);
-      final Font oldFont = g2d.getFont();
-      final Stroke oldStroke = g2d.getStroke();
-      final Color oldColor = g2d.getColor();
-    g2d.setFont(DrawingUtility.RELATION_FONT);
-    g2d.setColor(getState().getColor());
-    g2d.setStroke(DrawingUtility.RELATION_STROKE);
-      final int[] m1Position = getM1Position(g2d);
-      final int[] m2Position = getM2Position(g2d);
-    drawLabel(g2d, getFirstMultiplicityString(), m1Position[0], m1Position[1] - DrawingUtility.MARGIN, true);
-    drawLabel(g2d, getSecondMultiplicityString(), m2Position[0], m2Position[1] - DrawingUtility.MARGIN, true);
-    g2d.setColor(oldColor);
-    g2d.setStroke(oldStroke);
-    g2d.setFont(oldFont);
-  }
-
   @Override
   public boolean isFirstFunctional() {
     return firstMultiplicity.isFunctional();
@@ -138,6 +112,37 @@ public class Association extends Relationship {
   @Override
   public boolean isSecondFunctional() {
     return secondMultiplicity.isFunctional();
+  }
+
+
+  public boolean isManyToMany() {
+    return !firstMultiplicity.isFunctional() && !secondMultiplicity.isFunctional();
+  }
+
+  public String getDisplayString() {
+    if (associationClass == null) {
+      return getName() + getDirectionTriangle();
+    } else {
+      return "";
+    }
+  }
+
+  @Override
+  public void draw(Graphics2D g2d) {
+    super.draw(g2d);
+    final Font oldFont = g2d.getFont();
+    final Stroke oldStroke = g2d.getStroke();
+    final Color oldColor = g2d.getColor();
+    g2d.setFont(DrawingUtility.RELATION_FONT);
+    g2d.setColor(getState().getColor());
+    g2d.setStroke(DrawingUtility.RELATION_STROKE);
+    final int[] m1Position = getM1Position(g2d);
+    final int[] m2Position = getM2Position(g2d);
+    drawLabel(g2d, getFirstMultiplicityString(), m1Position[0], m1Position[1] - DrawingUtility.MARGIN, true);
+    drawLabel(g2d, getSecondMultiplicityString(), m2Position[0], m2Position[1] - DrawingUtility.MARGIN, true);
+    g2d.setColor(oldColor);
+    g2d.setStroke(oldStroke);
+    g2d.setFont(oldFont);
   }
 
   /**
