@@ -58,8 +58,9 @@ public class OneLevelExtractionTest {
         File domainOntologyFile = new File(folder + "conference.owl");
         File queriesFile = new File(folder + "conference.aqr");
         // prepare output files
-        String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName();
-        File generatedMappingsFile = new File(outputFileName + "_generated.obda");
+        //String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName();
+        String outputFileName = domainOntologyFile.getParent() + "/" + "conference";
+        File generatedMappingsFile = new File(outputFileName + ".generated.obda");
         File output = new File(outputFileName + ".xes.gz");
         // load mappings
         Properties dataSourceProperties = new Properties();
