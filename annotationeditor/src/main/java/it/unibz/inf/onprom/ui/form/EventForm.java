@@ -30,7 +30,6 @@ import it.unibz.inf.onprom.data.*;
 import it.unibz.inf.onprom.interfaces.AnnotationDiagram;
 import it.unibz.inf.onprom.interfaces.DiagramShape;
 import it.unibz.inf.onprom.ui.component.StringDocumentListener;
-import it.unibz.inf.onprom.ui.component.UpdateListener;
 import it.unibz.inf.onprom.ui.utility.*;
 
 import javax.swing.*;
@@ -84,17 +83,17 @@ public class EventForm extends AbstractAnnotationForm {
         txtNameFilter = UIUtility.createTextField("Enter name filter to this field", TXT_SIZE, e -> ok());
         mainPanel.add(txtNameFilter, gridBagConstraints);
 
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        mainPanel.add(UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> super.startNavigation(new UpdateListener() {
-            @Override
-            public void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute) {
-                nameListener.updateAttribute(null);
-                name = new StringAttribute(path, selectedClass, selectedAttribute);
-                txtName.setText(name.toString());
-                nameListener.updateAttribute(name);
-            }
-        }, false)), gridBagConstraints);
+//        gridBagConstraints.gridx = 3;
+//        gridBagConstraints.gridy = 0;
+//        mainPanel.add(UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> super.startNavigation(new UpdateListener() {
+//            @Override
+//            public void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute) {
+//                nameListener.updateAttribute(null);
+//                name = new StringAttribute(path, selectedClass, selectedAttribute);
+//                txtName.setText(name.toString());
+//                nameListener.updateAttribute(name);
+//            }
+//        }, false)), gridBagConstraints);
 
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -119,20 +118,20 @@ public class EventForm extends AbstractAnnotationForm {
         cmbTimestampPath = UIUtility.createWideComboBox(TXT_SIZE, null, true, true);
         mainPanel.add(cmbTimestampPath, gridBagConstraints);
 
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        mainPanel.add(UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> super.startNavigation(new UpdateListener() {
-            @Override
-            public void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute) {
-                timestamp = new NavigationalAttribute(path, selectedClass, selectedAttribute);
-                cmbTimestamp.setSelectedItem(timestamp);
-            }
-
-            @Override
-            public DataType[] getDataType() {
-                return UpdateListener.TIMESTAMP_TYPES;
-            }
-        }, true)), gridBagConstraints);
+//        gridBagConstraints.gridx = 3;
+//        gridBagConstraints.gridy = 1;
+//        mainPanel.add(UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> super.startNavigation(new UpdateListener() {
+//            @Override
+//            public void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute) {
+//                timestamp = new NavigationalAttribute(path, selectedClass, selectedAttribute);
+//                cmbTimestamp.setSelectedItem(timestamp);
+//            }
+//
+//            @Override
+//            public DataType[] getDataType() {
+//                return UpdateListener.TIMESTAMP_TYPES;
+//            }
+//        }, true)), gridBagConstraints);
 
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
@@ -154,17 +153,17 @@ public class EventForm extends AbstractAnnotationForm {
                 eventAnnotation.getCase().getRelatedClass()), DOUBLE_TXT_SIZE, null, true, false);
         mainPanel.add(cmbTracePath, gridBagConstraints);
 
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 1;
-        JButton btnTraceAdd = UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> super.startNavigation(new UpdateListener() {
-            @Override
-            public void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute) {
-                tracePath = new NavigationalAttribute(path, selectedClass, selectedAttribute);
-                cmbTracePath.setSelectedItem(tracePath);
-            }
-        }, false));
-        mainPanel.add(btnTraceAdd, gridBagConstraints);
+//        gridBagConstraints.gridx = 2;
+//        gridBagConstraints.gridy = 2;
+//        gridBagConstraints.gridwidth = 1;
+//        JButton btnTraceAdd = UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> super.startNavigation(new UpdateListener() {
+//            @Override
+//            public void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute) {
+//                tracePath = new NavigationalAttribute(path, selectedClass, selectedAttribute);
+//                cmbTracePath.setSelectedItem(tracePath);
+//            }
+//        }, false));
+//        mainPanel.add(btnTraceAdd, gridBagConstraints);
 
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;

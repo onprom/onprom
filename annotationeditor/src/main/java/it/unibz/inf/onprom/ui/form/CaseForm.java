@@ -26,10 +26,10 @@
 
 package it.unibz.inf.onprom.ui.form;
 
-import it.unibz.inf.onprom.data.*;
+import it.unibz.inf.onprom.data.CaseAnnotation;
+import it.unibz.inf.onprom.data.NavigationalAttribute;
 import it.unibz.inf.onprom.interfaces.AnnotationDiagram;
 import it.unibz.inf.onprom.interfaces.DiagramShape;
-import it.unibz.inf.onprom.ui.component.UpdateListener;
 import it.unibz.inf.onprom.ui.utility.*;
 
 import javax.swing.*;
@@ -75,15 +75,15 @@ public class CaseForm extends AbstractAnnotationForm {
         cmbNamePath = UIUtility.createWideComboBox(TXT_SIZE, null, true, true);
         mainPanel.add(cmbNamePath, gridBagConstraints);
 
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        JButton btnNameAdd = UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> startNavigation(new UpdateListener() {
-            @Override
-            public void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute) {
-                cmbName.setSelectedItem(new StringAttribute(path, selectedClass, selectedAttribute));
-            }
-        }, false));
-        mainPanel.add(btnNameAdd, gridBagConstraints);
+//        gridBagConstraints.gridx = 3;
+//        gridBagConstraints.gridy = 0;
+//        JButton btnNameAdd = UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> startNavigation(new UpdateListener() {
+//            @Override
+//            public void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute) {
+//                cmbName.setSelectedItem(new StringAttribute(path, selectedClass, selectedAttribute));
+//            }
+//        }, false));
+//        mainPanel.add(btnNameAdd, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;

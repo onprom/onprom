@@ -1,9 +1,9 @@
 /*
- * onprom-dynamiceditor
+ * annotationeditor
  *
  * DynamicAttributePanel.java
  *
- * Copyright (C) 2016-2019 Free University of Bozen-Bolzano
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
  *
  * This product includes software developed under
  * KAOS: Knowledge-Aware Operational Support project
@@ -26,11 +26,12 @@
 
 package it.unibz.inf.onprom.ui.component;
 
-import it.unibz.inf.onprom.data.*;
+import it.unibz.inf.onprom.data.Attribute;
+import it.unibz.inf.onprom.data.DynamicAttribute;
+import it.unibz.inf.onprom.data.DynamicNavigationalAttribute;
 import it.unibz.inf.onprom.interfaces.DiagramShape;
 import it.unibz.inf.onprom.ui.form.AbstractAnnotationForm;
 import it.unibz.inf.onprom.ui.form.DynamicAnnotationForm;
-import it.unibz.inf.onprom.ui.utility.AnnotationEditorButtons;
 import it.unibz.inf.onprom.ui.utility.AnnotationEditorLabels;
 import it.unibz.inf.onprom.ui.utility.UIUtility;
 
@@ -64,13 +65,13 @@ public class DynamicAttributePanel extends JPanel {
         txtFilter = UIUtility.createTextField(AnnotationEditorLabels.FILTER.getTooltip(), AbstractAnnotationForm.TXT_SIZE);
         add(txtFilter);
 
-        JButton btnTraceAdd = UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> form.startNavigation(new UpdateListener() {
-            @Override
-            public void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute) {
-                cmbPath.setSelectedItem(new NavigationalAttribute(path, selectedClass, selectedAttribute));
-            }
-        }, false));
-        add(btnTraceAdd);
+//        JButton btnTraceAdd = UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM, e -> form.startNavigation(new UpdateListener() {
+//            @Override
+//            public void updateAttribute(Set<DiagramShape> path, UMLClass selectedClass, Attribute selectedAttribute) {
+//                cmbPath.setSelectedItem(new NavigationalAttribute(path, selectedClass, selectedAttribute));
+//            }
+//        }, false));
+//        add(btnTraceAdd);
     }
 
     private void populatePath() {
