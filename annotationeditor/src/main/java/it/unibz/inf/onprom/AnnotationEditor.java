@@ -102,11 +102,11 @@ public class AnnotationEditor extends UMLEditor {
             public Optional<Annotation> createAnnotation(AnnotationDiagram panel, ActionType currentAction, UMLClass selectedCls) {
                 CaseAnnotation caseAnnotation = panel.findFirst(CaseAnnotation.class);
 
-                if (currentAction.toString().equals(CaseAnnotation.class.getAnnotation(AnnotationProperties.class).title())) {
+                if (currentAction.getTitle().equals(CaseAnnotation.class.getAnnotation(AnnotationProperties.class).title())) {
                     if (caseAnnotation == null || UIUtility.confirm(AnnotationEditorMessages.CHANGE_CASE)) {
                         return Optional.of(new CaseAnnotation(selectedCls));
                     }
-                } else if (currentAction.toString().equals(EventAnnotation.class.getAnnotation(AnnotationProperties.class).title())) {
+                } else if (currentAction.getTitle().equals(EventAnnotation.class.getAnnotation(AnnotationProperties.class).title())) {
                     if (caseAnnotation == null) {
                         UIUtility.error(AnnotationEditorMessages.SELECT_CASE);
                     } else {
@@ -208,8 +208,8 @@ public class AnnotationEditor extends UMLEditor {
     }
 
     private void load(OWLOntology upperOntology) {
+        annotations.clear();
         if (upperOntology != null) {
-            annotations.clear();
             new AnnotationSelectionDialog(
                     OWLImporter.getShapes(upperOntology).stream()
                             .filter(UMLClass.class::isInstance)
@@ -218,18 +218,16 @@ public class AnnotationEditor extends UMLEditor {
                     .forEach(umlClass -> annotations.put(umlClass.getName(), umlClass));
             setTitle("Annotation Editor for " + upperOntology.getOntologyID().getOntologyIRI().or(IRI.create("")));
             ((AnnotationDiagramPanel) diagramPanel).setFactory(getDynamicFactory());
-            initUI();
         } else {
-            annotations.clear();
             setTitle("Default Annotation Editor");
             ((AnnotationDiagramPanel) diagramPanel).setFactory(getDefaultFactory());
-            initUI();
         }
+        initUI();
     }
 
     private void loadDefault(OWLOntology upperOntology) {
+        annotations.clear();
         if (upperOntology != null) {
-            annotations.clear();
             OWLImporter.getShapes(upperOntology).stream()
                     .filter(UMLClass.class::isInstance)
                     .map(UMLClass.class::cast)
@@ -238,13 +236,11 @@ public class AnnotationEditor extends UMLEditor {
                     );
             setTitle("Annotation Editor for " + upperOntology.getOntologyID().getOntologyIRI().or(IRI.create("")));
             ((AnnotationDiagramPanel) diagramPanel).setFactory(getDynamicFactory());
-            initUI();
         } else {
-            annotations.clear();
             setTitle("Default Annotation Editor");
             ((AnnotationDiagramPanel) diagramPanel).setFactory(getDefaultFactory());
-            initUI();
         }
+        initUI();
     }
 
     @Override
