@@ -71,7 +71,7 @@ PREFIX obda: <https://w3id.org/obda/vocabulary#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX onprom: <http://kaos.inf.unibz.it/onprom/>
 
-SELECT *  {?shipmentItem a :ShipmentItem}
+SELECT *  {?shipmentItem a <http://www.example.com/dolibarr#ShipmentItem>}
 [QueryItem="getSPO"]
 PREFIX : <http://www.example.com/dolibarr#>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -192,7 +192,7 @@ WHERE
   { ?Shipment  <http://www.example.com/dolibarr#shipTo>  ?Customer .
     ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}
 [QueryItem="hasInvoice-salesOrder"]
-PREFIX : <http://www.example.com/dolibarr#>
+PREFIX : <http://www.example.com/dolibarr/>
 PREFIX owl: <http://www.w3.org/2002/07/owl#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX xml: <http://www.w3.org/XML/1998/namespace>

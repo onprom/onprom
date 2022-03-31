@@ -1,340 +1,340 @@
 {
-  "@class" : "it.unibz.inf.kaos.data.query.AnnotationQueries",
+  "@class" : "it.unibz.inf.onprom.data.query.AnnotationQueries",
   "queries" : [ "java.util.LinkedHashSet", [ {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice (\"Invoice\" AS ?_value) (\"Invoice\" AS ?_label) ?SalesOrder\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
-    "firstComponent" : [ "SalesOrder" ],
-    "secondComponent" : [ "_label", "Invoice" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice (\"Invoice\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
-    "firstComponent" : [ "_label", "Invoice" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice (\"Invoice\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_type" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice (\"Invoice\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_key" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice (\"Invoice\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice ?_value (\"Invoice\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invDate>  ?_value .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
-    "firstComponent" : [ "_label", "Invoice" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice ?_value (\"Invoice\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invDate>  ?_value .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_type" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice ?_value (\"Invoice\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invDate>  ?_value .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_key" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice ?_value (\"Invoice\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invDate>  ?_value .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice (\"Complete\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
-    "firstComponent" : [ "_label", "Invoice" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice (\"Complete\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_type" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice (\"Complete\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_key" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Invoice (\"Complete\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder ?_value (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr/orderNo>  ?_value}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/t-has-a",
-    "firstComponent" : [ "SalesOrder" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder ?_value (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr/orderNo>  ?_value}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_type" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder ?_value (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr/orderNo>  ?_value}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_key" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder ?_value (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr/orderNo>  ?_value}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment (\"Shipment\" AS ?_value) (\"Shipment\" AS ?_label) ?SalesOrder\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment (\"Shipment\" AS ?_value) (\"Shipment\" AS ?_label) ?SalesOrder\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
     "firstComponent" : [ "SalesOrder" ],
     "secondComponent" : [ "_label", "Shipment" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment (\"Shipment\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment (\"Shipment\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
     "firstComponent" : [ "_label", "Shipment" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
+    "secondComponent" : [ "_label", "Shipment", "_type", "_key", "_value" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment (\"Shipment\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment (\"Shipment\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Shipment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_type" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment (\"Shipment\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment (\"Shipment\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Shipment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_key" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment (\"Shipment\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment (\"Shipment\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Shipment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_value" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment ?_value (\"Shipment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipDate>  ?_value ;\n              <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment ?_value (\"Shipment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipDate>  ?_value ;\n              <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
     "firstComponent" : [ "_label", "Shipment" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
+    "secondComponent" : [ "_label", "Shipment", "_type", "_key", "_value" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment ?_value (\"Shipment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipDate>  ?_value ;\n              <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment ?_value (\"Shipment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipDate>  ?_value ;\n              <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Shipment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_type" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment ?_value (\"Shipment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipDate>  ?_value ;\n              <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment ?_value (\"Shipment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipDate>  ?_value ;\n              <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Shipment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_key" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment ?_value (\"Shipment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipDate>  ?_value ;\n              <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment ?_value (\"Shipment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipDate>  ?_value ;\n              <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Shipment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_value" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment (\"Complete\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment (\"Complete\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
     "firstComponent" : [ "_label", "Shipment" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
+    "secondComponent" : [ "_label", "Shipment", "_type", "_key", "_value" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment (\"Complete\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment (\"Complete\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Shipment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_type" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment (\"Complete\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment (\"Complete\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Shipment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_key" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Shipment (\"Complete\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr/shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Shipment (\"Complete\" AS ?_value) (\"Shipment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Shipment  <http://www.example.com/dolibarr#shipTo>  ?Customer .\n    ?Customer  <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Shipment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_value" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder (\"Creation\" AS ?_value) (\"Creation\" AS ?_label)\nWHERE\n  { ?SalesOrder  a                  <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
-    "firstComponent" : [ "SalesOrder" ],
-    "secondComponent" : [ "_label", "SalesOrder" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  a                  <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
-    "firstComponent" : [ "_label", "SalesOrder" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  a                  <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_type" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  a                  <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_key" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  a                  <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder ?_value (\"Creation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr/createDate>  ?_value ;\n              a                     <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
-    "firstComponent" : [ "_label", "SalesOrder" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder ?_value (\"Creation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr/createDate>  ?_value ;\n              a                     <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_type" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder ?_value (\"Creation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr/createDate>  ?_value ;\n              a                     <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_key" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder ?_value (\"Creation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr/createDate>  ?_value ;\n              a                     <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder (\"Complete\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?SalesOrder  a                  <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
-    "firstComponent" : [ "_label", "SalesOrder" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder (\"Complete\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?SalesOrder  a                  <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_type" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder (\"Complete\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?SalesOrder  a                  <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_key" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?SalesOrder (\"Complete\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?SalesOrder  a                  <http://www.example.com/dolibarr/SalesOrder>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
-    "secondComponent" : [ "_value" ]
-  }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment (\"Payment\" AS ?_value) (\"Payment\" AS ?_label) ?SalesOrder\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment (\"Payment\" AS ?_value) (\"Payment\" AS ?_label) ?SalesOrder\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
     "firstComponent" : [ "SalesOrder" ],
     "secondComponent" : [ "_label", "Payment" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment (\"Payment\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment (\"Payment\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
     "firstComponent" : [ "_label", "Payment" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
+    "secondComponent" : [ "_label", "Payment", "_type", "_key", "_value" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment (\"Payment\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment (\"Payment\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Payment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_type" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment (\"Payment\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment (\"Payment\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Payment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_key" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment (\"Payment\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment (\"Payment\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Payment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_value" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment ?_value (\"Payment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Payment  <http://www.example.com/dolibarr/payDate>  ?_value .\n    ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment ?_value (\"Payment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Payment  <http://www.example.com/dolibarr#payDate>  ?_value .\n    ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
     "firstComponent" : [ "_label", "Payment" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
+    "secondComponent" : [ "_label", "Payment", "_type", "_key", "_value" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment ?_value (\"Payment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Payment  <http://www.example.com/dolibarr/payDate>  ?_value .\n    ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment ?_value (\"Payment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Payment  <http://www.example.com/dolibarr#payDate>  ?_value .\n    ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Payment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_type" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment ?_value (\"Payment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Payment  <http://www.example.com/dolibarr/payDate>  ?_value .\n    ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment ?_value (\"Payment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Payment  <http://www.example.com/dolibarr#payDate>  ?_value .\n    ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Payment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_key" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment ?_value (\"Payment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Payment  <http://www.example.com/dolibarr/payDate>  ?_value .\n    ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment ?_value (\"Payment\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Payment  <http://www.example.com/dolibarr#payDate>  ?_value .\n    ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Payment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_value" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment (\"Complete\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment (\"Complete\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
     "firstComponent" : [ "_label", "Payment" ],
-    "secondComponent" : [ "_type", "_key", "_value" ]
+    "secondComponent" : [ "_label", "Payment", "_type", "_key", "_value" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment (\"Complete\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment (\"Complete\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attType",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Payment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_type" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment (\"Complete\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment (\"Complete\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attKey",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Payment", "_type", "_key", "_value" ],
     "secondComponent" : [ "_key" ]
   }, {
-    "@class" : "it.unibz.inf.kaos.data.query.BinaryAnnotationQuery",
-    "query" : "SELECT  ?Payment (\"Complete\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr/invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr/hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr/create>  ?SalesOrder}\n",
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Payment (\"Complete\" AS ?_value) (\"Payment\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invoiceToPayment>  ?Payment .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
     "targetIRI" : "http://onprom.inf.unibz.it/attValue",
-    "firstComponent" : [ "_type", "_key", "_value" ],
+    "firstComponent" : [ "_label", "Payment", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice (\"Invoice\" AS ?_value) (\"Invoice\" AS ?_label) ?SalesOrder\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "SalesOrder" ],
+    "secondComponent" : [ "_label", "Invoice" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice (\"Invoice\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Invoice" ],
+    "secondComponent" : [ "_label", "Invoice", "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice (\"Invoice\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_label", "Invoice", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice (\"Invoice\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_label", "Invoice", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice (\"Invoice\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_label", "Invoice", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice ?_value (\"Invoice\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invDate>  ?_value .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Invoice" ],
+    "secondComponent" : [ "_label", "Invoice", "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice ?_value (\"Invoice\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invDate>  ?_value .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_label", "Invoice", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice ?_value (\"Invoice\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invDate>  ?_value .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_label", "Invoice", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice ?_value (\"Invoice\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?Invoice  <http://www.example.com/dolibarr#invDate>  ?_value .\n    ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_label", "Invoice", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice (\"Complete\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "Invoice" ],
+    "secondComponent" : [ "_label", "Invoice", "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice (\"Complete\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_label", "Invoice", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice (\"Complete\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_label", "Invoice", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Invoice (\"Complete\" AS ?_value) (\"Invoice\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?Customer  <http://www.example.com/dolibarr#hasInvoice>  ?Invoice ;\n              <http://www.example.com/dolibarr#create>  ?SalesOrder}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_label", "Invoice", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder (\"Creation\" AS ?_value) (\"Creation\" AS ?_label)\nWHERE\n  { ?SalesOrder  a  <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-contains-e",
+    "firstComponent" : [ "SalesOrder" ],
+    "secondComponent" : [ "_label", "SalesOrder" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  a  <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "SalesOrder" ],
+    "secondComponent" : [ "_label", "SalesOrder", "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  a  <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_label", "SalesOrder", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  a  <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_label", "SalesOrder", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder (\"Creation\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  a  <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_label", "SalesOrder", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder ?_value (\"Creation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr#createDate>  ?_value ;\n              a                     <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "SalesOrder" ],
+    "secondComponent" : [ "_label", "SalesOrder", "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder ?_value (\"Creation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr#createDate>  ?_value ;\n              a                     <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_label", "SalesOrder", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder ?_value (\"Creation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr#createDate>  ?_value ;\n              a                     <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_label", "SalesOrder", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder ?_value (\"Creation\" AS ?_label) (\"timestamp\" AS ?_type) (\"time:timestamp\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr#createDate>  ?_value ;\n              a                     <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_label", "SalesOrder", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder (\"Complete\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?SalesOrder  a  <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/e-has-a",
+    "firstComponent" : [ "_label", "SalesOrder" ],
+    "secondComponent" : [ "_label", "SalesOrder", "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder (\"Complete\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?SalesOrder  a  <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "_label", "SalesOrder", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder (\"Complete\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?SalesOrder  a  <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "_label", "SalesOrder", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder (\"Complete\" AS ?_value) (\"Creation\" AS ?_label) (\"literal\" AS ?_type) (\"lifecycle:transition\" AS ?_key)\nWHERE\n  { ?SalesOrder  a  <http://www.example.com/dolibarr#SalesOrder>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "_label", "SalesOrder", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder ?_value (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr#orderNo>  ?_value}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/t-has-a",
+    "firstComponent" : [ "SalesOrder" ],
+    "secondComponent" : [ "SalesOrder", "_type", "_key", "_value" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder ?_value (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr#orderNo>  ?_value}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attType",
+    "firstComponent" : [ "SalesOrder", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_type" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder ?_value (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr#orderNo>  ?_value}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attKey",
+    "firstComponent" : [ "SalesOrder", "_type", "_key", "_value" ],
+    "secondComponent" : [ "_key" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?SalesOrder ?_value (\"literal\" AS ?_type) (\"concept:name\" AS ?_key)\nWHERE\n  { ?SalesOrder  <http://www.example.com/dolibarr#orderNo>  ?_value}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/attValue",
+    "firstComponent" : [ "SalesOrder", "_type", "_key", "_value" ],
     "secondComponent" : [ "_value" ]
   } ] ]
 }

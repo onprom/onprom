@@ -195,16 +195,14 @@ class XESEBDAReasoner extends EBDAReasoner<XAttribute, XEvent, XTrace> {
                     String eventKey = result.getOWLObject(XESConstants.qTraceEvt_SimpleAnsVarEvent).toString();
 
                     //Process the string into a form that matches the key
-
                     XTrace trace = traces.get(traceKey);
                     if (trace != null) {
                         XEvent event = events.get(eventKey);
-                        if (event != null) {
+                        if (event != null &&
+                                event.getAttributes().get("time:timestamp") != null) { //Eliminate events without timestamps
                             trace.add(event);
                         }
                     }
-
-
                 } catch (Exception e) {
                     logger.error(e.getMessage());
                 }
@@ -216,9 +214,7 @@ class XESEBDAReasoner extends EBDAReasoner<XAttribute, XEvent, XTrace> {
             logger.error(e.getMessage());
         }
 
-
         Collection<XTrace> sortedTraces = ToolUtil.sortTrace(traces.values(), "time:timestamp");
-
 //        return traces.values();
         return sortedTraces;
     }
