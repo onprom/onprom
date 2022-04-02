@@ -26,11 +26,13 @@
 
 package it.unibz.inf.onprom.ui.form;
 
-import it.unibz.inf.onprom.data.*;
+import it.unibz.inf.onprom.data.Annotation;
+import it.unibz.inf.onprom.data.AnnotationAttribute;
+import it.unibz.inf.onprom.data.NavigationalAttribute;
+import it.unibz.inf.onprom.data.StringAttribute;
 import it.unibz.inf.onprom.interfaces.AnnotationDiagram;
 import it.unibz.inf.onprom.interfaces.DiagramShape;
 import it.unibz.inf.onprom.ui.component.AnnotationAttributeTable;
-import it.unibz.inf.onprom.ui.component.UpdateListener;
 import it.unibz.inf.onprom.ui.utility.AnnotationEditorButtons;
 import it.unibz.inf.onprom.ui.utility.AnnotationEditorLabels;
 import it.unibz.inf.onprom.ui.utility.NavigationUtility;
@@ -95,14 +97,14 @@ class AttributeForm extends AbstractAnnotationForm {
         cmbValuePath = UIUtility.createWideComboBox(TXT_SIZE, null, false, true);
         add(cmbValuePath, gridBagConstraints);
 
-        gridBagConstraints.gridx = 3;
-        add(UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM,
-                e -> startNavigation(new UpdateListener() {
-                    @Override
-                    public void updateAttribute(Set<DiagramShape> navigation, UMLClass selectedClass, Attribute selectedAttribute) {
-                        cmbValue.setSelectedItem(new StringAttribute(navigation, selectedClass, selectedAttribute));
-                    }
-                }, false)), gridBagConstraints);
+//        gridBagConstraints.gridx = 3;
+//        add(UIUtility.createSmallButton(AnnotationEditorButtons.DIAGRAM,
+//                e -> startNavigation(new UpdateListener() {
+//                    @Override
+//                    public void updateAttribute(Set<DiagramShape> navigation, UMLClass selectedClass, Attribute selectedAttribute) {
+//                        cmbValue.setSelectedItem(new StringAttribute(navigation, selectedClass, selectedAttribute));
+//                    }
+//                }, false)), gridBagConstraints);
 
         if (withFilter) {
             gridBagConstraints.gridy += 1;
