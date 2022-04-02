@@ -28,6 +28,6 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            toolkit/target/toolkit-${{ steps.currenttag.outputs.version }}.jar
+            toolkit/target/toolkit-*.jar
             LICENSE.txt
             README.md
