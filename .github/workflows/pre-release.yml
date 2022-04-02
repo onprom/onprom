@@ -30,6 +30,6 @@ jobs:
           prerelease: true
           title: "Development Build v${{ steps.project.outputs.version }}"
           files: |
-            toolkit/target/toolkit-${{ steps.currenttag.outputs.version }}.jar
+            ./toolkit/target/toolkit-{{ steps.project.outputs.version }}.jar
             LICENSE.txt
             README.md
