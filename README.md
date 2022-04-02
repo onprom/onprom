@@ -1,3 +1,5 @@
+[![Build and Test](https://github.com/onprom/onprom/actions/workflows/test.yml/badge.svg)](https://github.com/onprom/onprom/actions/workflows/test.yml) [![Development release](https://github.com/onprom/onprom/actions/workflows/pre-release.yml/badge.svg)](https://github.com/onprom/onprom/actions/workflows/pre-release.yml) [![CodeQL](https://github.com/onprom/onprom/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/onprom/onprom/actions/workflows/codeql-analysis.yml) [![Tagged Release](https://github.com/onprom/onprom/actions/workflows/tagged-release.yml/badge.svg)](https://github.com/onprom/onprom/actions/workflows/tagged-release.yml)
+
 # onprom
 
 The [onprom](https://onprom.inf.unibz.it) is an event log extraction tool suite using ontology-based data access (
