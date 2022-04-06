@@ -1,23 +1,17 @@
 package it.unibz.inf.pm.ocel.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import lombok.Data;
 
-@Data
+/**
+ * An element is composed of a key and value(s). The key is string-based,
+ * whereas the value may be string, timestamp, integer, ﬂoat, and boolean.
+ */
 public class OcelElement {
-    @JSONField(name = "ocel:global-log")
-    private String globalLog;
 
-    @JSONField(name = "ocel:global-event")
-    private Object globalEvent;
+    private String key;
 
-    @JSONField(name = "ocel:global-object")
-    private Object globalObject;
+    public enum values {
+        String, Timestamp, Integer, Float, Boolean
+    }
 
-    @JSONField(name = "ocel:events")
-    private Object events;
-
-    @JSONField(name = "ocel:objects")
-    private Object objects;
 
 }
