@@ -1,0 +1,14 @@
+{
+  "@class" : "it.unibz.inf.onprom.data.query.AnnotationQueries",
+  "queries" : [ "java.util.LinkedHashSet", [ {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Object\nWHERE\n  { ?Object  a  <http://onprom.inf.unibz.it/ocel/Object>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/Object",
+    "component" : [ "Object" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Event\nWHERE\n  { ?Event  a  <http://onprom.inf.unibz.it/ocel/Event>}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/Event",
+    "component" : [ "Event" ]
+  } ] ]
+}
