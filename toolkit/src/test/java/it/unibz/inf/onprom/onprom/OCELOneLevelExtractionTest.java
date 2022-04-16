@@ -27,13 +27,13 @@
 package it.unibz.inf.onprom.onprom;
 
 import it.unibz.inf.onprom.data.query.AnnotationQueries;
-import it.unibz.inf.onprom.logextractor.xes.XESLogExtractor;
+import it.unibz.inf.onprom.logextractor.ocel.OCELLogExtractor;
 import it.unibz.inf.onprom.obdamapper.OBDAMapper;
 import it.unibz.inf.onprom.obdamapper.utility.OntopUtility;
 import it.unibz.inf.onprom.ui.utility.IOUtility;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
-import org.deckfour.xes.model.XLog;
-import org.deckfour.xes.out.XesXmlGZIPSerializer;
+import it.unibz.ocel.model.OcelLog;
+import it.unibz.ocel.out.OcelXmlGZIPSerializer;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 
@@ -60,7 +60,7 @@ public class OCELOneLevelExtractionTest {
         // prepare output files
         String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName();
         File generatedMappingsFile = new File(outputFileName + "_generated.obda");
-        File output = new File(outputFileName + ".xes.gz");
+        File output = new File(outputFileName + ".ocel.gz");
         // load mappings
         Properties dataSourceProperties = new Properties();
         dataSourceProperties.load(new FileReader(propertiesFile));
@@ -70,14 +70,16 @@ public class OCELOneLevelExtractionTest {
         // load annotation queries
         AnnotationQueries firstLevel = IOUtility.readJSON(queriesFile, AnnotationQueries.class)
                 .orElseThrow(IllegalArgumentException::new);
-        XESLogExtractor extractor = new XESLogExtractor();
+        OCELLogExtractor extractor = new OCELLogExtractor();
         // generate new mapping
+
         SQLPPMapping newMapping = new OBDAMapper(domainOntology, extractor.getOntology(), obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
+
         OntopUtility.saveModel(newMapping, generatedMappingsFile);
         // extract log
-        XLog xTraces = extractor.extractLog(newMapping, dataSourceProperties);
+        OcelLog ocelLog = extractor.extractLog(newMapping, dataSourceProperties);
         // serialize extracted log
-        new XesXmlGZIPSerializer().serialize(xTraces, new FileOutputStream(output));
+        new OcelXmlGZIPSerializer().serialize(ocelLog, new FileOutputStream(output));
         System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) / 1000 + "s");
     }
 }

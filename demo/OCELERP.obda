@@ -15,7 +15,7 @@ target		:data/product/{rowid} a :Product ; :productId {rowid}^^xsd:string .
 source		SELECT * FROM llx_product
 
 mappingId	customer
-target		:data/customer/{rowid} a :Customer ; :customerId {rowid}^^xsd:string . 
+target		:data/customer/{rowid} a :Customer ; :customerId {rowid}^^xsd:string ; :customerName {nom}^^xsd:string . 
 source		SELECT * FROM llx_societe
 
 mappingId	OrderInfo

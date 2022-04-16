@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file has been generated with the Ocel library. It conforms -->
+<!-- to the XML serialization of the OCEl standard for log storage and -->
+<!-- management. -->
+<!-- OCEL standard version: 1.0 -->
+<!-- OCEL standard is available from http://ocel-standard.org/ -->
+<log>
+	<global scope="log">
+		<string key="version" value="0.1"/>
+		<string key="ordering" value="timestamp"/>
+		<string key="attribute-names" value="list"/>
+	</global>
+	<global scope="event">
+		<string key="id" value="__INVALID__"/>
+		<string key="activity" value="__INVALID__"/>
+		<date key="timestamp" value="1970-01-01T01:00:00+08:00"/>
+		<string key="omap" value="__INVALID__"/>
+	</global>
+	<global scope="object">
+		<string key="id" value="__INVALID__"/>
+		<string key="type" value="__INVALID__"/>
+	</global>
+	<events/>
+	<objects/>
+</log>

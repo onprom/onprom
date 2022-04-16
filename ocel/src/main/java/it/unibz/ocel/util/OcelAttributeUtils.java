@@ -131,7 +131,7 @@ public class OcelAttributeUtils {
                     return factory.createAttributeTimestamp(key, OcelAttributeTimestamp.FORMATTER.parseObject(value), extension);
                 }
             } catch (ParseException var9) {
-                throw new AssertionError("OpenXES: could not parse date-time attribute. Value: " + value);
+                throw new AssertionError("Ocel: could not parse date-time attribute. Value: " + value);
             }
         } else if (type.equalsIgnoreCase("ID")) {
             return factory.createAttributeID(key, OcelID.parse(value), extension);

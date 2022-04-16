@@ -33,6 +33,7 @@ import it.unibz.ocel.extension.std.OcelTimeExtension;
 import it.unibz.ocel.factory.OcelFactoryLiteImpl;
 import it.unibz.ocel.model.OcelAttribute;
 import it.unibz.ocel.model.OcelLog;
+import org.deckfour.xes.extension.std.XConceptExtension;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -73,7 +74,9 @@ public class OCELFactory extends OcelFactoryLiteImpl implements Factory<OcelAttr
             switch (key.toLowerCase()) {
                 case "timestamp":
                     return OcelTimeExtension.instance();
-                case "attribute-name":
+//                case "attribute-name":
+//                    return OcelConceptExtension.instance();
+                case "concept:name":
                     return OcelConceptExtension.instance();
 //                case "lifecycle:transition":
 //                    return OcelLifecycleExtension.instance();

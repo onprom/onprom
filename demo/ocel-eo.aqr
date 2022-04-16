@@ -2,13 +2,84 @@
   "@class" : "it.unibz.inf.onprom.data.query.AnnotationQueries",
   "queries" : [ "java.util.LinkedHashSet", [ {
     "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
-    "query" : "SELECT  ?Object\nWHERE\n  { ?Object  a  <http://onprom.inf.unibz.it/ocel/Object>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/ocel/Object",
-    "component" : [ "Object" ]
+    "query" : "SELECT  ?Event (\"event\" AS ?_L_1012665869) ?_I1_1012665869 ?_I2_1012665869 ?_I3_1012665869\nWHERE\n  { ?Event  a                     <http://onprom.inf.unibz.it/ocel/Event> ;\n            <http://onprom.inf.unibz.it/ocel/activity>  ?_I1_1012665869 ;\n            <http://onprom.inf.unibz.it/ocel/eventId>  ?_I2_1012665869 ;\n            <http://onprom.inf.unibz.it/ocel/timestamp>  ?_I3_1012665869}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/Event",
+    "component" : [ "Event", "_L_1012665869", "_I1_1012665869", "_I2_1012665869", "_I3_1012665869" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I1_1012665869 (\"event\" AS ?_L_1012665869) ?_I2_1012665869 ?_I3_1012665869\nWHERE\n  { ?Event  <http://onprom.inf.unibz.it/ocel/activity>  ?_I1_1012665869 ;\n            <http://onprom.inf.unibz.it/ocel/eventId>  ?_I2_1012665869 ;\n            <http://onprom.inf.unibz.it/ocel/timestamp>  ?_I3_1012665869}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/activity",
+    "firstComponent" : [ "Event", "_L_1012665869", "_I1_1012665869", "_I2_1012665869", "_I3_1012665869" ],
+    "secondComponent" : [ "_I1_1012665869" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I2_1012665869 (\"event\" AS ?_L_1012665869) ?_I1_1012665869 ?_I3_1012665869\nWHERE\n  { ?Event  <http://onprom.inf.unibz.it/ocel/eventId>  ?_I2_1012665869 ;\n            <http://onprom.inf.unibz.it/ocel/activity>  ?_I1_1012665869 ;\n            <http://onprom.inf.unibz.it/ocel/timestamp>  ?_I3_1012665869}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/eventId",
+    "firstComponent" : [ "Event", "_L_1012665869", "_I1_1012665869", "_I2_1012665869", "_I3_1012665869" ],
+    "secondComponent" : [ "_I2_1012665869" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Event ?_I3_1012665869 (\"event\" AS ?_L_1012665869) ?_I1_1012665869 ?_I2_1012665869\nWHERE\n  { ?Event  <http://onprom.inf.unibz.it/ocel/timestamp>  ?_I3_1012665869 ;\n            <http://onprom.inf.unibz.it/ocel/activity>  ?_I1_1012665869 ;\n            <http://onprom.inf.unibz.it/ocel/eventId>  ?_I2_1012665869}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/timestamp",
+    "firstComponent" : [ "Event", "_L_1012665869", "_I1_1012665869", "_I2_1012665869", "_I3_1012665869" ],
+    "secondComponent" : [ "_I3_1012665869" ]
   }, {
     "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
-    "query" : "SELECT  ?Event\nWHERE\n  { ?Event  a  <http://onprom.inf.unibz.it/ocel/Event>}\n",
-    "targetIRI" : "http://onprom.inf.unibz.it/ocel/Event",
-    "component" : [ "Event" ]
+    "query" : "SELECT  ?Attribute (\"attribute\" AS ?_L_196485444) ?_I1_196485444 ?_I2_196485444 ?_I3_196485444\nWHERE\n  { ?Attribute  a                   <http://onprom.inf.unibz.it/ocel/Attribute> ;\n              <http://onprom.inf.unibz.it/ocel/attValue>  ?_I1_196485444 ;\n              <http://onprom.inf.unibz.it/ocel/attKey>  ?_I2_196485444 ;\n              <http://onprom.inf.unibz.it/ocel/attKey>  ?_I3_196485444}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/Attribute",
+    "component" : [ "Attribute", "_L_196485444", "_I1_196485444", "_I2_196485444", "_I3_196485444", "Event", "Object" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Attribute ?_I1_196485444 (\"attribute\" AS ?_L_196485444) ?_I2_196485444 ?_I3_196485444\nWHERE\n  { ?Attribute  <http://onprom.inf.unibz.it/ocel/attValue>  ?_I1_196485444 ;\n              <http://onprom.inf.unibz.it/ocel/attKey>  ?_I2_196485444 ;\n              <http://onprom.inf.unibz.it/ocel/attKey>  ?_I3_196485444}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/attValue",
+    "firstComponent" : [ "Attribute", "_L_196485444", "_I1_196485444", "_I2_196485444", "_I3_196485444", "Event", "Object" ],
+    "secondComponent" : [ "_I1_196485444" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Attribute ?_I2_196485444 (\"attribute\" AS ?_L_196485444) ?_I1_196485444 ?_I3_196485444\nWHERE\n  { ?Attribute  <http://onprom.inf.unibz.it/ocel/attKey>  ?_I2_196485444 ;\n              <http://onprom.inf.unibz.it/ocel/attValue>  ?_I1_196485444 ;\n              <http://onprom.inf.unibz.it/ocel/attKey>  ?_I3_196485444}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/attKey",
+    "firstComponent" : [ "Attribute", "_L_196485444", "_I1_196485444", "_I2_196485444", "_I3_196485444", "Event", "Object" ],
+    "secondComponent" : [ "_I2_196485444" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Attribute ?_I3_196485444 (\"attribute\" AS ?_L_196485444) ?_I1_196485444 ?_I2_196485444\nWHERE\n  { ?Attribute  <http://onprom.inf.unibz.it/ocel/attKey>  ?_I3_196485444 ;\n              <http://onprom.inf.unibz.it/ocel/attValue>  ?_I1_196485444 ;\n              <http://onprom.inf.unibz.it/ocel/attKey>  ?_I2_196485444}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/attType",
+    "firstComponent" : [ "Attribute", "_L_196485444", "_I1_196485444", "_I2_196485444", "_I3_196485444", "Event", "Object" ],
+    "secondComponent" : [ "_I3_196485444" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Attribute ?Event (\"attribute\" AS ?_L_196485444) ?_I1_196485444 ?_I2_196485444 ?_I3_196485444 (\"event\" AS ?_L_1012665869) ?_I1_1012665869 ?_I2_1012665869 ?_I3_1012665869\nWHERE\n  { ?Event    <http://onprom.inf.unibz.it/ocel/e-has-a>  ?Attribute .\n    ?Attribute  <http://onprom.inf.unibz.it/ocel/attValue>  ?_I1_196485444 ;\n              <http://onprom.inf.unibz.it/ocel/attKey>  ?_I2_196485444 ;\n              <http://onprom.inf.unibz.it/ocel/attKey>  ?_I3_196485444 .\n    ?Event    <http://onprom.inf.unibz.it/ocel/activity>  ?_I1_1012665869 ;\n              <http://onprom.inf.unibz.it/ocel/eventId>  ?_I2_1012665869 ;\n              <http://onprom.inf.unibz.it/ocel/timestamp>  ?_I3_1012665869}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/e-has-a",
+    "firstComponent" : [ "Event", "_L_1012665869", "_I1_1012665869", "_I2_1012665869", "_I3_1012665869" ],
+    "secondComponent" : [ "Attribute", "_L_196485444", "_I1_196485444", "_I2_196485444", "_I3_196485444", "Event", "Object" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Attribute ?Object (\"attribute\" AS ?_L_196485444) ?_I1_196485444 ?_I2_196485444 ?_I3_196485444 (\"object\" AS ?_L_274766570) ?_I1_274766570 ?_I2_274766570\nWHERE\n  { ?Object   <http://onprom.inf.unibz.it/ocel/o-has-a>  ?Attribute .\n    ?Attribute  <http://onprom.inf.unibz.it/ocel/attValue>  ?_I1_196485444 ;\n              <http://onprom.inf.unibz.it/ocel/attKey>  ?_I2_196485444 ;\n              <http://onprom.inf.unibz.it/ocel/attKey>  ?_I3_196485444 .\n    ?Object   <http://onprom.inf.unibz.it/ocel/objectId>  ?_I1_274766570 ;\n              <http://onprom.inf.unibz.it/ocel/objectType>  ?_I2_274766570}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/o-has-a",
+    "firstComponent" : [ "Object", "_L_274766570", "_I1_274766570", "_I2_274766570" ],
+    "secondComponent" : [ "Attribute", "_L_196485444", "_I1_196485444", "_I2_196485444", "_I3_196485444", "Event", "Object" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Object (\"object\" AS ?_L_274766570) ?_I1_274766570 ?_I2_274766570\nWHERE\n  { ?Object  a                     <http://onprom.inf.unibz.it/ocel/Object> ;\n             <http://onprom.inf.unibz.it/ocel/objectId>  ?_I1_274766570 ;\n             <http://onprom.inf.unibz.it/ocel/objectType>  ?_I2_274766570}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/Object",
+    "component" : [ "Object", "_L_274766570", "_I1_274766570", "_I2_274766570" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Object ?_I1_274766570 (\"object\" AS ?_L_274766570) ?_I2_274766570\nWHERE\n  { ?Object  <http://onprom.inf.unibz.it/ocel/objectId>  ?_I1_274766570 ;\n             <http://onprom.inf.unibz.it/ocel/objectType>  ?_I2_274766570}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/objectId",
+    "firstComponent" : [ "Object", "_L_274766570", "_I1_274766570", "_I2_274766570" ],
+    "secondComponent" : [ "_I1_274766570" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Object ?_I2_274766570 (\"object\" AS ?_L_274766570) ?_I1_274766570\nWHERE\n  { ?Object  <http://onprom.inf.unibz.it/ocel/objectType>  ?_I2_274766570 ;\n             <http://onprom.inf.unibz.it/ocel/objectId>  ?_I1_274766570}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/objectType",
+    "firstComponent" : [ "Object", "_L_274766570", "_I1_274766570", "_I2_274766570" ],
+    "secondComponent" : [ "_I2_274766570" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Object ?Event (\"object\" AS ?_L_274766570) ?_I1_274766570 ?_I2_274766570 (\"event\" AS ?_L_1012665869) ?_I1_1012665869 ?_I2_1012665869 ?_I3_1012665869\nWHERE\n  { ?Event   <http://onprom.inf.unibz.it/ocel/e-contains-o>  ?Object .\n    ?Object  <http://onprom.inf.unibz.it/ocel/objectId>  ?_I1_274766570 ;\n             <http://onprom.inf.unibz.it/ocel/objectType>  ?_I2_274766570 .\n    ?Event   <http://onprom.inf.unibz.it/ocel/activity>  ?_I1_1012665869 ;\n             <http://onprom.inf.unibz.it/ocel/eventId>  ?_I2_1012665869 ;\n             <http://onprom.inf.unibz.it/ocel/timestamp>  ?_I3_1012665869}\n",
+    "targetIRI" : "http://onprom.inf.unibz.it/ocel/e-contains-o",
+    "firstComponent" : [ "Event", "_L_1012665869", "_I1_1012665869", "_I2_1012665869", "_I3_1012665869" ],
+    "secondComponent" : [ "Object", "_L_274766570", "_I1_274766570", "_I2_274766570" ]
   } ] ]
 }

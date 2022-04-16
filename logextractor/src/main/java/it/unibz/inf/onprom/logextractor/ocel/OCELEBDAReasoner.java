@@ -79,7 +79,6 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                 OWLBindingSet result = resultSet.next();
                 try {
                     String attributeKey = result.getOWLObject(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAtt).toString();
-
                     String type = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttType).getLiteral();
                     String key = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
                     String value = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
@@ -124,15 +123,15 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                         events.put(eventKey, event);
                         if (events.size() % 1000000 == 0) logger.info(events.size() + " events added!");
                     }
-//                    try {
-//                        String attributeKey = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarAtt).toString();
-//                        OcelAttribute attribute = attributes.get(attributeKey);
-//                        if (attribute != null) {
-//                            event.getAttributes().put(attribute.getKey(), attribute);
-//                        }
-//                    } catch (Exception e) {
-//                        logger.error(e.getMessage());
-//                    }
+                    try {
+                        String attributeKey = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarAtt).toString();
+                        OcelAttribute attribute = attributes.get(attributeKey);
+                        if (attribute != null) {
+                            event.getAttributes().put(attribute.getKey(), attribute);
+                        }
+                    } catch (Exception e) {
+                        logger.error(e.getMessage());
+                    }
                 } catch (Exception e) {
                     logger.error(e.getMessage());
                 }

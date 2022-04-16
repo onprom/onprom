@@ -71,21 +71,17 @@ public class OcelXmlSerializer implements OcelSerializer {
         doc.addComment("to the XML serialization of the OCEl standard for log storage and");
         doc.addComment("management.");
         doc.addComment("OCEL standard version: 1.0");
-//        doc.addComment("OCEL library version: 1.0RC7");
         doc.addComment("OCEL standard is available from http://ocel-standard.org/");
         SXTag logTag = doc.addNode("log");
-//        logTag.addAttribute("ocel.version", "1.0");
-//        logTag.addAttribute("ocel.features", "nested-attributes");
-//        logTag.addAttribute("ocel.version", "1.0RC7");
         Iterator i$ = log.getExtensions().iterator();
 
-        SXTag traceTag;
+        SXTag eventsTag;
         while(i$.hasNext()) {
             OcelExtension extension = (OcelExtension)i$.next();
-            traceTag = logTag.addChildNode("extension");
-            traceTag.addAttribute("name", extension.getName());
-            traceTag.addAttribute("prefix", extension.getPrefix());
-            traceTag.addAttribute("uri", extension.getUri().toString());
+            eventsTag = logTag.addChildNode("extension");
+            eventsTag.addAttribute("name", extension.getName());
+            eventsTag.addAttribute("prefix", extension.getPrefix());
+            eventsTag.addAttribute("uri", extension.getUri().toString());
         }
 
         this.addGlobalAttributes(logTag, "log", log.getGlobalLogAttributes());
@@ -106,18 +102,29 @@ public class OcelXmlSerializer implements OcelSerializer {
         this.addAttributes(logTag, log.getAttributes().values());
         i$ = log.iterator();
 
-        while(i$.hasNext()) {
-            OcelEvent event = (OcelEvent) i$.next();
-            traceTag = logTag.addChildNode("event");
-            this.addAttributes(traceTag, event.getAttributes().values());
-//            Iterator<OcelEvent> iEvent = trace.iterator();
+        eventsTag = logTag.addChildNode("events");
+        for (Iterator it = i$; it.hasNext(); ) {
+            Object o = it.next();
+            System.out.println(o);
+        }
 
-//            while(iEvent.hasNext()) {
-//                OcelEvent event = (OcelEvent)iEvent.next();
-//                SXTag eventTag = traceTag.addChildNode("event");
+
+//        while(i$.hasNext()) {
+//            OcelTrace trace = (OcelTrace)i$.next();
+//            eventsTag = logTag.addChildNode("events");
+//            this.addAttributes(eventsTag, trace.getAttributes().values());
+//            Iterator ii$ = trace.iterator();
+//
+//            while(ii$.hasNext()) {
+//                OcelEvent event = (OcelEvent)ii$.next();
+//                SXTag eventTag = eventsTag.addChildNode("event");
 //                this.addAttributes(eventTag, event.getAttributes().values());
 //            }
-        }
+//        }
+
+        // Ocel objects serialization
+        SXTag objsTag = logTag.addChildNode("objects");
+
 
         doc.close();
         String duration = " (" + (System.currentTimeMillis() - start) + " msec.)";

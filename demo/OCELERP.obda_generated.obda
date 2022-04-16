@@ -1,0 +1,233 @@
+[PrefixDeclaration]
+:		http://www.example.com/dolibarr/
+owl:		http://www.w3.org/2002/07/owl#
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+xml:		http://www.w3.org/XML/1998/namespace
+xsd:		http://www.w3.org/2001/XMLSchema#
+data:		http://www.example.com/dolibarr/data/
+obda:		https://w3id.org/obda/vocabulary#
+rdfs:		http://www.w3.org/2000/01/rdf-schema#
+onprom:		http://kaos.inf.unibz.it/onprom/
+
+[MappingDeclaration] @collection [[
+mappingId	ONPROM_MAPPING_1
+target		<http://onprom.inf.unibz.it/{rowid1m10}/Payment/{rowid1m10}/{v0}> a <http://onprom.inf.unibz.it/ocel/Event> . 
+source		SELECT v1.`rowid` AS `rowid1m10`, REPLACE(CAST(v1.`datec` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_paiement` v1
+			WHERE v1.`datec` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_2
+target		<http://onprom.inf.unibz.it/{rowid1m10}/Payment/{rowid1m10}/{v0}> <http://onprom.inf.unibz.it/ocel/activity> "Payment"^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m10`, REPLACE(CAST(v1.`datec` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_paiement` v1
+			WHERE v1.`datec` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_3
+target		<http://onprom.inf.unibz.it/{rowid1m10}/Payment/{rowid1m10}/{v0}> a <http://onprom.inf.unibz.it/ocel/Event> . 
+source		SELECT v1.`rowid` AS `rowid1m10`, REPLACE(CAST(v1.`datec` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_paiement` v1
+			WHERE v1.`datec` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_4
+target		<http://onprom.inf.unibz.it/{rowid1m10}/Payment/{rowid1m10}/{v0}> <http://onprom.inf.unibz.it/ocel/activity> "Payment"^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m10`, REPLACE(CAST(v1.`datec` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_paiement` v1
+			WHERE v1.`datec` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_5
+target		<http://onprom.inf.unibz.it/{rowid1m10}/Payment/{rowid1m10}/{v0}> <http://onprom.inf.unibz.it/ocel/eventId> {rowid1m10}^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m10`, REPLACE(CAST(v1.`datec` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_paiement` v1
+			WHERE v1.`datec` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_6
+target		<http://onprom.inf.unibz.it/{rowid1m16}/Payment/{rowid1m16}/{v0}> <http://onprom.inf.unibz.it/ocel/timestamp> {v0}^^xsd:dateTime . 
+source		SELECT v1.`rowid` AS `rowid1m16`, REPLACE(CAST(v1.`datec` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_paiement` v1
+			WHERE v1.`datec` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_7
+target		<http://onprom.inf.unibz.it/{rowid1m23}/Shipment/{rowid1m23}/{v0}> a <http://onprom.inf.unibz.it/ocel/Event> . 
+source		SELECT v1.`rowid` AS `rowid1m23`, REPLACE(CAST(v1.`date_creation` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_expedition` v1
+			WHERE v1.`date_creation` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_8
+target		<http://onprom.inf.unibz.it/{rowid1m23}/Shipment/{rowid1m23}/{v0}> <http://onprom.inf.unibz.it/ocel/activity> "Shipment"^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m23`, REPLACE(CAST(v1.`date_creation` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_expedition` v1
+			WHERE v1.`date_creation` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_9
+target		<http://onprom.inf.unibz.it/{rowid1m23}/Shipment/{rowid1m23}/{v0}> <http://onprom.inf.unibz.it/ocel/eventId> {rowid1m23}^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m23`, REPLACE(CAST(v1.`date_creation` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_expedition` v1
+			WHERE v1.`date_creation` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_10
+target		<http://onprom.inf.unibz.it/{rowid1m19}/Shipment/{rowid1m19}/{v0}> <http://onprom.inf.unibz.it/ocel/timestamp> {v0}^^xsd:dateTime . 
+source		SELECT v1.`rowid` AS `rowid1m19`, REPLACE(CAST(v1.`date_creation` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_expedition` v1
+			WHERE v1.`date_creation` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_11
+target		<http://onprom.inf.unibz.it/{rowid1m22}/Product/{rowid1m22}//> a <http://onprom.inf.unibz.it/ocel/Object> . 
+source		SELECT v1.`rowid` AS `rowid1m22`
+			FROM `llx_product` v1
+			
+
+mappingId	ONPROM_MAPPING_12
+target		<http://onprom.inf.unibz.it/{rowid1m22}/Product/{rowid1m22}//> <http://onprom.inf.unibz.it/ocel/objectId> {rowid1m22}^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m22`
+			FROM `llx_product` v1
+			
+
+mappingId	ONPROM_MAPPING_13
+target		<http://onprom.inf.unibz.it/{rowid1m22}/Product/{rowid1m22}/{rowid1m22}/> <http://onprom.inf.unibz.it/ocel/objectType> {rowid1m22}^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m22`
+			FROM `llx_product` v1
+			
+
+mappingId	ONPROM_MAPPING_14
+target		<http://onprom.inf.unibz.it/{fk_commande1m7}/PlaceOrder/{fk_commande1m7}/{fk_commande1m7}> <http://onprom.inf.unibz.it/ocel/e-contains-o> <http://onprom.inf.unibz.it/{fk_product1m2}/Product/{fk_product1m2}//{fk_commande1m7}> . 
+source		SELECT v1.`fk_commande` AS `fk_commande1m7`, v1.`fk_product` AS `fk_product1m2`
+			FROM `llx_commandedet` v1, `llx_product` v2
+			WHERE (v1.`fk_commande` IS NOT NULL AND v1.`fk_product` = v2.`rowid`)
+			
+
+mappingId	ONPROM_MAPPING_15
+target		<http://onprom.inf.unibz.it/{rowid1m11}/PlaceOrder/{rowid1m11}/{rowid1m11}> a <http://onprom.inf.unibz.it/ocel/Event> . 
+source		SELECT v1.`rowid` AS `rowid1m11`
+			FROM `llx_commande` v1
+			
+
+mappingId	ONPROM_MAPPING_16
+target		<http://onprom.inf.unibz.it/{rowid1m11}/PlaceOrder/{rowid1m11}/{rowid1m11}> <http://onprom.inf.unibz.it/ocel/activity> "PlaceOrder"^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m11`
+			FROM `llx_commande` v1
+			
+
+mappingId	ONPROM_MAPPING_17
+target		<http://onprom.inf.unibz.it/{rowid1m11}/PlaceOrder/{rowid1m11}/{rowid1m11}> <http://onprom.inf.unibz.it/ocel/eventId> {rowid1m11}^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m11`
+			FROM `llx_commande` v1
+			
+
+mappingId	ONPROM_MAPPING_18
+target		<http://onprom.inf.unibz.it/{rowid1m11}/PlaceOrder/{rowid1m11}/{rowid1m11}> <http://onprom.inf.unibz.it/ocel/timestamp> {rowid1m11}^^xsd:dateTime . 
+source		SELECT v1.`rowid` AS `rowid1m11`
+			FROM `llx_commande` v1
+			
+
+mappingId	ONPROM_MAPPING_19
+target		<http://onprom.inf.unibz.it/{rowid1m18}/{nom1m4}/{nom1m4}/> a <http://onprom.inf.unibz.it/ocel/Attribute> . 
+source		SELECT v1.`nom` AS `nom1m4`, v1.`rowid` AS `rowid1m18`
+			FROM `llx_societe` v1
+			WHERE v1.`nom` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_20
+target		<http://onprom.inf.unibz.it/{rowid1m18}/{nom1m4}/{nom1m4}/> <http://onprom.inf.unibz.it/ocel/attValue> {nom1m4}^^xsd:string . 
+source		SELECT v1.`nom` AS `nom1m4`, v1.`rowid` AS `rowid1m18`
+			FROM `llx_societe` v1
+			WHERE v1.`nom` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_21
+target		<http://onprom.inf.unibz.it/{rowid1m18}/{nom1m4}/{nom1m4}/> <http://onprom.inf.unibz.it/ocel/attKey> {nom1m4}^^xsd:string . 
+source		SELECT v1.`nom` AS `nom1m4`, v1.`rowid` AS `rowid1m18`
+			FROM `llx_societe` v1
+			WHERE v1.`nom` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_22
+target		<http://onprom.inf.unibz.it/{rowid1m18}/{nom1m4}/{nom1m4}/{rowid1m18}> <http://onprom.inf.unibz.it/ocel/attType> {rowid1m18}^^xsd:string . 
+source		SELECT v1.`nom` AS `nom1m4`, v1.`rowid` AS `rowid1m18`
+			FROM `llx_societe` v1
+			WHERE v1.`nom` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_23
+target		<http://onprom.inf.unibz.it/{rowid1m18}/Customer/{rowid1m18}////> <http://onprom.inf.unibz.it/ocel/o-has-a> <http://onprom.inf.unibz.it/{rowid1m18}/{nom1m4}/{nom1m4}/> . 
+source		SELECT v1.`nom` AS `nom1m4`, v1.`rowid` AS `rowid1m18`
+			FROM `llx_societe` v1
+			WHERE v1.`nom` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_24
+target		<http://onprom.inf.unibz.it/{rowid1m21}/Customer/{rowid1m21}////> a <http://onprom.inf.unibz.it/ocel/Object> . 
+source		SELECT v1.`rowid` AS `rowid1m21`
+			FROM `llx_societe` v1
+			
+
+mappingId	ONPROM_MAPPING_25
+target		<http://onprom.inf.unibz.it/{rowid1m21}/Customer/{rowid1m21}////> <http://onprom.inf.unibz.it/ocel/objectId> {rowid1m21}^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m21`
+			FROM `llx_societe` v1
+			
+
+mappingId	ONPROM_MAPPING_26
+target		<http://onprom.inf.unibz.it/{rowid1m21}/Customer/{rowid1m21}/{rowid1m21}///> <http://onprom.inf.unibz.it/ocel/objectType> {rowid1m21}^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m21`
+			FROM `llx_societe` v1
+			
+
+mappingId	ONPROM_MAPPING_27
+target		<http://onprom.inf.unibz.it/{rowid1m8}/PlaceOrder/{rowid1m8}/{rowid1m8}> <http://onprom.inf.unibz.it/ocel/e-contains-o> <http://onprom.inf.unibz.it/{fk_soc1m8}/Customer/{fk_soc1m8}//{rowid1m8}//> . 
+source		SELECT v1.`fk_soc` AS `fk_soc1m8`, v1.`rowid` AS `rowid1m8`
+			FROM `llx_commande` v1
+			
+
+mappingId	ONPROM_MAPPING_28
+target		<http://onprom.inf.unibz.it/{rowid1m4}/Shipment/{rowid1m4}/{v0}> <http://onprom.inf.unibz.it/ocel/e-contains-o> <http://onprom.inf.unibz.it/{fk_soc1m4}/Customer/{fk_soc1m4}///{rowid1m4}/> . 
+source		SELECT v1.`fk_soc` AS `fk_soc1m4`, v1.`rowid` AS `rowid1m4`, REPLACE(CAST(v1.`date_creation` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_expedition` v1
+			WHERE v1.`date_creation` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_29
+target		<http://onprom.inf.unibz.it/{rowid1m3}/Invoice/{rowid1m3}/{v0}> <http://onprom.inf.unibz.it/ocel/e-contains-o> <http://onprom.inf.unibz.it/{fk_soc1m3}/Customer/{fk_soc1m3}////{rowid1m3}> . 
+source		SELECT v1.`fk_soc` AS `fk_soc1m3`, v1.`rowid` AS `rowid1m3`, REPLACE(CAST(v1.`datec` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_facture` v1
+			WHERE v1.`datec` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_30
+target		<http://onprom.inf.unibz.it/{rowid1m14}/Invoice/{rowid1m14}/{v0}> a <http://onprom.inf.unibz.it/ocel/Event> . 
+source		SELECT v1.`rowid` AS `rowid1m14`, REPLACE(CAST(v1.`datec` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_facture` v1
+			WHERE v1.`datec` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_31
+target		<http://onprom.inf.unibz.it/{rowid1m14}/Invoice/{rowid1m14}/{v0}> <http://onprom.inf.unibz.it/ocel/activity> "Invoice"^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m14`, REPLACE(CAST(v1.`datec` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_facture` v1
+			WHERE v1.`datec` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_32
+target		<http://onprom.inf.unibz.it/{rowid1m14}/Invoice/{rowid1m14}/{v0}> <http://onprom.inf.unibz.it/ocel/eventId> {rowid1m14}^^xsd:string . 
+source		SELECT v1.`rowid` AS `rowid1m14`, REPLACE(CAST(v1.`datec` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_facture` v1
+			WHERE v1.`datec` IS NOT NULL
+			
+
+mappingId	ONPROM_MAPPING_33
+target		<http://onprom.inf.unibz.it/{rowid1m13}/Invoice/{rowid1m13}/{v0}> <http://onprom.inf.unibz.it/ocel/timestamp> {v0}^^xsd:dateTime . 
+source		SELECT v1.`rowid` AS `rowid1m13`, REPLACE(CAST(v1.`datec` AS CHAR(30)),' ', 'T') AS `v0`
+			FROM `llx_facture` v1
+			WHERE v1.`datec` IS NOT NULL
+			
+]]
+

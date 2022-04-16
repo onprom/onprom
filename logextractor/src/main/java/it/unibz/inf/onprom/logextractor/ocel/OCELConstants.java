@@ -41,8 +41,8 @@ public class OCELConstants {
 
     //Event Ontology location
     static final String eventOntoPath = "/ocel-ontology.owl";
-    static final String qTraceAtt_SimpleAnsVarTrace = "trace";
-    static final String qTraceAtt_SimpleAnsVarAtt = "att";
+//    static final String qTraceAtt_SimpleAnsVarTrace = "trace";
+//    static final String qTraceAtt_SimpleAnsVarAtt = "att";
 
     static final String qEvtAtt_SimpleAnsVarEvent = "event";
     static final String qEvtAtt_SimpleAnsVarObject = "object";
@@ -53,13 +53,13 @@ public class OCELConstants {
     static final String qAttTypeKeyVal_SimpleAnsVarAttVal = "attValue";
     //END OF OnProm event ontology vocabularies
 
-    //Some queries over the event ontology for retrieving the required information for generating XES log
+    //Some queries over the event ontology for retrieving the required information for generating OCEL log
 
     //====================================================================================================
     static final String qTraceEvt_SimpleAnsVarTrace = "trace";
     static final String qEvt_SimpleAnsVarEvent = "event";
     static final String qEvt_SimpleAnsVarObject = "object";
-    //    private static final String eventOntoPrefix = "http://www.example.com/dolibarr/";
+//        private static final String eventOntoPrefix = "http://www.example.com/dolibarr/";
     private static final String eventOntoPrefix = "http://onprom.inf.unibz.it/ocel/";
     //====================================================================================================
     private static final String ATTRIBUTE_CONCEPT = "<" + eventOntoPrefix + "Attribute" + ">";
@@ -76,7 +76,7 @@ public class OCELConstants {
                     "WHERE { "
                     + "?event " + E_CONTAINS_O_ROLE + " ?obj . "
                     + "}";
-    private static final String T_CONTAINS_A_ROLE = "<" + eventOntoPrefix + "o-has-a" + ">";
+
     //====================================================================================================
     // Query for retrieving  the information about the association between a trace and its attributes.
     //
@@ -85,13 +85,13 @@ public class OCELConstants {
     // WHERE {
     //   ?trace :TcontainsA ?att .
     // }
+    private static final String O_CONTAINS_A_ROLE = "<" + eventOntoPrefix + "o-has-a" + ">";
     static final String qObjectAtt_Simple =
             "PREFIX : <" + eventOntoPrefix + "> \n" +
                     "SELECT Distinct ?obj ?att \n" +
                     "WHERE { "
-                    + "?obj " + T_CONTAINS_A_ROLE + " ?att . "
+                    + "?obj " + O_CONTAINS_A_ROLE + " ?att . "
                     + "}";
-    private static final String E_CONTAINS_A_ROLE = "<" + eventOntoPrefix + "e-has-a" + ">";
     //====================================================================================================
     //Query for retrieving  the information about the association between an event and its attribute
     //
@@ -100,6 +100,7 @@ public class OCELConstants {
     // WHERE {
     //   ?event :EcontainsA ?att .
     // }
+    private static final String E_CONTAINS_A_ROLE = "<" + eventOntoPrefix + "e-has-a" + ">";
     static final String qEvtAtt_Simple =
             "PREFIX : <" + eventOntoPrefix + "> \n" +
                     "SELECT ?event ?att \n" +

@@ -34,12 +34,14 @@ import it.unibz.ocel.factory.OcelFactoryRegistry;
 import it.unibz.ocel.model.OcelAttribute;
 import it.unibz.ocel.model.OcelEvent;
 import it.unibz.ocel.model.OcelLog;
+import it.unibz.ocel.model.OcelObject;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
 
@@ -85,15 +87,15 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
                     logger.info("Initialized reasoner in " + (System.currentTimeMillis() - start) + " ms");
                     Map<String, OcelAttribute> attributes = ebdaR.getAttributes();
                     Map<String, OcelEvent> events = ebdaR.getEvents(attributes);
-//                    Map<String, OcelObject> objects = ebdaR.getObjects(attributes);
+                    Collection<OcelObject> objects = ebdaR.getObjects(events, attributes);
 //                    Collection<OcelTrace> traces = ebdaR.getTraces(events, attributes);
                     ebdaR.dispose();
                     OcelLog ocelLog = factory.createLog();
 
                     factory.addDefaultExtensions(ocelLog);
-//                    ocelLog.add(attributes);
-//                    ocelLog.add(events);
-//                    ocelLog.add(objects);
+                    ocelLog.add(attributes);
+                    ocelLog.add(events);
+                    ocelLog.add(objects);
 //                    ocelLog.addAll(traces);
                     return ocelLog;
                 } else {

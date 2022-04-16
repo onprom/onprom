@@ -251,7 +251,11 @@ public class OBDAMapper {
     }
 
     private String formatTerms(List<ImmutableTerm> terms) {
-        return terms.stream().map(this::formatTerm).collect(Collectors.joining("/"));
+        //just a temporary solution for null
+        if (terms == null) {terms = new ArrayList<ImmutableTerm>(); }
+        return terms.stream()
+                .map(this::formatTerm)
+                .collect(Collectors.joining("/"));
     }
 
     private String formatTerm(ImmutableTerm term) {
@@ -266,16 +270,17 @@ public class OBDAMapper {
 
     private void addMapping(UnaryAnnotationQuery annoQ) {
         String[] uriComponent = annoQ.getComponent();
+        System.out.println("uriComponent============"+uriComponent);
         IRI targetURI = annoQ.getTargetIRI();
+        System.out.println("targetURI=============="+targetURI);
         String query = annoQ.getQuery();
-
+        System.out.println("query============="+query);
         if (uriComponent == null || targetURI == null || query == null) {
             logger.error("invalid input - some inputs contain null value");
             return;
         }
 
         OWLEntity targetEntity;
-
 
         targetEntity = OBDAMappingUtility.getOWLTargetEntity(targetOntology, targetURI);
         OntopReformulationResult result = reformulate(query);
