@@ -108,7 +108,9 @@ public class DynamicAssociationPanel extends JPanel {
     public Set<DynamicAnnotationAttribute> getValue() {
         Set<DynamicAnnotationAttribute> selectedAttributes = Sets.newLinkedHashSet();
         if (isManyToMany) {
-            selectedAttributes = IntStream.range(0, cmbAnnotationAttributes.getItemCount()).mapToObj(cmbAnnotationAttributes::getItemAt).collect(Collectors.toCollection(Sets::newLinkedHashSet));
+            selectedAttributes = IntStream.range(0, cmbAnnotationAttributes.getItemCount())
+                    .mapToObj(cmbAnnotationAttributes::getItemAt)
+                    .collect(Collectors.toCollection(Sets::newLinkedHashSet));
         } else {
             if (cmbAnnotations.getSelectedItem() != null) {
                 DynamicAnnotationAttribute annotation = (DynamicAnnotationAttribute) cmbAnnotations.getSelectedItem();

@@ -31,12 +31,9 @@ import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
 import it.unibz.inf.ontop.owlapi.resultset.OWLBindingSet;
 import it.unibz.inf.ontop.owlapi.resultset.TupleOWLResultSet;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
-import it.unibz.ocel.extension.OcelExtension;
-import it.unibz.ocel.model.OcelAttribute;
-import it.unibz.ocel.model.OcelEvent;
-import it.unibz.ocel.model.OcelObject;
-import it.unibz.ocel.model.impl.OcelEventImpl;
-import it.unibz.ocel.model.impl.OcelObjectImpl;
+import it.unibz.inf.pm.ocel.entity.OcelAttribute;
+import it.unibz.inf.pm.ocel.entity.OcelEvent;
+import it.unibz.inf.pm.ocel.entity.OcelObject;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,8 +80,8 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                     String key = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
                     String value = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
                     if (!attributes.containsKey(attributeKey)) {
-                        OcelExtension extension = factory.getPredefinedExtension(key);
-                        OcelAttribute attribute = factory.createAttribute(type, key, value, extension);
+                        //OcelExtension extension = factory.getPredefinedExtension(key);
+                        OcelAttribute attribute = factory.createAttribute(type, key, value);
                         if (attribute != null) {
                             attributes.put(attributeKey, attribute);
                         }
@@ -119,7 +116,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                     String eventKey = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
                     OcelEvent event = events.get(eventKey);
                     if (event == null) {
-                        event = new OcelEventImpl();
+                        event = new OcelEvent();
                         events.put(eventKey, event);
                         if (events.size() % 1000000 == 0) logger.info(events.size() + " events added!");
                     }
@@ -127,7 +124,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                         String attributeKey = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarAtt).toString();
                         OcelAttribute attribute = attributes.get(attributeKey);
                         if (attribute != null) {
-                            event.getAttributes().put(attribute.getKey(), attribute);
+                            //event.getAttributes().put(attribute.getKey(), attribute);
                         }
                     } catch (Exception e) {
                         logger.error(e.getMessage());
@@ -160,7 +157,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                     String objectKey = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarObject).toString();
                     OcelObject object = objects.get(objectKey);
                     if (object == null) {
-                        object = new OcelObjectImpl();
+                        object = new OcelObject();
                         objects.put(objectKey, object);
                         if (objects.size() % 1000000 == 0) logger.info(objects.size() + " objects added!");
                     }
@@ -168,7 +165,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                         String attributeKey = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarAtt).toString();
                         OcelAttribute attribute = attributes.get(attributeKey);
                         if (attribute != null) {
-                            object.getAttributes().put(attribute.getKey(), attribute);
+                            //object.getAttributes().put(attribute.getKey(), attribute);
                         }
                     } catch (Exception e) {
                         logger.error(e.getMessage());

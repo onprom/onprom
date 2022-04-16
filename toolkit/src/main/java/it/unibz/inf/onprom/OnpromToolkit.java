@@ -39,7 +39,8 @@ import it.unibz.inf.onprom.ui.utility.DrawingUtility;
 import it.unibz.inf.onprom.ui.utility.UIUtility;
 import it.unibz.inf.onprom.utility.ToolkitMessages;
 import it.unibz.inf.onprom.utility.VersionUtility;
-import it.unibz.ocel.model.OcelLog;
+
+import it.unibz.inf.pm.ocel.entity.OcelLog;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -282,7 +283,7 @@ public class OnpromToolkit extends JFrame implements AnnotationEditorListener {
                     infoFrame = new XesLogSummaryPanel(XLogInfoFactory.createLogInfo((XLog) selectedObject));
                 else if (node.getType() == FileType.OCEL) {
                     OcelLog log = (OcelLog) selectedObject;
-                    infoFrame = new OcelLogSummaryPanel(log.getInfo(log.getClassifiers().get(0)));
+                    //infoFrame = new OcelLogSummaryPanel(log.getInfo(log.getClassifiers().get(0)));
                 }
                 if (infoFrame != null) {
                     infoFrame.addInternalFrameListener(new InternalFrameAdapter() {

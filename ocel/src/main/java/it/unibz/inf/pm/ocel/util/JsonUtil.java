@@ -31,7 +31,8 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import it.unibz.ocel.model.OcelEvent;
+
+import it.unibz.inf.pm.ocel.entity.OcelEvent;
 import lombok.Data;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;

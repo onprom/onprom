@@ -3,7 +3,9 @@ package it.unibz.inf.pm.ocel.entity;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * an OCEL contains a global log, global event, and global object element.
@@ -26,4 +28,13 @@ public class OcelLog {
     @JSONField(name = "ocel:objects")
     private List<OcelObject> objects;
 
+    public void addAttributes(Map<String, OcelAttribute> attributes) {
+    }
+
+    public void addEvents(Map<String, OcelEvent> events) {
+    }
+
+    public void addObjects(Collection<OcelObject> objects) {
+    }
+    
 }

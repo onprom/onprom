@@ -164,11 +164,19 @@ public class DynamicAnnotationForm extends AbstractAnnotationForm {
     }
 
     public Collection<DynamicAttribute> getAnnotations() {
-        return drawingPanel.findAnnotations(annotation.getRelatedClass(), false, DynamicAnnotation.class).stream().map(DynamicAnnotationAttribute::new).collect(Collectors.toList());
+        return drawingPanel
+                .findAnnotations(annotation.getRelatedClass(), false, DynamicAnnotation.class)
+                .stream()
+                .map(DynamicAnnotationAttribute::new)
+                .collect(Collectors.toList());
     }
 
     public Collection<DynamicAttribute> getAttributes() {
-        Collection<DynamicAttribute> attributes = drawingPanel.findAttributes(annotation.getRelatedClass(), false).stream().map(DynamicNavigationalAttribute::new).collect(Collectors.toList());
+        Collection<DynamicAttribute> attributes = drawingPanel
+                .findAttributes(annotation.getRelatedClass(), false)
+                .stream()
+                .map(DynamicNavigationalAttribute::new)
+                .collect(Collectors.toList());
         // add class URI as a selectable attribute
         attributes.add(new DynamicNavigationalAttribute(new ClassAttribute(annotation.getRelatedClass())));
         return attributes;

@@ -30,11 +30,10 @@ import it.unibz.inf.onprom.data.query.AnnotationQueries;
 import it.unibz.inf.onprom.logextractor.Extractor;
 import it.unibz.inf.onprom.obdamapper.OBDAMapper;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
-import it.unibz.ocel.factory.OcelFactoryRegistry;
-import it.unibz.ocel.model.OcelAttribute;
-import it.unibz.ocel.model.OcelEvent;
-import it.unibz.ocel.model.OcelLog;
-import it.unibz.ocel.model.OcelObject;
+import it.unibz.inf.pm.ocel.entity.OcelAttribute;
+import it.unibz.inf.pm.ocel.entity.OcelEvent;
+import it.unibz.inf.pm.ocel.entity.OcelLog;
+import it.unibz.inf.pm.ocel.entity.OcelObject;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -77,8 +76,8 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
         try {
             if (ebdaModel != null) {
                 OCELFactory factory = new OCELFactory();
-                logger.info("Factory in use: " + factory.getDescription());
-                OcelFactoryRegistry.instance().setCurrentDefault(factory);
+                //logger.info("Factory in use: " + factory.getDescription());
+                //OcelFactoryRegistry.instance().setCurrentDefault(factory);
 
                 logger.info("Start extracting OCEL Log from the EBDA Mapping");
                 long start = System.currentTimeMillis();
@@ -92,10 +91,10 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
                     ebdaR.dispose();
                     OcelLog ocelLog = factory.createLog();
 
-                    factory.addDefaultExtensions(ocelLog);
-                    ocelLog.add(attributes);
-                    ocelLog.add(events);
-                    ocelLog.add(objects);
+                    //factory.addDefaultExtensions(ocelLog);
+                    ocelLog.addAttributes(attributes);
+                    ocelLog.addEvents(events);
+                    ocelLog.addObjects(objects);
 //                    ocelLog.addAll(traces);
                     return ocelLog;
                 } else {

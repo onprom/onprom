@@ -32,8 +32,8 @@ import it.unibz.inf.onprom.obdamapper.OBDAMapper;
 import it.unibz.inf.onprom.obdamapper.utility.OntopUtility;
 import it.unibz.inf.onprom.ui.utility.IOUtility;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
-import it.unibz.ocel.model.OcelLog;
-import it.unibz.ocel.out.OcelXmlGZIPSerializer;
+import it.unibz.inf.pm.ocel.entity.OcelLog;
+import it.unibz.inf.pm.ocel.exporter.OcelXmlGZIPSerializer;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLOntology;
 

@@ -34,8 +34,9 @@ import it.unibz.inf.onprom.ui.form.InformationDialog;
 import it.unibz.inf.onprom.ui.utility.IOUtility;
 import it.unibz.inf.onprom.ui.utility.UIUtility;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
-import it.unibz.ocel.model.OcelLog;
-import it.unibz.ocel.out.OcelXmlSerializer;
+
+import it.unibz.inf.pm.ocel.entity.OcelLog;
+import it.unibz.inf.pm.ocel.exporter.OcelXmlSerializer;
 import org.apache.commons.io.FilenameUtils;
 import org.deckfour.xes.in.XesXmlParser;
 import org.deckfour.xes.model.XLog;
