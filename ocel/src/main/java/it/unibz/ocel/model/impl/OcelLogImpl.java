@@ -29,6 +29,7 @@ package it.unibz.ocel.model.impl;
 import it.unibz.ocel.classification.OcelEventClassifier;
 import it.unibz.ocel.extension.OcelExtension;
 import it.unibz.ocel.info.OcelLogInfo;
+import com.google.common.collect.Multimap;
 import it.unibz.ocel.model.*;
 
 import java.util.*;
@@ -45,6 +46,10 @@ public class OcelLogImpl extends ArrayList implements OcelLog {
     private List<OcelAttribute> globalLogAttributes;
     private OcelEventClassifier cachedClassifier;
     private OcelLogInfo cachedInfo;
+
+    private Set<OcelEvent> events;
+    private Set<OcelObject> objects;
+    Multimap<OcelEvent, OcelObject> eventObjectsMap;
 
     public OcelLogImpl(OcelAttributeMap attributeMap) {
         this.attributes = attributeMap;
