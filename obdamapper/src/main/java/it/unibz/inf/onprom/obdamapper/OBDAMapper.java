@@ -270,11 +270,8 @@ public class OBDAMapper {
 
     private void addMapping(UnaryAnnotationQuery annoQ) {
         String[] uriComponent = annoQ.getComponent();
-        System.out.println("uriComponent============"+uriComponent);
         IRI targetURI = annoQ.getTargetIRI();
-        System.out.println("targetURI=============="+targetURI);
         String query = annoQ.getQuery();
-        System.out.println("query============="+query);
         if (uriComponent == null || targetURI == null || query == null) {
             logger.error("invalid input - some inputs contain null value");
             return;

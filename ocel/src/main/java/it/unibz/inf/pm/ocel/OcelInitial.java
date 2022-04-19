@@ -7,7 +7,7 @@ import org.dom4j.DocumentException;
 public class OcelInitial {
 
     private static final String __version__ = "0.0.3.1";
-    private static final String __doc__ = "OCEL (object-centric event log) support for Python";
+    private static final String __doc__ = "OCEL (object-centric event log)";
     private static final String __author__ = "PADS";
     private static final String __author_email__ = "a.berti@pads.rwth-aachen.de";
     private static final String __maintainer__ = "PADS";

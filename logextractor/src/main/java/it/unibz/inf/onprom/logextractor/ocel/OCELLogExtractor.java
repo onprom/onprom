@@ -87,7 +87,6 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
                     Map<String, OcelAttribute> attributes = ebdaR.getAttributes();
                     Map<String, OcelEvent> events = ebdaR.getEvents(attributes);
                     Collection<OcelObject> objects = ebdaR.getObjects(events, attributes);
-//                    Collection<OcelTrace> traces = ebdaR.getTraces(events, attributes);
                     ebdaR.dispose();
                     OcelLog ocelLog = factory.createLog();
 
@@ -95,7 +94,6 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
                     ocelLog.addAttributes(attributes);
                     ocelLog.addEvents(events);
                     ocelLog.addObjects(objects);
-//                    ocelLog.addAll(traces);
                     return ocelLog;
                 } else {
                     logger.error("Can't unfold queries, something is wrong, please check logs");

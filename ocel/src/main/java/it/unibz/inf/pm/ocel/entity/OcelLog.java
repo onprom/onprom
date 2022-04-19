@@ -2,10 +2,12 @@ package it.unibz.inf.pm.ocel.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
+import org.deckfour.xes.classification.XEventClassifier;
+import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XLog;
+import org.python.apache.commons.compress.archivers.zip.X000A_NTFS;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * an OCEL contains a global log, global event, and global object element.
@@ -36,5 +38,28 @@ public class OcelLog {
 
     public void addObjects(Collection<OcelObject> objects) {
     }
-    
+
+    public List<XEventClassifier> getClassifiers() {
+        return null;
+    }
+
+    /**
+     *
+     * Reuse some properties of XES XAttribute
+     */
+    public List<XAttribute> getGlobalLogAttributes() {
+        return new ArrayList<>();
+    }
+
+    public List<XAttribute> getGlobalEventAttributes() {
+        return new ArrayList<>();
+    }
+
+    public List<XAttribute> getGlobalObjectAttributes() {
+        return new ArrayList<>();
+    }
+
+    public Map<String, XAttribute> getAttributes() {
+        return new HashMap<>();
+    }
 }
