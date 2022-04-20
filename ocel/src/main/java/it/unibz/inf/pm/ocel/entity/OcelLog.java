@@ -1,10 +1,12 @@
 package it.unibz.inf.pm.ocel.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Data;
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XLog;
+import org.deckfour.xes.model.impl.XLogImpl;
 import org.python.apache.commons.compress.archivers.zip.X000A_NTFS;
 
 import java.util.*;
@@ -30,6 +32,16 @@ public class OcelLog {
     @JSONField(name = "ocel:objects")
     private List<OcelObject> objects;
 
+    private Map<String, OcelAttribute> attributeMap;
+
+    public OcelLog() {
+        attributeMap = createInternalMap();
+    }
+
+    private Map<String, OcelAttribute> createInternalMap() {
+        return new Object2ObjectOpenHashMap<>(4);
+    }
+
     public void addAttributes(Map<String, OcelAttribute> attributes) {
     }
 
@@ -39,16 +51,16 @@ public class OcelLog {
     public void addObjects(Collection<OcelObject> objects) {
     }
 
-    public List<XEventClassifier> getClassifiers() {
-        return null;
-    }
-
     /**
      *
      * Reuse some properties of XES XAttribute
      */
     public List<XAttribute> getGlobalLogAttributes() {
         return new ArrayList<>();
+    }
+
+    public List<XEventClassifier> getClassifiers() {
+        return null;
     }
 
     public List<XAttribute> getGlobalEventAttributes() {

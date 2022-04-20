@@ -90,7 +90,7 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
                     ebdaR.dispose();
                     OcelLog ocelLog = factory.createLog();
 
-                    //factory.addDefaultExtensions(ocelLog);
+                    factory.addDefaultExtensions(ocelLog);
                     ocelLog.addAttributes(attributes);
                     ocelLog.addEvents(events);
                     ocelLog.addObjects(objects);
