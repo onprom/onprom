@@ -56,7 +56,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
     boolean printUnfoldedQueries() {
         return super.printUnfoldedQueries(new String[]{
                 OCELConstants.qAttTypeKeyVal_Simple,
-                OCELConstants.qEvtAtt_Simple,
+                OCELConstants.qEventAtt_Simple,
                 OCELConstants.qObjectAtt_Simple,
                 OCELConstants.qEvtObj_Simple
         });
@@ -80,8 +80,11 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                     String key = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
                     String value = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
                     if (!attributes.containsKey(attributeKey)) {
-                        //OcelExtension extension = factory.getPredefinedExtension(key);
+//                        XExtension extension = factory.getPredefinedExtension(key);
                         OcelAttribute attribute = factory.createAttribute(type, key, value);
+
+//                        XExtension extension = factory.getPredefinedExtension(key);
+//                        XAttribute attribute = factory.createAttribute(type, key, value, extension);
                         if (attribute != null) {
                             attributes.put(attributeKey, attribute);
                         }
@@ -124,7 +127,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                         String attributeKey = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarAtt).toString();
                         OcelAttribute attribute = attributes.get(attributeKey);
                         if (attribute != null) {
-                            //event.getAttributes().put(attribute.getKey(), attribute);
+                            event.getAttributes().put(attribute.getKey(), attribute);
                         }
                     } catch (Exception e) {
                         logger.error(e.getMessage());
@@ -148,7 +151,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
             OntopOWLStatement st = getStatement();
 
             long start = System.currentTimeMillis();
-            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEvtAtt_Simple);
+            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEvtObj_Simple);
             logger.info("Finished executing objects query in " + (System.currentTimeMillis() - start) + "ms");
             start = System.currentTimeMillis();
             while (resultSet.hasNext()) {
@@ -165,7 +168,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                         String attributeKey = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarAtt).toString();
                         OcelAttribute attribute = attributes.get(attributeKey);
                         if (attribute != null) {
-                            //object.getAttributes().put(attribute.getKey(), attribute);
+                            object.getAttributes().put(attribute.getKey(), attribute);
                         }
                     } catch (Exception e) {
                         logger.error(e.getMessage());
@@ -182,75 +185,4 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
         }
         return objects.values();
     }
-
-//    Collection<OcelTrace> getTraces(Map<String, OcelEvent> events, Map<String, OcelAttribute> attributes) {
-//        Map<String, OcelTrace> traces = new HashMap<>();
-//        try {
-//            OntopOWLStatement st = getStatement();
-//            long start = System.currentTimeMillis();
-//            //get the Set of trace and att
-//            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEvt_SimpleAnsVarObject);
-//            logger.info("Finished executing traces attributes query in " + (System.currentTimeMillis() - start) + "ms");
-//            start = System.currentTimeMillis();
-//            while (resultSet.hasNext()) {
-//                OWLBindingSet result = resultSet.next();
-//                try {
-//                    String traceKey = result.getOWLObject(OCELConstants.qTraceAtt_SimpleAnsVarTrace).toString();
-//                    OcelTrace trace = traces.get(traceKey);
-//                    if (trace == null) {
-//                        trace = new OcelTraceImpl(new OcelAttributeMapImpl());
-//                        traces.put(traceKey, trace);
-//                        if (traces.size() % 1000000 == 0) logger.info(traces.size() + " traces added!");
-//                    }
-//
-//                    String attributeKey = result.getOWLObject(OCELConstants.qTraceAtt_SimpleAnsVarAtt).toString();
-//                    OcelAttribute attribute = attributes.get(attributeKey);
-//                    if (attribute != null) {
-//                        trace.getAttributes().put(attribute.getKey(), attribute);
-//                    }
-//                } catch (Exception e) {
-//                    logger.error(e.getMessage());
-//                }
-//            }
-//            logger.info("Finished extracting " + traces.size() + " traces in " + (System.currentTimeMillis() - start) + "ms");
-//            resultSet.close();
-//            st.close();
-//
-//            st = getStatement();
-//            start = System.currentTimeMillis();
-//            resultSet = st.executeSelectQuery(OCELConstants.qTraceEvt_Simple);
-//            logger.info("Finished executing ocel events query in " + (System.currentTimeMillis() - start) + "ms");
-//            start = System.currentTimeMillis();
-//
-//            while (resultSet.hasNext()) {
-//                OWLBindingSet result = resultSet.next();
-//                try {
-//                    String traceKey = result.getOWLObject(OCELConstants.qTraceEvt_SimpleAnsVarTrace).toString();
-//                    String eventKey = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
-//
-//                    OcelTrace trace = traces.get(traceKey);
-//                    if (trace != null) {
-//                        OcelEvent event = events.get(eventKey);
-//                        if (event != null) {
-//                            trace.add(event);
-//                        }
-//                    }
-//                } catch (Exception e) {
-//                    logger.error(e.getMessage());
-//                }
-//            }
-//            logger.info("Finished updates traces events in " + (System.currentTimeMillis() - start) + "ms");
-//            resultSet.close();
-//            st.close();
-//        } catch (Exception e) {
-//            logger.error(e.getMessage());
-//        }
-//
-//
-//      //  Collection<XTrace> sortedTraces = ToolUtil.sortTrace(traces.values(), "time:timestamp");
-//
-//        return traces.values();
-//      //  return sortedTraces;
-//    }
-
 }

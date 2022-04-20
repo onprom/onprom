@@ -1,0 +1,79 @@
+/*
+ * ocel
+ *
+ * OcelEventClass.java
+ *
+ * Copyright (C) 2016-2022 Free University of Bozen-Bolzano
+ *
+ * This product includes software developed under
+ * KAOS: Knowledge-Aware Operational Support project
+ * (https://kaos.inf.unibz.it).
+ *
+ * Please visit https://onprom.inf.unibz.it for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package it.unibz.inf.pm.ocel.classification;
+
+public class OcelEventClass implements Comparable<OcelEventClass> {
+    protected int index;
+    protected String id;
+    protected int size;
+
+    public OcelEventClass(String id, int index) {
+        this.id = id;
+        this.index = index;
+        this.size = 0;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public int getIndex() {
+        return this.index;
+    }
+
+    public int size() {
+        return this.size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void incrementSize() {
+        ++this.size;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else {
+            return o instanceof OcelEventClass && this.id.equals(((OcelEventClass) o).id);
+        }
+    }
+
+    public int hashCode() {
+        return this.id.hashCode();
+    }
+
+    public String toString() {
+        return this.id;
+    }
+
+    public int compareTo(OcelEventClass o) {
+        return this.id.compareTo(o.getId());
+    }
+}

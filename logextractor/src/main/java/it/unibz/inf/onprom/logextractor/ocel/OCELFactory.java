@@ -26,12 +26,14 @@
 
 package it.unibz.inf.onprom.logextractor.ocel;
 
-import it.unibz.inf.onprom.logextractor.Factory;
 import it.unibz.inf.pm.ocel.entity.OcelAttribute;
 import it.unibz.inf.pm.ocel.entity.OcelLog;
+import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.extension.std.XConceptExtension;
+import org.deckfour.xes.extension.std.XLifecycleExtension;
+import org.deckfour.xes.extension.std.XOrganizationalExtension;
+import org.deckfour.xes.extension.std.XTimeExtension;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -66,27 +68,50 @@ public class OCELFactory {
         return null;
     }
 
+    public OcelAttribute createAttribute(String type, String key, String value, XExtension extension ) throws ParseException {
+
+        if (type != null && key != null && value != null) {
+            if (type.equalsIgnoreCase("timestamp")) {
+                // we assume that the timestamp is in format yyyy-[m]m-[d]d hh:mm:ss[.f...].
+                // The fractional seconds may be omitted. The leading zero for mm and dd may also be omitted.
+                Date date;
+                try {
+                    date = WITH_T.parse(value);
+                } catch (ParseException e0) {
+                    try {
+                        date = WITHOUT_T.parse(value);
+                    } catch (ParseException e1) {
+                        date = ONLY_DATE.parse(value);
+                    }
+                }
+                //return createAttributeTimestamp(key, date);
+                return new OcelAttribute(key, date.toString());
+            } else {
+                return new OcelAttribute(key, value);
+            }
+        }
+        return null;
+    }
+
     public OcelLog createLog() {
         return new OcelLog();
     }
 
-//    public OcelExtension getPredefinedExtension(String key) {
-//        if (key != null) {
-//            switch (key.toLowerCase()) {
-//                case "timestamp":
-//                    return OcelTimeExtension.instance();
-////                case "attribute-name":
-////                    return OcelConceptExtension.instance();
-//                case "concept:name":
-//                    return OcelConceptExtension.instance();
-////                case "lifecycle:transition":
-////                    return OcelLifecycleExtension.instance();
-////                case "org:resource":
-////                    return OcelOrganizationalExtension.instance();
-//            }
-//        }
-//        return null;
-//    }
+    public XExtension getPredefinedExtension(String key) {
+        if (key != null) {
+            switch (key.toLowerCase()) {
+                case "time:timestamp":
+                    return XTimeExtension.instance();
+                case "concept:name":
+                    return XConceptExtension.instance();
+                case "lifecycle:transition":
+                    return XLifecycleExtension.instance();
+                case "org:resource":
+                    return XOrganizationalExtension.instance();
+            }
+        }
+        return null;
+    }
 
 //    public void addDefaultExtensions(OcelLog ocelLog) {
 //        try {

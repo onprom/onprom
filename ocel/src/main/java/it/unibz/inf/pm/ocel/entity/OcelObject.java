@@ -18,4 +18,37 @@ public class OcelObject {
     private Map<String, String> ovmap; //map with its child elements having a string value type. not required
 
 
+    private Map<String, OcelAttribute> attributes;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Map<String, String> getOvmap() {
+        return ovmap;
+    }
+
+    public void setOvmap(Map<String, String> ovmap) {
+        this.ovmap = ovmap;
+    }
+
+    public Map<String, OcelAttribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, OcelAttribute> attributes) {
+        this.attributes = attributes;
+    }
 }

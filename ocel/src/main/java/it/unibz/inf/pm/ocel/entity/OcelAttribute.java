@@ -69,4 +69,9 @@ public class OcelAttribute implements XAttribute {
     public Set<XExtension> getExtensions() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }

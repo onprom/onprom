@@ -45,7 +45,7 @@ public class OCELConstants {
 //    static final String qTraceAtt_SimpleAnsVarAtt = "att";
 
     static final String qEvtAtt_SimpleAnsVarEvent = "event";
-    static final String qEvtAtt_SimpleAnsVarObject = "object";
+    static final String qEvtAtt_SimpleAnsVarObject = "obj";
     static final String qEvtAtt_SimpleAnsVarAtt = "att";
     static final String qAttTypeKeyVal_SimpleAnsVarAtt = "att";//att
     static final String qAttTypeKeyVal_SimpleAnsVarAttType = "attType";
@@ -56,9 +56,8 @@ public class OCELConstants {
     //Some queries over the event ontology for retrieving the required information for generating OCEL log
 
     //====================================================================================================
-    static final String qTraceEvt_SimpleAnsVarTrace = "trace";
     static final String qEvt_SimpleAnsVarEvent = "event";
-    static final String qEvt_SimpleAnsVarObject = "object";
+    static final String qEvt_SimpleAnsVarObject = "obj";
 //        private static final String eventOntoPrefix = "http://www.example.com/dolibarr/";
     private static final String eventOntoPrefix = "http://onprom.inf.unibz.it/ocel/";
     //====================================================================================================
@@ -101,7 +100,7 @@ public class OCELConstants {
     //   ?event :EcontainsA ?att .
     // }
     private static final String E_CONTAINS_A_ROLE = "<" + eventOntoPrefix + "e-has-a" + ">";
-    static final String qEvtAtt_Simple =
+    static final String qEventAtt_Simple =
             "PREFIX : <" + eventOntoPrefix + "> \n" +
                     "SELECT ?event ?att \n" +
                     "WHERE { ?event " + E_CONTAINS_A_ROLE + " ?att }";
