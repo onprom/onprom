@@ -4,6 +4,7 @@ package it.unibz.inf.pm.ocel.entity;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Data
@@ -14,11 +15,21 @@ public class OcelObject {
     @JSONField(name = "ocel:type")
     private String type;
 
+    
+//    private Map<String, Object> ovmap; //map with its child elements having a string value type. not required
+
+    public OcelObject(String id) {
+        this.id = id;
+        this.ovmap = new HashMap<>();
+    }
+
+    @Deprecated
+    public OcelObject() {
+        this.ovmap = new HashMap<>();
+    }
+
     @JSONField(name = "ocel:ovmap")
-    private Map<String, String> ovmap; //map with its child elements having a string value type. not required
-
-
-    private Map<String, OcelAttribute> attributes;
+    private Map<String, OcelAttribute> ovmap;
 
     public String getId() {
         return id;
@@ -35,20 +46,8 @@ public class OcelObject {
     public void setType(String type) {
         this.type = type;
     }
-
-    public Map<String, String> getOvmap() {
+    
+    public Map<String, OcelAttribute> getOvmap() {
         return ovmap;
-    }
-
-    public void setOvmap(Map<String, String> ovmap) {
-        this.ovmap = ovmap;
-    }
-
-    public Map<String, OcelAttribute> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(Map<String, OcelAttribute> attributes) {
-        this.attributes = attributes;
     }
 }

@@ -72,7 +72,7 @@ public abstract class EBDAReasoner<A, E, O> {
 
     protected abstract Map<String, A> getAttributes();
 
-    protected abstract Map<String, E> getEvents(Map<String, A> attributes);
+    //protected abstract Map<String, E> getEvents(Map<String, A> attributes);
 
-    protected abstract Collection<O> getObjects(Map<String, E> events, Map<String, A> attributes);
+    //protected abstract Collection<O> getObjects(Map<String, E> events, Map<String, A> attributes);
 }

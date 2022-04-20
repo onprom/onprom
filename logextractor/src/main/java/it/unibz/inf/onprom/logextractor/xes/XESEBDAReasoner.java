@@ -107,7 +107,7 @@ class XESEBDAReasoner extends EBDAReasoner<XAttribute, XEvent, XTrace> {
         return attributes;
     }
 
-    @Override
+    //@Override
     protected Map<String, XEvent> getEvents(Map<String, XAttribute> attributes) {
         Map<String, XEvent> events = new HashMap<>();
         try {
@@ -149,7 +149,7 @@ class XESEBDAReasoner extends EBDAReasoner<XAttribute, XEvent, XTrace> {
         return events;
     }
 
-    @Override
+    //@Override
     protected Collection<XTrace> getObjects(Map<String, XEvent> events, Map<String, XAttribute> attributes) {
         Map<String, XTrace> traces = new HashMap<>();
         try {

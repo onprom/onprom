@@ -64,6 +64,9 @@ public class OCELConstants {
     private static final String ATTRIBUTE_CONCEPT = "<" + eventOntoPrefix + "Attribute" + ">";
     //some vocabularies for role names/object properties
     private static final String E_CONTAINS_O_ROLE = "<" + eventOntoPrefix + "e-contains-o" + ">";
+
+    private static final String OCEL_OBJECT_IRI = "<" + eventOntoPrefix + "Object" + ">";
+    private static final String OCEL_EVENT_IRI = "<" + eventOntoPrefix + "Event" + ">";
     // PREFIX : <http://www.example.org/>
     // SELECT Distinct ?event ?obj
     // WHERE {
@@ -84,12 +87,12 @@ public class OCELConstants {
     // WHERE {
     //   ?trace :TcontainsA ?att .
     // }
-    private static final String O_CONTAINS_A_ROLE = "<" + eventOntoPrefix + "o-has-a" + ">";
+    private static final String O_HAS_A_ROLE = "<" + eventOntoPrefix + "o-has-a" + ">";
     static final String qObjectAtt_Simple =
             "PREFIX : <" + eventOntoPrefix + "> \n" +
                     "SELECT Distinct ?obj ?att \n" +
                     "WHERE { "
-                    + "?obj " + O_CONTAINS_A_ROLE + " ?att . "
+                    + "?obj " + O_HAS_A_ROLE + " ?att . "
                     + "}";
     //====================================================================================================
     //Query for retrieving  the information about the association between an event and its attribute
@@ -99,11 +102,11 @@ public class OCELConstants {
     // WHERE {
     //   ?event :EcontainsA ?att .
     // }
-    private static final String E_CONTAINS_A_ROLE = "<" + eventOntoPrefix + "e-has-a" + ">";
+    private static final String E_HAS_A_ROLE = "<" + eventOntoPrefix + "e-has-a" + ">";
     static final String qEventAtt_Simple =
             "PREFIX : <" + eventOntoPrefix + "> \n" +
                     "SELECT ?event ?att \n" +
-                    "WHERE { ?event " + E_CONTAINS_A_ROLE + " ?att }";
+                    "WHERE { ?event " + E_HAS_A_ROLE + " ?att }";
     //some vocabularies for attribute/data properties
     private static final String ATT_TYPE_ATT = "<" + eventOntoPrefix + "attType" + ">";
     private static final String ATT_KEY_ATT = "<" + eventOntoPrefix + "attKey" + ">";
@@ -124,6 +127,32 @@ public class OCELConstants {
                     ATT_KEY_ATT + " ?attKey; " +
                     ATT_VAL_ATT + " ?attValue  }";
 
+    static final String qObjects =
+            "PREFIX : <" + eventOntoPrefix + "> \n" +
+                    "SELECT distinct * \n" +
+                    "WHERE { ?object a " + OCEL_OBJECT_IRI + " . OPTIONAL { \n" +
+                    "  ?object " + O_HAS_A_ROLE + " ?att . \n" +
+                    "  ?att a " + ATTRIBUTE_CONCEPT + "; \n" +
+                    ATT_TYPE_ATT + " ?attType; \n" +
+                    ATT_KEY_ATT + " ?attKey; \n" +
+                    ATT_VAL_ATT + " ?attValue  } }";
+
+    static final String qEvents =
+            "PREFIX : <" + eventOntoPrefix + "> \n" +
+                    "SELECT distinct * \n" +
+                    "WHERE { " +
+                    "?event a " + OCEL_EVENT_IRI + " . \n" +
+                    "OPTIONAL { \n" +
+                    "  ?event " + E_CONTAINS_O_ROLE + " ?object } \n" +
+                    "OPTIONAL { \n" +
+                    "  ?event " + E_HAS_A_ROLE + " ?att . \n" +
+                    "  ?att a " + ATTRIBUTE_CONCEPT + "; \n" +
+                    ATT_TYPE_ATT + " ?attType; \n" +
+                    ATT_KEY_ATT + " ?attKey; \n" +
+                    ATT_VAL_ATT + " ?attValue  } " +
+                    "" +
+                    "}";
+    
     public static synchronized OWLOntology getDefaultEventOntology() throws OWLOntologyCreationException {
         return OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(
                 getDefaultEventLogStream());

@@ -72,8 +72,8 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
         return null;
     }
 
-    public OcelLog extractLog(SQLPPMapping ebdaModel, Properties dataSourceProperties) {
-        try {
+    public OcelLog extractLog(SQLPPMapping ebdaModel, Properties dataSourceProperties) throws Exception {
+        
             if (ebdaModel != null) {
                 OCELFactory factory = new OCELFactory();
                 //logger.info("Factory in use: " + factory.getDescription());
@@ -84,24 +84,28 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
                 OCELEBDAReasoner ebdaR = new OCELEBDAReasoner(ebdaModel, dataSourceProperties, factory);
                 if (ebdaR.printUnfoldedQueries()) {
                     logger.info("Initialized reasoner in " + (System.currentTimeMillis() - start) + " ms");
+
+                    Map<String, OcelObject> ocelObjects = ebdaR.getObjects();
                     Map<String, OcelAttribute> attributes = ebdaR.getAttributes();
-                    Map<String, OcelEvent> events = ebdaR.getEvents(attributes);
-                    Collection<OcelObject> objects = ebdaR.getObjects(events, attributes);
+                    Map<String, OcelEvent> events = ebdaR.getEvents();
+                    
+                    
+                    
+                    
+                    //Collection<OcelObject> objects = ebdaR.getObjects(events, attributes);
                     ebdaR.dispose();
                     OcelLog ocelLog = factory.createLog();
 
                     factory.addDefaultExtensions(ocelLog);
-                    ocelLog.addAttributes(attributes);
+                    //ocelLog.addAttributes(attributes);
                     ocelLog.addEvents(events);
-                    ocelLog.addObjects(objects);
+                    //ocelLog.addObjects(objects);
                     return ocelLog;
                 } else {
                     logger.error("Can't unfold queries, something is wrong, please check logs");
                 }
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
+        
         return null;
     }
 

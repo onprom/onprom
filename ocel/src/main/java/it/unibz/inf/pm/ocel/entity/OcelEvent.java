@@ -1,8 +1,6 @@
 package it.unibz.inf.pm.ocel.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import org.deckfour.xes.model.XAttribute;
-import org.deckfour.xes.model.XAttributeMap;
 import org.joda.time.DateTime;
 
 import java.util.List;
@@ -26,9 +24,7 @@ public class OcelEvent {
     private List<String> omap;
 
     @JSONField(name = "ocel:vmap")
-    private Map<String, String> vmap; //map with its child elements having a string value type. not required
-
-    private Map<String, OcelAttribute> attributes;
+    private Map<String, OcelAttribute> vmap;
 
     public String getId() {
         return id;
@@ -61,20 +57,12 @@ public class OcelEvent {
     public void setOmap(List<String> omap) {
         this.omap = omap;
     }
-
-    public Map<String, String> getVmap() {
+    
+    public Map<String, OcelAttribute> getVmap() {
         return vmap;
     }
 
-    public void setVmap(Map<String, String> vmap) {
+    public void setVmap(Map<String, OcelAttribute> vmap) {
         this.vmap = vmap;
-    }
-
-    public Map<String, OcelAttribute> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(Map<String, OcelAttribute> attributes) {
-        this.attributes = attributes;
     }
 }

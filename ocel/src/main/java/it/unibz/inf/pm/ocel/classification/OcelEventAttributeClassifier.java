@@ -49,15 +49,15 @@ public class OcelEventAttributeClassifier implements OcelEventClassifier, Compar
     public String getClassIdentity(OcelEvent event) {
         switch(this.keys.length) {
             case 1:
-                OcelAttribute attr = event.getAttributes().get(this.keys[0]);
+                OcelAttribute attr = event.getVmap().get(this.keys[0]);
                 if (attr != null) {
                     return attr.toString();
                 }
 
                 return "";
             case 2:
-                OcelAttribute attr1 = event.getAttributes().get(this.keys[0]);
-                OcelAttribute attr2 = event.getAttributes().get(this.keys[1]);
+                OcelAttribute attr1 = event.getVmap().get(this.keys[0]);
+                OcelAttribute attr2 = event.getVmap().get(this.keys[1]);
                 if (attr1 != null && attr2 != null) {
                     String val1 = attr1.toString();
                     String val2 = attr2.toString();
@@ -75,7 +75,7 @@ public class OcelEventAttributeClassifier implements OcelEventClassifier, Compar
                 StringBuilder sb = new StringBuilder();
 
                 for(int i = 0; i < this.keys.length; ++i) {
-                    OcelAttribute attribute = event.getAttributes().get(this.keys[i]);
+                    OcelAttribute attribute = event.getVmap().get(this.keys[i]);
                     if (attribute != null) {
                         sb.append(attribute);
                     }
