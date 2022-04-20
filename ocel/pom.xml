@@ -116,11 +116,6 @@
             <version>2.26</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>deckfour</groupId>
-            <artifactId>openxes</artifactId>
-            <version>2.23</version>
-        </dependency>
     </dependencies>
 
 </project>
