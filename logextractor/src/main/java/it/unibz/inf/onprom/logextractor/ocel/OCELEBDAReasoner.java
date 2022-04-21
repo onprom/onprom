@@ -135,10 +135,31 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
     public Map<String, OcelEvent> getEvents() throws Exception {
         Map<String, OcelEvent> events = new HashMap<>();
         long start = System.currentTimeMillis();
+        extractEventsAndAttributes(events);
+        extractEventsAndObjects(events);
+        extractEventsAndTimestamp(events);
+        logger.info("Finished extracting " + events.size() + " events in " + (System.currentTimeMillis() - start) + "ms");
+        return events;
+    }
+
+    
+    private void extractEventsAndObjects(Map<String, OcelEvent> events) throws Exception {
+        try (
+            OntopOWLStatement st = getStatement();
+            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithObjects)) {
+            while (resultSet.hasNext()) {
+                OWLBindingSet result = resultSet.next();
+                String evt = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
+                OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
+                String objectId = result.getOWLObject("object").toString();
+                event.getOmap().add(objectId);
+            }
+        }
+    }
+
+    private void extractEventsAndAttributes(Map<String, OcelEvent> events) throws Exception {
         try (OntopOWLStatement st = getStatement();
             TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEvents)) {
-            logger.info("Finished executing events query in " + (System.currentTimeMillis() - start) + "ms");
-            start = System.currentTimeMillis();
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
                 String evt = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
@@ -151,28 +172,21 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                     event.getVmap().put(key, factory.createAttribute(type, key, value));
                 }
             }
-            
         }
+    }
 
-        start = System.currentTimeMillis();
-        try (
-            OntopOWLStatement st = getStatement();
-            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithObjects)) {
 
-            logger.info("Finished executing events with objects query in " + (System.currentTimeMillis() - start) + "ms");
-            start = System.currentTimeMillis();
+    private void extractEventsAndTimestamp(Map<String, OcelEvent> events) throws Exception {
+        try (OntopOWLStatement st = getStatement();
+             TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithTimestamps)) {
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
-                String evt = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
+                String evt = result.getOWLObject("event").toString();
                 OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
-                String objectId = result.getOWLObject("object").toString();
-                event.getOmap().add(objectId);
+                String timestamp = result.getOWLLiteral("timestamp").getLiteral();
+                event.setTimestamp(timestamp);
             }
-            //logger.info("Finished extracting " + events.size() + " events with objects in " + (System.currentTimeMillis() - start) + "ms");
         }
-        logger.info("Finished extracting " + events.size() + " events in " + (System.currentTimeMillis() - start) + "ms"); 
-        
-        return events;
     }
 
 }

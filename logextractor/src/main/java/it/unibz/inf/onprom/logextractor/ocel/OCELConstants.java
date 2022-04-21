@@ -155,7 +155,13 @@ public class OCELConstants {
                     "?event " + E_CONTAINS_O_ROLE + " ?object  " +
                     "}" ;
 
-
+    static final String qEventsWithTimestamps =
+            "PREFIX : <" + eventOntoPrefix + "> \n" +
+                    "SELECT distinct * \n" +
+                    "WHERE { " +
+                    "?event a " + OCEL_EVENT_IRI + " . \n" +
+                    "?event <http://onprom.inf.unibz.it/ocel/timestamp> ?timestamp  " +
+                    "}" ;
     
     public static synchronized OWLOntology getDefaultEventOntology() throws OWLOntologyCreationException {
         return OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(

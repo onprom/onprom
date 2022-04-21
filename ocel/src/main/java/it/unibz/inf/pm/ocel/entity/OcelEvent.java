@@ -23,7 +23,7 @@ public class OcelEvent {
     private String activity;
 
     @JSONField(name = "ocel:timestamp")
-    private DateTime timestamp;
+    private String timestamp;
 
     @JSONField(name = "ocel:omap")
     private List<String> omap;
@@ -53,11 +53,11 @@ public class OcelEvent {
         this.activity = activity;
     }
 
-    public DateTime getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(DateTime timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
