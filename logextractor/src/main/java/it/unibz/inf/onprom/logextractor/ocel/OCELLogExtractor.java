@@ -47,79 +47,39 @@ import java.util.Properties;
 public class OCELLogExtractor implements Extractor<OcelLog> {
     private static final Logger logger = LoggerFactory.getLogger(OCELLogExtractor.class);
 
-    public static OWLOntology getOntology() {
-        try {
-            return OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(
-                    OCELLogExtractor.class.getResourceAsStream(OCELConstants.eventOntoPath)
-            );
-        } catch (OWLOntologyCreationException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static OWLOntology getOntology() throws OWLOntologyCreationException {
+        return OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(
+                OCELLogExtractor.class.getResourceAsStream(OCELConstants.eventOntoPath)
+        );
     }
-
-    public OcelLog extractLog(OWLOntology domainOnto, SQLPPMapping obdaModel, Properties dataSourceProperties, AnnotationQueries firstAnnoQueries, OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries) {
-        try {
-            SQLPPMapping obdaMapping = new OBDAMapper(domainOnto, eventOntoVariant, obdaModel, dataSourceProperties, firstAnnoQueries).getOBDAModel();
-            if (obdaMapping != null) {
-                return extractLog(eventOntoVariant, obdaMapping, dataSourceProperties, secondAnnoQueries);
-            } else {
-                logger.error("OBDA Mapping is NULL!");
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return null;
+    public OcelLog extractLog(OWLOntology domainOnto, SQLPPMapping obdaModel, Properties dataSourceProperties, AnnotationQueries firstAnnoQueries, OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries) throws Exception {
+        SQLPPMapping obdaMapping = new OBDAMapper(domainOnto, eventOntoVariant, obdaModel, dataSourceProperties, firstAnnoQueries).getOBDAModel();
+        return extractLog(eventOntoVariant, obdaMapping, dataSourceProperties, secondAnnoQueries);
     }
 
     public OcelLog extractLog(SQLPPMapping ebdaModel, Properties dataSourceProperties) throws Exception {
-        
-            if (ebdaModel != null) {
-                OCELFactory factory = new OCELFactory();
-                //logger.info("Factory in use: " + factory.getDescription());
-                //OcelFactoryRegistry.instance().setCurrentDefault(factory);
-
-                logger.info("Start extracting OCEL Log from the EBDA Mapping");
-                long start = System.currentTimeMillis();
-                OCELEBDAReasoner ebdaR = new OCELEBDAReasoner(ebdaModel, dataSourceProperties, factory);
-                if (ebdaR.printUnfoldedQueries()) {
-                    logger.info("Initialized reasoner in " + (System.currentTimeMillis() - start) + " ms");
-
-                    Map<String, OcelObject> objects = ebdaR.getObjects();
-//                    Map<String, OcelAttribute> attributes = ebdaR.getAttributes();
-                    Map<String, OcelEvent> events = ebdaR.getEvents();
-
-                    //Collection<OcelObject> objects = ebdaR.getObjects(events, attributes);
-                    ebdaR.dispose();
-                    OcelLog ocelLog = factory.createLog();
-
-//                    factory.addDefaultExtensions(ocelLog);
-                    //ocelLog.addAttributes(attributes);
-                    ocelLog.addEvents(events);
-                    //ocelLog.addObjects(objects);
-                    return ocelLog;
-                } else {
-                    logger.error("Can't unfold queries, something is wrong, please check logs");
-                }
-            }
-        
-        return null;
+        logger.info("Start extracting OCEL Log from the EBDA Mapping");
+        long start = System.currentTimeMillis();
+        OCELFactory factory = new OCELFactory();
+        OCELEBDAReasoner ebdaR = new OCELEBDAReasoner(ebdaModel, dataSourceProperties, factory);
+        ebdaR.printUnfoldedQueries();
+        logger.info("Initialized reasoner in " + (System.currentTimeMillis() - start) + " ms");
+        Map<String, OcelObject> objects = ebdaR.getObjects();
+        Map<String, OcelEvent> events = ebdaR.getEvents();
+        ebdaR.dispose();
+        OcelLog ocelLog = new OcelLog(events, objects);
+        return ocelLog;
     }
 
-    public OcelLog extractLog(OWLOntology domainOntology, SQLPPMapping obdaModel, Properties dataSourceProperties, AnnotationQueries annotation) {
-        try {
-            logger.info("Constructing EBDA Mapping");
-            SQLPPMapping ebdaModel = new OBDAMapper(domainOntology,
-                    getOntology(),
-                    obdaModel,
-                    dataSourceProperties,
-                    annotation
-            ).getOBDAModel();
-            return extractLog(ebdaModel, dataSourceProperties);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return null;
+    public OcelLog extractLog(OWLOntology domainOntology, SQLPPMapping obdaModel, Properties dataSourceProperties, AnnotationQueries annotation) throws Exception {
+        logger.info("Constructing EBDA Mapping");
+        SQLPPMapping ebdaModel = new OBDAMapper(domainOntology,
+                getOntology(),
+                obdaModel,
+                dataSourceProperties,
+                annotation
+        ).getOBDAModel();
+        return extractLog(ebdaModel, dataSourceProperties);
     }
 
     @Override

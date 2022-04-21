@@ -25,53 +25,18 @@ public class OcelLog {
 
     @JSONField(name = "ocel:global-object")
     private Object globalObject;
-
+    
     @JSONField(name = "ocel:events")
-    private List<OcelEvent> events;
+    private Map<String, OcelEvent> events;
 
     @JSONField(name = "ocel:objects")
-    private List<OcelObject> objects;
+    private Map<String, OcelObject> objects;
 
     private Map<String, OcelAttribute> attributeMap;
 
-    public OcelLog() {
-        attributeMap = createInternalMap();
-    }
-
-    private Map<String, OcelAttribute> createInternalMap() {
-        return new Object2ObjectOpenHashMap<>(4);
-    }
-
-    public void addAttributes(Map<String, OcelAttribute> attributes) {
-    }
-
-    public void addEvents(Map<String, OcelEvent> events) {
-    }
-
-    public void addObjects(Collection<OcelObject> objects) {
-    }
-
-    /**
-     *
-     * Reuse some properties of XES XAttribute
-     */
-    public List<XAttribute> getGlobalLogAttributes() {
-        return new ArrayList<>();
-    }
-
-    public List<XEventClassifier> getClassifiers() {
-        return null;
-    }
-
-    public List<XAttribute> getGlobalEventAttributes() {
-        return new ArrayList<>();
-    }
-
-    public List<XAttribute> getGlobalObjectAttributes() {
-        return new ArrayList<>();
-    }
-
-    public Map<String, XAttribute> getAttributes() {
-        return new HashMap<>();
+    public OcelLog(Map<String, OcelEvent> events, Map<String, OcelObject> objects) {
+        attributeMap = new HashMap<>();
+        this.events = events;
+        this.objects = objects;
     }
 }

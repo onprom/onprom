@@ -123,10 +123,6 @@ public class OCELFactory {
         return null;
     }
 
-    public OcelLog createLog() {
-        return new OcelLog();
-    }
-
     public XExtension getPredefinedExtension(String key) {
         if (key != null) {
             switch (key.toLowerCase()) {

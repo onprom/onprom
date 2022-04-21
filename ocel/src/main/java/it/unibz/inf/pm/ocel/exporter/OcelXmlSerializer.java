@@ -56,9 +56,9 @@ public class OcelXmlSerializer {
 //            traceTag.addAttribute("uri", extension.getUri().toString());
 //        }
 
-        this.addGlobalAttributes(logTag, "log", log.getGlobalLogAttributes());
-        this.addGlobalAttributes(logTag, "event", log.getGlobalEventAttributes());
-        this.addGlobalAttributes(logTag, "object", log.getGlobalObjectAttributes());
+//        this.addGlobalAttributes(logTag, "log", log.getGlobalLogAttributes());
+//        this.addGlobalAttributes(logTag, "event", log.getGlobalEventAttributes());
+//        this.addGlobalAttributes(logTag, "object", log.getGlobalObjectAttributes());
 //        i$ = log.getClassifiers().iterator();
 //
 //        while(i$.hasNext()) {
@@ -71,7 +71,7 @@ public class OcelXmlSerializer {
 //            }
 //        }
 
-        this.addAttributes(logTag, log.getAttributes().values());
+        //this.addAttributes(logTag, log.getAttributes().values());
 //        i$ = log.iterator();
 //
 //        while(i$.hasNext()) {

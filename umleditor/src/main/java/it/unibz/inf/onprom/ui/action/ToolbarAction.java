@@ -27,6 +27,7 @@
 package it.unibz.inf.onprom.ui.action;
 
 import it.unibz.inf.onprom.interfaces.ActionType;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 /**
  * Abstract class for toolbar actions

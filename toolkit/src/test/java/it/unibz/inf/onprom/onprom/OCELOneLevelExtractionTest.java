@@ -26,6 +26,7 @@
 
 package it.unibz.inf.onprom.onprom;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unibz.inf.onprom.data.query.AnnotationQueries;
 import it.unibz.inf.onprom.logextractor.ocel.OCELLogExtractor;
 import it.unibz.inf.onprom.obdamapper.OBDAMapper;
@@ -78,6 +79,11 @@ public class OCELOneLevelExtractionTest {
         OntopUtility.saveModel(newMapping, generatedMappingsFile);
         // extract log
         OcelLog ocelLog = extractor.extractLog(newMapping, dataSourceProperties);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValue(new File("log.ocel.json"), ocelLog);
+        
+        
         // serialize extracted log
         new OcelXmlGZIPSerializer().serialize(ocelLog, new FileOutputStream(output));
         System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) / 1000 + "s");

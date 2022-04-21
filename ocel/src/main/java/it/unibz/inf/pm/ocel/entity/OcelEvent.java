@@ -33,14 +33,6 @@ public class OcelEvent {
 
     public OcelEvent(String id) {
         this.id = id;
-        this.omap = new ArrayList<>();
-        this.vmap =  new HashMap<>();
-    }
-
-    @Deprecated
-    public OcelEvent() {
-        this.omap = new ArrayList<>();
-        this.vmap = new HashMap<>();
     }
 
     public String getId() {

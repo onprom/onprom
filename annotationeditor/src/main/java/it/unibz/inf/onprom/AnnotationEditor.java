@@ -41,6 +41,7 @@ import it.unibz.inf.onprom.ui.panel.AnnotationDiagramPanel;
 import it.unibz.inf.onprom.ui.utility.*;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -315,8 +316,12 @@ public class AnnotationEditor extends UMLEditor {
     private ToolbarAction getOCELOntologyAction() {
         return new ToolbarAction(new ActionTypeImpl("OCEL Ontology", "OCEL ontology derived from OCEL standard", "ocel-ontology")) {
             @Override
-            public void execute() {
-                loadDefault(OCELLogExtractor.getOntology());
+            public void execute()  {
+                try {
+                    loadDefault(OCELLogExtractor.getOntology());
+                } catch (OWLOntologyCreationException e) {
+                    throw new RuntimeException(e);
+                }
             }
         };
     }
