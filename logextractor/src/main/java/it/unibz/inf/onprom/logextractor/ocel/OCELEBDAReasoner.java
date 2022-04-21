@@ -100,14 +100,43 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
         return attributes;
     }
 
-    public Map<String, OcelEvent> getEvents() {
+   
+
+
+    public Map<String, OcelObject> getObjects() throws Exception {
+        Map<String, OcelObject> objects = new HashMap<>();
+        long start = System.currentTimeMillis();
+        
+        try (OntopOWLStatement st = getStatement();
+            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qObjects)) {
+            logger.info("Finished executing objects query in " + (System.currentTimeMillis() - start) + "ms");
+
+            start = System.currentTimeMillis();
+            while (resultSet.hasNext()) {
+                OWLBindingSet result = resultSet.next();
+                String obj = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarObject).toString();
+                OcelObject object = objects.computeIfAbsent(obj, OcelObject::new);
+
+                if (result.getOWLObject(OCELConstants.qAtt) != null) {
+                    String type = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttType).getLiteral();
+                    String key = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
+                    String value = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
+                    object.getOvmap().put(key, factory.createAttribute(type, key, value));
+                }
+                if (objects.size() % 1000000 == 0) logger.info(objects.size() + " objects added!");
+
+            }
+            logger.info("Finished extracting " + objects.size() + " objects in " + (System.currentTimeMillis() - start) + "ms");
+        }
+
+        return objects;
+    }
+
+    public Map<String, OcelEvent> getEvents() throws Exception {
         Map<String, OcelEvent> events = new HashMap<>();
-        try {
-            OntopOWLStatement st = getStatement();
-
-            long start = System.currentTimeMillis();
-            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEvents);
-
+        long start = System.currentTimeMillis();
+        try (OntopOWLStatement st = getStatement();
+            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEvents)) {
             logger.info("Finished executing events query in " + (System.currentTimeMillis() - start) + "ms");
             start = System.currentTimeMillis();
             while (resultSet.hasNext()) {
@@ -122,52 +151,13 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                     event.getVmap().put(key, factory.createAttribute(type, key, value));
                 }
             }
-            logger.info("Finished extracting " + events.size() + " events in " + (System.currentTimeMillis() - start) + "ms");
-            resultSet.close();
-            st.close();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
+            
         }
-        return events;
-    }
-
-
-    public Map<String, OcelObject> getObjects() throws Exception {
-        Map<String, OcelObject> objects = new HashMap<>();
-        long start = System.currentTimeMillis();
-        OntopOWLStatement st = getStatement();
-        TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qObjects);
-
-        logger.info("Finished executing objects query in " + (System.currentTimeMillis() - start) + "ms");
 
         start = System.currentTimeMillis();
-        while (resultSet.hasNext()) {
-            OWLBindingSet result = resultSet.next();
-            String obj = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarObject).toString();
-            OcelObject object = objects.computeIfAbsent(obj, OcelObject::new);
-
-            if (result.getOWLObject(OCELConstants.qAtt) != null) {
-                String type = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttType).getLiteral();
-                String key = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
-                String value = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
-                object.getOvmap().put(key, factory.createAttribute(type, key, value));
-            }
-            if (objects.size() % 1000000 == 0) logger.info(objects.size() + " objects added!");
-
-        }
-        logger.info("Finished extracting " + objects.size() + " objects in " + (System.currentTimeMillis() - start) + "ms");
-        resultSet.close();
-        st.close();
-        return objects;
-    }
-
-    public Map<String, OcelEvent> getEventsWithObjects() {
-        Map<String, OcelEvent> events = new HashMap<>();
-        try {
+        try (
             OntopOWLStatement st = getStatement();
-
-            long start = System.currentTimeMillis();
-            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithObjects);
+            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithObjects)) {
 
             logger.info("Finished executing events with objects query in " + (System.currentTimeMillis() - start) + "ms");
             start = System.currentTimeMillis();
@@ -175,21 +165,13 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                 OWLBindingSet result = resultSet.next();
                 String evt = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
                 OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
-
-                if (result.getOWLObject(OCELConstants.qAtt) != null) {
-                    String type = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttType).getLiteral();
-                    String key = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
-                    String value = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
-                    event.getOmap().add(value);
-                    event.getVmap().put(key, factory.createAttribute(type, key, value));
-                }
+                String objectId = result.getOWLObject("object").toString();
+                event.getOmap().add(objectId);
             }
-            logger.info("Finished extracting " + events.size() + " events with objects in " + (System.currentTimeMillis() - start) + "ms");
-            resultSet.close();
-            st.close();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
+            //logger.info("Finished extracting " + events.size() + " events with objects in " + (System.currentTimeMillis() - start) + "ms");
         }
+        logger.info("Finished extracting " + events.size() + " events in " + (System.currentTimeMillis() - start) + "ms"); 
+        
         return events;
     }
 

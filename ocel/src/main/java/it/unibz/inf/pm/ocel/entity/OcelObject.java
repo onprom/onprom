@@ -28,9 +28,7 @@ public class OcelObject {
     public OcelObject() {
         this.ovmap = new HashMap<>();
     }
-
-
-
+    
     public String getId() {
         return id;
     }

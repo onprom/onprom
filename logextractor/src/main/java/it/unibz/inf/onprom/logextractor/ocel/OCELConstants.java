@@ -152,8 +152,7 @@ public class OCELConstants {
                     "SELECT distinct * \n" +
                     "WHERE { " +
                     "?event a " + OCEL_EVENT_IRI + " . \n" +
-                    "OPTIONAL { \n" +
-                    "  ?event " + E_CONTAINS_O_ROLE + " ?object } " +
+                    "?event " + E_CONTAINS_O_ROLE + " ?object  " +
                     "}" ;
 
 
