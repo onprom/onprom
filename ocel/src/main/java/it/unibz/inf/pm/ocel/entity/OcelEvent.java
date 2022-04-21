@@ -33,6 +33,8 @@ public class OcelEvent {
 
     public OcelEvent(String id) {
         this.id = id;
+        this.omap = new ArrayList<>();
+        this.vmap = new HashMap<>();
     }
 
     public String getId() {
@@ -63,15 +65,7 @@ public class OcelEvent {
         return omap;
     }
 
-    public void setOmap(List<String> omap) {
-        this.omap = omap;
-    }
-    
     public Map<String, OcelAttribute> getVmap() {
         return vmap;
-    }
-
-    public void setVmap(Map<String, OcelAttribute> vmap) {
-        this.vmap = vmap;
     }
 }
