@@ -1,8 +1,11 @@
 package it.unibz.inf.pm.ocel.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import lombok.Data;
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +13,8 @@ import java.util.Map;
  *
  * an event contains the id, activity, timestamp, omap, and vmap elements.
  */
+
+@Data
 public class OcelEvent {
     @JSONField(name = "ocel:id")
     private String id;
@@ -25,6 +30,18 @@ public class OcelEvent {
 
     @JSONField(name = "ocel:vmap")
     private Map<String, OcelAttribute> vmap;
+
+    public OcelEvent(String id) {
+        this.id = id;
+        this.omap = new ArrayList<>();
+        this.vmap =  new HashMap<>();
+    }
+
+    @Deprecated
+    public OcelEvent() {
+        this.omap = new ArrayList<>();
+        this.vmap = new HashMap<>();
+    }
 
     public String getId() {
         return id;

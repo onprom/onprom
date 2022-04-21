@@ -86,9 +86,10 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
                     logger.info("Initialized reasoner in " + (System.currentTimeMillis() - start) + " ms");
 
                     Map<String, OcelObject> ocelObjects = ebdaR.getObjects();
-                    Map<String, OcelAttribute> attributes = ebdaR.getAttributes();
+//                    Map<String, OcelAttribute> attributes = ebdaR.getAttributes();
                     Map<String, OcelEvent> events = ebdaR.getEvents();
-                    
+                    Map<String, OcelEvent> eventsWithObjects = ebdaR.getEventsWithObjects();
+
                     
                     
                     
@@ -96,7 +97,7 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
                     ebdaR.dispose();
                     OcelLog ocelLog = factory.createLog();
 
-                    factory.addDefaultExtensions(ocelLog);
+//                    factory.addDefaultExtensions(ocelLog);
                     //ocelLog.addAttributes(attributes);
                     ocelLog.addEvents(events);
                     //ocelLog.addObjects(objects);

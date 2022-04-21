@@ -15,8 +15,9 @@ public class OcelObject {
     @JSONField(name = "ocel:type")
     private String type;
 
-    
-//    private Map<String, Object> ovmap; //map with its child elements having a string value type. not required
+
+    @JSONField(name = "ocel:ovmap")
+    private Map<String, OcelAttribute> ovmap; //map with its child elements having a string value type. not required
 
     public OcelObject(String id) {
         this.id = id;
@@ -28,8 +29,7 @@ public class OcelObject {
         this.ovmap = new HashMap<>();
     }
 
-    @JSONField(name = "ocel:ovmap")
-    private Map<String, OcelAttribute> ovmap;
+
 
     public String getId() {
         return id;

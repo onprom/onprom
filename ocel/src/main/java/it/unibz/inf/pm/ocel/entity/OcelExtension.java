@@ -26,8 +26,6 @@
 
 package it.unibz.inf.pm.ocel.entity;
 
-
-
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
@@ -108,8 +106,8 @@ public class OcelExtension implements Serializable {
         return this.name;
     }
 
-//    public void accept(OcelVisitor visitor, OcelLog log) {
-//        visitor.visitExtensionPre(this, log);
-//        visitor.visitExtensionPost(this, log);
-//    }
+    public void accept(OcelVisitor visitor, OcelLog log) {
+        visitor.visitExtensionPre(this, log);
+        visitor.visitExtensionPost(this, log);
+    }
 }

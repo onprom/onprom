@@ -45,9 +45,8 @@ public class OCELConstants {
 //    static final String qTraceAtt_SimpleAnsVarAtt = "att";
 
     static final String qEvtAtt_SimpleAnsVarEvent = "event";
-    static final String qEvtAtt_SimpleAnsVarObject = "obj";
-    static final String qEvtAtt_SimpleAnsVarAtt = "att";
-    static final String qAttTypeKeyVal_SimpleAnsVarAtt = "att";//att
+    static final String qEvtAtt_SimpleAnsVarObject = "object";
+    static final String qAtt = "att";//att
     static final String qAttTypeKeyVal_SimpleAnsVarAttType = "attType";
     static final String qAttTypeKeyVal_SimpleAnsVarAttKey = "attKey";
     static final String qAttTypeKeyVal_SimpleAnsVarAttVal = "attValue";
@@ -56,8 +55,6 @@ public class OCELConstants {
     //Some queries over the event ontology for retrieving the required information for generating OCEL log
 
     //====================================================================================================
-    static final String qEvt_SimpleAnsVarEvent = "event";
-    static final String qEvt_SimpleAnsVarObject = "obj";
 //        private static final String eventOntoPrefix = "http://www.example.com/dolibarr/";
     private static final String eventOntoPrefix = "http://onprom.inf.unibz.it/ocel/";
     //====================================================================================================
@@ -143,15 +140,23 @@ public class OCELConstants {
                     "WHERE { " +
                     "?event a " + OCEL_EVENT_IRI + " . \n" +
                     "OPTIONAL { \n" +
-                    "  ?event " + E_CONTAINS_O_ROLE + " ?object } \n" +
-                    "OPTIONAL { \n" +
                     "  ?event " + E_HAS_A_ROLE + " ?att . \n" +
                     "  ?att a " + ATTRIBUTE_CONCEPT + "; \n" +
                     ATT_TYPE_ATT + " ?attType; \n" +
                     ATT_KEY_ATT + " ?attKey; \n" +
                     ATT_VAL_ATT + " ?attValue  } " +
-                    "" +
                     "}";
+
+    static final String qEventsWithObjects =
+            "PREFIX : <" + eventOntoPrefix + "> \n" +
+                    "SELECT distinct * \n" +
+                    "WHERE { " +
+                    "?event a " + OCEL_EVENT_IRI + " . \n" +
+                    "OPTIONAL { \n" +
+                    "  ?event " + E_CONTAINS_O_ROLE + " ?object } " +
+                    "}" ;
+
+
     
     public static synchronized OWLOntology getDefaultEventOntology() throws OWLOntologyCreationException {
         return OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(

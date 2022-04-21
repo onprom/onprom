@@ -97,7 +97,6 @@ class XESEBDAReasoner extends EBDAReasoner<XAttribute, XEvent, XTrace> {
                     logger.error(e.getMessage());
                 }
             }
-            System.out.println("getAttributes=========="+attributes);
             logger.info("Finished extracting " + attributes.size() + " attributes in " + (System.currentTimeMillis() - start) + "ms");
             resultSet.close();
             st.close();
