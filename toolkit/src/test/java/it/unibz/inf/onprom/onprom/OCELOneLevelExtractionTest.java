@@ -81,7 +81,7 @@ public class OCELOneLevelExtractionTest {
         OcelLog ocelLog = extractor.extractLog(newMapping, dataSourceProperties);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(new File("log.ocel.json"), ocelLog);
+        objectMapper.writeValue(new File("./demo/log.ocel.json"), ocelLog);
         
         
         // serialize extracted log

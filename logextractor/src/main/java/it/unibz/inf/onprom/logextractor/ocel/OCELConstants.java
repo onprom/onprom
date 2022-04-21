@@ -41,11 +41,11 @@ public class OCELConstants {
 
     //Event Ontology location
     static final String eventOntoPath = "/ocel-ontology.owl";
-//    static final String qTraceAtt_SimpleAnsVarTrace = "trace";
-//    static final String qTraceAtt_SimpleAnsVarAtt = "att";
 
     static final String qEvtAtt_SimpleAnsVarEvent = "event";
     static final String qEvtAtt_SimpleAnsVarObject = "object";
+    static final String qEvtAtt_SimpleAnsVarActivity = "activity";
+    static final String qEvtAtt_SimpleAnsVarTimestamp = "timestamp";
     static final String qAtt = "att";//att
     static final String qAttTypeKeyVal_SimpleAnsVarAttType = "attType";
     static final String qAttTypeKeyVal_SimpleAnsVarAttKey = "attKey";
@@ -55,7 +55,6 @@ public class OCELConstants {
     //Some queries over the event ontology for retrieving the required information for generating OCEL log
 
     //====================================================================================================
-//        private static final String eventOntoPrefix = "http://www.example.com/dolibarr/";
     private static final String eventOntoPrefix = "http://onprom.inf.unibz.it/ocel/";
     //====================================================================================================
     private static final String ATTRIBUTE_CONCEPT = "<" + eventOntoPrefix + "Attribute" + ">";
@@ -64,6 +63,8 @@ public class OCELConstants {
 
     private static final String OCEL_OBJECT_IRI = "<" + eventOntoPrefix + "Object" + ">";
     private static final String OCEL_EVENT_IRI = "<" + eventOntoPrefix + "Event" + ">";
+    private static final String OCEL_TIMESTAMP_IRI = "<" + eventOntoPrefix + "timestamp" + ">";
+    private static final String OCEL_ACTIVITY_IRI = "<" + eventOntoPrefix + "activity" + ">";
     // PREFIX : <http://www.example.org/>
     // SELECT Distinct ?event ?obj
     // WHERE {
@@ -160,8 +161,18 @@ public class OCELConstants {
                     "SELECT distinct * \n" +
                     "WHERE { " +
                     "?event a " + OCEL_EVENT_IRI + " . \n" +
-                    "?event <http://onprom.inf.unibz.it/ocel/timestamp> ?timestamp  " +
+                    "?event  "+ OCEL_TIMESTAMP_IRI +" ?timestamp  " +
                     "}" ;
+
+    static final String qEventsWithActivities =
+            "PREFIX : <" + eventOntoPrefix + "> \n" +
+                    "SELECT distinct * \n" +
+                    "WHERE { " +
+                    "?event a " + OCEL_EVENT_IRI + " . \n" +
+                    "?event  "+ OCEL_ACTIVITY_IRI +" ?activity " +
+                    "}" ;
+
+
     
     public static synchronized OWLOntology getDefaultEventOntology() throws OWLOntologyCreationException {
         return OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(

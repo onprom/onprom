@@ -138,6 +138,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
         extractEventsAndAttributes(events);
         extractEventsAndObjects(events);
         extractEventsAndTimestamp(events);
+        extractEventsAndActivity(events);
         logger.info("Finished extracting " + events.size() + " events in " + (System.currentTimeMillis() - start) + "ms");
         return events;
     }
@@ -181,10 +182,23 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
              TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithTimestamps)) {
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
-                String evt = result.getOWLObject("event").toString();
+                String evt = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
                 OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
-                String timestamp = result.getOWLLiteral("timestamp").getLiteral();
+                String timestamp = result.getOWLLiteral(OCELConstants.qEvtAtt_SimpleAnsVarTimestamp).getLiteral();
                 event.setTimestamp(timestamp);
+            }
+        }
+    }
+
+    private void extractEventsAndActivity(Map<String, OcelEvent> events) throws Exception {
+        try (OntopOWLStatement st = getStatement();
+             TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithActivities)) {
+            while (resultSet.hasNext()) {
+                OWLBindingSet result = resultSet.next();
+                String evt = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
+                OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
+                String activity = result.getOWLLiteral(OCELConstants.qEvtAtt_SimpleAnsVarActivity).getLiteral();
+                event.setActivity(activity);
             }
         }
     }
