@@ -64,10 +64,12 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
         OCELEBDAReasoner ebdaR = new OCELEBDAReasoner(ebdaModel, dataSourceProperties, factory);
         ebdaR.printUnfoldedQueries();
         logger.info("Initialized reasoner in " + (System.currentTimeMillis() - start) + " ms");
+        Map<String, Object> globalInfo = ebdaR.getGlobalInfo();
         Map<String, OcelObject> objects = ebdaR.getObjects();
         Map<String, OcelEvent> events = ebdaR.getEvents();
+
         ebdaR.dispose();
-        OcelLog ocelLog = new OcelLog(events, objects);
+        OcelLog ocelLog = new OcelLog(globalInfo,events, objects);
         return ocelLog;
     }
 

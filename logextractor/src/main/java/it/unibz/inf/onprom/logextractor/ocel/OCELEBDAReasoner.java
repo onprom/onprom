@@ -38,7 +38,10 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject> {
     private static final Logger logger = LoggerFactory.getLogger(OCELEBDAReasoner.class);
@@ -77,11 +80,8 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                     String key = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
                     String value = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
                     if (!attributes.containsKey(attributeKey)) {
-//                        XExtension extension = factory.getPredefinedExtension(key);
                         OcelAttribute attribute = factory.createAttribute(type, key, value);
 
-//                        XExtension extension = factory.getPredefinedExtension(key);
-//                        XAttribute attribute = factory.createAttribute(type, key, value, extension);
                         if (attribute != null) {
                             attributes.put(attributeKey, attribute);
                         }
@@ -100,15 +100,12 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
         return attributes;
     }
 
-   
-
-
     public Map<String, OcelObject> getObjects() throws Exception {
         Map<String, OcelObject> objects = new HashMap<>();
         long start = System.currentTimeMillis();
-        
+
         try (OntopOWLStatement st = getStatement();
-            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qObjects)) {
+             TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qObjects)) {
             logger.info("Finished executing objects query in " + (System.currentTimeMillis() - start) + "ms");
 
             start = System.currentTimeMillis();
@@ -143,11 +140,40 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
         return events;
     }
 
-    
+    public Map<String, Object> getGlobalInfo() throws Exception {
+        Map<String, Object> content = new HashMap<>();
+        //init global-log
+        content.put("ocel:version", "1.0");
+        content.put("ocel:attribute-names", new ArrayList<String>() {{
+            add("color");
+            add("costs");
+            add("customer");
+            add("size");
+        }});
+        content.put("ocel:object-types", new ArrayList<String>() {{
+            add("customer");
+            add("item");
+            add("order");
+            add("package");
+            add("produce");
+        }});
+        //init global-event
+        content.put("ocel:global-event", new HashMap<String, String>() {{
+            put("ocel-activity", "__INVALID__");
+        }});
+
+        //init global-object
+        content.put("ocel:global-object", new HashMap<String, String>() {{
+            put("ocel-type", "__INVALID__");
+        }});
+        return content;
+    }
+
+
     private void extractEventsAndObjects(Map<String, OcelEvent> events) throws Exception {
         try (
-            OntopOWLStatement st = getStatement();
-            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithObjects)) {
+                OntopOWLStatement st = getStatement();
+                TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithObjects)) {
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
                 String evt = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
@@ -160,7 +186,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
 
     private void extractEventsAndAttributes(Map<String, OcelEvent> events) throws Exception {
         try (OntopOWLStatement st = getStatement();
-            TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEvents)) {
+             TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEvents)) {
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
                 String evt = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
