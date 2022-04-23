@@ -1,7 +1,7 @@
 package it.unibz.inf.pm.ocel.entity;
 
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -9,14 +9,14 @@ import java.util.Map;
 
 @Data
 public class OcelObject {
-    @JSONField(name = "ocel:id")
+    @JsonProperty("ocel:id")
     private String id;
 
-    @JSONField(name = "ocel:type")
+    @JsonProperty("ocel:type")
     private String type;
 
 
-    @JSONField(name = "ocel:ovmap")
+    @JsonProperty("ocel:ovmap")
     private Map<String, OcelAttribute> ovmap; //map with its child elements having a string value type. not required
 
     public OcelObject(String id) {
@@ -28,7 +28,7 @@ public class OcelObject {
     public OcelObject() {
         this.ovmap = new HashMap<>();
     }
-    
+
     public String getId() {
         return id;
     }
@@ -44,7 +44,7 @@ public class OcelObject {
     public void setType(String type) {
         this.type = type;
     }
-    
+
     public Map<String, OcelAttribute> getOvmap() {
         return ovmap;
     }

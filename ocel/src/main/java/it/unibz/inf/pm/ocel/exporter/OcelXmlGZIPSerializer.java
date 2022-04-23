@@ -1,15 +1,14 @@
 package it.unibz.inf.pm.ocel.exporter;
 
 import it.unibz.inf.pm.ocel.entity.OcelLog;
-import org.deckfour.xes.model.XLog;
+import org.dom4j.DocumentException;
 
 import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class OcelXmlGZIPSerializer extends OcelXmlSerializer{
+public class OcelXmlGZIPSerializer extends OcelXmlSerializer {
 
     public String getDescription() {
         return "OCEL XML Compressed Serialization";
@@ -27,7 +26,7 @@ public class OcelXmlGZIPSerializer extends OcelXmlSerializer{
         return new String[]{"ocel", "ocel.gz"};
     }
 
-    public void serialize(OcelLog log, OutputStream out) throws IOException {
+    public void serialize(OcelLog log, OutputStream out) throws IOException, DocumentException {
         GZIPOutputStream gzos = new GZIPOutputStream(out);
         BufferedOutputStream bos = new BufferedOutputStream(gzos);
         super.serialize(log, bos);

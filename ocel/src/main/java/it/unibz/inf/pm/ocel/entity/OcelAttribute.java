@@ -2,11 +2,20 @@ package it.unibz.inf.pm.ocel.entity;
 
 import java.util.Date;
 
-public class OcelAttribute  {
+public class OcelAttribute {
     private long millis;
     private String key;
     private String value;
     private String type;
+
+    public String getValue() {
+        return value;
+    }
+
+    public String getType() {
+        return type;
+    }
+
     private Date date;
     private OcelExtension extension;
 
@@ -15,8 +24,7 @@ public class OcelAttribute  {
         this.value = value;
     }
 
-    public OcelAttribute (String key, String value, OcelExtension extension)
-    {
+    public OcelAttribute(String key, String value, OcelExtension extension) {
         this.key = key;
         this.value = value;
         this.extension = extension;
@@ -44,7 +52,6 @@ public class OcelAttribute  {
     public String getKey() {
         return key;
     }
-
 
 
 }
