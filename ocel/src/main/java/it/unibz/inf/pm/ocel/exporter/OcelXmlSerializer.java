@@ -47,8 +47,7 @@ public class OcelXmlSerializer {
         int i = str.indexOf(prefix);
         return str.substring(i + prefix.length());
     }
-
-
+    
     public void serialize(OcelLog log, OutputStream out) throws IOException, DocumentException {
         OcelLogging.log("start serializing log to OCEL.XML", OcelLogging.Importance.DEBUG);
         long start = System.currentTimeMillis();
@@ -162,7 +161,6 @@ public class OcelXmlSerializer {
             Element eventOmapList = event.addElement("list");
             eventOmapList.addAttribute("key", "omap");
             eventOmapList.setName("list");
-//            List objectIds = (ArrayList) eventMap.get(stringkey);
             for (Object attr : omap) {
                 Element event_omaplist_string = eventOmapList.addElement("string");
                 event_omaplist_string.addAttribute("key", "object-id");
@@ -182,7 +180,6 @@ public class OcelXmlSerializer {
                 event_vmaplist_string.addAttribute("value", ocelAttribute.getValue());
                 event_vmaplist_string.setName("string");
             }
-
         }
 
         //create <objects> node
@@ -221,7 +218,6 @@ public class OcelXmlSerializer {
         }
 
         try {
-//            File file = new File(output_path);
             OutputFormat format = new OutputFormat("\t", true);
             format.setTrimText(false);
             //format.setLineSeparator("\\r\\n");

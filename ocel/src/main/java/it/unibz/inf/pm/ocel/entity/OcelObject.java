@@ -21,6 +21,13 @@ public class OcelObject {
 
     public OcelObject(String id) {
         this.id = id;
+        this.type = "__INVALID__";
+        this.ovmap = new HashMap<>();
+    }
+
+    public OcelObject(String id, String type) {
+        this.id = id;
+        this.type = type;
         this.ovmap = new HashMap<>();
     }
 

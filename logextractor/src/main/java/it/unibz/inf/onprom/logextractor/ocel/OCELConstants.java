@@ -44,6 +44,7 @@ public class OCELConstants {
 
     static final String qEvtAtt_SimpleAnsVarEvent = "event";
     static final String qEvtAtt_SimpleAnsVarObject = "object";
+    static final String qType_SimpleAnsVarObject = "objectType";
     static final String qEvtAtt_SimpleAnsVarActivity = "activity";
     static final String qEvtAtt_SimpleAnsVarTimestamp = "timestamp";
     static final String qAtt = "att";//att
@@ -65,6 +66,7 @@ public class OCELConstants {
     private static final String OCEL_EVENT_IRI = "<" + eventOntoPrefix + "Event" + ">";
     private static final String OCEL_TIMESTAMP_IRI = "<" + eventOntoPrefix + "timestamp" + ">";
     private static final String OCEL_ACTIVITY_IRI = "<" + eventOntoPrefix + "activity" + ">";
+    private static final String OCEL_OBJECTTYPE_IRI = "<" + eventOntoPrefix + "objectType" + ">";
     // PREFIX : <http://www.example.org/>
     // SELECT Distinct ?event ?obj
     // WHERE {
@@ -154,26 +156,33 @@ public class OCELConstants {
                     "WHERE { " +
                     "?event a " + OCEL_EVENT_IRI + " . \n" +
                     "?event " + E_CONTAINS_O_ROLE + " ?object  " +
-                    "}" ;
+                    "}";
 
     static final String qEventsWithTimestamps =
             "PREFIX : <" + eventOntoPrefix + "> \n" +
                     "SELECT distinct * \n" +
                     "WHERE { " +
                     "?event a " + OCEL_EVENT_IRI + " . \n" +
-                    "?event  "+ OCEL_TIMESTAMP_IRI +" ?timestamp  " +
-                    "}" ;
+                    "?event  " + OCEL_TIMESTAMP_IRI + " ?timestamp  " +
+                    "}";
 
     static final String qEventsWithActivities =
             "PREFIX : <" + eventOntoPrefix + "> \n" +
                     "SELECT distinct * \n" +
                     "WHERE { " +
                     "?event a " + OCEL_EVENT_IRI + " . \n" +
-                    "?event  "+ OCEL_ACTIVITY_IRI +" ?activity " +
-                    "}" ;
+                    "?event  " + OCEL_ACTIVITY_IRI + " ?activity " +
+                    "}";
+
+    static final String qObjectWithType =
+            "PREFIX : <" + eventOntoPrefix + "> \n" +
+                    "SELECT distinct * \n" +
+                    "WHERE { " +
+                    "?object a " + OCEL_OBJECT_IRI + " . \n" +
+                    "?object  " + OCEL_OBJECTTYPE_IRI + " ?objectType " +
+                    "}";
 
 
-    
     public static synchronized OWLOntology getDefaultEventOntology() throws OWLOntologyCreationException {
         return OWLManager.createOWLOntologyManager().loadOntologyFromOntologyDocument(
                 getDefaultEventLogStream());

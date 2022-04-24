@@ -30,17 +30,12 @@ import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
 import it.unibz.inf.pm.ocel.entity.OcelAttribute;
 import it.unibz.inf.pm.ocel.entity.OcelExtension;
-import it.unibz.inf.pm.ocel.entity.OcelLog;
 import org.deckfour.xes.extension.XExtension;
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.extension.std.XLifecycleExtension;
 import org.deckfour.xes.extension.std.XOrganizationalExtension;
 import org.deckfour.xes.extension.std.XTimeExtension;
-import org.deckfour.xes.model.XAttribute;
-import org.deckfour.xes.model.XLog;
-import org.deckfour.xes.model.impl.XLogImpl;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,7 +48,8 @@ public class OCELFactory {
     SimpleDateFormat WITHOUT_T = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat ONLY_DATE = new SimpleDateFormat("yyyy-MM-dd");
 
-    public OCELFactory(){}
+    public OCELFactory() {
+    }
 
     private String intern(String s) {
         return this.useInterner ? this.interner.intern(s) : s;
@@ -98,7 +94,7 @@ public class OCELFactory {
         return null;
     }
 
-    public OcelAttribute createAttribute(String type, String key, String value, OcelExtension extension ) throws ParseException {
+    public OcelAttribute createAttribute(String type, String key, String value, OcelExtension extension) throws ParseException {
 
         if (type != null && key != null && value != null) {
             if (type.equalsIgnoreCase("timestamp")) {
