@@ -252,7 +252,9 @@ public class OBDAMapper {
 
     private String formatTerms(List<ImmutableTerm> terms) {
         //just a temporary solution for null
-        if (terms == null) {terms = new ArrayList<ImmutableTerm>(); }
+        if (terms == null) {
+            terms = new ArrayList<ImmutableTerm>(); 
+        }
         return terms.stream()
                 .map(this::formatTerm)
                 .collect(Collectors.joining("/"));

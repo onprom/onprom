@@ -135,6 +135,7 @@ public class DynamicAnnotation extends Annotation {
 
         logger.info("\tpreparing URI fields");
 
+        // FIXME: check if this is needed!!!!
         uri.add(getVarName());
 
         if (isLabelPartOfIndex) {
@@ -158,6 +159,8 @@ public class DynamicAnnotation extends Annotation {
             }
         });
 
+        // FIXME: check if this is needed!!!!   
+        // isPartOfURI cannot be saved correctly. HACKY!
         relationValues.forEach((key, value) -> {
             value.forEach(dynamicAnnotationAttribute -> {
                 if (dynamicAnnotationAttribute.isPartOfURI()) {
