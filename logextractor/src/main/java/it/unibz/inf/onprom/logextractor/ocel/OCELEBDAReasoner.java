@@ -34,6 +34,8 @@ import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import it.unibz.inf.pm.ocel.entity.OcelAttribute;
 import it.unibz.inf.pm.ocel.entity.OcelEvent;
 import it.unibz.inf.pm.ocel.entity.OcelObject;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +77,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
                 try {
-                    String attributeKey = result.getOWLObject(OCELConstants.qAtt).toString();
+                    String attributeKey = asUnquotedString(result.getOWLObject(OCELConstants.qAtt));
                     String type = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttType).getLiteral();
                     String key = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
                     String value = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
@@ -156,12 +158,16 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                 TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithObjects)) {
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
-                String evt = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
+                String evt = asUnquotedString(result.getOWLObject("object"));
                 OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
-                String objectId = result.getOWLObject("object").toString();
+                String objectId = asUnquotedString(result.getOWLObject("object"));
                 event.getOmap().add(objectId);
             }
         }
+    }
+
+    private String asUnquotedString(OWLObject object) {
+        return ((OWLNamedIndividual)object).getIRI().toString();
     }
 
     private void extractEventsAndAttributes(Map<String, OcelEvent> events) throws Exception {
@@ -169,7 +175,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
              TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEvents)) {
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
-                String evt = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
+                String evt = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent));
                 OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
 
                 if (result.getOWLObject(OCELConstants.qAtt) != null) {
@@ -188,7 +194,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
              TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithTimestamps)) {
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
-                String evt = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
+                String evt = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent));
                 OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
                 String timestamp = result.getOWLLiteral(OCELConstants.qEvtAtt_SimpleAnsVarTimestamp).getLiteral();
                 event.setTimestamp(timestamp);
@@ -201,7 +207,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
              TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithActivities)) {
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
-                String evt = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent).toString();
+                String evt = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent));
                 OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
                 String activity = result.getOWLLiteral(OCELConstants.qEvtAtt_SimpleAnsVarActivity).getLiteral();
                 event.setActivity(activity);
@@ -214,7 +220,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
              TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qObjects)) {
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
-                String obj = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarObject).toString();
+                String obj = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarObject));
                 OcelObject object = objects.computeIfAbsent(obj, OcelObject::new);
 
                 if (result.getOWLObject(OCELConstants.qAtt) != null) {
@@ -232,7 +238,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
              TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qObjectWithType)) {
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
-                String obj = result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarObject).toString();
+                String obj = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarObject));
                 OcelObject object = objects.computeIfAbsent(obj, OcelObject::new);
                 String type = result.getOWLLiteral(OCELConstants.qType_SimpleAnsVarObject).getLiteral();
                 object.setType(type);
