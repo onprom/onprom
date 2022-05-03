@@ -62,7 +62,7 @@ public class OCELOneLevelExtractionTest {
         // prepare output files
         String outputFileName = domainOntologyFile.getParent() + "/" + domainMappingsFile.getName();
         File generatedMappingsFile = new File(outputFileName + "_generated.obda");
-        File output = new File(outputFileName + ".ocel.xml.gz");
+        File output = new File(outputFileName + ".ocel.xml");
         // load mappings
         Properties dataSourceProperties = new Properties();
         dataSourceProperties.load(new FileReader(propertiesFile));
@@ -82,7 +82,7 @@ public class OCELOneLevelExtractionTest {
         OcelLog ocelLog = extractor.extractLog(newMapping, dataSourceProperties);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(new File("./demo/log.ocel.json"), ocelLog);
+        objectMapper.writeValue(new File(outputFileName + ".ocel.json"), ocelLog);
 
         // serialize extracted log
         new OcelXmlGZIPSerializer().serialize(ocelLog, new FileOutputStream(output));

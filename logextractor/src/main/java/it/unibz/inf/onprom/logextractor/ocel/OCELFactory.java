@@ -70,7 +70,6 @@ public class OCELFactory {
 
 
     public OcelAttribute createAttribute(String type, String key, String value) throws ParseException {
-
         if (type != null && key != null && value != null) {
             if (type.equalsIgnoreCase("timestamp")) {
                 // we assume that the timestamp is in format yyyy-[m]m-[d]d hh:mm:ss[.f...].
@@ -86,9 +85,9 @@ public class OCELFactory {
                     }
                 }
                 //return createAttributeTimestamp(key, date);
-                return new OcelAttribute(key, date.toString());
+                return new OcelAttribute(type, key, date.toString());
             } else {
-                return new OcelAttribute(key, value);
+                return new OcelAttribute(type, key, value);
             }
         }
         return null;

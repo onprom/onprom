@@ -2,7 +2,6 @@ package it.unibz.inf.pm.ocel.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
-import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * an event contains the id, activity, timestamp, omap, and vmap elements.
  */
 

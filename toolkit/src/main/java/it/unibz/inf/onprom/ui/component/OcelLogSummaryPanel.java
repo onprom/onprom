@@ -34,6 +34,7 @@ import it.unibz.inf.pm.ocel.entity.OcelLog;
 import it.unibz.inf.pm.ocel.info.OcelAttributeInfo;
 import it.unibz.inf.pm.ocel.info.OcelLogInfo;
 import it.unibz.inf.pm.ocel.info.OcelTimeBounds;
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -172,10 +173,10 @@ public class OcelLogSummaryPanel extends JInternalFrame {
         gridBagConstraints.gridy++;
         gridBagConstraints.gridx = 0;
         //info.getLogTimeBoundaries().getStartDate()
-        panel.add(UIUtility.createLabel("Start: " + log.getObjects().size(), TXT_SIZE), gridBagConstraints);
+        panel.add(UIUtility.createLabel("Start: " + "2013-7-20T15:23:12", TXT_SIZE), gridBagConstraints);
         gridBagConstraints.gridx = 1;
         //info.getLogTimeBoundaries().getEndDate()
-        panel.add(UIUtility.createLabel("End: " + log.getObjects().size(), TXT_SIZE), gridBagConstraints);
+        panel.add(UIUtility.createLabel("End: " + "2020-12-10T12:24:23", TXT_SIZE), gridBagConstraints);
 
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 //        OcelEventClasses eventClasses = info.getEventClasses();
@@ -195,6 +196,7 @@ public class OcelLogSummaryPanel extends JInternalFrame {
         gridBagConstraints.gridy++;
         DefaultListModel<String> listModel = new DefaultListModel<>();
         JList<String> list = new JList<>(listModel);
+        String prefix = "http://onprom.inf.unibz.it/";
         Map<String, OcelEvent> events = log.getEvents();
         Graph graph = new SingleGraph("Events and Objects");
 
@@ -203,27 +205,30 @@ public class OcelLogSummaryPanel extends JInternalFrame {
         graph.setStrict(false);
         graph.display();
 
-
         for (OcelEvent evt : events.values()) {
             StringBuilder eventStr = new StringBuilder();
             String id = evt.getId();
+            id = id.substring(id.indexOf(prefix) + prefix.length());
             String activity = evt.getActivity();
             eventStr.append(activity + " ⇨");
             List<String> omap = evt.getOmap();
             Node node = graph.addNode(id);
             node.setAttribute("ui.class", "marked");
+            node.addAttribute("layout.weight", 10.0f);
             if (omap.size() > 0) {
                 for (String o : omap) {
-                    eventStr.append("  " + o.toString());
-                    graph.addEdge(id + "->" + o, id, o);
+                    String short_o = o.substring(o.indexOf(prefix) + prefix.length());
+                    eventStr.append("  " + short_o);
+                    Edge edge = graph.addEdge(id + "->" + short_o, id, short_o);
+                    edge.setAttribute("layout.weight", 10.0f);
                 }
             }
             listModel.addElement(eventStr.substring(0, eventStr.length() - 1));
         }
 
-//        for (Node node : graph) {
-//            node.setAttribute("ui.label", node.getId());
-//        }
+        for (Node node : graph) {
+            node.setAttribute("ui.label", node.getId());
+        }
 
 //        explore(graph.getNode(startNode));
 
@@ -252,8 +257,10 @@ public class OcelLogSummaryPanel extends JInternalFrame {
     protected String styleSheet = "graph { padding: 50px; fill-color: white; }" +
             "node {" +
             "	fill-color: blue;" +
+            "   size: 10px;" +
             "}" +
             "node.marked {" +
             "	fill-color: red;" +
+            "   size: 18px;" +
             "}";
 }

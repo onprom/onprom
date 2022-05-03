@@ -141,11 +141,15 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
         }});
         //init global-event
         content.put("ocel:global-event", new HashMap<String, String>() {{
+            put("ocel-id", "__INVALID__");
             put("ocel-activity", "__INVALID__");
+            put("ocel-timestamp", "__INVALID__");
+            put("ocel-omap", "__INVALID__");
         }});
 
         //init global-object
         content.put("ocel:global-object", new HashMap<String, String>() {{
+            put("ocel-id", "__INVALID__");
             put("ocel-type", "__INVALID__");
         }});
         return content;
@@ -158,16 +162,16 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                 TupleOWLResultSet resultSet = st.executeSelectQuery(OCELConstants.qEventsWithObjects)) {
             while (resultSet.hasNext()) {
                 OWLBindingSet result = resultSet.next();
-                String evt = asUnquotedString(result.getOWLObject("object"));
+                String evt = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent));
                 OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
-                String objectId = asUnquotedString(result.getOWLObject("object"));
+                String objectId = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarObject));
                 event.getOmap().add(objectId);
             }
         }
     }
 
     private String asUnquotedString(OWLObject object) {
-        return ((OWLNamedIndividual)object).getIRI().toString();
+        return ((OWLNamedIndividual) object).getIRI().toString();
     }
 
     private void extractEventsAndAttributes(Map<String, OcelEvent> events) throws Exception {
