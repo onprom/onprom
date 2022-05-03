@@ -19,7 +19,7 @@ target		:data/customer/{rowid} a :Customer ; :customerId {rowid}^^xsd:string ; :
 source		SELECT * FROM llx_societe
 
 mappingId	OrderInfo
-target		:data/order/{rowid} a :Order ; :orderId {rowid}^^xsd:string ; :orderNo {ref}^^xsd:string ; :orderDate {date_creation}^^xsd:dateTime . 
+target		:data/orders/{rowid} a :Orders ; :orderId {rowid}^^xsd:string ; :orderNo {ref}^^xsd:string ; :orderDate {date_creation}^^xsd:dateTime . 
 source		SELECT * FROM llx_commande where rowid is not null
 
 mappingId	payment
@@ -47,7 +47,7 @@ target		:data/paymentItem/{rowid} :hasInvoice :data/invoice/{fk_facture} .
 source		SELECT rowid, fk_facture FROM llx_paiement_facture
 
 mappingId	createOrder
-target		:data/customer/{fk_soc} :createOrder :data/order/{rowid} ; :orderDate {date_creation}^^xsd:dateTime . 
+target		:data/customer/{fk_soc} :createOrder :data/orders/{rowid} ; :orderDate {date_creation}^^xsd:dateTime . 
 source		SELECT * FROM llx_commande
 
 mappingId	OrderItem
@@ -55,7 +55,7 @@ target		:data/orderItem/{rowid} a :OrderItem ; :orderItemId {rowid}^^xsd:string 
 source		SELECT * FROM llx_commandedet
 
 mappingId	relatedOrder
-target		:data/orderItem/{rowid} :relatedOrder :data/order/{fk_commande} . 
+target		:data/orderItem/{rowid} :relatedOrder :data/orders/{fk_commande} . 
 source		SELECT * FROM llx_commandedet
 
 mappingId	hasProduct

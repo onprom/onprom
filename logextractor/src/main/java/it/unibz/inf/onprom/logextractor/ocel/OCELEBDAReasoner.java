@@ -201,6 +201,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                 String evt = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent));
                 OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
                 String timestamp = result.getOWLLiteral(OCELConstants.qEvtAtt_SimpleAnsVarTimestamp).getLiteral();
+                System.out.println(evt + ",time=" + timestamp);
                 event.setTimestamp(timestamp);
             }
         }
