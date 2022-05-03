@@ -118,11 +118,11 @@ public class DynamicAssociationPanel extends JPanel {
                     if (cmbPath.getSelectedIndex() > -1) {
                         annotation.setPath(cmbPath.getItemAt(cmbPath.getSelectedIndex()));
                     }
-                    annotation.setPartOfURI(chkIndex.isSelected());
                 }
                 selectedAttributes.add(annotation);
             }
         }
+        selectedAttributes.forEach(e -> e.setPartOfURI(chkIndex.isSelected()));
         return selectedAttributes;
     }
 
