@@ -72,7 +72,7 @@ public class OBDAMapper {
 
     private final OWLOntology targetOntology;
     //private final SQLPPMapping obdaModel;
-    
+
     private final List<OntopNativeSQLPPTriplesMap> triplesMaps;
     private final PrefixManager prefixManager;
     private final OntopOWLStatement statement;
@@ -103,7 +103,7 @@ public class OBDAMapper {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        
+
     }
 
     public SQLPPMapping getOBDAModel() {
@@ -175,7 +175,6 @@ public class OBDAMapper {
 
     private void addMapping(BinaryAnnotationQuery annoQ) {
         String[] firstComponent = annoQ.getFirstComponent();
-
         String[] secondComponent = annoQ.getSecondComponent();
         IRI targetURI = annoQ.getTargetIRI();
         String query = annoQ.getQuery();
@@ -253,7 +252,7 @@ public class OBDAMapper {
     private String formatTerms(List<ImmutableTerm> terms) {
         //just a temporary solution for null
         if (terms == null) {
-            terms = new ArrayList<ImmutableTerm>(); 
+            terms = new ArrayList<ImmutableTerm>();
         }
         return terms.stream()
                 .map(this::formatTerm)
@@ -305,6 +304,7 @@ public class OBDAMapper {
     static class OntopReformulationResult {
         String sqlString;
         Map<String, List<ImmutableTerm>> substitution;
+
         public OntopReformulationResult(String sqlString, Map<String, List<ImmutableTerm>> substitution) {
             this.sqlString = sqlString;
             this.substitution = substitution;

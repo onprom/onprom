@@ -178,7 +178,6 @@ public class DynamicAnnotation extends Annotation {
                 queries.add(getRelationQuery(key, dynamicAnnotationAttribute));
             });
         });
-
         return queries;
     }
 

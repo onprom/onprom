@@ -26,6 +26,7 @@ public class OcelLog {
     @JsonIgnore
     private Map<String, OcelAttribute> attributeMap;
 
+    @JsonIgnore
     private List<String> timestamps;
 
 
