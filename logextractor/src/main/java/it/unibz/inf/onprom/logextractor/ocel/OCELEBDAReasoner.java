@@ -40,15 +40,14 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject> {
     private static final Logger logger = LoggerFactory.getLogger(OCELEBDAReasoner.class);
 
     private final OCELFactory factory;
+
+    private List<String> timestamps = new ArrayList<>(); //for sorting all the timestamps
 
     OCELEBDAReasoner(SQLPPMapping obdaModel, Properties dataSourceProperties, OCELFactory factory) throws OWLOntologyCreationException {
         super(obdaModel, dataSourceProperties, OCELConstants.getDefaultEventOntology());
@@ -83,7 +82,6 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                     String value = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
                     if (!attributes.containsKey(attributeKey)) {
                         OcelAttribute attribute = factory.createAttribute(type, key, value);
-
                         if (attribute != null) {
                             attributes.put(attributeKey, attribute);
                         }
@@ -120,6 +118,10 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
         extractEventsAndActivity(events);
         logger.info("Finished extracting " + events.size() + " events in " + (System.currentTimeMillis() - start) + "ms");
         return events;
+    }
+
+    public List<String> getAllTimestamps() {
+        return timestamps;
     }
 
     public Map<String, Object> getGlobalInfo() throws Exception {
@@ -201,6 +203,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                 String evt = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent));
                 OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
                 String timestamp = result.getOWLLiteral(OCELConstants.qEvtAtt_SimpleAnsVarTimestamp).getLiteral();
+                timestamps.add(timestamp);
                 event.setTimestamp(timestamp);
             }
         }

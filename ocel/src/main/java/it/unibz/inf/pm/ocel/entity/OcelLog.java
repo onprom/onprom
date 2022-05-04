@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,8 +26,19 @@ public class OcelLog {
     @JsonIgnore
     private Map<String, OcelAttribute> attributeMap;
 
+    private List<String> timestamps;
+
+
     public OcelLog(Map<String, Object> globalLog, Map<String, OcelEvent> events, Map<String, OcelObject> objects) {
         attributeMap = new HashMap<>();
+        this.globalLog = globalLog;
+        this.events = events;
+        this.objects = objects;
+    }
+
+    public OcelLog(Map<String, Object> globalLog, Map<String, OcelEvent> events, Map<String, OcelObject> objects, List<String> timestamps) {
+        attributeMap = new HashMap<>();
+        this.timestamps = timestamps;
         this.globalLog = globalLog;
         this.events = events;
         this.objects = objects;

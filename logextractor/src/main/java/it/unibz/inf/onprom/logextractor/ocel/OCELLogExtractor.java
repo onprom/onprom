@@ -30,7 +30,6 @@ import it.unibz.inf.onprom.data.query.AnnotationQueries;
 import it.unibz.inf.onprom.logextractor.Extractor;
 import it.unibz.inf.onprom.obdamapper.OBDAMapper;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
-import it.unibz.inf.pm.ocel.entity.OcelAttribute;
 import it.unibz.inf.pm.ocel.entity.OcelEvent;
 import it.unibz.inf.pm.ocel.entity.OcelLog;
 import it.unibz.inf.pm.ocel.entity.OcelObject;
@@ -40,7 +39,7 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -52,6 +51,7 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
                 OCELLogExtractor.class.getResourceAsStream(OCELConstants.eventOntoPath)
         );
     }
+
     public OcelLog extractLog(OWLOntology domainOnto, SQLPPMapping obdaModel, Properties dataSourceProperties, AnnotationQueries firstAnnoQueries, OWLOntology eventOntoVariant, AnnotationQueries secondAnnoQueries) throws Exception {
         SQLPPMapping obdaMapping = new OBDAMapper(domainOnto, eventOntoVariant, obdaModel, dataSourceProperties, firstAnnoQueries).getOBDAModel();
         return extractLog(eventOntoVariant, obdaMapping, dataSourceProperties, secondAnnoQueries);
@@ -67,9 +67,11 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
         Map<String, Object> globalInfo = ebdaR.getGlobalInfo();
         Map<String, OcelObject> objects = ebdaR.getObjects();
         Map<String, OcelEvent> events = ebdaR.getEvents();
+        List<String> allTimestamps = ebdaR.getAllTimestamps();
 
         ebdaR.dispose();
-        OcelLog ocelLog = new OcelLog(globalInfo,events, objects);
+        OcelLog ocelLog = new OcelLog(globalInfo, events, objects, allTimestamps);
+
         return ocelLog;
     }
 

@@ -27,13 +27,8 @@
 package it.unibz.inf.onprom.ui.component;
 
 import it.unibz.inf.onprom.ui.utility.UIUtility;
-import it.unibz.inf.pm.ocel.classification.OcelEventClasses;
-import it.unibz.inf.pm.ocel.classification.OcelEventClassifier;
 import it.unibz.inf.pm.ocel.entity.OcelEvent;
 import it.unibz.inf.pm.ocel.entity.OcelLog;
-import it.unibz.inf.pm.ocel.info.OcelAttributeInfo;
-import it.unibz.inf.pm.ocel.info.OcelLogInfo;
-import it.unibz.inf.pm.ocel.info.OcelTimeBounds;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -45,7 +40,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -74,96 +69,14 @@ public class OcelLogSummaryPanel extends JInternalFrame {
     }
 
     private JPanel createPanel(OcelLog log) {
-        OcelLogInfo info = new OcelLogInfo() {
-            @Override
-            public OcelLog getLog() {
-                return null;
-            }
-
-            @Override
-            public int getNumberOfEvents() {
-                return 0;
-            }
-
-            @Override
-            public int getNumberOfObjects() {
-                return 0;
-            }
-
-            @Override
-            public int getNumberOfTraces() {
-                return 0;
-            }
-
-            @Override
-            public Collection<OcelEventClassifier> getEventClassifiers() {
-                return null;
-            }
-
-            @Override
-            public OcelEventClasses getEventClasses(OcelEventClassifier var1) {
-                return null;
-            }
-
-            @Override
-            public OcelEventClasses getEventClasses() {
-                return null;
-            }
-
-            @Override
-            public OcelEventClasses getResourceClasses() {
-                return null;
-            }
-
-            @Override
-            public OcelEventClasses getNameClasses() {
-                return null;
-            }
-
-            @Override
-            public OcelEventClasses getTransitionClasses() {
-                return null;
-            }
-
-            @Override
-            public OcelTimeBounds getLogTimeBoundaries() {
-                return null;
-            }
-
-            @Override
-            public OcelTimeBounds getEventTimeBoundaries(OcelEvent var1) {
-                return null;
-            }
-
-            @Override
-            public OcelAttributeInfo getLogAttributeInfo() {
-                return null;
-            }
-
-            @Override
-            public OcelAttributeInfo getTraceAttributeInfo() {
-                return null;
-            }
-
-            @Override
-            public OcelAttributeInfo getEventAttributeInfo() {
-                return null;
-            }
-
-            @Override
-            public OcelAttributeInfo getObjectAttributeInfo() {
-                return null;
-            }
-
-            @Override
-            public OcelAttributeInfo getMetaAttributeInfo() {
-                return null;
-            }
-        };
-
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gridBagConstraints = UIUtility.getGridBagConstraints();
+
+        String prefix = "http://onprom.inf.unibz.it/";
+        Map<String, OcelEvent> events = log.getEvents();
+        List<String> timestamps = log.getTimestamps();
+        Collections.sort(timestamps);
 
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridx = 0;
@@ -172,11 +85,9 @@ public class OcelLogSummaryPanel extends JInternalFrame {
         panel.add(UIUtility.createLabel("Number of events: " + log.getEvents().size(), TXT_SIZE), gridBagConstraints);
         gridBagConstraints.gridy++;
         gridBagConstraints.gridx = 0;
-        //info.getLogTimeBoundaries().getStartDate()
-        panel.add(UIUtility.createLabel("Start: " + "2013-7-20T15:23:12", TXT_SIZE), gridBagConstraints);
+        panel.add(UIUtility.createLabel("Start: " + timestamps.get(0), TXT_SIZE), gridBagConstraints);
         gridBagConstraints.gridx = 1;
-        //info.getLogTimeBoundaries().getEndDate()
-        panel.add(UIUtility.createLabel("End: " + "2020-12-10T12:24:23", TXT_SIZE), gridBagConstraints);
+        panel.add(UIUtility.createLabel("End: " + timestamps.get(timestamps.size() - 1), TXT_SIZE), gridBagConstraints);
 
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 //        OcelEventClasses eventClasses = info.getEventClasses();
@@ -196,8 +107,7 @@ public class OcelLogSummaryPanel extends JInternalFrame {
         gridBagConstraints.gridy++;
         DefaultListModel<String> listModel = new DefaultListModel<>();
         JList<String> list = new JList<>(listModel);
-        String prefix = "http://onprom.inf.unibz.it/";
-        Map<String, OcelEvent> events = log.getEvents();
+
         Graph graph = new SingleGraph("Events and Objects");
 
         graph.setAttribute("ui.stylesheet", styleSheet);
