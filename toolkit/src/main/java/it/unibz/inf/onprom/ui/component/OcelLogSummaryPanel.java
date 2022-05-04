@@ -124,13 +124,13 @@ public class OcelLogSummaryPanel extends JInternalFrame {
             List<String> omap = evt.getOmap();
             Node node = graph.addNode(id);
             node.setAttribute("ui.class", "marked");
-            node.addAttribute("layout.weight", 10.0f);
+            node.addAttribute("layout.weight", 25.0f);
             if (omap.size() > 0) {
                 for (String o : omap) {
                     String short_o = o.substring(o.indexOf(prefix) + prefix.length());
                     eventStr.append("  " + short_o);
                     Edge edge = graph.addEdge(id + "->" + short_o, id, short_o);
-                    edge.setAttribute("layout.weight", 10.0f);
+                    edge.setAttribute("layout.weight", 25.0f);
                 }
             }
             listModel.addElement(eventStr.substring(0, eventStr.length() - 1));
@@ -166,11 +166,11 @@ public class OcelLogSummaryPanel extends JInternalFrame {
 
     protected String styleSheet = "graph { padding: 50px; fill-color: white; }" +
             "node {" +
-            "	fill-color: blue;" +
-            "   size: 10px;" +
+            "	fill-color: #0066FF;" +
+            "   size: 15px;" +
             "}" +
             "node.marked {" +
-            "	fill-color: red;" +
-            "   size: 18px;" +
+            "	fill-color: #FF3333;" +
+            "   size: 20px;" +
             "}";
 }
