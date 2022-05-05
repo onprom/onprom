@@ -40,10 +40,8 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Frame showing log summary
@@ -56,7 +54,7 @@ public class OcelLogSummaryPanel extends JInternalFrame {
     private static final Dimension CHART_SIZE = new Dimension(800, 300);
 
     private final OcelLog info;
-
+    private String totalEvent = "";
 
     public OcelLogSummaryPanel(OcelLog info) {
         super("Log Summary", true, true, true, true);
@@ -76,7 +74,8 @@ public class OcelLogSummaryPanel extends JInternalFrame {
         String prefix = "http://onprom.inf.unibz.it/";
         Map<String, OcelEvent> events = log.getEvents();
         List<String> timestamps = log.getTimestamps();
-        Collections.sort(timestamps);
+        Collections.sort(timestamps); // Sort by timestamps in ascending order
+
 
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridx = 0;
@@ -90,12 +89,7 @@ public class OcelLogSummaryPanel extends JInternalFrame {
         panel.add(UIUtility.createLabel("End: " + timestamps.get(timestamps.size() - 1), TXT_SIZE), gridBagConstraints);
 
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-//        OcelEventClasses eventClasses = info.getEventClasses();
-//        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-//        for (int i = 0; i < eventClasses.size(); i++) {
-//            OcelEventClass eventClass = eventClasses.getByIndex(i);
-//            dataset.addValue(eventClass.size(), eventClass.getId(), "");
-//        }
+
         gridBagConstraints.gridy++;
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridwidth = 2;
@@ -108,8 +102,8 @@ public class OcelLogSummaryPanel extends JInternalFrame {
         DefaultListModel<String> listModel = new DefaultListModel<>();
         JList<String> list = new JList<>(listModel);
 
+        //create events and objects graph
         Graph graph = new SingleGraph("Events and Objects");
-
         graph.setAttribute("ui.stylesheet", styleSheet);
         graph.setAutoCreate(true);
         graph.setStrict(false);
@@ -121,6 +115,7 @@ public class OcelLogSummaryPanel extends JInternalFrame {
             id = id.substring(id.indexOf(prefix) + prefix.length());
             String activity = evt.getActivity();
             eventStr.append(activity + " ⇨");
+            totalEvent += activity + " ";
             List<String> omap = evt.getOmap();
             Node node = graph.addNode(id);
             node.setAttribute("ui.class", "marked");
@@ -128,16 +123,23 @@ public class OcelLogSummaryPanel extends JInternalFrame {
             if (omap.size() > 0) {
                 for (String o : omap) {
                     String short_o = o.substring(o.indexOf(prefix) + prefix.length());
-                    eventStr.append("  " + short_o);
+                    eventStr.append(short_o + ", ");
                     Edge edge = graph.addEdge(id + "->" + short_o, id, short_o);
                     edge.setAttribute("layout.weight", 25.0f);
                 }
             }
-            listModel.addElement(eventStr.substring(0, eventStr.length() - 1));
+            listModel.addElement(eventStr.substring(0, eventStr.length() - 2));
         }
 
         for (Node node : graph) {
             node.setAttribute("ui.label", node.getId());
+        }
+
+
+        //Display statistics of events with a bar graph
+        Map<String, Integer> numOfEvents = getEventStatisticsInfo(totalEvent);
+        for (Map.Entry<String, Integer> entry : getEventStatisticsInfo(totalEvent).entrySet()) {
+            dataset.addValue(entry.getValue(), entry.getKey(), "");
         }
 
 //        explore(graph.getNode(startNode));
@@ -155,6 +157,24 @@ public class OcelLogSummaryPanel extends JInternalFrame {
             next.setAttribute("ui.class", "marked");
             sleep();
         }
+    }
+
+    //Count the number of various events
+    private Map<String, Integer> getEventStatisticsInfo(String str) {
+        Map<String, Integer> eventStatistics = new HashMap<>();
+        String[] s = str.split(" ");
+        for (int i = 0; i < s.length; i++) {
+            String key = s[i];
+            if (!"".equals(key)) {
+                Integer num = eventStatistics.get(key);
+                if (num == null || num == 0) {
+                    eventStatistics.put(key, 1);
+                } else if (num > 0) {
+                    eventStatistics.put(key, num + 1);
+                }
+            }
+        }
+        return eventStatistics;
     }
 
     protected void sleep() {

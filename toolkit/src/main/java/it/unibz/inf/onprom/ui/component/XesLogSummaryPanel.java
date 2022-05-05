@@ -109,6 +109,7 @@ public class XesLogSummaryPanel extends JInternalFrame {
             });
             listModel.addElement(events.substring(0, events.length() - 1));
         });
+        
         final JScrollPane jScrollPane = new JScrollPane(list);
         jScrollPane.setPreferredSize(CHART_SIZE);
         panel.add(jScrollPane, gridBagConstraints);
