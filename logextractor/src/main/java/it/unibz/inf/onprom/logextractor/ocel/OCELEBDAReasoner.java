@@ -48,6 +48,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
     private final OCELFactory factory;
 
     private List<String> timestamps = new ArrayList<>(); //for sorting all the timestamps
+    private Set<String> objectTypes = new HashSet<>();   //for getting all the types of objects
 
     OCELEBDAReasoner(SQLPPMapping obdaModel, Properties dataSourceProperties, OCELFactory factory) throws OWLOntologyCreationException {
         super(obdaModel, dataSourceProperties, OCELConstants.getDefaultEventOntology());
@@ -124,6 +125,10 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
         return timestamps;
     }
 
+    public Set<String> getObjectTypes() {
+        return objectTypes;
+    }
+
     public Map<String, Object> getGlobalInfo() throws Exception {
         Map<String, Object> content = new HashMap<>();
         //init global-log
@@ -134,13 +139,14 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
             add("customer");
             add("size");
         }});
-        content.put("ocel:object-types", new ArrayList<String>() {{
-            add("customer");
-            add("item");
-            add("order");
-            add("package");
-            add("produce");
-        }});
+        content.put("ocel:object-types", new ArrayList<String>(objectTypes));
+//        {{
+////            add("customer");
+////            add("item");
+////            add("order");
+////            add("package");
+////            add("produce");
+//        }});
         //init global-event
         content.put("ocel:global-event", new HashMap<String, String>() {{
             put("ocel-id", "__INVALID__");
@@ -248,6 +254,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                 String obj = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarObject));
                 OcelObject object = objects.computeIfAbsent(obj, OcelObject::new);
                 String type = result.getOWLLiteral(OCELConstants.qType_SimpleAnsVarObject).getLiteral();
+                objectTypes.add(type);
                 object.setType(type);
             }
         }

@@ -24,6 +24,9 @@ public class OcelLog {
     private Map<String, OcelObject> objects;
 
     @JsonIgnore
+    private List<String> objectTypes;
+
+    @JsonIgnore
     private Map<String, OcelAttribute> attributeMap;
 
     @JsonIgnore
@@ -40,6 +43,16 @@ public class OcelLog {
     public OcelLog(Map<String, Object> globalLog, Map<String, OcelEvent> events, Map<String, OcelObject> objects, List<String> timestamps) {
         attributeMap = new HashMap<>();
         this.timestamps = timestamps;
+        this.globalLog = globalLog;
+        this.events = events;
+        this.objects = objects;
+    }
+
+    public OcelLog(Map<String, Object> globalLog, Map<String, OcelEvent> events,
+                   Map<String, OcelObject> objects, List<String> timestamps, List<String> objectTypes) {
+        attributeMap = new HashMap<>();
+        this.timestamps = timestamps;
+        this.objectTypes = objectTypes;
         this.globalLog = globalLog;
         this.events = events;
         this.objects = objects;
