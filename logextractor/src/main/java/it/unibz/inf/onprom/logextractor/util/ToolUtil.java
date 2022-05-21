@@ -118,4 +118,10 @@ public class ToolUtil {
         return sResult.toString();
     }
 
+    public static String shortenId(String str) {
+        String prefix = "http://onprom.inf.unibz.it/";
+        int index = str.indexOf(prefix);
+        return str.substring(index + prefix.length());
+    }
+
 }

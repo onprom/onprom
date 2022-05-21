@@ -140,13 +140,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
             add("size");
         }});
         content.put("ocel:object-types", new ArrayList<String>(objectTypes));
-//        {{
-////            add("customer");
-////            add("item");
-////            add("order");
-////            add("package");
-////            add("produce");
-//        }});
+
         //init global-event
         content.put("ocel:global-event", new HashMap<String, String>() {{
             put("ocel-id", "__INVALID__");
@@ -172,8 +166,8 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                 OWLBindingSet result = resultSet.next();
                 String evt = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent));
                 OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
-                String objectId = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarObject));
-                event.getOmap().add(objectId);
+                String object = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarObject));
+                event.getOmap().add(object);
             }
         }
     }
@@ -259,6 +253,4 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
             }
         }
     }
-
-
 }

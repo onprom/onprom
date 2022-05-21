@@ -177,6 +177,9 @@ public class OBDAMapper {
         String[] firstComponent = annoQ.getFirstComponent();
         String[] secondComponent = annoQ.getSecondComponent();
         IRI targetURI = annoQ.getTargetIRI();
+
+        System.out.println("targetURI========" + targetURI);
+
         String query = annoQ.getQuery();
 
         OntopReformulationResult result = reformulate(query);
@@ -204,6 +207,7 @@ public class OBDAMapper {
         String targetQuery = "";
 
         String firstURITemplate = getComponentTemplate(firstComponent, map);
+        System.out.println("firstURITemplate=================" + firstURITemplate);
         StringBuilder secondURITemplate = new StringBuilder(getComponentTemplate(secondComponent, map));
 
 
@@ -234,6 +238,7 @@ public class OBDAMapper {
                     OBDAMappingUtility.cleanURI(firstURITemplate),
                     targetEntity,
                     secondURITemplate);
+            System.out.println("targetQuery=================" + targetQuery);
         }
         if (!query.equals("") &&
                 targetQuery != null && !targetQuery.equals("")) {
@@ -243,6 +248,14 @@ public class OBDAMapper {
     }
 
     private String getComponentTemplate(String[] uriComponent, Map<String, List<ImmutableTerm>> map) {
+        for (String s : uriComponent
+        ) {
+            System.out.print(s + "\t");
+            System.out.println();
+        }
+
+        System.out.println("map--------------------" + map);
+
         return Arrays.stream(uriComponent)
                 .map(map::get)
                 .map(this::formatTerms)
@@ -251,9 +264,9 @@ public class OBDAMapper {
 
     private String formatTerms(List<ImmutableTerm> terms) {
         //just a temporary solution for null
-        if (terms == null) {
-            terms = new ArrayList<ImmutableTerm>();
-        }
+//        if (terms == null) {
+//            terms = new ArrayList<ImmutableTerm>();
+//        }
         return terms.stream()
                 .map(this::formatTerm)
                 .collect(Collectors.joining("/"));

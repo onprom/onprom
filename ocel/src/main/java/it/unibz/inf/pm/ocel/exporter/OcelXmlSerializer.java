@@ -47,7 +47,7 @@ public class OcelXmlSerializer {
         int i = str.indexOf(prefix);
         return str.substring(i + prefix.length());
     }
-    
+
     public void serialize(OcelLog log, OutputStream out) throws IOException, DocumentException {
         OcelLogging.log("start serializing log to OCEL.XML", OcelLogging.Importance.DEBUG);
         long start = System.currentTimeMillis();
@@ -144,7 +144,7 @@ public class OcelXmlSerializer {
             Element eventId = event.addElement("string");
             eventId.setName("string");
             eventId.addAttribute("key", "id");
-            eventId.addAttribute("value", ocelEvent.getId());
+            eventId.addAttribute("value", shortenId(ocelEvent.getId()));
             //write eventActivity
             Element eventActivity = event.addElement("string");
             eventActivity.setName("string");
@@ -164,7 +164,7 @@ public class OcelXmlSerializer {
             for (Object attr : omap) {
                 Element event_omaplist_string = eventOmapList.addElement("string");
                 event_omaplist_string.addAttribute("key", "object-id");
-                event_omaplist_string.addAttribute("value", attr.toString());
+                event_omaplist_string.addAttribute("value", shortenId(attr.toString()));
                 event_omaplist_string.setName("string");
             }
 
@@ -195,7 +195,7 @@ public class OcelXmlSerializer {
             Element objectId = object.addElement("string");
             objectId.setName("string");
             objectId.addAttribute("key", "id");
-            objectId.addAttribute("value", ocelObject.getId());
+            objectId.addAttribute("value", shortenId(ocelObject.getId()));
             //write objectType
             Element objectType = object.addElement("string");
             objectType.setName("string");
@@ -243,6 +243,11 @@ public class OcelXmlSerializer {
         }
     }
 
+    private static String shortenId(String str) {
+        String prefix = "http://onprom.inf.unibz.it/";
+        int index = str.indexOf(prefix);
+        return str.substring(index + prefix.length());
+    }
 
     public String toString() {
         return this.getName();
