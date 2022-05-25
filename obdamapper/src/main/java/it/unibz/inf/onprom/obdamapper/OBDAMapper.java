@@ -178,8 +178,6 @@ public class OBDAMapper {
         String[] secondComponent = annoQ.getSecondComponent();
         IRI targetURI = annoQ.getTargetIRI();
 
-        System.out.println("targetURI========" + targetURI);
-
         String query = annoQ.getQuery();
 
         OntopReformulationResult result = reformulate(query);
@@ -207,9 +205,7 @@ public class OBDAMapper {
         String targetQuery = "";
 
         String firstURITemplate = getComponentTemplate(firstComponent, map);
-        System.out.println("firstURITemplate=================" + firstURITemplate);
         StringBuilder secondURITemplate = new StringBuilder(getComponentTemplate(secondComponent, map));
-
 
         logger.info("firstURITemplate: " + firstURITemplate);
         logger.info("secondURITemplate: " + secondURITemplate);
@@ -238,7 +234,6 @@ public class OBDAMapper {
                     OBDAMappingUtility.cleanURI(firstURITemplate),
                     targetEntity,
                     secondURITemplate);
-            System.out.println("targetQuery=================" + targetQuery);
         }
         if (!query.equals("") &&
                 targetQuery != null && !targetQuery.equals("")) {
@@ -251,10 +246,9 @@ public class OBDAMapper {
         for (String s : uriComponent
         ) {
             System.out.print(s + "\t");
-            System.out.println();
         }
 
-        System.out.println("map--------------------" + map);
+        System.out.println("\n map--------------------" + map);
 
         return Arrays.stream(uriComponent)
                 .map(map::get)
