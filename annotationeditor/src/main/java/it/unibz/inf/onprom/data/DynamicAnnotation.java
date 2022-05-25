@@ -134,10 +134,7 @@ public class DynamicAnnotation extends Annotation {
         uri.clear();
 
         logger.info("\tpreparing URI fields");
-
-        // FIXME: check if this is needed!!!!
-        uri.add(getVarName());
-
+        
         if (isLabelPartOfIndex) {
             String id = "_L_" + hashCode();
             uriFields.put("__label__", ImmutablePair.of(id, getLabel()));
@@ -159,8 +156,10 @@ public class DynamicAnnotation extends Annotation {
             }
         });
 
-        // FIXME: check if this is needed!!!!   
-        // isPartOfURI cannot be saved correctly. HACKY!
+        // FIXME: check if this is needed!!!!
+        uri.add(getVarName());
+        
+        // FIXME: check if this is needed!!!!
         relationValues.forEach((key, value) -> {
             value.forEach(dynamicAnnotationAttribute -> {
                 if (dynamicAnnotationAttribute.isPartOfURI()) {
@@ -178,6 +177,9 @@ public class DynamicAnnotation extends Annotation {
                 queries.add(getRelationQuery(key, dynamicAnnotationAttribute));
             });
         });
+        
+        
+
         return queries;
     }
 

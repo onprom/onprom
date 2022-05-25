@@ -235,21 +235,11 @@ public class OBDAMapper {
                     targetEntity,
                     secondURITemplate);
         }
-        if (!query.equals("") &&
-                targetQuery != null && !targetQuery.equals("")) {
-            this.addMapping(result.sqlString, targetQuery);
-        }
-
+        
+        this.addMapping(result.sqlString, targetQuery);
     }
 
     private String getComponentTemplate(String[] uriComponent, Map<String, List<ImmutableTerm>> map) {
-        for (String s : uriComponent
-        ) {
-            System.out.print(s + "\t");
-        }
-
-        System.out.println("\n map--------------------" + map);
-
         return Arrays.stream(uriComponent)
                 .map(map::get)
                 .map(this::formatTerms)
@@ -280,10 +270,6 @@ public class OBDAMapper {
         String[] uriComponent = annoQ.getComponent();
         IRI targetURI = annoQ.getTargetIRI();
         String query = annoQ.getQuery();
-        if (uriComponent == null || targetURI == null || query == null) {
-            logger.error("invalid input - some inputs contain null value");
-            return;
-        }
 
         OWLEntity targetEntity;
 
@@ -293,7 +279,7 @@ public class OBDAMapper {
         String uriTemplate = getComponentTemplate(uriComponent, map);
         if (uriTemplate.length() == 0) {
             logger.error("something wrong with the answer variables information - skip");
-            return;
+            throw new IllegalStateException();
         }
 
         logger.info("uriTemplate: " + uriTemplate);
@@ -302,10 +288,9 @@ public class OBDAMapper {
 
         String targetQuery = String.format(conceptTripleTemplate,
                 OBDAMappingUtility.cleanURI(uriTemplate), targetEntity);
-
-        if (!query.equals("") && targetQuery != null && !targetQuery.equals("")) {
-            this.addMapping(result.sqlString, targetQuery);
-        }
+        
+        this.addMapping(result.sqlString, targetQuery);
+        
     }
 
     static class OntopReformulationResult {

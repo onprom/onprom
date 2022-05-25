@@ -20,7 +20,7 @@ source		SELECT * FROM llx_societe
 
 mappingId	OrderInfo
 target		:data/order/{rowid} a :Order ; :orderId {rowid}^^xsd:string ; :orderNo {ref}^^xsd:string ; :orderDate {date_creation}^^xsd:dateTime . 
-source		SELECT * FROM llx_commande where rowid is not null
+source		SELECT * FROM llx_commande
 
 mappingId	payment
 target		:data/payment/{rowid} a :Payment ; :paymentId {rowid}^^xsd:string ; :paymentDate {datec}^^xsd:dateTime . 
@@ -47,7 +47,7 @@ target		:data/paymentItem/{rowid} :hasInvoice :data/invoice/{fk_facture} .
 source		SELECT rowid, fk_facture FROM llx_paiement_facture
 
 mappingId	createOrder
-target		:data/customer/{fk_soc} :createOrder :data/order/{rowid} ; :orderDate {date_creation}^^xsd:dateTime . 
+target		:data/customer/{fk_soc} :createOrder :data/order/{rowid} . 
 source		SELECT * FROM llx_commande
 
 mappingId	OrderItem
@@ -60,7 +60,7 @@ source		SELECT * FROM llx_commandedet
 
 mappingId	hasProduct
 target		:data/orderItem/{rowid} :hasProduct :data/product/{fk_product} . 
-source		SELECT rowid, fk_product FROM llx_commandedet where fk_product is not null
+source		SELECT rowid, fk_product FROM llx_commandedet
 
 mappingId	relatedPayment
 target		:data/paymentItem/{rowid} :relatedPayment :data/payment/{fk_paiement} . 
@@ -69,10 +69,6 @@ source		select * from llx_paiement_facture
 mappingId	shipTo
 target		:data/shipment/{rowid} :shipTo :data/customer/{fk_soc} ; :shipmentDate {date_creation}^^xsd:dateTime . 
 source		SELECT * FROM llx_expedition
-
-mappingId	invoiceOf
-target		:data/invoice/{rowid} :invoiceOf :data/order{ref} ; :invoiceDate {datec}^^xsd:dateTime . 
-source		select rowid, ref, datec from llx_facture
 
 mappingId	invoiceTo
 target		:data/invoice/{rowid} :invoiceTo :data/customer/{fk_soc} . 
