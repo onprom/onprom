@@ -73,5 +73,9 @@ source		SELECT * FROM llx_expedition
 mappingId	invoiceTo
 target		:data/invoice/{rowid} :invoiceTo :data/customer/{fk_soc} . 
 source		select * from llx_facture
+
+mappingId	invoiceOf
+target		:data/invoice/{fk_facture} :invoiceOf :data/order/{fk_commande} . 
+source		SELECT fc.fk_facture,cd.fk_commande from llx_facturedet fc,llx_commandedet cd WHERE fc.fk_product = cd.fk_product
 ]]
 
