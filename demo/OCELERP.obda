@@ -11,7 +11,7 @@ onprom:		http://kaos.inf.unibz.it/onprom/
 
 [MappingDeclaration] @collection [[
 mappingId	product
-target		:data/product/{rowid} a :Product ; :productId {rowid}^^xsd:string ; :productName {label}^^xsd:string . 
+target		:data/product/{rowid} a :Product ; :productId {rowid}^^xsd:string ; :productName {ref}^^xsd:string . 
 source		SELECT * FROM llx_product
 
 mappingId	customer
