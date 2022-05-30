@@ -112,7 +112,6 @@ public class OcelLogSummaryPanel extends JInternalFrame {
         for (OcelEvent evt : events.values()) {
             StringBuilder eventStr = new StringBuilder();
             String id = evt.getId();
-            System.out.println("eventId==========" + id);
             id = id.substring(id.indexOf(prefix) + prefix.length());
             String activity = evt.getActivity();
             eventStr.append(id + " ⇨");
@@ -124,7 +123,6 @@ public class OcelLogSummaryPanel extends JInternalFrame {
 
             if (omap.size() > 0) {
                 for (String o : omap) {
-                    System.out.println("objId==========" + o);
                     String short_o = o.substring(o.indexOf(prefix) + prefix.length());
                     eventStr.append(short_o + ", ");
                     Edge edge = graph.addEdge(id + "->" + short_o, id, short_o);
