@@ -30,11 +30,6 @@ import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
 import it.unibz.inf.pm.ocel.entity.OcelAttribute;
 import it.unibz.inf.pm.ocel.entity.OcelExtension;
-import org.deckfour.xes.extension.XExtension;
-import org.deckfour.xes.extension.std.XConceptExtension;
-import org.deckfour.xes.extension.std.XLifecycleExtension;
-import org.deckfour.xes.extension.std.XOrganizationalExtension;
-import org.deckfour.xes.extension.std.XTimeExtension;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -118,38 +113,20 @@ public class OCELFactory {
         return null;
     }
 
-    public XExtension getPredefinedExtension(String key) {
-        if (key != null) {
-            switch (key.toLowerCase()) {
-                case "time:timestamp":
-                    return XTimeExtension.instance();
-                case "concept:name":
-                    return XConceptExtension.instance();
-                case "lifecycle:transition":
-                    return XLifecycleExtension.instance();
-                case "org:resource":
-                    return XOrganizationalExtension.instance();
-            }
-        }
-        return null;
-    }
-
-//    public void addDefaultExtensions(OcelLog ocelLog) {
-//        try {
-//            ocelLog.getGlobalLogAttributes().add(createAttributeLiteral("version", "0.1", null));
-//            ocelLog.getGlobalLogAttributes().add(createAttributeLiteral("ordering", "timestamp", null));
-//            ocelLog.getGlobalLogAttributes().add(createAttributeLiteral("attribute-names", "list", null));
-//
-//            ocelLog.getGlobalEventAttributes().add(createAttributeLiteral("id", "__INVALID__", null));
-//            ocelLog.getGlobalEventAttributes().add(createAttributeLiteral("activity", "__INVALID__", null));
-//            ocelLog.getGlobalEventAttributes().add(createAttributeTimestamp("timestamp", Timestamp.valueOf("1970-01-01 01:00:00").getTime(), null));
-//            ocelLog.getGlobalEventAttributes().add(createAttributeLiteral("omap", "__INVALID__", null));
-//
-//            ocelLog.getGlobalObjectAttributes().add(createAttributeLiteral("id", "__INVALID__", null));
-//            ocelLog.getGlobalObjectAttributes().add(createAttributeLiteral("type", "__INVALID__", null));
-//        } catch (Exception e) {
-//            e.printStackTrace();
+//    public XExtension getPredefinedExtension(String key) {
+//        if (key != null) {
+//            switch (key.toLowerCase()) {
+//                case "time:timestamp":
+//                    return XTimeExtension.instance();
+//                case "concept:name":
+//                    return XConceptExtension.instance();
+//                case "lifecycle:transition":
+//                    return XLifecycleExtension.instance();
+//                case "org:resource":
+//                    return XOrganizationalExtension.instance();
+//            }
 //        }
+//        return null;
 //    }
 
     private OcelAttribute createAttributeTimestamp(String key, Date date, OcelExtension extension) {

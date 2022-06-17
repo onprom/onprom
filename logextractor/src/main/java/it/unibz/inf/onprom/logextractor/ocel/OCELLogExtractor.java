@@ -30,6 +30,7 @@ import it.unibz.inf.onprom.data.query.AnnotationQueries;
 import it.unibz.inf.onprom.logextractor.Extractor;
 import it.unibz.inf.onprom.obdamapper.OBDAMapper;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
+import it.unibz.inf.pm.ocel.entity.OcelAttribute;
 import it.unibz.inf.pm.ocel.entity.OcelEvent;
 import it.unibz.inf.pm.ocel.entity.OcelLog;
 import it.unibz.inf.pm.ocel.entity.OcelObject;
@@ -62,14 +63,14 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
         OCELEBDAReasoner ebdaR = new OCELEBDAReasoner(ebdaModel, dataSourceProperties, factory);
         ebdaR.printUnfoldedQueries();
         logger.info("Initialized reasoner in " + (System.currentTimeMillis() - start) + " ms");
-
+        Map<String, OcelAttribute> attributes = ebdaR.getAttributes();
         Map<String, OcelObject> objects = ebdaR.getObjects();
         Map<String, OcelEvent> events = ebdaR.getEvents();
         List<String> allTimestamps = ebdaR.getAllTimestamps();
         Set<String> objectTypes = ebdaR.getObjectTypes();
         Map<String, Object> globalInfo = ebdaR.getGlobalInfo();
         ebdaR.dispose();
-        OcelLog ocelLog = new OcelLog(globalInfo, events, objects, allTimestamps, new ArrayList<String>(objectTypes));
+        OcelLog ocelLog = new OcelLog(globalInfo, events, objects, attributes, allTimestamps, new ArrayList<String>(objectTypes));
 
         return ocelLog;
     }

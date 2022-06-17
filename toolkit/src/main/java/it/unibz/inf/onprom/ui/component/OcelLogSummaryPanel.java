@@ -76,7 +76,6 @@ public class OcelLogSummaryPanel extends JInternalFrame {
         List<String> timestamps = log.getTimestamps();
         Collections.sort(timestamps); // Sort by timestamps in ascending order
 
-
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridx = 0;
         panel.add(UIUtility.createLabel("Number of objects: " + log.getObjects().size(), TXT_SIZE), gridBagConstraints);
@@ -109,6 +108,8 @@ public class OcelLogSummaryPanel extends JInternalFrame {
         graph.setStrict(false);
         graph.display();
 
+        int relationCount = 0;
+
         for (OcelEvent evt : events.values()) {
             StringBuilder eventStr = new StringBuilder();
             String id = evt.getId();
@@ -126,11 +127,13 @@ public class OcelLogSummaryPanel extends JInternalFrame {
                     String short_o = o.substring(o.indexOf(prefix) + prefix.length());
                     eventStr.append(short_o + ", ");
                     Edge edge = graph.addEdge(id + "->" + short_o, id, short_o);
+                    relationCount++;
                     edge.setAttribute("layout.weight", 25.0f);
                 }
             }
             listModel.addElement(eventStr.substring(0, eventStr.length() - 2));
         }
+        System.out.println("The total number of relations is: " + relationCount);
 
         for (Node node : graph) {
             node.setAttribute("ui.label", node.getId());

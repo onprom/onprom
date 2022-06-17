@@ -87,6 +87,7 @@ public class OCELOneLevelExtractionTest {
         // serialize extracted log
         new OcelXmlGZIPSerializer().serialize(ocelLog, new FileOutputStream(output));
 
-        System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) / 1000 + "s");
+//        System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) / 1000 + "s");
+        System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) + "ms");
     }
 }
