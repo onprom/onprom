@@ -68,9 +68,10 @@ public class OCELLogExtractor implements Extractor<OcelLog> {
         Map<String, OcelEvent> events = ebdaR.getEvents();
         List<String> allTimestamps = ebdaR.getAllTimestamps();
         Set<String> objectTypes = ebdaR.getObjectTypes();
+        Set<String> attributeNames = ebdaR.getAttributeNames();
         Map<String, Object> globalInfo = ebdaR.getGlobalInfo();
         ebdaR.dispose();
-        OcelLog ocelLog = new OcelLog(globalInfo, events, objects, attributes, allTimestamps, new ArrayList<String>(objectTypes));
+        OcelLog ocelLog = new OcelLog(globalInfo, events, objects, attributes, allTimestamps, new ArrayList<String>(objectTypes), new ArrayList<String>(attributeNames));
 
         return ocelLog;
     }

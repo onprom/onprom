@@ -96,7 +96,6 @@ public class OcelXmlSerializer {
 
         //loop for global tag
         Map<String, Object> global_logMap = log.getGlobalLog();
-
         for (String stringkey : global_logMap.keySet()) {
 //            if ((prefix + "version").equals(stringkey)) {
 //                Element global_log_string = global_log.addElement("string");

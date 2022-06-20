@@ -49,6 +49,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
 
     private List<String> timestamps = new ArrayList<>(); //for sorting all the timestamps
     private Set<String> objectTypes = new HashSet<>();   //for getting all the types of objects
+    private Set<String> attributeNames = new HashSet<>();   //for getting all the attributeNames
 
     OCELEBDAReasoner(SQLPPMapping obdaModel, Properties dataSourceProperties, OCELFactory factory) throws OWLOntologyCreationException {
         super(obdaModel, dataSourceProperties, OCELConstants.getDefaultEventOntology());
@@ -81,6 +82,7 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                     String type = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttType).getLiteral();
                     String key = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
                     String value = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttVal).getLiteral();
+                    attributeNames.add(key);
                     if (!attributes.containsKey(attributeKey)) {
                         OcelAttribute attribute = factory.createAttribute(type, key, value);
                         if (attribute != null) {
@@ -129,16 +131,16 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
         return objectTypes;
     }
 
+    public Set<String> getAttributeNames() {
+        return attributeNames;
+    }
+
     public Map<String, Object> getGlobalInfo() throws Exception {
         Map<String, Object> content = new HashMap<>();
         //init global-log
         content.put("ocel:version", "1.0");
-        content.put("ocel:attribute-names", new ArrayList<String>() {{
-            add("color");
-            add("costs");
-            add("customer");
-            add("size");
-        }});
+
+        content.put("ocel:attribute-names", new ArrayList<String>(attributeNames));
         content.put("ocel:object-types", new ArrayList<String>(objectTypes));
 
         //init global-event
@@ -183,7 +185,6 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
                 OWLBindingSet result = resultSet.next();
                 String evt = asUnquotedString(result.getOWLObject(OCELConstants.qEvtAtt_SimpleAnsVarEvent));
                 OcelEvent event = events.computeIfAbsent(evt, OcelEvent::new);
-
                 if (result.getOWLObject(OCELConstants.qAtt) != null) {
                     String type = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttType).getLiteral();
                     String key = result.getOWLLiteral(OCELConstants.qAttTypeKeyVal_SimpleAnsVarAttKey).getLiteral();
