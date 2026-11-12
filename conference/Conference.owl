@@ -64,11 +64,23 @@
     
 
 
+    <!-- http://www.example.org/conference/invitedBy -->
+
+
+    <owl:ObjectProperty rdf:about="http://www.example.org/conference/invitedBy">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.example.org/conference/AdditionalAssignment"/>
+        <rdfs:range rdf:resource="http://www.example.org/conference/Person"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.example.org/conference/leadsTo -->
 
 
     <owl:ObjectProperty rdf:about="http://www.example.org/conference/leadsTo">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
         <rdfs:domain rdf:resource="http://www.example.org/conference/Assignment"/>
         <rdfs:range rdf:resource="http://www.example.org/conference/Review"/>
     </owl:ObjectProperty>
@@ -122,6 +134,7 @@
 
 
     <owl:DatatypeProperty rdf:about="http://www.example.org/conference/accTime">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdfs:domain rdf:resource="http://www.example.org/conference/Paper"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     </owl:DatatypeProperty>
@@ -132,8 +145,31 @@
 
 
     <owl:DatatypeProperty rdf:about="http://www.example.org/conference/accepted">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdfs:domain rdf:resource="http://www.example.org/conference/DecidedPaper"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.example.org/conference/additionalInviteComplete -->
+
+
+    <owl:DatatypeProperty rdf:about="http://www.example.org/conference/additionalInviteComplete">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.example.org/conference/AdditionalAssignment"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.example.org/conference/additionalInviteStart -->
+
+
+    <owl:DatatypeProperty rdf:about="http://www.example.org/conference/additionalInviteStart">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.example.org/conference/AdditionalAssignment"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     </owl:DatatypeProperty>
     
 
@@ -142,6 +178,7 @@
 
 
     <owl:DatatypeProperty rdf:about="http://www.example.org/conference/cName">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdfs:domain rdf:resource="http://www.example.org/conference/Conference"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
@@ -152,6 +189,7 @@
 
 
     <owl:DatatypeProperty rdf:about="http://www.example.org/conference/crTime">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdfs:domain rdf:resource="http://www.example.org/conference/Conference"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     </owl:DatatypeProperty>
@@ -162,6 +200,7 @@
 
 
     <owl:DatatypeProperty rdf:about="http://www.example.org/conference/declTime">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdfs:domain rdf:resource="http://www.example.org/conference/DecidedPaper"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     </owl:DatatypeProperty>
@@ -172,6 +211,7 @@
 
 
     <owl:DatatypeProperty rdf:about="http://www.example.org/conference/invTime">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdfs:domain rdf:resource="http://www.example.org/conference/Paper"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     </owl:DatatypeProperty>
@@ -182,7 +222,19 @@
 
 
     <owl:DatatypeProperty rdf:about="http://www.example.org/conference/pName">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdfs:domain rdf:resource="http://www.example.org/conference/Person"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.example.org/conference/recommendation -->
+
+
+    <owl:DatatypeProperty rdf:about="http://www.example.org/conference/recommendation">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.example.org/conference/Review"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
@@ -192,6 +244,7 @@
 
 
     <owl:DatatypeProperty rdf:about="http://www.example.org/conference/subTime">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdfs:domain rdf:resource="http://www.example.org/conference/Review"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
     </owl:DatatypeProperty>
@@ -202,6 +255,7 @@
 
 
     <owl:DatatypeProperty rdf:about="http://www.example.org/conference/title">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdfs:domain rdf:resource="http://www.example.org/conference/Paper"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
@@ -217,6 +271,34 @@
      -->
 
 
+    
+
+
+    <!-- http://www.example.org/conference/AdditionalAssignment -->
+
+
+    <owl:Class rdf:about="http://www.example.org/conference/AdditionalAssignment">
+        <rdfs:subClassOf rdf:resource="http://www.example.org/conference/Assignment"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.example.org/conference/invitedBy"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.example.org/conference/additionalInviteComplete"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.example.org/conference/additionalInviteStart"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <onprom:coordinates>928,507</onprom:coordinates>
+    </owl:Class>
     
 
 
@@ -267,7 +349,7 @@
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <onprom:coordinates>222,32</onprom:coordinates>
+        <onprom:coordinates>711,157</onprom:coordinates>
     </owl:Class>
     
 
@@ -295,7 +377,7 @@
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <onprom:coordinates>189,507</onprom:coordinates>
+        <onprom:coordinates>303,507</onprom:coordinates>
     </owl:Class>
     
 
@@ -324,11 +406,23 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.example.org/conference/accTime"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.example.org/conference/invTime"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.example.org/conference/title"/>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <onprom:coordinates>190,246</onprom:coordinates>
+        <onprom:coordinates>431,246</onprom:coordinates>
     </owl:Class>
     
 
@@ -343,7 +437,7 @@
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <onprom:coordinates>583,492</onprom:coordinates>
+        <onprom:coordinates>622,467</onprom:coordinates>
     </owl:Class>
     
 
@@ -354,11 +448,27 @@
     <owl:Class rdf:about="http://www.example.org/conference/Review">
         <rdfs:subClassOf>
             <owl:Restriction>
+                <owl:onProperty>
+                    <rdf:Description>
+                        <owl:inverseOf rdf:resource="http://www.example.org/conference/leadsTo"/>
+                    </rdf:Description>
+                </owl:onProperty>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.example.org/conference/recommendation"/>
+                <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.example.org/conference/subTime"/>
                 <owl:someValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <onprom:coordinates>866,117</onprom:coordinates>
+        <onprom:coordinates>1016,357</onprom:coordinates>
     </owl:Class>
 </rdf:RDF>
 

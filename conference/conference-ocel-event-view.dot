@@ -1,0 +1,23 @@
+digraph Events {
+ graph [rankdir=LR, bgcolor=white, pad=.25, nodesep=.45, ranksep=.8, fontname="DejaVu Sans", labelloc=t, fontsize=20, label="Conference model → OCEL 2.0 event view"];
+ node [shape=plain, fontname="DejaVu Sans", fontsize=10]; edge [fontname="DejaVu Sans", fontsize=9, color="#475569", arrowsize=.7];
+ subgraph cluster_domain {label="DOMAIN CONCEPTS / EVENT SOURCES"; style=rounded; color="#64748b"; fontsize=14;
+  Conference [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>Conference</B></TD></TR><TR><TD ALIGN="LEFT">crTime</TD></TR></TABLE>>];
+  Paper [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>Paper</B></TD></TR><TR><TD ALIGN="LEFT">invTime / accTime</TD></TR></TABLE>>];
+  AddAssign [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="5"><TR><TD BGCOLOR="#bfdbfe"><B>AdditionalAssignment</B></TD></TR><TR><TD ALIGN="LEFT">additionalInviteStart</TD></TR><TR><TD ALIGN="LEFT">additionalInviteComplete</TD></TR></TABLE>>];
+  Review [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>Review</B></TD></TR><TR><TD ALIGN="LEFT">subTime</TD></TR><TR><TD ALIGN="LEFT">recommendation</TD></TR></TABLE>>];
+  DecidedPaper [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>DecidedPaper</B></TD></TR><TR><TD ALIGN="LEFT">declTime</TD></TR><TR><TD ALIGN="LEFT">accepted</TD></TR></TABLE>>];
+ }
+ subgraph cluster_event {label="OCEL ACTIVITIES, EVENTS, TIMES AND EVENT ATTRIBUTES"; style=rounded; color="#0e7490"; fontsize=14;
+  events [label=<<TABLE BORDER="1" CELLBORDER="1" CELLPADDING="5" COLOR="#0e7490"><TR><TD COLSPAN="4" BGCOLOR="#cffafe"><B>Activity → Event mapping</B></TD></TR><TR><TD><B>Activity</B></TD><TD><B>Event instance(s)</B></TD><TD><B>Time source</B></TD><TD><B>Event attributes</B></TD></TR><TR><TD>MakeConference</TD><TD>MakeConference</TD><TD>Conference.crTime</TD><TD>—</TD></TR><TR><TD>InviteReviewers</TD><TD>InviteReviewersStart<BR/>InviteReviewersEnd</TD><TD>Paper.invTime<BR/>Paper.accTime</TD><TD>lifecycle=start/end</TD></TR><TR><TD>InviteAdditionalReviewer</TD><TD>InviteAdditionalReviewerStart<BR/>InviteAdditionalReviewerEnd</TD><TD>AdditionalAssignment.additionalInviteStart<BR/>AdditionalAssignment.additionalInviteComplete</TD><TD>lifecycle=start/end</TD></TR><TR><TD>SubmitReview</TD><TD>SubmitReview</TD><TD>Review.subTime</TD><TD>recommendation</TD></TR><TR><TD>NotifyDecision</TD><TD>NotifyDecision</TD><TD>DecidedPaper.declTime</TD><TD>outcome=accept/reject</TD></TR></TABLE>>];
+  wire [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" COLOR="#ca8a04"><TR><TD BGCOLOR="#fef9c3"><B>OCEL event wiring</B></TD></TR><TR><TD>Activity.name; Event.eventId</TD></TR><TR><TD>Event observes → Activity</TD></TR><TR><TD>Activity hasEAttribute → Attribute (key)</TD></TR><TR><TD>Event hasEAttr → EAttrValue</TD></TR><TR><TD>Attribute hasEValue → EAttrValue</TD></TR><TR><TD>Event eventAtTime → Time</TD></TR><TR><TD>EAttrValue.eValue → literal</TD></TR></TABLE>>];
+  lifecycle [shape=note, style=filled, fillcolor="#fefce8", color="#ca8a04", label="Lifecycle values\nInviteReviewers: start / end\nInviteAdditionalReviewer: start / end\n\nSubmitReview recommendation is copied\nfrom Review.recommendation.\nNotifyDecision outcome is derived from\nDecidedPaper.accepted."];
+  omission [shape=note, style=filled, fillcolor="#f1f5f9", color="#64748b", label="No separate Decide event.\nThe accepts/rejects vote counts are omitted.\nThe final outcome is represented by\nNotifyDecision and Paper.decision."];
+  events -> wire [style=invis]; wire -> lifecycle [style=invis]; lifecycle -> omission [style=invis];
+ }
+ Conference -> events [style=dashed, color="#0e7490", label="crTime"];
+ Paper -> events [style=dashed, color="#0e7490", label="invTime / accTime"];
+ AddAssign -> events [style=dashed, color="#0e7490", label="additional invitation timestamps"];
+ Review -> events [style=dashed, color="#0e7490", label="subTime / recommendation"];
+ DecidedPaper -> events [style=dashed, color="#0e7490", label="declTime / accepted"];
+}

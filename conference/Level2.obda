@@ -1,0 +1,1392 @@
+[PrefixDeclaration]
+obda:		https://w3id.org/obda/vocabulary#
+owl:		http://www.w3.org/2002/07/owl#
+log:		http://www.example.com/OCELv2/
+xsd:		http://www.w3.org/2001/XMLSchema#
+rdfs:		http://www.w3.org/2000/01/rdf-schema#
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+onprom:		http://kaos.inf.unibz.it/onprom/
+:		http://www.example.com/dolibarr/
+xml:		http://www.w3.org/XML/1998/namespace
+data:		http://www.example.org/conference/data
+
+[MappingDeclaration] @collection [[
+mappingId	ONPROM_MAPPING_1
+target		:{_L_1269339945}/{_I1_1269339945}/{Review} a log:Activity . 
+source		SELECT  ?Review ("subReviewActivity" AS ?_L_1269339945) ("SubmitReview" AS ?_I1_1269339945)
+			WHERE
+			  { ?Review  a  <http://www.example.org/conference/Review>}
+			
+
+mappingId	ONPROM_MAPPING_2
+target		:{_L_1269339945}/{_I1_1269339945}/{Review} log:name {_I1_1269339945}^^xsd:string . 
+source		SELECT  ?Review ("SubmitReview" AS ?_I1_1269339945) ("subReviewActivity" AS ?_L_1269339945)
+			WHERE
+			  { ?Review  a  <http://www.example.org/conference/Review>}
+			
+
+mappingId	ONPROM_MAPPING_3
+target		:{_L_56112634}/{_I1_56112634}/{Review} log:observes :{_L_1269339945}/{_I1_1269339945}/{Review} . 
+source		SELECT  ?Review ("subReviewActivity" AS ?_L_1269339945) ("SubmitReview" AS ?_I1_1269339945) ("SubmitReview" AS ?_L_56112634) ?_I1_56112634
+			WHERE
+			  { ?Review  a  <http://www.example.org/conference/Review>
+			    BIND(?Review AS ?_I1_56112634)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_4
+target		:{_L_194408994}/{_I1_194408994}/{Person} a log:OAttrValue . 
+source		SELECT  ?Person ("nameValue" AS ?_L_194408994) ?_I1_194408994
+			WHERE
+			  { ?Person  a                     <http://www.example.org/conference/Person> ;
+			             <http://www.example.org/conference/pName>  ?_I1_194408994}
+			
+
+mappingId	ONPROM_MAPPING_5
+target		:{_L_194408994}/{_I1_194408994}/{Person} log:oValue {_I1_194408994}^^xsd:anyURI . 
+source		SELECT  ?Person ?_I1_194408994 ("nameValue" AS ?_L_194408994)
+			WHERE
+			  { ?Person  <http://www.example.org/conference/pName>  ?_I1_194408994}
+			
+
+mappingId	ONPROM_MAPPING_6
+target		:{_L_1067936865}/{_I1_1067936865}/{Person} log:hasOValue :{_L_194408994}/{_I1_194408994}/{Person} . 
+source		SELECT  ?Person ("nameValue" AS ?_L_194408994) ?_I1_194408994 ("nameType" AS ?_L_1067936865) ("pName" AS ?_I1_1067936865)
+			WHERE
+			  { ?Person  a                     <http://www.example.org/conference/Person> ;
+			             <http://www.example.org/conference/pName>  ?_I1_194408994}
+			
+
+mappingId	ONPROM_MAPPING_7
+target		:{_L_1579584742}/{_I1_1579584742}/{Person} log:hasOAttr :{_L_194408994}/{_I1_194408994}/{Person} . 
+source		SELECT  ?Person ("nameValue" AS ?_L_194408994) ?_I1_194408994 ("Person" AS ?_L_1579584742) ?_I1_1579584742
+			WHERE
+			  { ?Person  a                     <http://www.example.org/conference/Person> ;
+			             <http://www.example.org/conference/pName>  ?_I1_194408994
+			    BIND(?Person AS ?_I1_1579584742)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_8
+target		:{_L_1048444228}/{_I1_1048444228}/{Paper} a log:Attribute . 
+source		SELECT  ?Paper ("lifecycleAtt" AS ?_L_1048444228) ("lifecycle" AS ?_I1_1048444228)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_9
+target		:{_L_1048444228}/{_I1_1048444228}/{Paper} log:key {_I1_1048444228}^^xsd:string . 
+source		SELECT  ?Paper ("lifecycle" AS ?_I1_1048444228) ("lifecycleAtt" AS ?_L_1048444228)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_10
+target		:{_L_1159694255}/{_I1_1159694255}/{Paper} log:hasEAttribute :{_L_1048444228}/{_I1_1048444228}/{Paper} . 
+source		SELECT  ?Paper ("lifecycleAtt" AS ?_L_1048444228) ("lifecycle" AS ?_I1_1048444228) ("inviteRevAct" AS ?_L_1159694255) ("InviteReviewers" AS ?_I1_1159694255)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_11
+target		:{_L_1916720513}/{_I1_1916720513}/{Paper} a log:Event . 
+source		SELECT  ?Paper ("InviteReviewersEnd" AS ?_L_1916720513) ?_I1_1916720513
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_1916720513)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_12
+target		:{_L_1916720513}/{_I1_1916720513}/{Paper} log:eventId {_I1_1916720513}^^xsd:string . 
+source		SELECT  ?Paper ?_I1_1916720513 ("InviteReviewersEnd" AS ?_L_1916720513)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_1916720513)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_13
+target		:{_L_950125603}/{_I1_950125603}/{Paper} a log:Object . 
+source		SELECT  ?Paper ("Paper" AS ?_L_950125603) ?_I1_950125603
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_950125603)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_14
+target		:{_L_950125603}/{_I1_950125603}/{Paper} log:objectId {_I1_950125603}^^xsd:string . 
+source		SELECT  ?Paper ?_I1_950125603 ("Paper" AS ?_L_950125603)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_950125603)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_15
+target		:corr/{_L_582819897}/{_I1_582819897}/{Paper}/{_L_950125603}/{_I1_950125603}/{Paper} a log:corr ; log:corr_2_Event :{_L_582819897}/{_I1_582819897}/{Paper} ; log:corr_2_Object :{_L_950125603}/{_I1_950125603}/{Paper} ; log:eQualifier "paper"^^xsd:string . 
+source		SELECT  ?Paper ("Paper" AS ?_L_950125603) ?_I1_950125603 ("InviteReviewersStart" AS ?_L_582819897) ?_I1_582819897
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_950125603)
+			    BIND(?Paper AS ?_I1_582819897)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_16
+target		:corr/{_L_1916720513}/{_I1_1916720513}/{Paper}/{_L_950125603}/{_I1_950125603}/{Paper} a log:corr ; log:corr_2_Event :{_L_1916720513}/{_I1_1916720513}/{Paper} ; log:corr_2_Object :{_L_950125603}/{_I1_950125603}/{Paper}  ; log:eQualifier "paper"^^xsd:string. 
+source		SELECT  ?Paper ("Paper" AS ?_L_950125603) ?_I1_950125603 ("InviteReviewersEnd" AS ?_L_1916720513) ?_I1_1916720513
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_950125603)
+			    BIND(?Paper AS ?_I1_1916720513)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_17
+target		:corr/{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment}/{_L_950125603}/{_I1_950125603}/{Paper} a log:corr ; log:corr_2_Event :{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment} ; log:corr_2_Object :{_L_950125603}/{_I1_950125603}/{Paper} ; log:eQualifier "paper"^^xsd:string. 
+source		SELECT  ?Paper ?AdditionalAssignment ("Paper" AS ?_L_950125603) ?_I1_950125603 ("InviteAdditionalReviewerStart" AS ?_L_1227903899) ?_I1_1227903899
+			WHERE
+			  { ?Paper    <http://www.example.org/conference/assignment>  ?Assignment .
+			    ?Assignment  a                  <http://www.example.org/conference/AdditionalAssignment>
+			    BIND(?Paper AS ?_I1_950125603)
+			    BIND(?AdditionalAssignment AS ?_I1_1227903899)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_18
+target		:corr/{_L_56112634}/{_I1_56112634}/{Review}/{_L_950125603}/{_I1_950125603}/{Paper} a log:corr ; log:corr_2_Event :{_L_56112634}/{_I1_56112634}/{Review} ; log:corr_2_Object :{_L_950125603}/{_I1_950125603}/{Paper} ; log:eQualifier "reviewed-paper"^^xsd:string. 
+source		SELECT  ?Paper ?Review ("Paper" AS ?_L_950125603) ?_I1_950125603 ("SubmitReview" AS ?_L_56112634) ?_I1_56112634
+			WHERE
+			  { ?Paper    <http://www.example.org/conference/assignment>  ?Assignment .
+			    ?Assignment  <http://www.example.org/conference/leadsTo>  ?Review
+			    BIND(?Paper AS ?_I1_950125603)
+			    BIND(?Review AS ?_I1_56112634)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_19
+target		:corr/{_L_1498705150}/{_I1_1498705150}/{DecidedPaper}/{_L_950125603}/{_I1_950125603}/{Paper} a log:corr ; log:corr_2_Event :{_L_1498705150}/{_I1_1498705150}/{DecidedPaper} ; log:corr_2_Object :{_L_950125603}/{_I1_950125603}/{Paper} ; log:eQualifier "decided-paper"^^xsd:string. 
+source		SELECT  ?Paper ?DecidedPaper ("Paper" AS ?_L_950125603) ?_I1_950125603 ("NotifyDecision" AS ?_L_1498705150) ?_I1_1498705150
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?DecidedPaper)
+			    BIND(?Paper AS ?_I1_950125603)
+			    BIND(?DecidedPaper AS ?_I1_1498705150)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_20
+target		:relatedTo/{_L_703232177}/{_I1_703232177}/{Conference}/{_L_950125603}/{_I1_950125603}/{Paper} a log:relatedTo ; log:relatedTo_2_Object :{_L_703232177}/{_I1_703232177}/{Paper} , :{_L_950125603}/{_I1_950125603}/{Conference} ; log:oQualifier "submitted-to"^^xsd:string. 
+source		SELECT  ?Paper ?Conference ("Paper" AS ?_L_950125603) ?_I1_950125603 ("Conference" AS ?_L_703232177) ?_I1_703232177
+			WHERE
+			  { ?Paper  <http://www.example.org/conference/submittedTo>  ?Conference
+			    BIND(?Paper AS ?_I1_950125603)
+			    BIND(?Conference AS ?_I1_703232177)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_21
+target		:relatedTo/{_L_1579584742}/{_I1_1579584742}/{Person}/{_L_950125603}/{_I1_950125603}/{Paper} a log:relatedTo ; log:relatedTo_2_Object :{_L_1579584742}/{_I1_1579584742}/{Paper} , :{_L_950125603}/{_I1_950125603}/{Person} ; log:oQualifier "submitted-by"^^xsd:string. 
+source		SELECT  ?Paper ?Person ("Paper" AS ?_L_950125603) ?_I1_950125603 ("Person" AS ?_L_1579584742) ?_I1_1579584742
+			WHERE
+			  { ?Paper  <http://www.example.org/conference/submittedBy>  ?Person
+			    BIND(?Paper AS ?_I1_950125603)
+			    BIND(?Person AS ?_I1_1579584742)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_22
+target		:relatedTo/{_L_1760443245}/{_I1_1760443245}/{Assignment}/{_L_950125603}/{_I1_950125603}/{Paper} a log:relatedTo ; log:relatedTo_2_Object :{_L_1760443245}/{_I1_1760443245}/{Paper} , :{_L_950125603}/{_I1_950125603}/{Assignment} ; log:oQualifier "has-assignment"^^xsd:string. 
+source		SELECT  ?Paper ?Assignment ("Paper" AS ?_L_950125603) ?_I1_950125603 ("Assignment" AS ?_L_1760443245) ?_I1_1760443245
+			WHERE
+			  { ?Paper  <http://www.example.org/conference/assignment>  ?Assignment
+			    BIND(?Paper AS ?_I1_950125603)
+			    BIND(?Assignment AS ?_I1_1760443245)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_23
+target		:{_L_954937264}/{_I1_954937264}/{AdditionalAssignment} a log:Time . 
+source		SELECT  ?AdditionalAssignment ("addInvEndTime" AS ?_L_954937264) ?_I1_954937264
+			WHERE
+			  { ?AdditionalAssignment
+			              a                     <http://www.example.org/conference/AdditionalAssignment> ;
+			              <http://www.example.org/conference/additionalInviteComplete>  ?_I1_954937264}
+			
+
+mappingId	ONPROM_MAPPING_24
+target		:{_L_954937264}/{_I1_954937264}/{AdditionalAssignment} log:value {_I1_954937264}^^xsd:dateTime . 
+source		SELECT  ?AdditionalAssignment ?_I1_954937264 ("addInvEndTime" AS ?_L_954937264)
+			WHERE
+			  { ?AdditionalAssignment
+			              <http://www.example.org/conference/additionalInviteComplete>  ?_I1_954937264}
+			
+
+mappingId	ONPROM_MAPPING_25
+target		:{_L_1875108260}/{_I1_1875108260}/{AdditionalAssignment} log:eventAtTime :{_L_954937264}/{_I1_954937264}/{AdditionalAssignment} . 
+source		SELECT  ?AdditionalAssignment ("addInvEndTime" AS ?_L_954937264) ?_I1_954937264 ("InviteAdditionalReviewerEnd" AS ?_L_1875108260) ?_I1_1875108260
+			WHERE
+			  { ?AdditionalAssignment
+			              a                     <http://www.example.org/conference/AdditionalAssignment> ;
+			              <http://www.example.org/conference/additionalInviteComplete>  ?_I1_954937264
+			    BIND(?AdditionalAssignment AS ?_I1_1875108260)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_26
+target		:{_L_1538745405}/{_I1_1538745405}/{DecidedPaper} a log:Attribute . 
+source		SELECT  ?DecidedPaper ("outcomeAct" AS ?_L_1538745405) ("outcome" AS ?_I1_1538745405)
+			WHERE
+			  { ?DecidedPaper
+			              a  <http://www.example.org/conference/DecidedPaper>}
+			
+
+mappingId	ONPROM_MAPPING_27
+target		:{_L_1538745405}/{_I1_1538745405}/{DecidedPaper} log:key {_I1_1538745405}^^xsd:string . 
+source		SELECT  ?DecidedPaper ("outcome" AS ?_I1_1538745405) ("outcomeAct" AS ?_L_1538745405)
+			WHERE
+			  { ?DecidedPaper
+			              a  <http://www.example.org/conference/DecidedPaper>}
+			
+
+mappingId	ONPROM_MAPPING_28
+target		:{_L_31906520}/{_I1_31906520}/{DecidedPaper} log:hasEAttribute :{_L_1538745405}/{_I1_1538745405}/{DecidedPaper} . 
+source		SELECT  ?DecidedPaper ("outcomeAct" AS ?_L_1538745405) ("outcome" AS ?_I1_1538745405) ("notifyDecisionAct" AS ?_L_31906520) ("NotifyDecision" AS ?_I1_31906520)
+			WHERE
+			  { ?DecidedPaper
+			              a  <http://www.example.org/conference/DecidedPaper>}
+			
+
+mappingId	ONPROM_MAPPING_29
+target		:{_L_1053856141}/{_I1_1053856141}/{Paper} a log:EAttrValue . 
+source		SELECT  ?Paper ("endLifecycleVal" AS ?_L_1053856141) ("end" AS ?_I1_1053856141)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_30
+target		:{_L_1053856141}/{_I1_1053856141}/{Paper} log:eValue {_I1_1053856141}^^xsd:anyURI . 
+source		SELECT  ?Paper ("end" AS ?_I1_1053856141) ("endLifecycleVal" AS ?_L_1053856141)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_31
+target		:{_L_1048444228}/{_I1_1048444228}/{Paper} log:hasEValue :{_L_1053856141}/{_I1_1053856141}/{Paper} . 
+source		SELECT  ?Paper ("endLifecycleVal" AS ?_L_1053856141) ("end" AS ?_I1_1053856141) ("lifecycleAtt" AS ?_L_1048444228) ("lifecycle" AS ?_I1_1048444228)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_32
+target		:{_L_1916720513}/{_I1_1916720513}/{Paper} log:hasEAttr :{_L_1053856141}/{_I1_1053856141}/{Paper} . 
+source		SELECT  ?Paper ("endLifecycleVal" AS ?_L_1053856141) ("end" AS ?_I1_1053856141) ("InviteReviewersEnd" AS ?_L_1916720513) ?_I1_1916720513
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_1916720513)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_33
+target		:{_L_1579584742}/{_I1_1579584742}/{Person} a log:Object . 
+source		SELECT  ?Person ("Person" AS ?_L_1579584742) ?_I1_1579584742
+			WHERE
+			  { ?Person  a  <http://www.example.org/conference/Person>
+			    BIND(?Person AS ?_I1_1579584742)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_34
+target		:{_L_1579584742}/{_I1_1579584742}/{Person} log:objectId {_I1_1579584742}^^xsd:string . 
+source		SELECT  ?Person ?_I1_1579584742 ("Person" AS ?_L_1579584742)
+			WHERE
+			  { ?Person  a  <http://www.example.org/conference/Person>
+			    BIND(?Person AS ?_I1_1579584742)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_35
+target		:corr/{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment}/{_L_1579584742}/{_I1_1579584742}/{Person} a log:corr ; log:corr_2_Event :{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment} ; log:corr_2_Object :{_L_1579584742}/{_I1_1579584742}/{Person} ; log:eQualifier "invitee"^^xsd:string. 
+source		SELECT  ?Person ?AdditionalAssignment ("Person" AS ?_L_1579584742) ?_I1_1579584742 ("InviteAdditionalReviewerStart" AS ?_L_1227903899) ?_I1_1227903899
+			WHERE
+			  { ?Assignment  <http://www.example.org/conference/assignedTo>  ?Person .
+			    ?Assignment   a                     <http://www.example.org/conference/AdditionalAssignment>
+			    BIND(?Person AS ?_I1_1579584742)
+			    BIND(?AdditionalAssignment AS ?_I1_1227903899)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_36
+target		:corr/{_L_1875108260}/{_I1_1875108260}/{AdditionalAssignment}/{_L_1579584742}/{_I1_1579584742}/{Person} a log:corr ; log:corr_2_Event :{_L_1875108260}/{_I1_1875108260}/{AdditionalAssignment} ; log:corr_2_Object :{_L_1579584742}/{_I1_1579584742}/{Person} ; log:eQualifier "invitee"^^xsd:string. 
+source		SELECT  ?Person ?AdditionalAssignment ("Person" AS ?_L_1579584742) ?_I1_1579584742 ("InviteAdditionalReviewerEnd" AS ?_L_1875108260) ?_I1_1875108260
+			WHERE
+			  { ?Assignment  <http://www.example.org/conference/assignedTo>  ?Person .
+			    ?Assignment   a                     <http://www.example.org/conference/AdditionalAssignment>
+			    BIND(?Person AS ?_I1_1579584742)
+			    BIND(?AdditionalAssignment AS ?_I1_1875108260)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_37
+target		:corr/{_L_56112634}/{_I1_56112634}/{Review}/{_L_1579584742}/{_I1_1579584742}/{Person} a log:corr ; log:corr_2_Event :{_L_56112634}/{_I1_56112634}/{Review} ; log:corr_2_Object :{_L_1579584742}/{_I1_1579584742}/{Person} ; log:eQualifier "reviewer"^^xsd:string. 
+source		SELECT  ?Person ?Review ("Person" AS ?_L_1579584742) ?_I1_1579584742 ("SubmitReview" AS ?_L_56112634) ?_I1_56112634
+			WHERE
+			  { ?Assignment  <http://www.example.org/conference/assignedTo>  ?Person ;
+			              <http://www.example.org/conference/leadsTo>  ?Review
+			    BIND(?Person AS ?_I1_1579584742)
+			    BIND(?Review AS ?_I1_56112634)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_38
+target		:corr/{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment}/{_L_1579584742}/{_I1_1579584742}/{Person} a log:corr ; log:corr_2_Event :{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment} ; log:corr_2_Object :{_L_1579584742}/{_I1_1579584742}/{Person} ; log:eQualifier "inviter"^^xsd:string. 
+source		SELECT  ?Person ?AdditionalAssignment ("Person" AS ?_L_1579584742) ?_I1_1579584742 ("InviteAdditionalReviewerStart" AS ?_L_1227903899) ?_I1_1227903899
+			WHERE
+			  { ?AdditionalAssignment
+			              <http://www.example.org/conference/invitedBy>  ?Person
+			    BIND(?Person AS ?_I1_1579584742)
+			    BIND(?AdditionalAssignment AS ?_I1_1227903899)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_39
+target		:corr/{_L_1875108260}/{_I1_1875108260}/{AdditionalAssignment}/{_L_1579584742}/{_I1_1579584742}/{Person} a log:corr ; log:corr_2_Event :{_L_1875108260}/{_I1_1875108260}/{AdditionalAssignment} ; log:corr_2_Object :{_L_1579584742}/{_I1_1579584742}/{Person} ; log:eQualifier "inviter"^^xsd:string. 
+source		SELECT  ?Person ?AdditionalAssignment ("Person" AS ?_L_1579584742) ?_I1_1579584742 ("InviteAdditionalReviewerEnd" AS ?_L_1875108260) ?_I1_1875108260
+			WHERE
+			  { ?AdditionalAssignment
+			              <http://www.example.org/conference/invitedBy>  ?Person
+			    BIND(?Person AS ?_I1_1579584742)
+			    BIND(?AdditionalAssignment AS ?_I1_1875108260)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_40
+target		:corr/{_L_1498705150}/{_I1_1498705150}/{DecidedPaper}/{_L_1579584742}/{_I1_1579584742}/{Person} a log:corr ; log:corr_2_Event :{_L_1498705150}/{_I1_1498705150}/{DecidedPaper} ; log:corr_2_Object :{_L_1579584742}/{_I1_1579584742}/{Person} ; log:eQualifier "notifier"^^xsd:string. 
+source		SELECT  ?Person ?DecidedPaper ("Person" AS ?_L_1579584742) ?_I1_1579584742 ("NotifyDecision" AS ?_L_1498705150) ?_I1_1498705150
+			WHERE
+			  { ?DecidedPaper
+			              <http://www.example.org/conference/notifiedBy>  ?Person
+			    BIND(?Person AS ?_I1_1579584742)
+			    BIND(?DecidedPaper AS ?_I1_1498705150)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_41
+target		:{_L_1668385683}/{_I1_1668385683}/{Conference} a log:OAttribute . 
+source		SELECT  ?Conference ("nameType" AS ?_L_1668385683) ("confName" AS ?_I1_1668385683)
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>}
+			
+
+mappingId	ONPROM_MAPPING_42
+target		:{_L_1668385683}/{_I1_1668385683}/{Conference} log:oKey {_I1_1668385683}^^xsd:string . 
+source		SELECT  ?Conference ("confName" AS ?_I1_1668385683) ("nameType" AS ?_L_1668385683)
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>}
+			
+
+mappingId	ONPROM_MAPPING_43
+target		:{_I0_761229698}/{Conference} log:hasOAttribute :{_L_1668385683}/{_I1_1668385683}/{Conference} . 
+source		SELECT  ?Conference ("nameType" AS ?_L_1668385683) ("confName" AS ?_I1_1668385683) ("Conference" AS ?_I0_761229698)
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>}
+			
+
+mappingId	ONPROM_MAPPING_44
+target		:{_I0_1630968203}/{Conference} a log:Time . 
+source		SELECT  ?Conference ?_I0_1630968203
+			WHERE
+			  { ?Conference  a                  <http://www.example.org/conference/Conference> ;
+			              <http://www.example.org/conference/crTime>  ?_I0_1630968203}
+			
+
+mappingId	ONPROM_MAPPING_45
+target		:{_I0_1630968203}/{Conference} log:value {_I0_1630968203}^^xsd:dateTime . 
+source		SELECT  ?Conference ?_I0_1630968203
+			WHERE
+			  { ?Conference  <http://www.example.org/conference/crTime>  ?_I0_1630968203}
+			
+
+mappingId	ONPROM_MAPPING_46
+target		:{_L_1740797856}/{_I1_1740797856}/{Conference} log:eventAtTime :{_I0_1630968203}/{Conference} . 
+source		SELECT  ?Conference ?_I0_1630968203 ("MakeConference" AS ?_L_1740797856) ?_I1_1740797856
+			WHERE
+			  { ?Conference  a                  <http://www.example.org/conference/Conference> ;
+			              <http://www.example.org/conference/crTime>  ?_I0_1630968203
+			    BIND(?Conference AS ?_I1_1740797856)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_47
+target		:{_I0_193625667}/{Conference} a log:Activity . 
+source		SELECT  ?Conference ("MakeConference" AS ?_I0_193625667)
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>}
+			
+
+mappingId	ONPROM_MAPPING_48
+target		:{_I0_193625667}/{Conference} log:name {_I0_193625667}^^xsd:string . 
+source		SELECT  ?Conference ("MakeConference" AS ?_I0_193625667)
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>}
+			
+
+mappingId	ONPROM_MAPPING_49
+target		:{_L_1740797856}/{_I1_1740797856}/{Conference} log:observes :{_I0_193625667}/{Conference} . 
+source		SELECT  ?Conference ("MakeConference" AS ?_I0_193625667) ("MakeConference" AS ?_L_1740797856) ?_I1_1740797856
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>
+			    BIND(?Conference AS ?_I1_1740797856)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_50
+target		:{_L_56112634}/{_I1_56112634}/{Review} a log:Event . 
+source		SELECT  ?Review ("SubmitReview" AS ?_L_56112634) ?_I1_56112634
+			WHERE
+			  { ?Review  a  <http://www.example.org/conference/Review>
+			    BIND(?Review AS ?_I1_56112634)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_51
+target		:{_L_56112634}/{_I1_56112634}/{Review} log:eventId {_I1_56112634}^^xsd:string . 
+source		SELECT  ?Review ?_I1_56112634 ("SubmitReview" AS ?_L_56112634)
+			WHERE
+			  { ?Review  a  <http://www.example.org/conference/Review>
+			    BIND(?Review AS ?_I1_56112634)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_52
+target		data:eventOutcome/{DecidedPaper} a log:EAttrValue . 
+source		SELECT  ?DecidedPaper ("outcomeVal" AS ?_L_707250996) (IF(?accepted, "accept", "reject") AS ?_I1_707250996)
+			WHERE
+			  { ?DecidedPaper
+			              a                     <http://www.example.org/conference/DecidedPaper> ;
+			              <http://www.example.org/conference/accepted>  ?accepted}
+			
+
+mappingId	ONPROM_MAPPING_53
+target		:{_L_707250996}/{_I1_707250996}/{DecidedPaper} log:eValue {_I1_707250996}^^xsd:anyURI . 
+source		SELECT  ?DecidedPaper (IF(?accepted, "accept", "reject") AS ?_I1_707250996) ("outcomeVal" AS ?_L_707250996)
+			WHERE
+			  { ?DecidedPaper
+			              <http://www.example.org/conference/accepted>  ?accepted}
+			
+
+mappingId	ONPROM_MAPPING_54
+target		:{_L_1538745405}/{_I1_1538745405}/{DecidedPaper} log:hasEValue :{_L_707250996}/{_I1_707250996}/{DecidedPaper} . 
+source		SELECT  ?DecidedPaper ("outcomeVal" AS ?_L_707250996) (IF(?accepted, "accept", "reject") AS ?_I1_707250996) ("outcomeAct" AS ?_L_1538745405) ("outcome" AS ?_I1_1538745405)
+			WHERE
+			  { ?DecidedPaper
+			              a                     <http://www.example.org/conference/DecidedPaper> ;
+			              <http://www.example.org/conference/accepted>  ?accepted}
+			
+
+mappingId	ONPROM_MAPPING_55
+target		:{_L_1498705150}/{_I1_1498705150}/{DecidedPaper} log:hasEAttr :{_L_707250996}/{_I1_707250996}/{DecidedPaper} . 
+source		SELECT  ?DecidedPaper ("outcomeVal" AS ?_L_707250996) ?_I1_707250996 ("NotifyDecision" AS ?_L_1498705150) ?_I1_1498705150
+			WHERE
+			  { ?DecidedPaper
+			              a                     <http://www.example.org/conference/DecidedPaper> ;
+			              <http://www.example.org/conference/accepted>  ?_I1_707250996
+			    BIND(?DecidedPaper AS ?_I1_1498705150)
+			  }
+			
+
+mappingId decisionInitialState
+target data:decisionValue/{Paper}/deciding a log:OAttrValue ;
+        log:oValue "deciding"^^xsd:anyURI .
+    :{_L_2066945445}/{_I1_2066945445}/{Paper}
+        log:hasOValue data:decisionValue/{Paper}/deciding .
+    :{_L_1181205697}/{_I1_1181205697}/{Paper}
+        log:hasOAttr data:decisionValue/{Paper}/deciding .
+    data:decisionValue/{Paper}/deciding
+        log:attrAtTime :{_I0_1624355359}/{Paper} .
+source SELECT ?Paper ?_I0_1624355359
+        ("decType" AS ?_L_2066945445)
+        ("decision" AS ?_I1_2066945445)
+        ("Paper" AS ?_L_1181205697)
+        (?Paper AS ?_I1_1181205697)
+    WHERE {
+        ?Paper a <http://www.example.org/conference/Paper> ;
+               <http://www.example.org/conference/accTime>
+                   ?_I0_1624355359 .
+    }
+
+mappingId decisionFinalState
+target data:decisionValue/{Paper}/final a log:OAttrValue ;
+        log:oValue {_decisionValue}^^xsd:anyURI .
+    :{_L_2066945445}/{_I1_2066945445}/{Paper}
+        log:hasOValue data:decisionValue/{Paper}/final .
+    :{_L_1181205697}/{_I1_1181205697}/{Paper}
+        log:hasOAttr data:decisionValue/{Paper}/final .
+    data:decisionValue/{Paper}/final
+        log:attrAtTime :{_I0_2126664214}/{DecidedPaper}/{Paper} .
+source SELECT ?DecidedPaper
+        (?DecidedPaper AS ?Paper)
+        ?_I0_2126664214
+        (IF(?accepted, "accept", "reject") AS ?_decisionValue)
+        ("decType" AS ?_L_2066945445)
+        ("decision" AS ?_I1_2066945445)
+        ("Paper" AS ?_L_1181205697)
+        (?DecidedPaper AS ?_I1_1181205697)
+    WHERE {
+        ?DecidedPaper
+            a <http://www.example.org/conference/DecidedPaper> ;
+            <http://www.example.org/conference/accepted>
+                ?accepted ;
+            <http://www.example.org/conference/declTime>
+                ?_I0_2126664214 .
+    }
+			
+
+mappingId	ONPROM_MAPPING_60
+target		:{_I0_1311315651}/{Person} a log:Type . 
+source		SELECT  ?Person ("Person" AS ?_I0_1311315651)
+			WHERE
+			  { ?Person  a  <http://www.example.org/conference/Person>}
+			
+
+mappingId	ONPROM_MAPPING_61
+target		:{_I0_1311315651}/{Person} log:typeString {_I0_1311315651}^^xsd:string . 
+source		SELECT  ?Person ("Person" AS ?_I0_1311315651)
+			WHERE
+			  { ?Person  a  <http://www.example.org/conference/Person>}
+			
+
+mappingId	ONPROM_MAPPING_62
+target		:{_L_1579584742}/{_I1_1579584742}/{Person} log:has :{_I0_1311315651}/{Person} . 
+source		SELECT  ?Person ("Person" AS ?_I0_1311315651) ("Person" AS ?_L_1579584742) ?_I1_1579584742
+			WHERE
+			  { ?Person  a  <http://www.example.org/conference/Person>
+			    BIND(?Person AS ?_I1_1579584742)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_63
+target		:{_I0_1624355359}/{Paper} a log:Time . 
+source		SELECT  ?Paper ?_I0_1624355359
+			WHERE
+			  { ?Paper  a                     <http://www.example.org/conference/Paper> ;
+			            <http://www.example.org/conference/accTime>  ?_I0_1624355359}
+			
+
+mappingId	ONPROM_MAPPING_64
+target		:{_I0_1624355359}/{Paper} log:value {_I0_1624355359}^^xsd:dateTime . 
+source		SELECT  ?Paper ?_I0_1624355359
+			WHERE
+			  { ?Paper  <http://www.example.org/conference/accTime>  ?_I0_1624355359}
+
+mappingId	ONPROM_MAPPING_66
+target		:{_L_1916720513}/{_I1_1916720513}/{Paper} log:eventAtTime :{_I0_1624355359}/{Paper} . 
+source		SELECT  ?Paper ?_I0_1624355359 ("InviteReviewersEnd" AS ?_L_1916720513) ?_I1_1916720513
+			WHERE
+			  { ?Paper  a                     <http://www.example.org/conference/Paper> ;
+			            <http://www.example.org/conference/accTime>  ?_I0_1624355359
+			    BIND(?Paper AS ?_I1_1916720513)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_67
+target		:{_I0_1415979460}/{Assignment} a log:Type . 
+source		SELECT  ?Assignment ("Assignment" AS ?_I0_1415979460)
+			WHERE
+			  { ?Assignment  a  <http://www.example.org/conference/Assignment>}
+			
+
+mappingId	ONPROM_MAPPING_68
+target		:{_I0_1415979460}/{Assignment} log:typeString {_I0_1415979460}^^xsd:string . 
+source		SELECT  ?Assignment ("Assignment" AS ?_I0_1415979460)
+			WHERE
+			  { ?Assignment  a  <http://www.example.org/conference/Assignment>}
+			
+
+mappingId	ONPROM_MAPPING_69
+target		:{_L_1760443245}/{_I1_1760443245}/{Assignment} log:has :{_I0_1415979460}/{Assignment} . 
+source		SELECT  ?Assignment ("Assignment" AS ?_I0_1415979460) ("Assignment" AS ?_L_1760443245) ?_I1_1760443245
+			WHERE
+			  { ?Assignment  a  <http://www.example.org/conference/Assignment>
+			    BIND(?Assignment AS ?_I1_1760443245)
+			  }
+
+mappingId	ONPROM_MAPPING_71
+target		:{_L_255041198}/{_I1_255041198}/{Conference} log:oKey {_I1_255041198}^^xsd:string . 
+source		SELECT  ?Conference ("createdAt" AS ?_I1_255041198) ("createdAtType" AS ?_L_255041198)
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>}
+			
+			
+
+mappingId	ONPROM_MAPPING_73
+target		:{_L_1846568576}/{_I1_1846568576}/{AdditionalAssignment} a log:EAttrValue . 
+source		SELECT  ?AdditionalAssignment ("startLifecycleVal" AS ?_L_1846568576) ("start" AS ?_I1_1846568576)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>}
+			
+
+mappingId	ONPROM_MAPPING_74
+target		:{_L_1846568576}/{_I1_1846568576}/{AdditionalAssignment} log:eValue {_I1_1846568576}^^xsd:anyURI . 
+source		SELECT  ?AdditionalAssignment ("start" AS ?_I1_1846568576) ("startLifecycleVal" AS ?_L_1846568576)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>}
+			
+
+mappingId	ONPROM_MAPPING_75
+target		:{_L_1479100519}/{_I1_1479100519}/{AdditionalAssignment} log:hasEValue :{_L_1846568576}/{_I1_1846568576}/{AdditionalAssignment} . 
+source		SELECT  ?AdditionalAssignment ("startLifecycleVal" AS ?_L_1846568576) ("start" AS ?_I1_1846568576) ("lifecycleAtt" AS ?_L_1479100519) ("lifecycle" AS ?_I1_1479100519)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>}
+			
+
+mappingId	ONPROM_MAPPING_76
+target		:{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment} log:hasEAttr :{_L_1846568576}/{_I1_1846568576}/{AdditionalAssignment} . 
+source		SELECT  ?AdditionalAssignment ("startLifecycleVal" AS ?_L_1846568576) ("start" AS ?_I1_1846568576) ("InviteAdditionalReviewerStart" AS ?_L_1227903899) ?_I1_1227903899
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>
+			    BIND(?AdditionalAssignment AS ?_I1_1227903899)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_77
+target		:{_L_1441577726}/{_I1_1441577726}/{Paper} a log:Time . 
+source		SELECT  ?Paper ("invSendTime" AS ?_L_1441577726) ?_I1_1441577726
+			WHERE
+			  { ?Paper  a                     <http://www.example.org/conference/Paper> ;
+			            <http://www.example.org/conference/invTime>  ?_I1_1441577726}
+			
+
+mappingId	ONPROM_MAPPING_78
+target		:{_L_1441577726}/{_I1_1441577726}/{Paper} log:value {_I1_1441577726}^^xsd:dateTime . 
+source		SELECT  ?Paper ?_I1_1441577726 ("invSendTime" AS ?_L_1441577726)
+			WHERE
+			  { ?Paper  <http://www.example.org/conference/invTime>  ?_I1_1441577726}
+			
+
+mappingId	ONPROM_MAPPING_79
+target		:{_L_582819897}/{_I1_582819897}/{Paper} log:eventAtTime :{_L_1441577726}/{_I1_1441577726}/{Paper} . 
+source		SELECT  ?Paper ("invSendTime" AS ?_L_1441577726) ?_I1_1441577726 ("InviteReviewersStart" AS ?_L_582819897) ?_I1_582819897
+			WHERE
+			  { ?Paper  a                     <http://www.example.org/conference/Paper> ;
+			            <http://www.example.org/conference/invTime>  ?_I1_1441577726
+			    BIND(?Paper AS ?_I1_582819897)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_80
+target		:{_L_1019009267}/{_I1_1019009267}/{Conference} a log:OAttrValue . 
+source		SELECT  ?Conference ("nameValue" AS ?_L_1019009267) ?_I1_1019009267
+			WHERE
+			  { ?Conference  a                  <http://www.example.org/conference/Conference> ;
+			              <http://www.example.org/conference/cName>  ?_I1_1019009267}
+			
+
+mappingId	ONPROM_MAPPING_81
+target		:{_L_1019009267}/{_I1_1019009267}/{Conference} log:oValue {_I1_1019009267}^^xsd:anyURI . 
+source		SELECT  ?Conference ?_I1_1019009267 ("nameValue" AS ?_L_1019009267)
+			WHERE
+			  { ?Conference  <http://www.example.org/conference/cName>  ?_I1_1019009267}
+			
+
+mappingId	ONPROM_MAPPING_82
+target		:{_L_703232177}/{_I1_703232177}/{Conference} log:hasOAttr :{_L_1019009267}/{_I1_1019009267}/{Conference} . 
+source		SELECT  ?Conference ("nameValue" AS ?_L_1019009267) ?_I1_1019009267 ("Conference" AS ?_L_703232177) ?_I1_703232177
+			WHERE
+			  { ?Conference  a                  <http://www.example.org/conference/Conference> ;
+			              <http://www.example.org/conference/cName>  ?_I1_1019009267
+			    BIND(?Conference AS ?_I1_703232177)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_83
+target		:{_L_1668385683}/{_I1_1668385683}/{Conference} log:hasOValue :{_L_1019009267}/{_I1_1019009267}/{Conference} . 
+source		SELECT  ?Conference ("nameValue" AS ?_L_1019009267) ?_I1_1019009267 ("nameType" AS ?_L_1668385683) ("confName" AS ?_I1_1668385683)
+			WHERE
+			  { ?Conference  a                  <http://www.example.org/conference/Conference> ;
+			              <http://www.example.org/conference/cName>  ?_I1_1019009267}
+			
+
+mappingId	ONPROM_MAPPING_84
+target		:{_L_36707189}/{_I1_36707189}/{Paper} a log:OAttrValue . 
+source		SELECT  ?Paper ("titleValue" AS ?_L_36707189) ?_I1_36707189
+			WHERE
+			  { ?Paper  a                     <http://www.example.org/conference/Paper> ;
+			            <http://www.example.org/conference/title>  ?_I1_36707189}
+			
+
+mappingId	ONPROM_MAPPING_85
+target		:{_L_36707189}/{_I1_36707189}/{Paper} log:oValue {_I1_36707189}^^xsd:anyURI . 
+source		SELECT  ?Paper ?_I1_36707189 ("titleValue" AS ?_L_36707189)
+			WHERE
+			  { ?Paper  <http://www.example.org/conference/title>  ?_I1_36707189}
+			
+
+mappingId	ONPROM_MAPPING_86
+target		:{_L_630122462}/{_I1_630122462}/{Paper} log:hasOValue :{_L_36707189}/{_I1_36707189}/{Paper} . 
+source		SELECT  ?Paper ("titleValue" AS ?_L_36707189) ?_I1_36707189 ("titleType" AS ?_L_630122462) ("title" AS ?_I1_630122462)
+			WHERE
+			  { ?Paper  a                     <http://www.example.org/conference/Paper> ;
+			            <http://www.example.org/conference/title>  ?_I1_36707189}
+			
+
+mappingId	ONPROM_MAPPING_87
+target		:{_L_1181205697}/{_I1_1181205697}/{Paper} log:hasOAttr :{_L_36707189}/{_I1_36707189}/{Paper} . 
+source		SELECT  ?Paper ("titleValue" AS ?_L_36707189) ?_I1_36707189 ("Paper" AS ?_L_1181205697) ?_I1_1181205697
+			WHERE
+			  { ?Paper  a                     <http://www.example.org/conference/Paper> ;
+			            <http://www.example.org/conference/title>  ?_I1_36707189
+			    BIND(?Paper AS ?_I1_1181205697)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_88
+target		:{_I0_2126664214}/{DecidedPaper}/{Paper} a log:Time . 
+source		SELECT  ?DecidedPaper ?_I0_2126664214 ?Paper
+			WHERE
+			  { ?DecidedPaper
+			              a                     <http://www.example.org/conference/DecidedPaper> ;
+			              <http://www.example.org/conference/declTime>  ?_I0_2126664214
+			              BIND(?DecidedPaper AS ?Paper)}
+			
+
+mappingId	ONPROM_MAPPING_89
+target		:{_I0_2126664214}/{DecidedPaper}/{Paper} log:value {_I0_2126664214}^^xsd:dateTime . 
+source		SELECT  ?DecidedPaper ?_I0_2126664214 ?Paper
+			WHERE
+			  { ?DecidedPaper
+			              <http://www.example.org/conference/declTime>  ?_I0_2126664214 ; BIND(?DecidedPaper AS ?Paper)}
+
+mappingId	ONPROM_MAPPING_91
+target		:{_L_1498705150}/{_I1_1498705150}/{DecidedPaper} log:eventAtTime :{_I0_2126664214}/{DecidedPaper}/{Paper} . 
+source		SELECT  ?DecidedPaper ?_I0_2126664214 ("NotifyDecision" AS ?_L_1498705150) ?_I1_1498705150 ?Paper
+			WHERE
+			  { ?DecidedPaper
+			              a                     <http://www.example.org/conference/DecidedPaper> ;
+			              <http://www.example.org/conference/declTime>  ?_I0_2126664214
+			    BIND(?DecidedPaper AS ?_I1_1498705150)
+			    BIND(?DecidedPaper AS ?Paper)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_92
+target		:{_L_1787083839}/{_I1_1787083839}/{Review} a log:Attribute . 
+source		SELECT  ?Review ("recAtt" AS ?_L_1787083839) ("recommendation" AS ?_I1_1787083839)
+			WHERE
+			  { ?Review  a  <http://www.example.org/conference/Review>}
+			
+
+mappingId	ONPROM_MAPPING_93
+target		:{_L_1787083839}/{_I1_1787083839}/{Review} log:key {_I1_1787083839}^^xsd:string . 
+source		SELECT  ?Review ("recommendation" AS ?_I1_1787083839) ("recAtt" AS ?_L_1787083839)
+			WHERE
+			  { ?Review  a  <http://www.example.org/conference/Review>}
+			
+
+mappingId	ONPROM_MAPPING_94
+target		:{_L_1269339945}/{_I1_1269339945}/{Review} log:hasEAttribute :{_L_1787083839}/{_I1_1787083839}/{Review} . 
+source		SELECT  ?Review ("recAtt" AS ?_L_1787083839) ("recommendation" AS ?_I1_1787083839) ("subReviewActivity" AS ?_L_1269339945) ("SubmitReview" AS ?_I1_1269339945)
+			WHERE
+			  { ?Review  a  <http://www.example.org/conference/Review>}
+			
+
+mappingId	ONPROM_MAPPING_95
+target		:{_L_630122462}/{_I1_630122462}/{Paper} a log:OAttribute . 
+source		SELECT  ?Paper ("titleType" AS ?_L_630122462) ("title" AS ?_I1_630122462)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_96
+target		:{_L_630122462}/{_I1_630122462}/{Paper} log:oKey {_I1_630122462}^^xsd:string . 
+source		SELECT  ?Paper ("title" AS ?_I1_630122462) ("titleType" AS ?_L_630122462)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_97
+target		:{_I0_679442449}/{Paper} log:hasOAttribute :{_L_630122462}/{_I1_630122462}/{Paper} . 
+source		SELECT  ?Paper ("titleType" AS ?_L_630122462) ("title" AS ?_I1_630122462) ("Paper" AS ?_I0_679442449)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_98
+target		:{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment} a log:Event . 
+source		SELECT  ?AdditionalAssignment ("InviteAdditionalReviewerStart" AS ?_L_1227903899) ?_I1_1227903899
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>
+			    BIND(?AdditionalAssignment AS ?_I1_1227903899)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_99
+target		:{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment} log:eventId {_I1_1227903899}^^xsd:string . 
+source		SELECT  ?AdditionalAssignment ?_I1_1227903899 ("InviteAdditionalReviewerStart" AS ?_L_1227903899)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>
+			    BIND(?AdditionalAssignment AS ?_I1_1227903899)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_100
+target		:{_L_1830231264}/{_I1_1830231264}/{AdditionalAssignment} a log:Activity . 
+source		SELECT  ?AdditionalAssignment ("invAddAct" AS ?_L_1830231264) ("InviteAdditionalReviewer" AS ?_I1_1830231264)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>}
+			
+
+mappingId	ONPROM_MAPPING_101
+target		:{_L_1830231264}/{_I1_1830231264}/{AdditionalAssignment} log:name {_I1_1830231264}^^xsd:string . 
+source		SELECT  ?AdditionalAssignment ("InviteAdditionalReviewer" AS ?_I1_1830231264) ("invAddAct" AS ?_L_1830231264)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>}
+			
+
+mappingId	ONPROM_MAPPING_102
+target		:{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment} log:observes :{_L_1830231264}/{_I1_1830231264}/{AdditionalAssignment} . 
+source		SELECT  ?AdditionalAssignment ("invAddAct" AS ?_L_1830231264) ("InviteAdditionalReviewer" AS ?_I1_1830231264) ("InviteAdditionalReviewerStart" AS ?_L_1227903899) ?_I1_1227903899
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>
+			    BIND(?AdditionalAssignment AS ?_I1_1227903899)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_103
+target		:{_L_1875108260}/{_I1_1875108260}/{AdditionalAssignment} log:observes :{_L_1830231264}/{_I1_1830231264}/{AdditionalAssignment} . 
+source		SELECT  ?AdditionalAssignment ("invAddAct" AS ?_L_1830231264) ("InviteAdditionalReviewer" AS ?_I1_1830231264) ("InviteAdditionalReviewerEnd" AS ?_L_1875108260) ?_I1_1875108260
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>
+			    BIND(?AdditionalAssignment AS ?_I1_1875108260)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_104
+target		:{_L_582819897}/{_I1_582819897}/{Paper} a log:Event . 
+source		SELECT  ?Paper ("InviteReviewersStart" AS ?_L_582819897) ?_I1_582819897
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_582819897)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_105
+target		:{_L_582819897}/{_I1_582819897}/{Paper} log:eventId {_I1_582819897}^^xsd:string . 
+source		SELECT  ?Paper ?_I1_582819897 ("InviteReviewersStart" AS ?_L_582819897)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_582819897)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_106
+target		:{_L_645476639}/{_I1_645476639}/{Assignment} a log:Object . 
+source		SELECT  ?Assignment ("Assignment" AS ?_L_645476639) ?_I1_645476639
+			WHERE
+			  { ?Assignment  a  <http://www.example.org/conference/Assignment>
+			    BIND(?Assignment AS ?_I1_645476639)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_107
+target		:{_L_645476639}/{_I1_645476639}/{Assignment} log:objectId {_I1_645476639}^^xsd:string . 
+source		SELECT  ?Assignment ?_I1_645476639 ("Assignment" AS ?_L_645476639)
+			WHERE
+			  { ?Assignment  a  <http://www.example.org/conference/Assignment>
+			    BIND(?Assignment AS ?_I1_645476639)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_108
+target		:corr/{_L_582819897}/{_I1_582819897}/{Paper}/{_L_645476639}/{_I1_645476639}/{Assignment} a log:corr ; log:corr_2_Event :{_L_582819897}/{_I1_582819897}/{Paper} ; log:corr_2_Object :{_L_645476639}/{_I1_645476639}/{Assignment} ; log:eQualifier "assignment"^^xsd:string. 
+source		SELECT  ?Assignment ?Paper ("Assignment" AS ?_L_645476639) ?_I1_645476639 ("InviteReviewersStart" AS ?_L_582819897) ?_I1_582819897
+			WHERE
+			  { ?Paper  <http://www.example.org/conference/assignment>  ?Assignment
+			    BIND(?Assignment AS ?_I1_645476639)
+			    BIND(?Paper AS ?_I1_582819897)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_109
+target		:corr/{_L_1916720513}/{_I1_1916720513}/{Paper}/{_L_645476639}/{_I1_645476639}/{Assignment} a log:corr ; log:corr_2_Event :{_L_1916720513}/{_I1_1916720513}/{Paper} ; log:corr_2_Object :{_L_645476639}/{_I1_645476639}/{Assignment} ; log:eQualifier "assignment"^^xsd:string. 
+source		SELECT  ?Assignment ?Paper ("Assignment" AS ?_L_645476639) ?_I1_645476639 ("InviteReviewersEnd" AS ?_L_1916720513) ?_I1_1916720513
+			WHERE
+			  { ?Paper  <http://www.example.org/conference/assignment>  ?Assignment
+			    BIND(?Assignment AS ?_I1_645476639)
+			    BIND(?Paper AS ?_I1_1916720513)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_110
+target		:corr/{_L_56112634}/{_I1_56112634}/{Review}/{_L_645476639}/{_I1_645476639}/{Assignment} a log:corr ; log:corr_2_Event :{_L_56112634}/{_I1_56112634}/{Review} ; log:corr_2_Object :{_L_645476639}/{_I1_645476639}/{Assignment} ; log:eQualifier "assignment"^^xsd:string. 
+source		SELECT  ?Assignment ?Review ("Assignment" AS ?_L_645476639) ?_I1_645476639 ("SubmitReview" AS ?_L_56112634) ?_I1_56112634
+			WHERE
+			  { ?Assignment  <http://www.example.org/conference/leadsTo>  ?Review
+			    BIND(?Assignment AS ?_I1_645476639)
+			    BIND(?Review AS ?_I1_56112634)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_111
+target		:corr/{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment}/{_L_645476639}/{_I1_645476639}/{Assignment} a log:corr ; log:corr_2_Event :{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment} ; log:corr_2_Object :{_L_645476639}/{_I1_645476639}/{Assignment} ; log:eQualifier "additional-assignment"^^xsd:string. 
+source		SELECT  ?Assignment ?AdditionalAssignment ("Assignment" AS ?_L_645476639) ?_I1_645476639 ("InviteAdditionalReviewerStart" AS ?_L_1227903899) ?_I1_1227903899
+			WHERE
+			  { ?Assignment  a  <http://www.example.org/conference/Assignment>
+			    BIND(?Assignment AS ?AdditionalAssignment)
+			    BIND(?Assignment AS ?_I1_645476639)
+			    BIND(?AdditionalAssignment AS ?_I1_1227903899)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_112
+target		:corr/{_L_1875108260}/{_I1_1875108260}/{AdditionalAssignment}/{_L_645476639}/{_I1_645476639}/{Assignment} a log:corr ; log:corr_2_Event :{_L_1875108260}/{_I1_1875108260}/{AdditionalAssignment} ; log:corr_2_Object :{_L_645476639}/{_I1_645476639}/{Assignment} ; log:eQualifier "additional-assignment"^^xsd:string. 
+source		SELECT  ?Assignment ?AdditionalAssignment ("Assignment" AS ?_L_645476639) ?_I1_645476639 ("InviteAdditionalReviewerEnd" AS ?_L_1875108260) ?_I1_1875108260
+			WHERE
+			  { ?Assignment  a  <http://www.example.org/conference/Assignment>
+			    BIND(?Assignment AS ?AdditionalAssignment)
+			    BIND(?Assignment AS ?_I1_645476639)
+			    BIND(?AdditionalAssignment AS ?_I1_1875108260)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_113
+target		:relatedTo/{_L_1579584742}/{_I1_1579584742}/{Person}/{_L_645476639}/{_I1_645476639}/{Assignment} a log:relatedTo ; log:relatedTo_2_Object :{_L_1579584742}/{_I1_1579584742}/{Assignment} , :{_L_645476639}/{_I1_645476639}/{Person} ; log:oQualifier "assigned-to"^^xsd:string. 
+source		SELECT  ?Assignment ?Person ("Assignment" AS ?_L_645476639) ?_I1_645476639 ("Person" AS ?_L_1579584742) ?_I1_1579584742
+			WHERE
+			  { ?Assignment  <http://www.example.org/conference/assignedTo>  ?Person
+			    BIND(?Assignment AS ?_I1_645476639)
+			    BIND(?Person AS ?_I1_1579584742)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_114
+target		:relatedTo/{_L_1579584742}/{_I1_1579584742}/{Person}/{_L_645476639}/{_I1_645476639}/{Assignment} a log:relatedTo ; log:relatedTo_2_Object :{_L_1579584742}/{_I1_1579584742}/{Assignment} , :{_L_645476639}/{_I1_645476639}/{Person} ; log:oQualifier "invited-by"^^xsd:string. 
+source		SELECT  ?Assignment ?Person ("Assignment" AS ?_L_645476639) ?_I1_645476639 ("Person" AS ?_L_1579584742) ?_I1_1579584742
+			WHERE
+			  { ?null     a                     <http://www.example.org/conference/AdditionalAssignment> .
+			    ?AdditionalAssignment
+			              <http://www.example.org/conference/invitedBy>  ?Person
+			    BIND(?Assignment AS ?_I1_645476639)
+			    BIND(?Person AS ?_I1_1579584742)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_115
+target		:{_I0_679442449}/{Paper} a log:Type . 
+source		SELECT  ?Paper ("Paper" AS ?_I0_679442449)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_116
+target		:{_I0_679442449}/{Paper} log:typeString {_I0_679442449}^^xsd:string . 
+source		SELECT  ?Paper ("Paper" AS ?_I0_679442449)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_117
+target		:{_L_1181205697}/{_I1_1181205697}/{Paper} log:has :{_I0_679442449}/{Paper} . 
+source		SELECT  ?Paper ("Paper" AS ?_I0_679442449) ("Paper" AS ?_L_1181205697) ?_I1_1181205697
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_1181205697)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_118
+target		:{_L_1159694255}/{_I1_1159694255}/{Paper} a log:Activity . 
+source		SELECT  ?Paper ("inviteRevAct" AS ?_L_1159694255) ("InviteReviewers" AS ?_I1_1159694255)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_119
+target		:{_L_1159694255}/{_I1_1159694255}/{Paper} log:name {_I1_1159694255}^^xsd:string . 
+source		SELECT  ?Paper ("InviteReviewers" AS ?_I1_1159694255) ("inviteRevAct" AS ?_L_1159694255)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_120
+target		:{_L_582819897}/{_I1_582819897}/{Paper} log:observes :{_L_1159694255}/{_I1_1159694255}/{Paper} . 
+source		SELECT  ?Paper ("inviteRevAct" AS ?_L_1159694255) ("InviteReviewers" AS ?_I1_1159694255) ("InviteReviewersStart" AS ?_L_582819897) ?_I1_582819897
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_582819897)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_121
+target		:{_L_1916720513}/{_I1_1916720513}/{Paper} log:observes :{_L_1159694255}/{_I1_1159694255}/{Paper} . 
+source		SELECT  ?Paper ("inviteRevAct" AS ?_L_1159694255) ("InviteReviewers" AS ?_I1_1159694255) ("InviteReviewersEnd" AS ?_L_1916720513) ?_I1_1916720513
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_1916720513)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_122
+target		:{_L_388436342}/{_I1_388436342}/{AdditionalAssignment} a log:EAttrValue . 
+source		SELECT  ?AdditionalAssignment ("endLifecycleVal" AS ?_L_388436342) ("end" AS ?_I1_388436342)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>}
+			
+
+mappingId	ONPROM_MAPPING_123
+target		:{_L_388436342}/{_I1_388436342}/{AdditionalAssignment} log:eValue {_I1_388436342}^^xsd:anyURI . 
+source		SELECT  ?AdditionalAssignment ("end" AS ?_I1_388436342) ("endLifecycleVal" AS ?_L_388436342)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>}
+			
+
+mappingId	ONPROM_MAPPING_124
+target		:{_L_1479100519}/{_I1_1479100519}/{AdditionalAssignment} log:hasEValue :{_L_388436342}/{_I1_388436342}/{AdditionalAssignment} . 
+source		SELECT  ?AdditionalAssignment ("endLifecycleVal" AS ?_L_388436342) ("end" AS ?_I1_388436342) ("lifecycleAtt" AS ?_L_1479100519) ("lifecycle" AS ?_I1_1479100519)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>}
+			
+
+mappingId	ONPROM_MAPPING_125
+target		:{_L_1875108260}/{_I1_1875108260}/{AdditionalAssignment} log:hasEAttr :{_L_388436342}/{_I1_388436342}/{AdditionalAssignment} . 
+source		SELECT  ?AdditionalAssignment ("endLifecycleVal" AS ?_L_388436342) ("end" AS ?_I1_388436342) ("InviteAdditionalReviewerEnd" AS ?_L_1875108260) ?_I1_1875108260
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>
+			    BIND(?AdditionalAssignment AS ?_I1_1875108260)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_126
+target		:{_L_775174220}/{_I1_775174220}/{AdditionalAssignment} a log:Time . 
+source		SELECT  ?AdditionalAssignment ("addInvStartTime" AS ?_L_775174220) ?_I1_775174220
+			WHERE
+			  { ?AdditionalAssignment
+			              a                     <http://www.example.org/conference/AdditionalAssignment> ;
+			              <http://www.example.org/conference/additionalInviteStart>  ?_I1_775174220}
+			
+
+mappingId	ONPROM_MAPPING_127
+target		:{_L_775174220}/{_I1_775174220}/{AdditionalAssignment} log:value {_I1_775174220}^^xsd:dateTime . 
+source		SELECT  ?AdditionalAssignment ?_I1_775174220 ("addInvStartTime" AS ?_L_775174220)
+			WHERE
+			  { ?AdditionalAssignment
+			              <http://www.example.org/conference/additionalInviteStart>  ?_I1_775174220}
+			
+
+mappingId	ONPROM_MAPPING_128
+target		:{_L_1227903899}/{_I1_1227903899}/{AdditionalAssignment} log:eventAtTime :{_L_775174220}/{_I1_775174220}/{AdditionalAssignment} . 
+source		SELECT  ?AdditionalAssignment ("addInvStartTime" AS ?_L_775174220) ?_I1_775174220 ("InviteAdditionalReviewerStart" AS ?_L_1227903899) ?_I1_1227903899
+			WHERE
+			  { ?AdditionalAssignment
+			              a                     <http://www.example.org/conference/AdditionalAssignment> ;
+			              <http://www.example.org/conference/additionalInviteStart>  ?_I1_775174220
+			    BIND(?AdditionalAssignment AS ?_I1_1227903899)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_129
+target		:{_L_1473313929}/{_I1_1473313929}/{Paper} a log:EAttrValue . 
+source		SELECT  ?Paper ("startLifecycelVal" AS ?_L_1473313929) ("start" AS ?_I1_1473313929)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_130
+target		:{_L_1473313929}/{_I1_1473313929}/{Paper} log:eValue {_I1_1473313929}^^xsd:anyURI . 
+source		SELECT  ?Paper ("start" AS ?_I1_1473313929) ("startLifecycelVal" AS ?_L_1473313929)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_131
+target		:{_L_1048444228}/{_I1_1048444228}/{Paper} log:hasEValue :{_L_1473313929}/{_I1_1473313929}/{Paper} . 
+source		SELECT  ?Paper ("startLifecycelVal" AS ?_L_1473313929) ("start" AS ?_I1_1473313929) ("lifecycleAtt" AS ?_L_1048444228) ("lifecycle" AS ?_I1_1048444228)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_132
+target		:{_L_582819897}/{_I1_582819897}/{Paper} log:hasEAttr :{_L_1473313929}/{_I1_1473313929}/{Paper} . 
+source		SELECT  ?Paper ("startLifecycelVal" AS ?_L_1473313929) ("start" AS ?_I1_1473313929) ("InviteReviewersStart" AS ?_L_582819897) ?_I1_582819897
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>
+			    BIND(?Paper AS ?_I1_582819897)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_133
+target		:{_L_1479100519}/{_I1_1479100519}/{AdditionalAssignment} a log:Attribute . 
+source		SELECT  ?AdditionalAssignment ("lifecycleAtt" AS ?_L_1479100519) ("lifecycle" AS ?_I1_1479100519)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>}
+			
+
+mappingId	ONPROM_MAPPING_134
+target		:{_L_1479100519}/{_I1_1479100519}/{AdditionalAssignment} log:key {_I1_1479100519}^^xsd:string . 
+source		SELECT  ?AdditionalAssignment ("lifecycle" AS ?_I1_1479100519) ("lifecycleAtt" AS ?_L_1479100519)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>}
+			
+
+mappingId	ONPROM_MAPPING_135
+target		:{_L_1830231264}/{_I1_1830231264}/{AdditionalAssignment} log:hasEAttribute :{_L_1479100519}/{_I1_1479100519}/{AdditionalAssignment} . 
+source		SELECT  ?AdditionalAssignment ("lifecycleAtt" AS ?_L_1479100519) ("lifecycle" AS ?_I1_1479100519) ("invAddAct" AS ?_L_1830231264) ("InviteAdditionalReviewer" AS ?_I1_1830231264)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>}
+			
+
+mappingId	ONPROM_MAPPING_136
+target		:{_L_1740797856}/{_I1_1740797856}/{Conference} a log:Event . 
+source		SELECT  ?Conference ("MakeConference" AS ?_L_1740797856) ?_I1_1740797856
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>
+			    BIND(?Conference AS ?_I1_1740797856)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_137
+target		:{_L_1740797856}/{_I1_1740797856}/{Conference} log:eventId {_I1_1740797856}^^xsd:string . 
+source		SELECT  ?Conference ?_I1_1740797856 ("MakeConference" AS ?_L_1740797856)
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>
+			    BIND(?Conference AS ?_I1_1740797856)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_138
+target		:{_L_1875108260}/{_I1_1875108260}/{AdditionalAssignment} a log:Event . 
+source		SELECT  ?AdditionalAssignment ("InviteAdditionalReviewerEnd" AS ?_L_1875108260) ?_I1_1875108260
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>
+			    BIND(?AdditionalAssignment AS ?_I1_1875108260)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_139
+target		:{_L_1875108260}/{_I1_1875108260}/{AdditionalAssignment} log:eventId {_I1_1875108260}^^xsd:string . 
+source		SELECT  ?AdditionalAssignment ?_I1_1875108260 ("InviteAdditionalReviewerEnd" AS ?_L_1875108260)
+			WHERE
+			  { ?AdditionalAssignment
+			              a  <http://www.example.org/conference/AdditionalAssignment>
+			    BIND(?AdditionalAssignment AS ?_I1_1875108260)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_140
+target		:{_L_1067936865}/{_I1_1067936865}/{Person} a log:OAttribute . 
+source		SELECT  ?Person ("nameType" AS ?_L_1067936865) ("pName" AS ?_I1_1067936865)
+			WHERE
+			  { ?Person  a  <http://www.example.org/conference/Person>}
+			
+
+mappingId	ONPROM_MAPPING_141
+target		:{_L_1067936865}/{_I1_1067936865}/{Person} log:oKey {_I1_1067936865}^^xsd:string . 
+source		SELECT  ?Person ("pName" AS ?_I1_1067936865) ("nameType" AS ?_L_1067936865)
+			WHERE
+			  { ?Person  a  <http://www.example.org/conference/Person>}
+			
+
+mappingId	ONPROM_MAPPING_142
+target		:{_I0_1311315651}/{Person} log:hasOAttribute :{_L_1067936865}/{_I1_1067936865}/{Person} . 
+source		SELECT  ?Person ("nameType" AS ?_L_1067936865) ("pName" AS ?_I1_1067936865) ("Person" AS ?_I0_1311315651)
+			WHERE
+			  { ?Person  a  <http://www.example.org/conference/Person>}
+			
+
+mappingId	ONPROM_MAPPING_143
+target		:{_I0_761229698}/{Conference} a log:Type . 
+source		SELECT  ?Conference ("Conference" AS ?_I0_761229698)
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>}
+			
+
+mappingId	ONPROM_MAPPING_144
+target		:{_I0_761229698}/{Conference} log:typeString {_I0_761229698}^^xsd:string . 
+source		SELECT  ?Conference ("Conference" AS ?_I0_761229698)
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>}
+			
+
+mappingId	ONPROM_MAPPING_145
+target		:{_L_703232177}/{_I1_703232177}/{Conference} log:has :{_I0_761229698}/{Conference} . 
+source		SELECT  ?Conference ("Conference" AS ?_I0_761229698) ("Conference" AS ?_L_703232177) ?_I1_703232177
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>
+			    BIND(?Conference AS ?_I1_703232177)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_146
+target		:{_L_1498705150}/{_I1_1498705150}/{DecidedPaper} a log:Event . 
+source		SELECT  ?DecidedPaper ("NotifyDecision" AS ?_L_1498705150) ?_I1_1498705150
+			WHERE
+			  { ?DecidedPaper
+			              a  <http://www.example.org/conference/DecidedPaper>
+			    BIND(?DecidedPaper AS ?_I1_1498705150)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_147
+target		:{_L_1498705150}/{_I1_1498705150}/{DecidedPaper} log:eventId {_I1_1498705150}^^xsd:string . 
+source		SELECT  ?DecidedPaper ?_I1_1498705150 ("NotifyDecision" AS ?_L_1498705150)
+			WHERE
+			  { ?DecidedPaper
+			              a  <http://www.example.org/conference/DecidedPaper>
+			    BIND(?DecidedPaper AS ?_I1_1498705150)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_148
+target		:{_L_703232177}/{_I1_703232177}/{Conference} a log:Object . 
+source		SELECT  ?Conference ("Conference" AS ?_L_703232177) ?_I1_703232177
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>
+			    BIND(?Conference AS ?_I1_703232177)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_149
+target		:{_L_703232177}/{_I1_703232177}/{Conference} log:objectId {_I1_703232177}^^xsd:string . 
+source		SELECT  ?Conference ?_I1_703232177 ("Conference" AS ?_L_703232177)
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>
+			    BIND(?Conference AS ?_I1_703232177)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_150
+target		:corr/{_L_1740797856}/{_I1_1740797856}/{Conference}/{_L_703232177}/{_I1_703232177}/{Conference} a log:corr ; log:corr_2_Event :{_L_1740797856}/{_I1_1740797856}/{Conference} ; log:corr_2_Object :{_L_703232177}/{_I1_703232177}/{Conference} ; log:eQualifier "conference"^^xsd:string. 
+source		SELECT  ?Conference ("Conference" AS ?_L_703232177) ?_I1_703232177 ("MakeConference" AS ?_L_1740797856) ?_I1_1740797856
+			WHERE
+			  { ?Conference  a  <http://www.example.org/conference/Conference>
+			    BIND(?Conference AS ?_I1_703232177)
+			    BIND(?Conference AS ?_I1_1740797856)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_151
+target		:{_L_2075093711}/{_I1_2075093711}/{Review} a log:Time . 
+source		SELECT  ?Review ("subTime" AS ?_L_2075093711) ?_I1_2075093711
+			WHERE
+			  { ?Review  a                     <http://www.example.org/conference/Review> ;
+			             <http://www.example.org/conference/subTime>  ?_I1_2075093711}
+			
+
+mappingId	ONPROM_MAPPING_152
+target		:{_L_2075093711}/{_I1_2075093711}/{Review} log:value {_I1_2075093711}^^xsd:dateTime . 
+source		SELECT  ?Review ?_I1_2075093711 ("subTime" AS ?_L_2075093711)
+			WHERE
+			  { ?Review  <http://www.example.org/conference/subTime>  ?_I1_2075093711}
+			
+
+mappingId	ONPROM_MAPPING_153
+target		:{_L_56112634}/{_I1_56112634}/{Review} log:eventAtTime :{_L_2075093711}/{_I1_2075093711}/{Review} . 
+source		SELECT  ?Review ("subTime" AS ?_L_2075093711) ?_I1_2075093711 ("SubmitReview" AS ?_L_56112634) ?_I1_56112634
+			WHERE
+			  { ?Review  a                     <http://www.example.org/conference/Review> ;
+			             <http://www.example.org/conference/subTime>  ?_I1_2075093711
+			    BIND(?Review AS ?_I1_56112634)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_154
+target		:{_L_31906520}/{_I1_31906520}/{DecidedPaper} a log:Activity . 
+source		SELECT  ?DecidedPaper ("notifyDecisionAct" AS ?_L_31906520) ("NotifyDecision" AS ?_I1_31906520)
+			WHERE
+			  { ?DecidedPaper
+			              a  <http://www.example.org/conference/DecidedPaper>}
+			
+
+mappingId	ONPROM_MAPPING_155
+target		:{_L_31906520}/{_I1_31906520}/{DecidedPaper} log:name {_I1_31906520}^^xsd:string . 
+source		SELECT  ?DecidedPaper ("NotifyDecision" AS ?_I1_31906520) ("notifyDecisionAct" AS ?_L_31906520)
+			WHERE
+			  { ?DecidedPaper
+			              a  <http://www.example.org/conference/DecidedPaper>}
+			
+
+mappingId	ONPROM_MAPPING_156
+target		:{_L_1498705150}/{_I1_1498705150}/{DecidedPaper} log:observes :{_L_31906520}/{_I1_31906520}/{DecidedPaper} . 
+source		SELECT  ?DecidedPaper ("notifyDecisionAct" AS ?_L_31906520) ("NotifyDecision" AS ?_I1_31906520) ("NotifyDecision" AS ?_L_1498705150) ?_I1_1498705150
+			WHERE
+			  { ?DecidedPaper
+			              a  <http://www.example.org/conference/DecidedPaper>
+			    BIND(?DecidedPaper AS ?_I1_1498705150)
+			  }
+			
+
+mappingId	ONPROM_MAPPING_157
+target		:{_L_2066945445}/{_I1_2066945445}/{Paper} a log:OAttribute . 
+source		SELECT  ?Paper ("decType" AS ?_L_2066945445) ("decision" AS ?_I1_2066945445)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_158
+target		:{_L_2066945445}/{_I1_2066945445}/{Paper} log:oKey {_I1_2066945445}^^xsd:string . 
+source		SELECT  ?Paper ("decision" AS ?_I1_2066945445) ("decType" AS ?_L_2066945445)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_159
+target		:{_I0_679442449}/{Paper} log:hasOAttribute :{_L_2066945445}/{_I1_2066945445}/{Paper} . 
+source		SELECT  ?Paper ("decType" AS ?_L_2066945445) ("decision" AS ?_I1_2066945445) ("Paper" AS ?_I0_679442449)
+			WHERE
+			  { ?Paper  a  <http://www.example.org/conference/Paper>}
+			
+
+mappingId	ONPROM_MAPPING_160
+target		:{_L_930089183}/{_I1_930089183}/{Review} a log:EAttrValue . 
+source		SELECT  ?Review ("recValue" AS ?_L_930089183) ?_I1_930089183
+			WHERE
+			  { ?Review  a                     <http://www.example.org/conference/Review> ;
+			             <http://www.example.org/conference/recommendation>  ?_I1_930089183}
+			
+
+mappingId	ONPROM_MAPPING_161
+target		:{_L_930089183}/{_I1_930089183}/{Review} log:eValue {_I1_930089183}^^xsd:anyURI . 
+source		SELECT  ?Review ?_I1_930089183 ("recValue" AS ?_L_930089183)
+			WHERE
+			  { ?Review  <http://www.example.org/conference/recommendation>  ?_I1_930089183}
+			
+
+mappingId	ONPROM_MAPPING_162
+target		:{_L_1787083839}/{_I1_1787083839}/{Review} log:hasEValue :{_L_930089183}/{_I1_930089183}/{Review} . 
+source		SELECT  ?Review ("recValue" AS ?_L_930089183) ?_I1_930089183 ("recAtt" AS ?_L_1787083839) ("recommendation" AS ?_I1_1787083839)
+			WHERE
+			  { ?Review  a                     <http://www.example.org/conference/Review> ;
+			             <http://www.example.org/conference/recommendation>  ?_I1_930089183}
+			
+
+mappingId	ONPROM_MAPPING_163
+target		:{_L_56112634}/{_I1_56112634}/{Review} log:hasEAttr :{_L_930089183}/{_I1_930089183}/{Review} . 
+source		SELECT  ?Review ("recValue" AS ?_L_930089183) ?_I1_930089183 ("SubmitReview" AS ?_L_56112634) ?_I1_56112634
+			WHERE
+			  { ?Review  a                     <http://www.example.org/conference/Review> ;
+			             <http://www.example.org/conference/recommendation>  ?_I1_930089183
+			    BIND(?Review AS ?_I1_56112634)
+			  }
+			
+]]
+

@@ -89,59 +89,93 @@ public class SimpleQueryExporter {
     }
 
     public static String addJoin(SelectBuilder builder, Set<DiagramShape> path, @Nonnull ImmutableMap<String, String> varNames) {
-        if (path == null || path.stream().filter(Relationship.class::isInstance).count() < 1) {
+        if (path == null || path.stream().noneMatch(Relationship.class::isInstance)) {
             return null;
         }
+
         String isaSubject = null;
-        String subject = null;
         String isaURI = null;
-        String last = null;
+        String lastTarget = null;
+        String lastSubject = null;
         Iterator<DiagramShape> shapeIterator = path.iterator();
+
         while (shapeIterator.hasNext()) {
             DiagramShape shape = shapeIterator.next();
+
             if (shape instanceof Inheritance) {
-                subject = ((Inheritance) shape).getSuperclass().getCleanName();
                 isaSubject = ((Inheritance) shape).getSubclass().getCleanName();
                 isaURI = ((Inheritance) shape).getSubclass().getLongName();
+
             } else if (shape instanceof Association) {
-                final Association association = (Association) shape;
-                if (association.hasAssociation()) {
-                    subject = association.getCleanName();
-                    if (isaSubject != null) {
-                        subject = isaSubject;
-                        builder.addWhere("?" + varNames.getOrDefault(subject, subject), "a", "<" + isaURI + ">");
-                        isaSubject = null;
-                    }
-                    DiagramShape nextNode = shapeIterator.next();
-                    String varName1 = nextNode.getCleanName();
-                    builder.addWhere("?" + varNames.getOrDefault(subject, subject), "<" + association.getLongName() + OWLExporter.REIFICATION_SEPARATOR + nextNode.getCleanName() + ">", "?" + varNames.getOrDefault(varName1, varName1));
-                    String varName = nextNode.getCleanName();
-                    last = varNames.getOrDefault(varName, varName);
-                } else {
-                    subject = association.getFirstClass().getCleanName();
-                    if (isaSubject != null) {
-                        subject = isaSubject;
-                        isaSubject = null;
-                    }
-                    String varName = association.getSecondClass().getCleanName();
-                    last = varNames.getOrDefault(varName, varName);
-                    builder.addWhere("?" + varNames.getOrDefault(subject, subject), "<" + association.getLongName() + ">", "?" + last);
-                }
+                lastTarget = handleAssociation(builder, (Association) shape, varNames,
+                        isaSubject, isaURI, shapeIterator);
+                lastSubject = isaSubject != null ? isaSubject :
+                        ((Association) shape).getFirstClass().getCleanName();
+                isaSubject = null;
+                isaURI = null;
+
             } else if (shape instanceof AssociationClass) {
-                if (isaSubject != null && !shape.getCleanName().equalsIgnoreCase(subject)) {
-                    String varName = shape.getCleanName();
-                    builder.addWhere("?" + varNames.getOrDefault(varName, varName), "<" + shape.getLongName() +
-                            OWLExporter.REIFICATION_SEPARATOR + subject + ">", "?" + varNames.getOrDefault(isaSubject, isaSubject));
-                    isaSubject = null;
-                }
+                lastTarget = handleAssociationClass(builder, (AssociationClass) shape, varNames, lastSubject);
+
             } else if (shape instanceof UMLClass) {
                 if (isaSubject != null) {
-                    builder.addWhere("?" + varNames.getOrDefault(isaSubject, isaSubject), "a", "<" + shape.getLongName() + ">");
+                    applyInheritanceType(builder, varNames, isaSubject, isaURI);
                     isaSubject = null;
                 }
+                lastTarget = varNames.getOrDefault(shape.getCleanName(), shape.getCleanName());
             }
         }
-        return last;
+
+        return lastTarget;
+    }
+
+    private static String handleAssociation(SelectBuilder builder, Association association,
+                                            ImmutableMap<String, String> varNames, String isaSubject, String isaURI,
+                                            Iterator<DiagramShape> shapeIterator) {
+
+        String subject = isaSubject != null ? isaSubject : association.getFirstClass().getCleanName();
+        String target;
+
+        if (association.hasAssociation()) {
+            if (isaSubject != null) {
+                applyInheritanceType(builder, varNames, isaSubject, isaURI);
+            }
+            DiagramShape nextNode = shapeIterator.next();
+            String varName1 = nextNode.getCleanName();
+            builder.addWhere("?" + varNames.getOrDefault(subject, subject),
+                    "<" + association.getLongName() + OWLExporter.REIFICATION_SEPARATOR +
+                            nextNode.getCleanName() + ">",
+                    "?" + varNames.getOrDefault(varName1, varName1));
+            target = varNames.getOrDefault(varName1, varName1);
+        } else {
+            String targetClass = association.getSecondClass().getCleanName();
+            builder.addWhere("?" + varNames.getOrDefault(subject, subject),
+                    "<" + association.getLongName() + ">",
+                    "?" + varNames.getOrDefault(targetClass, targetClass));
+            target = varNames.getOrDefault(targetClass, targetClass);
+        }
+
+        return target;
+    }
+
+    private static String handleAssociationClass(SelectBuilder builder, AssociationClass assocClass,
+                                                 ImmutableMap<String, String> varNames, String lastSubject) {
+        String assocClassName = assocClass.getCleanName();
+        String assocClassVar = varNames.getOrDefault(assocClassName, assocClassName);
+
+        if (lastSubject != null) {
+            builder.addWhere("?" + assocClassVar,
+                    "<" + assocClass.getLongName() + OWLExporter.REIFICATION_SEPARATOR + lastSubject + ">",
+                    "?" + lastSubject);
+        }
+
+        return assocClassVar;
+    }
+
+    private static void applyInheritanceType(SelectBuilder builder,
+                                             ImmutableMap<String, String> varNames, String subject, String inheritanceType) {
+        builder.addWhere("?" + varNames.getOrDefault(subject, subject), "a",
+                "<" + inheritanceType + ">");
     }
 
     public static SelectBuilder getStringAttributeQueryBuilder(NavigationalAttribute navigationalAttribute, Annotation relatedAnnotation, Set<DiagramShape> casePath, Var nameVar) {

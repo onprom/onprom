@@ -48,6 +48,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -246,53 +247,60 @@ public class DynamicAnnotation extends Annotation {
                 final Var id = Var.alloc(entry.left);
                 Object value = entry.right;
                 try {
-                    if (value instanceof String) {
-                        builder.addVar("\"" + value + "\"", id);
-                    } else if (value instanceof DynamicNavigationalAttribute) {
-                        NavigationalAttribute attribute = ((DynamicNavigationalAttribute) value).getAttribute();
-                        if (attribute instanceof ClassAttribute) {
-                            String bindSource;
-                            if (attribute.getUmlClass().equalsOrInherits(getRelatedClass()))
-                                bindSource = getVarName();
-                            else
-                                bindSource = attribute.getUmlClass().getCleanName();
-                            builder.addVar(id.toString());
-                            builder.addBind("?" + bindSource, id);
-                        } else if (attribute instanceof StringAttribute && attribute.getPath() == null) {
-                            builder.addVar("\"" + ((StringAttribute) attribute).getValue() + "\"", id);
-                        } else {
-                            builder.addVar(id);
-                            if(!attribute.getAttribute().hasLongName())
-                                throw new IllegalArgumentException("Attribute " + attribute.getAttribute().getName() + " has no long name! Ensure annotations were properly exported");
-                            String attributeLongName = "<" + attribute.getAttribute().getLongName() + ">";
-                            if (!attribute.getUmlClass().equalsOrInherits(relatedClass)) {
-                                SimpleQueryExporter.addJoin(builder, attribute.getPath()
-                                        //, ImmutableMap.of(getCleanName(), getVarName())
-                                );
-                                builder.addWhere("?" + attribute.getUmlClass().getCleanName(), attributeLongName, id);
-                            } else {
-                                builder.addWhere("?" + getVarName(), attributeLongName, id);
-                            }
-                        }
-                    } else if (value instanceof DynamicAnnotationAttribute) {
-                        DynamicAnnotationAttribute attribute = (DynamicAnnotationAttribute) value;
-                        if (!relatedClass.equalsOrInherits(attribute.getRelatedClass()) && attribute.getPath() != null) {
-                            SimpleQueryExporter.addJoin(builder, attribute.getPath()
-                                    //,ImmutableMap.of(getCleanName(), getVarName(), attribute.getCleanName(), attribute.getVarName())
-                            );
-                            builder.addVar(id);
-                        } else {
-                            if (!builder.getVars().contains(Var.alloc(attribute.getVarName()))) {
-                                builder.addVar("?" + attribute.getVarName());
-                                builder.addBind("?" + getVarName(), "?" + attribute.getVarName());
-                            }
-                        }
-                    }
+                    if (value instanceof Collection<?> values) {
+                        values.forEach(v -> addOneURIGetter(builder, v, id));
+                    } else
+                       addOneURIGetter(builder, value, id);
                 } catch (Exception e) {
                     logger.error(e.getMessage());
                 }
             }
         });
+    }
+
+    private void addOneURIGetter(SelectBuilder builder, Object value, Var id) {
+        if (value instanceof String) {
+            builder.addVar("\"" + value + "\"", id);
+        } else if (value instanceof DynamicNavigationalAttribute) {
+            NavigationalAttribute attribute = ((DynamicNavigationalAttribute) value).getAttribute();
+            if (attribute instanceof ClassAttribute) {
+                String bindSource;
+                if (attribute.getUmlClass().equalsOrInherits(getRelatedClass()))
+                    bindSource = getVarName();
+                else
+                    bindSource = attribute.getUmlClass().getCleanName();
+                builder.addVar(id.toString());
+                builder.addBind("?" + bindSource, id);
+            } else if (attribute instanceof StringAttribute && attribute.getPath() == null) {
+                builder.addVar("\"" + ((StringAttribute) attribute).getValue() + "\"", id);
+            } else {
+                builder.addVar(id);
+                if(!attribute.getAttribute().hasLongName())
+                    throw new IllegalArgumentException("Attribute " + attribute.getAttribute().getName() + " has no long name! Ensure annotations were properly exported");
+                String attributeLongName = "<" + attribute.getAttribute().getLongName() + ">";
+                if (!attribute.getUmlClass().equalsOrInherits(relatedClass)) {
+                    SimpleQueryExporter.addJoin(builder, attribute.getPath()
+                            //, ImmutableMap.of(getCleanName(), getVarName())
+                    );
+                    builder.addWhere("?" + attribute.getUmlClass().getCleanName(), attributeLongName, id);
+                } else {
+                    builder.addWhere("?" + getVarName(), attributeLongName, id);
+                }
+            }
+        } else if (value instanceof DynamicAnnotationAttribute) {
+            DynamicAnnotationAttribute attribute = (DynamicAnnotationAttribute) value;
+            if (!relatedClass.equalsOrInherits(attribute.getRelatedClass()) && attribute.getPath() != null) {
+                SimpleQueryExporter.addJoin(builder, attribute.getPath()
+                        //,ImmutableMap.of(getCleanName(), getVarName(), attribute.getCleanName(), attribute.getVarName())
+                );
+                builder.addVar(id);
+            } else {
+                if (!builder.getVars().contains(Var.alloc(attribute.getVarName()))) {
+                    builder.addVar("?" + attribute.getVarName());
+                    builder.addBind("?" + getVarName(), "?" + attribute.getVarName());
+                }
+            }
+        }
     }
 
     public List<Attribute> getAnnotationClassAttributes() {

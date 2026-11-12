@@ -1,5 +1,5 @@
 [PrefixDeclaration]
-:		http://www.example.com/dolibarr/
+:		http://www.example.org/conference/
 owl:		http://www.w3.org/2002/07/owl#
 rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
 xml:		http://www.w3.org/XML/1998/namespace
@@ -23,19 +23,72 @@ mappingId collectiveAuthor
 target  :data/person/Author_{case_id} a :Person ; :pName "Author of {case_id}"^^xsd:string .
 source  SELECT DISTINCT case_id FROM events
 
+
 mappingId person
 target  :data/person/{person_id} a :Person ; :pName {person_id}^^xsd:string .
-source  SELECT DISTINCT substring(attr_name FROM 'Result by Reviewer (.*)$') AS person_id FROM event_attributes WHERE attr_name LIKE 'Result by Reviewer %' UNION SELECT DISTINCT org_resource AS person_id FROM events WHERE org_resource IS NOT NULL
+source  SELECT person_id FROM (
+    SELECT DISTINCT substring(attr_name FROM 'Result by Reviewer (.*)$') AS person_id
+    FROM event_attributes
+    WHERE attr_name LIKE 'Result by Reviewer %'
+    UNION
+    SELECT DISTINCT org_resource AS person_id
+    FROM events
+    WHERE org_resource IS NOT NULL
+) AS combined_persons
 
 mappingId assignmentAndReview
-target  :data/assignment/{paper}{reviewer} a :Assignment ; :assignedTo :data/person/{reviewer} ; :leadsTo :data/review/{paper}{reviewer} . :data/paper/{paper} :assignment :data/assignment/{paper}{reviewer} . :data/review/{paper}{reviewer} a :Review ; :subTime {time_timestamp}^^xsd:dateTime .
-source  SELECT DISTINCT A.case_id AS paper, substring(B.attr_name FROM 'Result by Reviewer (.*)$') AS reviewer, A.time_timestamp FROM events A INNER JOIN event_attributes B ON A.event_id = B.event_id WHERE B.attr_name LIKE 'Result by Reviewer %'
+target  :data/assignment/{paper}{reviewer} a :Assignment ; :assignedTo :data/person/{reviewer} ; :leadsTo :data/review/{paper}{reviewer} . :data/paper/{paper} :assignment :data/assignment/{paper}{reviewer} . :data/review/{paper}{reviewer} a :Review ; :subTime {time_timestamp}^^xsd:dateTime ; :recommendation {review_result}^^xsd:string .
+source  SELECT DISTINCT A.case_id AS paper, substring(B.attr_name FROM 'Result by Reviewer (.*)$') AS reviewer, A.time_timestamp, B.attr_value AS review_result  FROM events A INNER JOIN event_attributes B ON A.event_id = B.event_id WHERE B.attr_name LIKE 'Result by Reviewer %'
+
+mappingId additionalAssignment
+target :data/assignment/{paper}{reviewer} a :AdditionalAssignment ;
+        :additionalInviteStart {invite_start}^^xsd:dateTime ;
+        :additionalInviteComplete {invite_complete}^^xsd:dateTime ;
+        :invitedBy :data/person/{inviter} .
+source SELECT
+        A.case_id AS paper,
+        A.org_resource AS reviewer,
+        MIN(
+            CASE
+                WHEN I.lifecycle_transition = 'start'
+                THEN I.time_timestamp
+            END
+        ) AS invite_start,
+        MAX(
+            CASE
+                WHEN I.lifecycle_transition = 'complete'
+                THEN I.time_timestamp
+            END
+        ) AS invite_complete,
+        MAX(
+            CASE
+                WHEN I.lifecycle_transition = 'complete'
+                THEN I.org_resource
+            END
+        ) AS inviter
+    FROM events A
+    INNER JOIN event_attributes B
+        ON A.event_id = B.event_id
+    INNER JOIN events I
+        ON A.case_id = I.case_id
+    WHERE A.concept_name = 'get review X'
+      AND B.attr_name = 'Result by Reviewer X'
+      AND A.org_resource IS NOT NULL
+      AND I.concept_name = 'invite additional reviewer'
+    GROUP BY
+        A.case_id,
+        A.org_resource
 
 mappingId paperInviteTimes
 target  :data/paper/{case_id} :invTime {invite_start}^^xsd:dateTime ; :accTime {invite_acc}^^xsd:dateTime .
 source  SELECT case_id, (ARRAY_AGG(time_timestamp ORDER BY time_timestamp ASC))[1] AS invite_start, (ARRAY_AGG(time_timestamp ORDER BY time_timestamp ASC))[2] AS invite_acc FROM events WHERE concept_name = 'invite reviewers' GROUP BY case_id
 
 mappingId decidedPaper
-target  :data/decidedPaper/{paper} a :DecidedPaper ; :notifiedBy :data/person/{noted_by} ; :accepted {decision}^^xsd:boolean ; :declTime {time}^^xsd:dateTime . :data/paper/{paper} :decision :data/decidedPaper/{paper} .
+target  :data/decidedPaper/{paper} a :DecidedPaper ; :notifiedBy :data/person/{noted_by} ; :accepted {decision}^^xsd:boolean ; :declTime {time}^^xsd:dateTime .
 source  SELECT e_term.case_id AS paper, e_term.org_resource AS noted_by, e_term.time_timestamp AS time, (MAX(CASE WHEN a.attr_name = 'accepts' THEN a.attr_value::int ELSE 0 END) > MAX(CASE WHEN a.attr_name = 'rejects' THEN a.attr_value::int ELSE 0 END)) AS decision FROM events e_term LEFT JOIN events e_decide ON e_term.case_id = e_decide.case_id AND e_decide.concept_name = 'decide' LEFT JOIN event_attributes a ON e_decide.event_id = a.event_id WHERE e_term.concept_name IN ('accept', 'reject') GROUP BY e_term.case_id, e_term.org_resource, e_term.time_timestamp
+
+mappingId additionalPerson
+target :data/person/{inviter} a :Person; :pName "Inviter_{inviter}"^^xsd:string .
+source SELECT org_resource AS inviter FROM events WHERE concept_name='invite additional reviewer'
 ]]
+

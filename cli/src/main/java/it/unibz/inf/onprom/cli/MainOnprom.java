@@ -9,7 +9,8 @@ import static picocli.CommandLine.*;
         subcommands = {
                 AnnotationCommand.class,
                 GenerateCommand.class,
-                MergeCommand.class
+                MergeCommand.class,
+                UseCommand.class
         }
 )
 public class MainOnprom implements Runnable{

@@ -29,6 +29,7 @@ package it.unibz.inf.onprom.logextractor.ocel;
 import it.unibz.inf.onprom.logextractor.EBDAReasoner;
 import it.unibz.inf.ontop.owlapi.connection.OntopOWLStatement;
 import it.unibz.inf.ontop.owlapi.resultset.OWLBindingSet;
+import it.unibz.inf.ontop.owlapi.resultset.OWLResultSet;
 import it.unibz.inf.ontop.owlapi.resultset.TupleOWLResultSet;
 import it.unibz.inf.ontop.spec.mapping.pp.SQLPPMapping;
 import it.unibz.inf.pm.ocel.entity.OcelAttribute;
@@ -42,10 +43,11 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.ResultSet;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject> {
+public class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject> {
     private static final Logger logger = LoggerFactory.getLogger(OCELEBDAReasoner.class);
 
     private final OCELFactory factory;
@@ -59,6 +61,14 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
     OCELEBDAReasoner(SQLPPMapping obdaModel, Properties dataSourceProperties, OCELFactory factory) throws OWLOntologyCreationException {
         super(obdaModel, dataSourceProperties, OCELConstants.getDefaultEventOntology());
         this.factory = factory;
+    }
+
+    public static OCELEBDAReasoner from(SQLPPMapping combinedMapping, Properties properties, OCELFactory factory) {
+        try {
+            return new OCELEBDAReasoner(combinedMapping, properties, factory);
+        } catch (OWLOntologyCreationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     void printUnfoldedQueries() {
@@ -270,6 +280,33 @@ class OCELEBDAReasoner extends EBDAReasoner<OcelAttribute, OcelEvent, OcelObject
             objectTypes.add(type);
             object.setType(type);
         }
+    }
+
+    public enum QueryType {
+        Select,
+        Ask,
+        Construct,
+        Describe,
+        Graph
+    }
+
+    public OWLResultSet getResults(String query, QueryType type) {
+        try {
+            OntopOWLStatement statement = getStatement();
+            switch (type) {
+                case Select:
+                    return statement.executeSelectQuery(query);
+                case Ask:
+                    return statement.executeAskQuery(query);
+                case Construct:
+                    return statement.executeConstructQuery(query);
+                case Describe:
+                    return statement.executeDescribeQuery(query);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 //
 //

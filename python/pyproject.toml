@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=69.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "onprom-client"
+version = "2.4.0"
+description = "Python client wrapper for the onprom OBDA event log extraction framework via Py4J"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Rikayan Chaki" }
+]
+dependencies = [
+    "py4j>=0.10.9.9",
+    "tqdm>=4.66.5",
+]
+
+[project.optional-dependencies]
+neo4j = [
+    "neo4j>=6.0.3",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["onprom*"]s

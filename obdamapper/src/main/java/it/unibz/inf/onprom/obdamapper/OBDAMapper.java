@@ -161,8 +161,13 @@ public class OBDAMapper {
     }
 
     private String deriveIRI(Map<String, List<ImmutableTerm>> map, ImmutableTerm substitutedTerm) {
-        if(substitutedTerm instanceof GroundTerm)
+        if(substitutedTerm instanceof GroundFunctionalTerm groundTerm) {
+            ImmutableList<? extends GroundTerm> terms = groundTerm.getTerms();
+            if (terms.size() == 2 && terms.get(0) instanceof Constant constant && terms.get(1) instanceof RDFTermTypeConstant termTypeConstant) {
+                return '"' + constant.getValue() + "\"^^" + termTypeConstant.getRDFTermType().toString();
+            }
             return substitutedTerm.toString();
+        }
         else if(substitutedTerm instanceof NonGroundFunctionalTerm ngTerm) {
             List<String> sb = new ArrayList<>();
             ImmutableTerm term = ngTerm.getTerm(0);
@@ -421,15 +426,14 @@ public class OBDAMapper {
                                                 .anyMatch(axiom ->
                                                         axiom.getDomain().equals(targetClass)))
                         .toList();
-                if(domainIsClass.size() != 2)
+                if(domainIsClass.size() > 2)
                     throw new IllegalArgumentException("Expected association class "
                             + associationClass.getIRI().getShortForm()
-                     + " to have exactly two object properties with it as domain but got "
+                     + " to have at most two object properties with it as domain but got "
                             + domainIsClass.size() + " properties instead!");
 
 
                 OWLObjectProperty[] parts = getParts(domainIsClass, associationClass);
-
                 String associationURI = getAssociationInstanceTemplate(firstMappedURI, secondMappedURI,
                         targetEntity.getIRI());
 
@@ -458,9 +462,10 @@ public class OBDAMapper {
             List<OWLObjectProperty> properties,
             OWLClass associationClass) {
 
-        OWLObjectProperty[] parts = new OWLObjectProperty[2];
+        if (properties.size() == 2) {
+            OWLObjectProperty[] parts = new OWLObjectProperty[2];
 
-        for (OWLObjectProperty property : properties) {
+            for (OWLObjectProperty property : properties) {
             int index = getAssociationPart(property, associationClass);
 
             if (parts[index] != null) {
@@ -473,14 +478,15 @@ public class OBDAMapper {
 
             parts[index] = property;
         }
+            if (parts[0] == null || parts[1] == null) {
+                throw new IllegalArgumentException(
+                        "Association class " + associationClass
+                                + " must have exactly one domain part and one range part");
+            }
 
-        if (parts[0] == null || parts[1] == null) {
-            throw new IllegalArgumentException(
-                    "Association class " + associationClass
-                            + " must have exactly one domain part and one range part");
+            return parts;
         }
-
-        return parts;
+        return new OWLObjectProperty[] {properties.getFirst(), properties.getFirst()};
     }
 
     private int getAssociationPart(OWLObjectProperty property, OWLClass associationClass) {

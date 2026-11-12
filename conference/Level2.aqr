@@ -1,0 +1,873 @@
+{
+  "@class" : "it.unibz.inf.onprom.data.query.AnnotationQueries",
+  "queries" : [ "java.util.LinkedHashSet", [ {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"subReviewActivity\" AS ?_L_1266469886) (\"SubmitReview\" AS ?_I1_1266469886)\nWHERE\n  { ?Review  a  <http://www.example.org/conference/Review>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Activity",
+    "component" : [ "_L_1266469886", "_I1_1266469886", "Review" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"SubmitReview\" AS ?_I1_1266469886) (\"subReviewActivity\" AS ?_L_1266469886)\nWHERE\n  { ?Review  a  <http://www.example.org/conference/Review>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/name",
+    "firstComponent" : [ "_L_1266469886", "_I1_1266469886", "Review" ],
+    "secondComponent" : [ "_I1_1266469886" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"subReviewActivity\" AS ?_L_1266469886) (\"SubmitReview\" AS ?_I1_1266469886) (\"SubmitReview\" AS ?_L_1864160189) ?_I1_1864160189\nWHERE\n  { ?Review  a  <http://www.example.org/conference/Review>\n    BIND(?Review AS ?_I1_1864160189)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/observes",
+    "firstComponent" : [ "_L_1864160189", "_I1_1864160189", "Review" ],
+    "secondComponent" : [ "_L_1266469886", "_I1_1266469886", "Review" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Person (\"nameValue\" AS ?_L_1252495907) ?_I1_1252495907\nWHERE\n  { ?Person  a                     <http://www.example.org/conference/Person> ;\n             <http://www.example.org/conference/pName>  ?_I1_1252495907}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/OAttrValue",
+    "component" : [ "_L_1252495907", "_I1_1252495907", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person ?_I1_1252495907 (\"nameValue\" AS ?_L_1252495907)\nWHERE\n  { ?Person  <http://www.example.org/conference/pName>  ?_I1_1252495907}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/oValue",
+    "firstComponent" : [ "_L_1252495907", "_I1_1252495907", "Person" ],
+    "secondComponent" : [ "_I1_1252495907" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person (\"nameValue\" AS ?_L_1252495907) ?_I1_1252495907 (\"nameType\" AS ?_L_1063855386) (\"pName\" AS ?_I1_1063855386)\nWHERE\n  { ?Person  a                     <http://www.example.org/conference/Person> ;\n             <http://www.example.org/conference/pName>  ?_I1_1252495907}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOValue",
+    "firstComponent" : [ "_L_1063855386", "_I1_1063855386", "Person" ],
+    "secondComponent" : [ "_L_1252495907", "_I1_1252495907", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person (\"nameValue\" AS ?_L_1252495907) ?_I1_1252495907 (\"Person\" AS ?_L_1242566020) ?_I1_1242566020\nWHERE\n  { ?Person  a                     <http://www.example.org/conference/Person> ;\n             <http://www.example.org/conference/pName>  ?_I1_1252495907\n    BIND(?Person AS ?_I1_1242566020)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOAttr",
+    "firstComponent" : [ "_L_1242566020", "_I1_1242566020", "Person" ],
+    "secondComponent" : [ "_L_1252495907", "_I1_1252495907", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"lifecycleAtt\" AS ?_L_29608903) (\"lifecycle\" AS ?_I1_29608903)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Attribute",
+    "component" : [ "_L_29608903", "_I1_29608903", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"lifecycle\" AS ?_I1_29608903) (\"lifecycleAtt\" AS ?_L_29608903)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/key",
+    "firstComponent" : [ "_L_29608903", "_I1_29608903", "Paper" ],
+    "secondComponent" : [ "_I1_29608903" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"lifecycleAtt\" AS ?_L_29608903) (\"lifecycle\" AS ?_I1_29608903) (\"inviteRevAct\" AS ?_L_1940424522) (\"InviteReviewers\" AS ?_I1_1940424522)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasEAttribute",
+    "firstComponent" : [ "_L_1940424522", "_I1_1940424522", "Paper" ],
+    "secondComponent" : [ "_L_29608903", "_I1_29608903", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"InviteReviewersEnd\" AS ?_L_1627149556) ?_I1_1627149556\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_1627149556)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Event",
+    "component" : [ "_L_1627149556", "_I1_1627149556", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_I1_1627149556 (\"InviteReviewersEnd\" AS ?_L_1627149556)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_1627149556)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventId",
+    "firstComponent" : [ "_L_1627149556", "_I1_1627149556", "Paper" ],
+    "secondComponent" : [ "_I1_1627149556" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"Paper\" AS ?_L_396082064) ?_I1_396082064\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_396082064)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Object",
+    "component" : [ "_L_396082064", "_I1_396082064", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_I1_396082064 (\"Paper\" AS ?_L_396082064)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_396082064)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/objectId",
+    "firstComponent" : [ "_L_396082064", "_I1_396082064", "Paper" ],
+    "secondComponent" : [ "_I1_396082064" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"Paper\" AS ?_L_396082064) ?_I1_396082064 (\"InviteReviewersStart\" AS ?_L_1062213633) ?_I1_1062213633\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_396082064)\n    BIND(?Paper AS ?_I1_1062213633)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1062213633", "_I1_1062213633", "Paper" ],
+    "secondComponent" : [ "_L_396082064", "_I1_396082064", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"Paper\" AS ?_L_396082064) ?_I1_396082064 (\"InviteReviewersEnd\" AS ?_L_1627149556) ?_I1_1627149556\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_396082064)\n    BIND(?Paper AS ?_I1_1627149556)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1627149556", "_I1_1627149556", "Paper" ],
+    "secondComponent" : [ "_L_396082064", "_I1_396082064", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?AdditionalAssignment (\"Paper\" AS ?_L_396082064) ?_I1_396082064 (\"InviteAdditionalReviewerStart\" AS ?_L_1341029792) ?_I1_1341029792\nWHERE\n  { ?Paper    <http://www.example.org/conference/assignment>  ?Assignment .\n    ?Assignment  a                  <http://www.example.org/conference/AdditionalAssignment>\n    BIND(?Paper AS ?_I1_396082064)\n    BIND(?AdditionalAssignment AS ?_I1_1341029792)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1341029792", "_I1_1341029792", "AdditionalAssignment" ],
+    "secondComponent" : [ "_L_396082064", "_I1_396082064", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?Review (\"Paper\" AS ?_L_396082064) ?_I1_396082064 (\"SubmitReview\" AS ?_L_1864160189) ?_I1_1864160189\nWHERE\n  { ?Paper    <http://www.example.org/conference/assignment>  ?Assignment .\n    ?Assignment  <http://www.example.org/conference/leadsTo>  ?Review\n    BIND(?Paper AS ?_I1_396082064)\n    BIND(?Review AS ?_I1_1864160189)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1864160189", "_I1_1864160189", "Review" ],
+    "secondComponent" : [ "_L_396082064", "_I1_396082064", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?DecidedPaper (\"Paper\" AS ?_L_396082064) ?_I1_396082064 (\"NotifyDecision\" AS ?_L_1001656513) ?_I1_1001656513\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?DecidedPaper)\n    BIND(?Paper AS ?_I1_396082064)\n    BIND(?DecidedPaper AS ?_I1_1001656513)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1001656513", "_I1_1001656513", "DecidedPaper" ],
+    "secondComponent" : [ "_L_396082064", "_I1_396082064", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?Conference (\"Paper\" AS ?_L_396082064) ?_I1_396082064 (\"Conference\" AS ?_L_39195818) ?_I1_39195818\nWHERE\n  { ?Paper  <http://www.example.org/conference/submittedTo>  ?Conference\n    BIND(?Paper AS ?_I1_396082064)\n    BIND(?Conference AS ?_I1_39195818)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/relatedTo",
+    "firstComponent" : [ "_L_39195818", "_I1_39195818", "Conference" ],
+    "secondComponent" : [ "_L_396082064", "_I1_396082064", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?Person (\"Paper\" AS ?_L_396082064) ?_I1_396082064 (\"Person\" AS ?_L_1242566020) ?_I1_1242566020\nWHERE\n  { ?Paper  <http://www.example.org/conference/submittedBy>  ?Person\n    BIND(?Paper AS ?_I1_396082064)\n    BIND(?Person AS ?_I1_1242566020)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/relatedTo",
+    "firstComponent" : [ "_L_1242566020", "_I1_1242566020", "Person" ],
+    "secondComponent" : [ "_L_396082064", "_I1_396082064", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?Assignment (\"Paper\" AS ?_L_396082064) ?_I1_396082064 (\"Assignment\" AS ?_L_309486742) ?_I1_309486742\nWHERE\n  { ?Paper  <http://www.example.org/conference/assignment>  ?Assignment\n    BIND(?Paper AS ?_I1_396082064)\n    BIND(?Assignment AS ?_I1_309486742)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/relatedTo",
+    "firstComponent" : [ "_L_309486742", "_I1_309486742", "Assignment" ],
+    "secondComponent" : [ "_L_396082064", "_I1_396082064", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment (\"addInvEndTime\" AS ?_L_1380746591) ?_I1_1380746591\nWHERE\n  { ?AdditionalAssignment\n              a                     <http://www.example.org/conference/AdditionalAssignment> ;\n              <http://www.example.org/conference/additionalInviteComplete>  ?_I1_1380746591}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Time",
+    "component" : [ "_L_1380746591", "_I1_1380746591", "AdditionalAssignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment ?_I1_1380746591 (\"addInvEndTime\" AS ?_L_1380746591)\nWHERE\n  { ?AdditionalAssignment\n              <http://www.example.org/conference/additionalInviteComplete>  ?_I1_1380746591}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/value",
+    "firstComponent" : [ "_L_1380746591", "_I1_1380746591", "AdditionalAssignment" ],
+    "secondComponent" : [ "_I1_1380746591" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment (\"addInvEndTime\" AS ?_L_1380746591) ?_I1_1380746591 (\"InviteAdditionalReviewerEnd\" AS ?_L_1443875837) ?_I1_1443875837\nWHERE\n  { ?AdditionalAssignment\n              a                     <http://www.example.org/conference/AdditionalAssignment> ;\n              <http://www.example.org/conference/additionalInviteComplete>  ?_I1_1380746591\n    BIND(?AdditionalAssignment AS ?_I1_1443875837)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventAtTime",
+    "firstComponent" : [ "_L_1443875837", "_I1_1443875837", "AdditionalAssignment" ],
+    "secondComponent" : [ "_L_1380746591", "_I1_1380746591", "AdditionalAssignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"outcomeAct\" AS ?_L_1262314926) (\"outcome\" AS ?_I1_1262314926)\nWHERE\n  { ?DecidedPaper\n              a  <http://www.example.org/conference/DecidedPaper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Attribute",
+    "component" : [ "_L_1262314926", "_I1_1262314926", "DecidedPaper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"outcome\" AS ?_I1_1262314926) (\"outcomeAct\" AS ?_L_1262314926)\nWHERE\n  { ?DecidedPaper\n              a  <http://www.example.org/conference/DecidedPaper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/key",
+    "firstComponent" : [ "_L_1262314926", "_I1_1262314926", "DecidedPaper" ],
+    "secondComponent" : [ "_I1_1262314926" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"outcomeAct\" AS ?_L_1262314926) (\"outcome\" AS ?_I1_1262314926) (\"notifyDecisionAct\" AS ?_L_393825156) (\"NotifyDecision\" AS ?_I1_393825156)\nWHERE\n  { ?DecidedPaper\n              a  <http://www.example.org/conference/DecidedPaper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasEAttribute",
+    "firstComponent" : [ "_L_393825156", "_I1_393825156", "DecidedPaper" ],
+    "secondComponent" : [ "_L_1262314926", "_I1_1262314926", "DecidedPaper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"endLifecycleVal\" AS ?_L_973821976) (\"end\" AS ?_I1_973821976)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/EAttrValue",
+    "component" : [ "_L_973821976", "_I1_973821976", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"end\" AS ?_I1_973821976) (\"endLifecycleVal\" AS ?_L_973821976)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eValue",
+    "firstComponent" : [ "_L_973821976", "_I1_973821976", "Paper" ],
+    "secondComponent" : [ "_I1_973821976" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"endLifecycleVal\" AS ?_L_973821976) (\"end\" AS ?_I1_973821976) (\"lifecycleAtt\" AS ?_L_29608903) (\"lifecycle\" AS ?_I1_29608903)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasEValue",
+    "firstComponent" : [ "_L_29608903", "_I1_29608903", "Paper" ],
+    "secondComponent" : [ "_L_973821976", "_I1_973821976", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"endLifecycleVal\" AS ?_L_973821976) (\"end\" AS ?_I1_973821976) (\"InviteReviewersEnd\" AS ?_L_1627149556) ?_I1_1627149556\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_1627149556)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasEAttr",
+    "firstComponent" : [ "_L_1627149556", "_I1_1627149556", "Paper" ],
+    "secondComponent" : [ "_L_973821976", "_I1_973821976", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Person (\"Person\" AS ?_L_1242566020) ?_I1_1242566020\nWHERE\n  { ?Person  a  <http://www.example.org/conference/Person>\n    BIND(?Person AS ?_I1_1242566020)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Object",
+    "component" : [ "_L_1242566020", "_I1_1242566020", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person ?_I1_1242566020 (\"Person\" AS ?_L_1242566020)\nWHERE\n  { ?Person  a  <http://www.example.org/conference/Person>\n    BIND(?Person AS ?_I1_1242566020)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/objectId",
+    "firstComponent" : [ "_L_1242566020", "_I1_1242566020", "Person" ],
+    "secondComponent" : [ "_I1_1242566020" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person ?AdditionalAssignment (\"Person\" AS ?_L_1242566020) ?_I1_1242566020 (\"InviteAdditionalReviewerStart\" AS ?_L_1341029792) ?_I1_1341029792\nWHERE\n  { ?Assignment  <http://www.example.org/conference/assignedTo>  ?Person .\n    ?Person   a                     <http://www.example.org/conference/AdditionalAssignment>\n    BIND(?Person AS ?_I1_1242566020)\n    BIND(?AdditionalAssignment AS ?_I1_1341029792)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1341029792", "_I1_1341029792", "AdditionalAssignment" ],
+    "secondComponent" : [ "_L_1242566020", "_I1_1242566020", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person ?AdditionalAssignment (\"Person\" AS ?_L_1242566020) ?_I1_1242566020 (\"InviteAdditionalReviewerEnd\" AS ?_L_1443875837) ?_I1_1443875837\nWHERE\n  { ?Assignment  <http://www.example.org/conference/assignedTo>  ?Person .\n    ?Person   a                     <http://www.example.org/conference/AdditionalAssignment>\n    BIND(?Person AS ?_I1_1242566020)\n    BIND(?AdditionalAssignment AS ?_I1_1443875837)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1443875837", "_I1_1443875837", "AdditionalAssignment" ],
+    "secondComponent" : [ "_L_1242566020", "_I1_1242566020", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person ?Review (\"Person\" AS ?_L_1242566020) ?_I1_1242566020 (\"SubmitReview\" AS ?_L_1864160189) ?_I1_1864160189\nWHERE\n  { ?Assignment  <http://www.example.org/conference/assignedTo>  ?Person ;\n              <http://www.example.org/conference/leadsTo>  ?Review\n    BIND(?Person AS ?_I1_1242566020)\n    BIND(?Review AS ?_I1_1864160189)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1864160189", "_I1_1864160189", "Review" ],
+    "secondComponent" : [ "_L_1242566020", "_I1_1242566020", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person ?AdditionalAssignment (\"Person\" AS ?_L_1242566020) ?_I1_1242566020 (\"InviteAdditionalReviewerStart\" AS ?_L_1341029792) ?_I1_1341029792\nWHERE\n  { ?AdditionalAssignment\n              <http://www.example.org/conference/invitedBy>  ?Person\n    BIND(?Person AS ?_I1_1242566020)\n    BIND(?AdditionalAssignment AS ?_I1_1341029792)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1341029792", "_I1_1341029792", "AdditionalAssignment" ],
+    "secondComponent" : [ "_L_1242566020", "_I1_1242566020", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person ?AdditionalAssignment (\"Person\" AS ?_L_1242566020) ?_I1_1242566020 (\"InviteAdditionalReviewerEnd\" AS ?_L_1443875837) ?_I1_1443875837\nWHERE\n  { ?AdditionalAssignment\n              <http://www.example.org/conference/invitedBy>  ?Person\n    BIND(?Person AS ?_I1_1242566020)\n    BIND(?AdditionalAssignment AS ?_I1_1443875837)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1443875837", "_I1_1443875837", "AdditionalAssignment" ],
+    "secondComponent" : [ "_L_1242566020", "_I1_1242566020", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person ?DecidedPaper (\"Person\" AS ?_L_1242566020) ?_I1_1242566020 (\"NotifyDecision\" AS ?_L_1001656513) ?_I1_1001656513\nWHERE\n  { ?DecidedPaper\n              <http://www.example.org/conference/notifiedBy>  ?Person\n    BIND(?Person AS ?_I1_1242566020)\n    BIND(?DecidedPaper AS ?_I1_1001656513)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1001656513", "_I1_1001656513", "DecidedPaper" ],
+    "secondComponent" : [ "_L_1242566020", "_I1_1242566020", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"nameType\" AS ?_L_1406038616) (\"confName\" AS ?_I1_1406038616)\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/OAttribute",
+    "component" : [ "_L_1406038616", "_I1_1406038616", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"confName\" AS ?_I1_1406038616) (\"nameType\" AS ?_L_1406038616)\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/oKey",
+    "firstComponent" : [ "_L_1406038616", "_I1_1406038616", "Conference" ],
+    "secondComponent" : [ "_I1_1406038616" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"nameType\" AS ?_L_1406038616) (\"confName\" AS ?_I1_1406038616) (\"Conference\" AS ?_I0_1611475192)\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOAttribute",
+    "firstComponent" : [ "_I0_1611475192", "Conference" ],
+    "secondComponent" : [ "_L_1406038616", "_I1_1406038616", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Conference ?_I0_1863931397\nWHERE\n  { ?Conference  a                  <http://www.example.org/conference/Conference> ;\n              <http://www.example.org/conference/crTime>  ?_I0_1863931397}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Time",
+    "component" : [ "_I0_1863931397", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference ?_I0_1863931397\nWHERE\n  { ?Conference  <http://www.example.org/conference/crTime>  ?_I0_1863931397}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/value",
+    "firstComponent" : [ "_I0_1863931397", "Conference" ],
+    "secondComponent" : [ "_I0_1863931397" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference ?_I0_1863931397 (\"MakeConference\" AS ?_L_963073800) ?_I1_963073800\nWHERE\n  { ?Conference  a                  <http://www.example.org/conference/Conference> ;\n              <http://www.example.org/conference/crTime>  ?_I0_1863931397\n    BIND(?Conference AS ?_I1_963073800)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventAtTime",
+    "firstComponent" : [ "_L_963073800", "_I1_963073800", "Conference" ],
+    "secondComponent" : [ "_I0_1863931397", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"MakeConference\" AS ?_I0_461633438)\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Activity",
+    "component" : [ "_I0_461633438", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"MakeConference\" AS ?_I0_461633438)\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/name",
+    "firstComponent" : [ "_I0_461633438", "Conference" ],
+    "secondComponent" : [ "_I0_461633438" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"MakeConference\" AS ?_I0_461633438) (\"MakeConference\" AS ?_L_963073800) ?_I1_963073800\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>\n    BIND(?Conference AS ?_I1_963073800)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/observes",
+    "firstComponent" : [ "_L_963073800", "_I1_963073800", "Conference" ],
+    "secondComponent" : [ "_I0_461633438", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"SubmitReview\" AS ?_L_1864160189) ?_I1_1864160189\nWHERE\n  { ?Review  a  <http://www.example.org/conference/Review>\n    BIND(?Review AS ?_I1_1864160189)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Event",
+    "component" : [ "_L_1864160189", "_I1_1864160189", "Review" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_I1_1864160189 (\"SubmitReview\" AS ?_L_1864160189)\nWHERE\n  { ?Review  a  <http://www.example.org/conference/Review>\n    BIND(?Review AS ?_I1_1864160189)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventId",
+    "firstComponent" : [ "_L_1864160189", "_I1_1864160189", "Review" ],
+    "secondComponent" : [ "_I1_1864160189" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"outcomeVal\" AS ?_L_629391649) ?_I1_629391649\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.org/conference/DecidedPaper> ;\n              <http://www.example.org/conference/accepted>  ?_I1_629391649}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/EAttrValue",
+    "component" : [ "_L_629391649", "_I1_629391649", "DecidedPaper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?_I1_629391649 (\"outcomeVal\" AS ?_L_629391649)\nWHERE\n  { ?DecidedPaper\n              <http://www.example.org/conference/accepted>  ?_I1_629391649}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eValue",
+    "firstComponent" : [ "_L_629391649", "_I1_629391649", "DecidedPaper" ],
+    "secondComponent" : [ "_I1_629391649" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"outcomeVal\" AS ?_L_629391649) ?_I1_629391649 (\"outcomeAct\" AS ?_L_1262314926) (\"outcome\" AS ?_I1_1262314926)\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.org/conference/DecidedPaper> ;\n              <http://www.example.org/conference/accepted>  ?_I1_629391649}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasEValue",
+    "firstComponent" : [ "_L_1262314926", "_I1_1262314926", "DecidedPaper" ],
+    "secondComponent" : [ "_L_629391649", "_I1_629391649", "DecidedPaper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"outcomeVal\" AS ?_L_629391649) ?_I1_629391649 (\"NotifyDecision\" AS ?_L_1001656513) ?_I1_1001656513\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.org/conference/DecidedPaper> ;\n              <http://www.example.org/conference/accepted>  ?_I1_629391649\n    BIND(?DecidedPaper AS ?_I1_1001656513)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasEAttr",
+    "firstComponent" : [ "_L_1001656513", "_I1_1001656513", "DecidedPaper" ],
+    "secondComponent" : [ "_L_629391649", "_I1_629391649", "DecidedPaper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"decValue\" AS ?_L_1871039654) ?_I1_1871039654\nWHERE\n  { ?Paper  a                     <http://www.example.org/conference/Paper> ;\n            <http://www.example.org/conference/accepted>  ?_I1_1871039654}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/OAttrValue",
+    "component" : [ "_L_1871039654", "_I1_1871039654", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_I1_1871039654 (\"decValue\" AS ?_L_1871039654)\nWHERE\n  { ?null   a                     <http://www.example.org/conference/DecidedPaper> .\n    ?Paper  <http://www.example.org/conference/accepted>  ?_I1_1871039654}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/oValue",
+    "firstComponent" : [ "_L_1871039654", "_I1_1871039654", "Paper" ],
+    "secondComponent" : [ "_I1_1871039654" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"decValue\" AS ?_L_1871039654) ?_I1_1871039654 (\"decType\" AS ?_L_562785142) (\"decision\" AS ?_I1_562785142)\nWHERE\n  { ?Paper  a                     <http://www.example.org/conference/Paper> ;\n            <http://www.example.org/conference/accepted>  ?_I1_1871039654}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOValue",
+    "firstComponent" : [ "_L_562785142", "_I1_562785142", "Paper" ],
+    "secondComponent" : [ "_L_1871039654", "_I1_1871039654", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"decValue\" AS ?_L_1871039654) ?_I1_1871039654 (\"Paper\" AS ?_L_76744552) ?_I1_76744552\nWHERE\n  { ?Paper  a                     <http://www.example.org/conference/Paper> ;\n            <http://www.example.org/conference/accepted>  ?_I1_1871039654\n    BIND(?Paper AS ?_I1_76744552)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOAttr",
+    "firstComponent" : [ "_L_76744552", "_I1_76744552", "Paper" ],
+    "secondComponent" : [ "_L_1871039654", "_I1_1871039654", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Person (\"Person\" AS ?_I0_440500843)\nWHERE\n  { ?Person  a  <http://www.example.org/conference/Person>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Type",
+    "component" : [ "_I0_440500843", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person (\"Person\" AS ?_I0_440500843)\nWHERE\n  { ?Person  a  <http://www.example.org/conference/Person>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/typeString",
+    "firstComponent" : [ "_I0_440500843", "Person" ],
+    "secondComponent" : [ "_I0_440500843" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person (\"Person\" AS ?_I0_440500843) (\"Person\" AS ?_L_1242566020) ?_I1_1242566020\nWHERE\n  { ?Person  a  <http://www.example.org/conference/Person>\n    BIND(?Person AS ?_I1_1242566020)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/has",
+    "firstComponent" : [ "_L_1242566020", "_I1_1242566020", "Person" ],
+    "secondComponent" : [ "_I0_440500843", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_I0_1156425794\nWHERE\n  { ?Paper  a                     <http://www.example.org/conference/Paper> ;\n            <http://www.example.org/conference/accTime>  ?_I0_1156425794}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Time",
+    "component" : [ "_I0_1156425794", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_I0_1156425794\nWHERE\n  { ?Paper  <http://www.example.org/conference/accTime>  ?_I0_1156425794}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/value",
+    "firstComponent" : [ "_I0_1156425794", "Paper" ],
+    "secondComponent" : [ "_I0_1156425794" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_I0_1156425794 (\"decValue\" AS ?_L_1871039654) ?_I1_1871039654\nWHERE\n  { ?Paper  a                     <http://www.example.org/conference/Paper> ;\n            <http://www.example.org/conference/accTime>  ?_I0_1156425794 ;\n            <http://www.example.org/conference/accepted>  ?_I1_1871039654}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/attrAtTime",
+    "firstComponent" : [ "_L_1871039654", "_I1_1871039654", "Paper" ],
+    "secondComponent" : [ "_I0_1156425794", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_I0_1156425794 (\"InviteReviewersEnd\" AS ?_L_1627149556) ?_I1_1627149556\nWHERE\n  { ?Paper  a                     <http://www.example.org/conference/Paper> ;\n            <http://www.example.org/conference/accTime>  ?_I0_1156425794\n    BIND(?Paper AS ?_I1_1627149556)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventAtTime",
+    "firstComponent" : [ "_L_1627149556", "_I1_1627149556", "Paper" ],
+    "secondComponent" : [ "_I0_1156425794", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Assignment\" AS ?_I0_1259498400)\nWHERE\n  { ?Assignment  a  <http://www.example.org/conference/Assignment>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Type",
+    "component" : [ "_I0_1259498400", "Assignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Assignment\" AS ?_I0_1259498400)\nWHERE\n  { ?Assignment  a  <http://www.example.org/conference/Assignment>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/typeString",
+    "firstComponent" : [ "_I0_1259498400", "Assignment" ],
+    "secondComponent" : [ "_I0_1259498400" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Assignment\" AS ?_I0_1259498400) (\"Assignment\" AS ?_L_309486742) ?_I1_309486742\nWHERE\n  { ?Assignment  a  <http://www.example.org/conference/Assignment>\n    BIND(?Assignment AS ?_I1_309486742)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/has",
+    "firstComponent" : [ "_L_309486742", "_I1_309486742", "Assignment" ],
+    "secondComponent" : [ "_I0_1259498400", "Assignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"createdAtType\" AS ?_L_674532609) (\"createdAt\" AS ?_I1_674532609)\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/OAttribute",
+    "component" : [ "_L_674532609", "_I1_674532609", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"createdAt\" AS ?_I1_674532609) (\"createdAtType\" AS ?_L_674532609)\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/oKey",
+    "firstComponent" : [ "_L_674532609", "_I1_674532609", "Conference" ],
+    "secondComponent" : [ "_I1_674532609" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"createdAtType\" AS ?_L_674532609) (\"createdAt\" AS ?_I1_674532609) (\"Conference\" AS ?_I0_1611475192)\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOAttribute",
+    "firstComponent" : [ "_I0_1611475192", "Conference" ],
+    "secondComponent" : [ "_L_674532609", "_I1_674532609", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"invSendTime\" AS ?_L_832886939) ?_I1_832886939\nWHERE\n  { ?Paper  a                     <http://www.example.org/conference/Paper> ;\n            <http://www.example.org/conference/invTime>  ?_I1_832886939}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Time",
+    "component" : [ "_L_832886939", "_I1_832886939", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_I1_832886939 (\"invSendTime\" AS ?_L_832886939)\nWHERE\n  { ?Paper  <http://www.example.org/conference/invTime>  ?_I1_832886939}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/value",
+    "firstComponent" : [ "_L_832886939", "_I1_832886939", "Paper" ],
+    "secondComponent" : [ "_I1_832886939" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"invSendTime\" AS ?_L_832886939) ?_I1_832886939 (\"InviteReviewersStart\" AS ?_L_1062213633) ?_I1_1062213633\nWHERE\n  { ?Paper  a                     <http://www.example.org/conference/Paper> ;\n            <http://www.example.org/conference/invTime>  ?_I1_832886939\n    BIND(?Paper AS ?_I1_1062213633)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventAtTime",
+    "firstComponent" : [ "_L_1062213633", "_I1_1062213633", "Paper" ],
+    "secondComponent" : [ "_L_832886939", "_I1_832886939", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"nameValue\" AS ?_L_1566353177) ?_I1_1566353177\nWHERE\n  { ?Conference  a                  <http://www.example.org/conference/Conference> ;\n              <http://www.example.org/conference/cName>  ?_I1_1566353177}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/OAttrValue",
+    "component" : [ "_L_1566353177", "_I1_1566353177", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference ?_I1_1566353177 (\"nameValue\" AS ?_L_1566353177)\nWHERE\n  { ?Conference  <http://www.example.org/conference/cName>  ?_I1_1566353177}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/oValue",
+    "firstComponent" : [ "_L_1566353177", "_I1_1566353177", "Conference" ],
+    "secondComponent" : [ "_I1_1566353177" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"nameValue\" AS ?_L_1566353177) ?_I1_1566353177 (\"Conference\" AS ?_L_39195818) ?_I1_39195818\nWHERE\n  { ?Conference  a                  <http://www.example.org/conference/Conference> ;\n              <http://www.example.org/conference/cName>  ?_I1_1566353177\n    BIND(?Conference AS ?_I1_39195818)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOAttr",
+    "firstComponent" : [ "_L_39195818", "_I1_39195818", "Conference" ],
+    "secondComponent" : [ "_L_1566353177", "_I1_1566353177", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"nameValue\" AS ?_L_1566353177) ?_I1_1566353177 (\"nameType\" AS ?_L_1406038616) (\"confName\" AS ?_I1_1406038616)\nWHERE\n  { ?Conference  a                  <http://www.example.org/conference/Conference> ;\n              <http://www.example.org/conference/cName>  ?_I1_1566353177}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOValue",
+    "firstComponent" : [ "_L_1406038616", "_I1_1406038616", "Conference" ],
+    "secondComponent" : [ "_L_1566353177", "_I1_1566353177", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"titleValue\" AS ?_L_205863168) ?_I1_205863168\nWHERE\n  { ?Paper  a                     <http://www.example.org/conference/Paper> ;\n            <http://www.example.org/conference/title>  ?_I1_205863168}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/OAttrValue",
+    "component" : [ "_L_205863168", "_I1_205863168", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_I1_205863168 (\"titleValue\" AS ?_L_205863168)\nWHERE\n  { ?Paper  <http://www.example.org/conference/title>  ?_I1_205863168}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/oValue",
+    "firstComponent" : [ "_L_205863168", "_I1_205863168", "Paper" ],
+    "secondComponent" : [ "_I1_205863168" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"titleValue\" AS ?_L_205863168) ?_I1_205863168 (\"titleType\" AS ?_L_365043855) (\"title\" AS ?_I1_365043855)\nWHERE\n  { ?Paper  a                     <http://www.example.org/conference/Paper> ;\n            <http://www.example.org/conference/title>  ?_I1_205863168}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOValue",
+    "firstComponent" : [ "_L_365043855", "_I1_365043855", "Paper" ],
+    "secondComponent" : [ "_L_205863168", "_I1_205863168", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"titleValue\" AS ?_L_205863168) ?_I1_205863168 (\"Paper\" AS ?_L_76744552) ?_I1_76744552\nWHERE\n  { ?Paper  a                     <http://www.example.org/conference/Paper> ;\n            <http://www.example.org/conference/title>  ?_I1_205863168\n    BIND(?Paper AS ?_I1_76744552)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOAttr",
+    "firstComponent" : [ "_L_76744552", "_I1_76744552", "Paper" ],
+    "secondComponent" : [ "_L_205863168", "_I1_205863168", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?_I0_1093311340\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.org/conference/DecidedPaper> ;\n              <http://www.example.org/conference/declTime>  ?_I0_1093311340}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Time",
+    "component" : [ "_I0_1093311340", "DecidedPaper", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?_I0_1093311340\nWHERE\n  { ?DecidedPaper\n              <http://www.example.org/conference/declTime>  ?_I0_1093311340}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/value",
+    "firstComponent" : [ "_I0_1093311340", "DecidedPaper", "Paper" ],
+    "secondComponent" : [ "_I0_1093311340" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?Paper ?_I0_1093311340 (\"decValue\" AS ?_L_1871039654) ?_I1_1871039654\nWHERE\n  { ?DecidedPaper\n              a  <http://www.example.org/conference/DecidedPaper>\n    BIND(?DecidedPaper AS ?Paper)\n    ?DecidedPaper\n              <http://www.example.org/conference/declTime>  ?_I0_1093311340 .\n    ?Paper    <http://www.example.org/conference/accepted>  ?_I1_1871039654\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/attrAtTime",
+    "firstComponent" : [ "_L_1871039654", "_I1_1871039654", "Paper" ],
+    "secondComponent" : [ "_I0_1093311340", "DecidedPaper", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?_I0_1093311340 (\"NotifyDecision\" AS ?_L_1001656513) ?_I1_1001656513\nWHERE\n  { ?DecidedPaper\n              a                     <http://www.example.org/conference/DecidedPaper> ;\n              <http://www.example.org/conference/declTime>  ?_I0_1093311340\n    BIND(?DecidedPaper AS ?_I1_1001656513)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventAtTime",
+    "firstComponent" : [ "_L_1001656513", "_I1_1001656513", "DecidedPaper" ],
+    "secondComponent" : [ "_I0_1093311340", "DecidedPaper", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"recAtt\" AS ?_L_1341733811) (\"recommendation\" AS ?_I1_1341733811)\nWHERE\n  { ?Review  a  <http://www.example.org/conference/Review>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Attribute",
+    "component" : [ "_L_1341733811", "_I1_1341733811", "Review" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"recommendation\" AS ?_I1_1341733811) (\"recAtt\" AS ?_L_1341733811)\nWHERE\n  { ?Review  a  <http://www.example.org/conference/Review>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/key",
+    "firstComponent" : [ "_L_1341733811", "_I1_1341733811", "Review" ],
+    "secondComponent" : [ "_I1_1341733811" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"recAtt\" AS ?_L_1341733811) (\"recommendation\" AS ?_I1_1341733811) (\"subReviewActivity\" AS ?_L_1266469886) (\"SubmitReview\" AS ?_I1_1266469886)\nWHERE\n  { ?Review  a  <http://www.example.org/conference/Review>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasEAttribute",
+    "firstComponent" : [ "_L_1266469886", "_I1_1266469886", "Review" ],
+    "secondComponent" : [ "_L_1341733811", "_I1_1341733811", "Review" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"titleType\" AS ?_L_365043855) (\"title\" AS ?_I1_365043855)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/OAttribute",
+    "component" : [ "_L_365043855", "_I1_365043855", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"title\" AS ?_I1_365043855) (\"titleType\" AS ?_L_365043855)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/oKey",
+    "firstComponent" : [ "_L_365043855", "_I1_365043855", "Paper" ],
+    "secondComponent" : [ "_I1_365043855" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"titleType\" AS ?_L_365043855) (\"title\" AS ?_I1_365043855) (\"Paper\" AS ?_I0_2146847528)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOAttribute",
+    "firstComponent" : [ "_I0_2146847528", "Paper" ],
+    "secondComponent" : [ "_L_365043855", "_I1_365043855", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment (\"InviteAdditionalReviewerStart\" AS ?_L_1341029792) ?_I1_1341029792\nWHERE\n  { ?AdditionalAssignment\n              a  <http://www.example.org/conference/AdditionalAssignment>\n    BIND(?AdditionalAssignment AS ?_I1_1341029792)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Event",
+    "component" : [ "_L_1341029792", "_I1_1341029792", "AdditionalAssignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment ?_I1_1341029792 (\"InviteAdditionalReviewerStart\" AS ?_L_1341029792)\nWHERE\n  { ?AdditionalAssignment\n              a  <http://www.example.org/conference/AdditionalAssignment>\n    BIND(?AdditionalAssignment AS ?_I1_1341029792)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventId",
+    "firstComponent" : [ "_L_1341029792", "_I1_1341029792", "AdditionalAssignment" ],
+    "secondComponent" : [ "_I1_1341029792" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment (\"invAddAct\" AS ?_L_1330364699) (\"InviteAdditionalReviewer\" AS ?_I1_1330364699)\nWHERE\n  { ?AdditionalAssignment\n              a  <http://www.example.org/conference/AdditionalAssignment>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Activity",
+    "component" : [ "_L_1330364699", "_I1_1330364699", "AdditionalAssignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment (\"InviteAdditionalReviewer\" AS ?_I1_1330364699) (\"invAddAct\" AS ?_L_1330364699)\nWHERE\n  { ?AdditionalAssignment\n              a  <http://www.example.org/conference/AdditionalAssignment>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/name",
+    "firstComponent" : [ "_L_1330364699", "_I1_1330364699", "AdditionalAssignment" ],
+    "secondComponent" : [ "_I1_1330364699" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment (\"invAddAct\" AS ?_L_1330364699) (\"InviteAdditionalReviewer\" AS ?_I1_1330364699) (\"InviteAdditionalReviewerStart\" AS ?_L_1341029792) ?_I1_1341029792\nWHERE\n  { ?AdditionalAssignment\n              a  <http://www.example.org/conference/AdditionalAssignment>\n    BIND(?AdditionalAssignment AS ?_I1_1341029792)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/observes",
+    "firstComponent" : [ "_L_1341029792", "_I1_1341029792", "AdditionalAssignment" ],
+    "secondComponent" : [ "_L_1330364699", "_I1_1330364699", "AdditionalAssignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment (\"invAddAct\" AS ?_L_1330364699) (\"InviteAdditionalReviewer\" AS ?_I1_1330364699) (\"InviteAdditionalReviewerEnd\" AS ?_L_1443875837) ?_I1_1443875837\nWHERE\n  { ?AdditionalAssignment\n              a  <http://www.example.org/conference/AdditionalAssignment>\n    BIND(?AdditionalAssignment AS ?_I1_1443875837)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/observes",
+    "firstComponent" : [ "_L_1443875837", "_I1_1443875837", "AdditionalAssignment" ],
+    "secondComponent" : [ "_L_1330364699", "_I1_1330364699", "AdditionalAssignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"InviteReviewersStart\" AS ?_L_1062213633) ?_I1_1062213633\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_1062213633)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Event",
+    "component" : [ "_L_1062213633", "_I1_1062213633", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper ?_I1_1062213633 (\"InviteReviewersStart\" AS ?_L_1062213633)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_1062213633)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventId",
+    "firstComponent" : [ "_L_1062213633", "_I1_1062213633", "Paper" ],
+    "secondComponent" : [ "_I1_1062213633" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment (\"Assignment\" AS ?_L_611222585) ?_I1_611222585\nWHERE\n  { ?Assignment  a  <http://www.example.org/conference/Assignment>\n    BIND(?Assignment AS ?_I1_611222585)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Object",
+    "component" : [ "_L_611222585", "_I1_611222585", "Assignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?_I1_611222585 (\"Assignment\" AS ?_L_611222585)\nWHERE\n  { ?Assignment  a  <http://www.example.org/conference/Assignment>\n    BIND(?Assignment AS ?_I1_611222585)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/objectId",
+    "firstComponent" : [ "_L_611222585", "_I1_611222585", "Assignment" ],
+    "secondComponent" : [ "_I1_611222585" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?Paper (\"Assignment\" AS ?_L_611222585) ?_I1_611222585 (\"InviteReviewersStart\" AS ?_L_1062213633) ?_I1_1062213633\nWHERE\n  { ?Paper  <http://www.example.org/conference/assignment>  ?Assignment\n    BIND(?Assignment AS ?_I1_611222585)\n    BIND(?Paper AS ?_I1_1062213633)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1062213633", "_I1_1062213633", "Paper" ],
+    "secondComponent" : [ "_L_611222585", "_I1_611222585", "Assignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?Paper (\"Assignment\" AS ?_L_611222585) ?_I1_611222585 (\"InviteReviewersEnd\" AS ?_L_1627149556) ?_I1_1627149556\nWHERE\n  { ?Paper  <http://www.example.org/conference/assignment>  ?Assignment\n    BIND(?Assignment AS ?_I1_611222585)\n    BIND(?Paper AS ?_I1_1627149556)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1627149556", "_I1_1627149556", "Paper" ],
+    "secondComponent" : [ "_L_611222585", "_I1_611222585", "Assignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?Review (\"Assignment\" AS ?_L_611222585) ?_I1_611222585 (\"SubmitReview\" AS ?_L_1864160189) ?_I1_1864160189\nWHERE\n  { ?Assignment  <http://www.example.org/conference/leadsTo>  ?Review\n    BIND(?Assignment AS ?_I1_611222585)\n    BIND(?Review AS ?_I1_1864160189)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1864160189", "_I1_1864160189", "Review" ],
+    "secondComponent" : [ "_L_611222585", "_I1_611222585", "Assignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?AdditionalAssignment (\"Assignment\" AS ?_L_611222585) ?_I1_611222585 (\"InviteAdditionalReviewerStart\" AS ?_L_1341029792) ?_I1_1341029792\nWHERE\n  { ?Assignment  a  <http://www.example.org/conference/Assignment>\n    BIND(?Assignment AS ?AdditionalAssignment)\n    BIND(?Assignment AS ?_I1_611222585)\n    BIND(?AdditionalAssignment AS ?_I1_1341029792)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1341029792", "_I1_1341029792", "AdditionalAssignment" ],
+    "secondComponent" : [ "_L_611222585", "_I1_611222585", "Assignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?AdditionalAssignment (\"Assignment\" AS ?_L_611222585) ?_I1_611222585 (\"InviteAdditionalReviewerEnd\" AS ?_L_1443875837) ?_I1_1443875837\nWHERE\n  { ?Assignment  a  <http://www.example.org/conference/Assignment>\n    BIND(?Assignment AS ?AdditionalAssignment)\n    BIND(?Assignment AS ?_I1_611222585)\n    BIND(?AdditionalAssignment AS ?_I1_1443875837)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_1443875837", "_I1_1443875837", "AdditionalAssignment" ],
+    "secondComponent" : [ "_L_611222585", "_I1_611222585", "Assignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?Person (\"Assignment\" AS ?_L_611222585) ?_I1_611222585 (\"Person\" AS ?_L_1242566020) ?_I1_1242566020\nWHERE\n  { ?Assignment  <http://www.example.org/conference/assignedTo>  ?Person\n    BIND(?Assignment AS ?_I1_611222585)\n    BIND(?Person AS ?_I1_1242566020)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/relatedTo",
+    "firstComponent" : [ "_L_1242566020", "_I1_1242566020", "Person" ],
+    "secondComponent" : [ "_L_611222585", "_I1_611222585", "Assignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Assignment ?Person (\"Assignment\" AS ?_L_611222585) ?_I1_611222585 (\"Person\" AS ?_L_1242566020) ?_I1_1242566020\nWHERE\n  { ?null     a                     <http://www.example.org/conference/AdditionalAssignment> .\n    ?AdditionalAssignment\n              <http://www.example.org/conference/invitedBy>  ?Person\n    BIND(?Assignment AS ?_I1_611222585)\n    BIND(?Person AS ?_I1_1242566020)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/relatedTo",
+    "firstComponent" : [ "_L_1242566020", "_I1_1242566020", "Person" ],
+    "secondComponent" : [ "_L_611222585", "_I1_611222585", "Assignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"Paper\" AS ?_I0_2146847528)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Type",
+    "component" : [ "_I0_2146847528", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"Paper\" AS ?_I0_2146847528)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/typeString",
+    "firstComponent" : [ "_I0_2146847528", "Paper" ],
+    "secondComponent" : [ "_I0_2146847528" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"Paper\" AS ?_I0_2146847528) (\"Paper\" AS ?_L_76744552) ?_I1_76744552\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_76744552)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/has",
+    "firstComponent" : [ "_L_76744552", "_I1_76744552", "Paper" ],
+    "secondComponent" : [ "_I0_2146847528", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"inviteRevAct\" AS ?_L_1940424522) (\"InviteReviewers\" AS ?_I1_1940424522)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Activity",
+    "component" : [ "_L_1940424522", "_I1_1940424522", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"InviteReviewers\" AS ?_I1_1940424522) (\"inviteRevAct\" AS ?_L_1940424522)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/name",
+    "firstComponent" : [ "_L_1940424522", "_I1_1940424522", "Paper" ],
+    "secondComponent" : [ "_I1_1940424522" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"inviteRevAct\" AS ?_L_1940424522) (\"InviteReviewers\" AS ?_I1_1940424522) (\"InviteReviewersStart\" AS ?_L_1062213633) ?_I1_1062213633\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_1062213633)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/observes",
+    "firstComponent" : [ "_L_1062213633", "_I1_1062213633", "Paper" ],
+    "secondComponent" : [ "_L_1940424522", "_I1_1940424522", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"inviteRevAct\" AS ?_L_1940424522) (\"InviteReviewers\" AS ?_I1_1940424522) (\"InviteReviewersEnd\" AS ?_L_1627149556) ?_I1_1627149556\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_1627149556)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/observes",
+    "firstComponent" : [ "_L_1627149556", "_I1_1627149556", "Paper" ],
+    "secondComponent" : [ "_L_1940424522", "_I1_1940424522", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment (\"addInvStartTime\" AS ?_L_1131141383) ?_I1_1131141383\nWHERE\n  { ?AdditionalAssignment\n              a                     <http://www.example.org/conference/AdditionalAssignment> ;\n              <http://www.example.org/conference/additionalInviteStart>  ?_I1_1131141383}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Time",
+    "component" : [ "_L_1131141383", "_I1_1131141383", "AdditionalAssignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment ?_I1_1131141383 (\"addInvStartTime\" AS ?_L_1131141383)\nWHERE\n  { ?AdditionalAssignment\n              <http://www.example.org/conference/additionalInviteStart>  ?_I1_1131141383}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/value",
+    "firstComponent" : [ "_L_1131141383", "_I1_1131141383", "AdditionalAssignment" ],
+    "secondComponent" : [ "_I1_1131141383" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment (\"addInvStartTime\" AS ?_L_1131141383) ?_I1_1131141383 (\"InviteAdditionalReviewerStart\" AS ?_L_1341029792) ?_I1_1341029792\nWHERE\n  { ?AdditionalAssignment\n              a                     <http://www.example.org/conference/AdditionalAssignment> ;\n              <http://www.example.org/conference/additionalInviteStart>  ?_I1_1131141383\n    BIND(?AdditionalAssignment AS ?_I1_1341029792)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventAtTime",
+    "firstComponent" : [ "_L_1341029792", "_I1_1341029792", "AdditionalAssignment" ],
+    "secondComponent" : [ "_L_1131141383", "_I1_1131141383", "AdditionalAssignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"startLifecycelVal\" AS ?_L_1213401023) (\"start\" AS ?_I1_1213401023)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/EAttrValue",
+    "component" : [ "_L_1213401023", "_I1_1213401023", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"start\" AS ?_I1_1213401023) (\"startLifecycelVal\" AS ?_L_1213401023)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eValue",
+    "firstComponent" : [ "_L_1213401023", "_I1_1213401023", "Paper" ],
+    "secondComponent" : [ "_I1_1213401023" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"startLifecycelVal\" AS ?_L_1213401023) (\"start\" AS ?_I1_1213401023) (\"lifecycleAtt\" AS ?_L_29608903) (\"lifecycle\" AS ?_I1_29608903)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasEValue",
+    "firstComponent" : [ "_L_29608903", "_I1_29608903", "Paper" ],
+    "secondComponent" : [ "_L_1213401023", "_I1_1213401023", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"startLifecycelVal\" AS ?_L_1213401023) (\"start\" AS ?_I1_1213401023) (\"InviteReviewersStart\" AS ?_L_1062213633) ?_I1_1062213633\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>\n    BIND(?Paper AS ?_I1_1062213633)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasEAttr",
+    "firstComponent" : [ "_L_1062213633", "_I1_1062213633", "Paper" ],
+    "secondComponent" : [ "_L_1213401023", "_I1_1213401023", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"MakeConference\" AS ?_L_963073800) ?_I1_963073800\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>\n    BIND(?Conference AS ?_I1_963073800)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Event",
+    "component" : [ "_L_963073800", "_I1_963073800", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference ?_I1_963073800 (\"MakeConference\" AS ?_L_963073800)\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>\n    BIND(?Conference AS ?_I1_963073800)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventId",
+    "firstComponent" : [ "_L_963073800", "_I1_963073800", "Conference" ],
+    "secondComponent" : [ "_I1_963073800" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment (\"InviteAdditionalReviewerEnd\" AS ?_L_1443875837) ?_I1_1443875837\nWHERE\n  { ?AdditionalAssignment\n              a  <http://www.example.org/conference/AdditionalAssignment>\n    BIND(?AdditionalAssignment AS ?_I1_1443875837)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Event",
+    "component" : [ "_L_1443875837", "_I1_1443875837", "AdditionalAssignment" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?AdditionalAssignment ?_I1_1443875837 (\"InviteAdditionalReviewerEnd\" AS ?_L_1443875837)\nWHERE\n  { ?AdditionalAssignment\n              a  <http://www.example.org/conference/AdditionalAssignment>\n    BIND(?AdditionalAssignment AS ?_I1_1443875837)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventId",
+    "firstComponent" : [ "_L_1443875837", "_I1_1443875837", "AdditionalAssignment" ],
+    "secondComponent" : [ "_I1_1443875837" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Person (\"nameType\" AS ?_L_1063855386) (\"pName\" AS ?_I1_1063855386)\nWHERE\n  { ?Person  a  <http://www.example.org/conference/Person>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/OAttribute",
+    "component" : [ "_L_1063855386", "_I1_1063855386", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person (\"pName\" AS ?_I1_1063855386) (\"nameType\" AS ?_L_1063855386)\nWHERE\n  { ?Person  a  <http://www.example.org/conference/Person>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/oKey",
+    "firstComponent" : [ "_L_1063855386", "_I1_1063855386", "Person" ],
+    "secondComponent" : [ "_I1_1063855386" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Person (\"nameType\" AS ?_L_1063855386) (\"pName\" AS ?_I1_1063855386) (\"Person\" AS ?_I0_440500843)\nWHERE\n  { ?Person  a  <http://www.example.org/conference/Person>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOAttribute",
+    "firstComponent" : [ "_I0_440500843", "Person" ],
+    "secondComponent" : [ "_L_1063855386", "_I1_1063855386", "Person" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"Conference\" AS ?_I0_1611475192)\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Type",
+    "component" : [ "_I0_1611475192", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"Conference\" AS ?_I0_1611475192)\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/typeString",
+    "firstComponent" : [ "_I0_1611475192", "Conference" ],
+    "secondComponent" : [ "_I0_1611475192" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"Conference\" AS ?_I0_1611475192) (\"Conference\" AS ?_L_39195818) ?_I1_39195818\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>\n    BIND(?Conference AS ?_I1_39195818)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/has",
+    "firstComponent" : [ "_L_39195818", "_I1_39195818", "Conference" ],
+    "secondComponent" : [ "_I0_1611475192", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"NotifyDecision\" AS ?_L_1001656513) ?_I1_1001656513\nWHERE\n  { ?DecidedPaper\n              a  <http://www.example.org/conference/DecidedPaper>\n    BIND(?DecidedPaper AS ?_I1_1001656513)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Event",
+    "component" : [ "_L_1001656513", "_I1_1001656513", "DecidedPaper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper ?_I1_1001656513 (\"NotifyDecision\" AS ?_L_1001656513)\nWHERE\n  { ?DecidedPaper\n              a  <http://www.example.org/conference/DecidedPaper>\n    BIND(?DecidedPaper AS ?_I1_1001656513)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventId",
+    "firstComponent" : [ "_L_1001656513", "_I1_1001656513", "DecidedPaper" ],
+    "secondComponent" : [ "_I1_1001656513" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"Conference\" AS ?_L_39195818) ?_I1_39195818\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>\n    BIND(?Conference AS ?_I1_39195818)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Object",
+    "component" : [ "_L_39195818", "_I1_39195818", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference ?_I1_39195818 (\"Conference\" AS ?_L_39195818)\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>\n    BIND(?Conference AS ?_I1_39195818)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/objectId",
+    "firstComponent" : [ "_L_39195818", "_I1_39195818", "Conference" ],
+    "secondComponent" : [ "_I1_39195818" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Conference (\"Conference\" AS ?_L_39195818) ?_I1_39195818 (\"MakeConference\" AS ?_L_963073800) ?_I1_963073800\nWHERE\n  { ?Conference  a  <http://www.example.org/conference/Conference>\n    BIND(?Conference AS ?_I1_39195818)\n    BIND(?Conference AS ?_I1_963073800)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/corr",
+    "firstComponent" : [ "_L_963073800", "_I1_963073800", "Conference" ],
+    "secondComponent" : [ "_L_39195818", "_I1_39195818", "Conference" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"subTime\" AS ?_L_1534433288) ?_I1_1534433288\nWHERE\n  { ?Review  a                     <http://www.example.org/conference/Review> ;\n             <http://www.example.org/conference/subTime>  ?_I1_1534433288}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Time",
+    "component" : [ "_L_1534433288", "_I1_1534433288", "Review" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_I1_1534433288 (\"subTime\" AS ?_L_1534433288)\nWHERE\n  { ?Review  <http://www.example.org/conference/subTime>  ?_I1_1534433288}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/value",
+    "firstComponent" : [ "_L_1534433288", "_I1_1534433288", "Review" ],
+    "secondComponent" : [ "_I1_1534433288" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"subTime\" AS ?_L_1534433288) ?_I1_1534433288 (\"SubmitReview\" AS ?_L_1864160189) ?_I1_1864160189\nWHERE\n  { ?Review  a                     <http://www.example.org/conference/Review> ;\n             <http://www.example.org/conference/subTime>  ?_I1_1534433288\n    BIND(?Review AS ?_I1_1864160189)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eventAtTime",
+    "firstComponent" : [ "_L_1864160189", "_I1_1864160189", "Review" ],
+    "secondComponent" : [ "_L_1534433288", "_I1_1534433288", "Review" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"notifyDecisionAct\" AS ?_L_393825156) (\"NotifyDecision\" AS ?_I1_393825156)\nWHERE\n  { ?DecidedPaper\n              a  <http://www.example.org/conference/DecidedPaper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/Activity",
+    "component" : [ "_L_393825156", "_I1_393825156", "DecidedPaper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"NotifyDecision\" AS ?_I1_393825156) (\"notifyDecisionAct\" AS ?_L_393825156)\nWHERE\n  { ?DecidedPaper\n              a  <http://www.example.org/conference/DecidedPaper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/name",
+    "firstComponent" : [ "_L_393825156", "_I1_393825156", "DecidedPaper" ],
+    "secondComponent" : [ "_I1_393825156" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?DecidedPaper (\"notifyDecisionAct\" AS ?_L_393825156) (\"NotifyDecision\" AS ?_I1_393825156) (\"NotifyDecision\" AS ?_L_1001656513) ?_I1_1001656513\nWHERE\n  { ?DecidedPaper\n              a  <http://www.example.org/conference/DecidedPaper>\n    BIND(?DecidedPaper AS ?_I1_1001656513)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/observes",
+    "firstComponent" : [ "_L_1001656513", "_I1_1001656513", "DecidedPaper" ],
+    "secondComponent" : [ "_L_393825156", "_I1_393825156", "DecidedPaper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"decType\" AS ?_L_562785142) (\"decision\" AS ?_I1_562785142)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/OAttribute",
+    "component" : [ "_L_562785142", "_I1_562785142", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"decision\" AS ?_I1_562785142) (\"decType\" AS ?_L_562785142)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/oKey",
+    "firstComponent" : [ "_L_562785142", "_I1_562785142", "Paper" ],
+    "secondComponent" : [ "_I1_562785142" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Paper (\"decType\" AS ?_L_562785142) (\"decision\" AS ?_I1_562785142) (\"Paper\" AS ?_I0_2146847528)\nWHERE\n  { ?Paper  a  <http://www.example.org/conference/Paper>}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasOAttribute",
+    "firstComponent" : [ "_I0_2146847528", "Paper" ],
+    "secondComponent" : [ "_L_562785142", "_I1_562785142", "Paper" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.UnaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"recValue\" AS ?_L_566644793) ?_I1_566644793\nWHERE\n  { ?Review  a                     <http://www.example.org/conference/Review> ;\n             <http://www.example.org/conference/recommendation>  ?_I1_566644793}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/EAttrValue",
+    "component" : [ "_L_566644793", "_I1_566644793", "Review" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review ?_I1_566644793 (\"recValue\" AS ?_L_566644793)\nWHERE\n  { ?Review  <http://www.example.org/conference/recommendation>  ?_I1_566644793}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/eValue",
+    "firstComponent" : [ "_L_566644793", "_I1_566644793", "Review" ],
+    "secondComponent" : [ "_I1_566644793" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"recValue\" AS ?_L_566644793) ?_I1_566644793 (\"recAtt\" AS ?_L_1341733811) (\"recommendation\" AS ?_I1_1341733811)\nWHERE\n  { ?Review  a                     <http://www.example.org/conference/Review> ;\n             <http://www.example.org/conference/recommendation>  ?_I1_566644793}\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasEValue",
+    "firstComponent" : [ "_L_1341733811", "_I1_1341733811", "Review" ],
+    "secondComponent" : [ "_L_566644793", "_I1_566644793", "Review" ]
+  }, {
+    "@class" : "it.unibz.inf.onprom.data.query.BinaryAnnotationQuery",
+    "query" : "SELECT  ?Review (\"recValue\" AS ?_L_566644793) ?_I1_566644793 (\"SubmitReview\" AS ?_L_1864160189) ?_I1_1864160189\nWHERE\n  { ?Review  a                     <http://www.example.org/conference/Review> ;\n             <http://www.example.org/conference/recommendation>  ?_I1_566644793\n    BIND(?Review AS ?_I1_1864160189)\n  }\n",
+    "targetIRI" : "http://www.example.com/OCELv2/hasEAttr",
+    "firstComponent" : [ "_L_1864160189", "_I1_1864160189", "Review" ],
+    "secondComponent" : [ "_L_566644793", "_I1_566644793", "Review" ]
+  } ] ]
+}

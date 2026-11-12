@@ -1,0 +1,135 @@
+digraph ConferenceOCELCrosswalk {
+  graph [rankdir=LR, splines=true, compound=true, bgcolor="white", pad="0.28", nodesep="0.38", ranksep="0.78", fontname="DejaVu Sans", fontsize=20, labelloc=t, label="Conference domain model → OCEL 2.0 mapping overview\nDomain concepts, target objects/events, attributes, and associations"];
+  node [shape=plain, fontname="DejaVu Sans", fontsize=10];
+  edge [fontname="DejaVu Sans", fontsize=9, color="#475569", arrowsize=0.7];
+
+  subgraph cluster_source {
+    label="SOURCE: CONFERENCE DOMAIN MODEL"; color="#64748b"; penwidth=1.5; style="rounded"; fontsize=15; fontname="DejaVu Sans Bold";
+    node [shape=plain];
+    Conference [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#475569" BGCOLOR="#f8fafc">
+      <TR><TD BGCOLOR="#dbeafe"><B>Conference</B></TD></TR><TR><TD ALIGN="LEFT">cName : STRING</TD></TR><TR><TD ALIGN="LEFT">crTime : DATE_TIME</TD></TR></TABLE> >];
+    Paper [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#475569" BGCOLOR="#f8fafc">
+      <TR><TD BGCOLOR="#dbeafe"><B>Paper</B></TD></TR><TR><TD ALIGN="LEFT">title : STRING</TD></TR><TR><TD ALIGN="LEFT">invTime : DATE_TIME</TD></TR><TR><TD ALIGN="LEFT">accTime : DATE_TIME</TD></TR></TABLE> >];
+    DecidedPaper [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#475569" BGCOLOR="#f8fafc">
+      <TR><TD BGCOLOR="#dbeafe"><B>DecidedPaper</B> <FONT POINT-SIZE="8">(subclass of Paper)</FONT></TD></TR><TR><TD ALIGN="LEFT">accepted : BOOLEAN</TD></TR><TR><TD ALIGN="LEFT">declTime : DATE_TIME</TD></TR></TABLE> >];
+    Person [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#475569" BGCOLOR="#f8fafc">
+      <TR><TD BGCOLOR="#dbeafe"><B>Person</B></TD></TR><TR><TD ALIGN="LEFT">pName : STRING</TD></TR></TABLE> >];
+    Assignment [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#475569" BGCOLOR="#f8fafc">
+      <TR><TD BGCOLOR="#dbeafe"><B>Assignment</B></TD></TR></TABLE> >];
+    AdditionalAssignment [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#475569" BGCOLOR="#eff6ff">
+      <TR><TD BGCOLOR="#bfdbfe"><B>AdditionalAssignment</B> <FONT POINT-SIZE="8">(subclass of Assignment)</FONT></TD></TR><TR><TD ALIGN="LEFT">additionalInviteStart : DATE_TIME</TD></TR><TR><TD ALIGN="LEFT">additionalInviteComplete : DATE_TIME</TD></TR></TABLE> >];
+    Review [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5" COLOR="#475569" BGCOLOR="#f8fafc">
+      <TR><TD BGCOLOR="#dbeafe"><B>Review</B></TD></TR><TR><TD ALIGN="LEFT">subTime : DATE_TIME</TD></TR><TR><TD ALIGN="LEFT">recommendation : STRING</TD></TR></TABLE> >];
+
+    {rank=same; Conference; Paper; DecidedPaper;}
+    {rank=same; Person; Assignment; AdditionalAssignment; Review;}
+
+    Paper -> Conference [dir=both, arrowtail=none, arrowhead=none, label="submittedTo\nPaper 0..* / Conference 1..*"];
+    Paper -> Person [dir=both, arrowtail=none, arrowhead=none, label="submittedBy\nPaper 0..* / Person 1..1"];
+    Paper -> Assignment [dir=both, arrowtail=none, arrowhead=none, label="assignment\nPaper 1..1 / Assignment 1..*"];
+    Assignment -> Person [dir=both, arrowtail=none, arrowhead=none, label="assignedTo\nAssignment 0..* / Person 1..1"];
+    Assignment -> Review [dir=both, arrowtail=none, arrowhead=none, label="leadsTo\nAssignment 0..* / Review 1"];
+    AdditionalAssignment -> Person [dir=both, arrowtail=none, arrowhead=none, label="invitedBy\nAdditionalAssignment 0..* / Person 1..1"];
+    DecidedPaper -> Paper [dir=back, arrowhead=empty, arrowtail=none, label="isA"];
+    AdditionalAssignment -> Assignment [dir=back, arrowhead=empty, arrowtail=none, label="isA"];
+    DecidedPaper -> Person [dir=both, arrowhead=none, arrowtail=none, label="notifiedBy"];
+  }
+
+  subgraph cluster_objects {
+    label="OCEL OBJECT VIEW"; color="#0f766e"; penwidth=1.5; style="rounded"; fontsize=15; fontname="DejaVu Sans Bold";
+    node [shape=plain];
+    objtypes [label=< <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#0f766e">
+      <TR><TD COLSPAN="2" BGCOLOR="#d1fae5"><B>OCEL Object Types and Objects</B></TD></TR>
+      <TR><TD BGCOLOR="#ede9fe"><B>Type</B></TD><TD BGCOLOR="#dcfce7"><B>Object instances</B></TD></TR>
+      <TR><TD>Conference</TD><TD>Conference</TD></TR><TR><TD>Paper</TD><TD>Paper</TD></TR><TR><TD>Person</TD><TD>Person</TD></TR><TR><TD>Assignment</TD><TD>Assignment instances</TD></TR>
+      <TR><TD COLSPAN="2" ALIGN="LEFT"><FONT POINT-SIZE="9">AdditionalAssignment instances reuse the Assignment object type through the subclass mapping; no separate OCEL object type is created.</FONT></TD></TR>
+    </TABLE> >];
+    oattrs [label=< <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#b45309">
+      <TR><TD COLSPAN="3" BGCOLOR="#fef3c7"><B>Object Attributes (declared on Type)</B></TD></TR>
+      <TR><TD><B>Object type</B></TD><TD><B>OAttribute / key</B></TD><TD><B>Source / values</B></TD></TR>
+      <TR><TD>Conference</TD><TD>name</TD><TD>Conference.cName</TD></TR>
+      <TR><TD>Paper</TD><TD>title</TD><TD>Paper.title</TD></TR>
+      <TR><TD>Paper</TD><TD>decision (dynamic)</TD><TD>deciding @ Paper.accTime;<BR/>accept/reject @ DecidedPaper.declTime</TD></TR>
+      <TR><TD>Person</TD><TD>name</TD><TD>Person.pName</TD></TR>
+    </TABLE> >];
+    oattrwire [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#b45309">
+      <TR><TD BGCOLOR="#fef3c7"><B>OAttrValue pattern</B></TD></TR>
+      <TR><TD>Object hasOAttr → OAttrValue</TD></TR><TR><TD>OAttribute hasOValue → OAttrValue</TD></TR><TR><TD>OAttrValue oValue → literal</TD></TR><TR><TD>OAttrValue attrAtTime → Time (for dynamic values)</TD></TR>
+    </TABLE> >];
+    objtypes -> oattrs [style=invis];
+    oattrs -> oattrwire [style=invis];
+  }
+
+  subgraph cluster_events {
+    label="OCEL EVENT VIEW"; color="#0e7490"; penwidth=1.5; style="rounded"; fontsize=15; fontname="DejaVu Sans Bold";
+    node [shape=plain];
+    eventtable [label=< <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#0e7490">
+      <TR><TD COLSPAN="4" BGCOLOR="#cffafe"><B>Activities → Event instances</B></TD></TR>
+      <TR><TD><B>Activity</B></TD><TD><B>Events</B></TD><TD><B>eventAtTime</B></TD><TD><B>Event attributes</B></TD></TR>
+      <TR><TD>MakeConference</TD><TD>MakeConference</TD><TD>Conference.crTime</TD><TD>—</TD></TR>
+      <TR><TD>InviteReviewers</TD><TD>InviteReviewersStart<BR/>InviteReviewersEnd</TD><TD>Paper.invTime<BR/>Paper.accTime</TD><TD>lifecycle = start / end</TD></TR>
+      <TR><TD>InviteAdditionalReviewer</TD><TD>InviteAdditionalReviewerStart<BR/>InviteAdditionalReviewerEnd</TD><TD>AdditionalAssignment.additionalInviteStart<BR/>AdditionalAssignment.additionalInviteComplete</TD><TD>lifecycle = start / end</TD></TR>
+      <TR><TD>SubmitReview</TD><TD>SubmitReview</TD><TD>Review.subTime</TD><TD>recommendation = Review.recommendation</TD></TR>
+      <TR><TD>NotifyDecision</TD><TD>NotifyDecision</TD><TD>DecidedPaper.declTime</TD><TD>outcome = accept / reject</TD></TR>
+    </TABLE> >];
+    eattrwire [label=< <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" COLOR="#ca8a04">
+      <TR><TD BGCOLOR="#fef9c3"><B>EAttrValue pattern</B></TD></TR>
+      <TR><TD>Activity hasEAttribute → Attribute</TD></TR><TR><TD>Attribute hasEValue → EAttrValue</TD></TR><TR><TD>Event hasEAttr → EAttrValue</TD></TR><TR><TD>Event observes → Activity</TD></TR><TR><TD>Event eventAtTime → Time</TD></TR>
+    </TABLE> >];
+    eventnote [shape=note, style="filled", fillcolor="#f1f5f9", color="#64748b", label="No separate Decide event is generated.\nThe accepts/rejects counts are not projected.\nThe final outcome is represented by NotifyDecision\nand by the Paper.decision dynamic attribute."];
+    eventtable -> eattrwire [style=invis];
+    eattrwire -> eventnote [style=invis];
+  }
+
+  subgraph cluster_links {
+    label="OCEL ASSOCIATION CLASSES"; color="#6d28d9"; penwidth=1.5; style="rounded"; fontsize=15; fontname="DejaVu Sans Bold";
+    node [shape=plain];
+    corr [label=< <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#6d28d9">
+      <TR><TD COLSPAN="3" BGCOLOR="#ede9fe"><B>corr: Event–Object association class</B></TD></TR>
+      <TR><TD><B>Event</B></TD><TD><B>Object</B></TD><TD><B>eQualifier</B></TD></TR>
+      <TR><TD>MakeConference</TD><TD>Conference</TD><TD>conference</TD></TR>
+      <TR><TD>InviteReviewersStart/End</TD><TD>Paper</TD><TD>paper</TD></TR>
+      <TR><TD>InviteReviewersStart/End</TD><TD>Initial Assignment instances</TD><TD>assignment</TD></TR>
+      <TR><TD>InviteAdditionalReviewerStart/End</TD><TD>Assignment object (domain individual is AdditionalAssignment)</TD><TD>additional-assignment</TD></TR>
+      <TR><TD>InviteAdditionalReviewerStart/End</TD><TD>Person</TD><TD>inviter / invitee</TD></TR>
+      <TR><TD>SubmitReview</TD><TD>Paper / Assignment / Person</TD><TD>reviewed-paper / assignment / reviewer</TD></TR>
+      <TR><TD>NotifyDecision</TD><TD>Paper / Person</TD><TD>decided-paper / notifier</TD></TR>
+    </TABLE> >];
+    related [label=< <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#6d28d9">
+      <TR><TD COLSPAN="3" BGCOLOR="#ede9fe"><B>relatedTo: Object–Object association class</B></TD></TR>
+      <TR><TD><B>Source object</B></TD><TD><B>Target object</B></TD><TD><B>oQualifier</B></TD></TR>
+      <TR><TD>Paper</TD><TD>Conference</TD><TD>submitted-to</TD></TR>
+      <TR><TD>Paper</TD><TD>Person</TD><TD>submitted-by</TD></TR>
+      <TR><TD>Paper</TD><TD>Assignment</TD><TD>has-assignment</TD></TR>
+      <TR><TD>Assignment</TD><TD>Person</TD><TD>assigned-to</TD></TR>
+      <TR><TD>Assignment object (domain individual is AdditionalAssignment)</TD><TD>Person</TD><TD>invited-by</TD></TR>
+    </TABLE> >];
+    linknote [shape=note, style="filled", fillcolor="#f1f5f9", color="#64748b", label="corr carries eQualifier and links one Event\nto one Object. relatedTo is an association\nclass between Objects; oQualifier distinguishes\nrelationship roles and direction."];
+    corr -> related [style=invis];
+    related -> linknote [style=invis];
+  }
+
+  // Explicit mapping anchors: dashed arrows distinguish source-to-target realization.
+  Conference -> objtypes [style=dashed, color="#15803d", label="Object / Type"];
+  Paper -> objtypes [style=dashed, color="#15803d", label="Object / Type"];
+  Person -> objtypes [style=dashed, color="#15803d", label="Object / Type"];
+  Assignment -> objtypes [style=dashed, color="#15803d", label="Object / Type"];
+  AdditionalAssignment -> objtypes [style=dashed, color="#15803d", label="same Assignment object type"];
+  Conference -> oattrs [style=dashed, color="#b45309", label="cName"];
+  Paper -> oattrs [style=dashed, color="#b45309", label="title; decision history"];
+  Person -> oattrs [style=dashed, color="#b45309", label="pName"];
+  Paper -> eventtable [style=dashed, color="#0e7490", label="invTime / accTime"];
+  Conference -> eventtable [style=dashed, color="#0e7490", label="crTime"];
+  AdditionalAssignment -> eventtable [style=dashed, color="#0e7490", label="additional invitation times"];
+  Review -> eventtable [style=dashed, color="#0e7490", label="subTime / recommendation"];
+  DecidedPaper -> eventtable [style=dashed, color="#0e7490", label="declTime / accepted"];
+  Paper -> related [style=dashed, color="#6d28d9", label="submittedTo / submittedBy / assignment"];
+  Assignment -> related [style=dashed, color="#6d28d9", label="assignedTo"];
+  AdditionalAssignment -> related [style=dashed, color="#6d28d9", label="invitedBy"];
+  Assignment -> corr [style=dashed, color="#6d28d9", label="leadsTo + assignedTo; Paper.assignment"];
+  Review -> corr [style=dashed, color="#6d28d9", label="SubmitReview event"];
+  DecidedPaper -> corr [style=dashed, color="#6d28d9", label="NotifyDecision / notifiedBy"];
+
+  legend [shape=plain, label=< <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="5"><TR><TD><FONT COLOR="#15803d"><B>---&gt;</B></FONT></TD><TD ALIGN="LEFT">Object / Type mapping</TD><TD><FONT COLOR="#b45309"><B>---&gt;</B></FONT></TD><TD ALIGN="LEFT">Object attribute mapping</TD><TD><FONT COLOR="#0e7490"><B>---&gt;</B></FONT></TD><TD ALIGN="LEFT">Activity / Event mapping</TD><TD><FONT COLOR="#6d28d9"><B>---&gt;</B></FONT></TD><TD ALIGN="LEFT">Association mapping</TD></TR></TABLE> >];
+  {rank=sink; legend;}
+}

@@ -1,0 +1,32 @@
+digraph Objects {
+ graph [rankdir=LR, bgcolor=white, pad=.25, nodesep=.45, ranksep=.8, fontname="DejaVu Sans", labelloc=t, fontsize=20, label="Conference model → OCEL 2.0 object view"];
+ node [shape=plain, fontname="DejaVu Sans", fontsize=10]; edge [fontname="DejaVu Sans", fontsize=9, color="#475569", arrowsize=.7];
+ subgraph cluster_domain {label="DOMAIN CONCEPTS"; style=rounded; color="#64748b"; fontsize=14;
+  Conference [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>Conference</B></TD></TR><TR><TD ALIGN="LEFT">cName : STRING</TD></TR><TR><TD ALIGN="LEFT">crTime : DATE_TIME</TD></TR></TABLE>>];
+  Paper [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>Paper</B></TD></TR><TR><TD ALIGN="LEFT">title : STRING</TD></TR><TR><TD ALIGN="LEFT">invTime : DATE_TIME</TD></TR><TR><TD ALIGN="LEFT">accTime : DATE_TIME</TD></TR></TABLE>>];
+  DecidedPaper [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>DecidedPaper</B></TD></TR><TR><TD ALIGN="LEFT">accepted : BOOLEAN</TD></TR><TR><TD ALIGN="LEFT">declTime : DATE_TIME</TD></TR></TABLE>>];
+  Person [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>Person</B></TD></TR><TR><TD ALIGN="LEFT">pName : STRING</TD></TR></TABLE>>];
+  Assignment [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="5"><TR><TD BGCOLOR="#dbeafe"><B>Assignment</B></TD></TR></TABLE>>];
+  AdditionalAssignment [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="5"><TR><TD BGCOLOR="#bfdbfe"><B>AdditionalAssignment</B> ⊑ Assignment</TD></TR><TR><TD ALIGN="LEFT">additionalInviteStart : DATE_TIME</TD></TR><TR><TD ALIGN="LEFT">additionalInviteComplete : DATE_TIME</TD></TR></TABLE>>];
+  Paper -> DecidedPaper [dir=back, arrowhead=empty, label="subclass"];
+  Assignment -> AdditionalAssignment [dir=back, arrowhead=empty, label="subclass"];
+ }
+ subgraph cluster_ocel {label="OCEL OBJECTS, TYPES AND ATTRIBUTES"; style=rounded; color="#0f766e"; fontsize=14;
+  typeobj [label=<<TABLE BORDER="1" CELLBORDER="1" CELLPADDING="5" COLOR="#0f766e"><TR><TD COLSPAN="2" BGCOLOR="#d1fae5"><B>OCEL Object / Type pairs</B></TD></TR><TR><TD><B>Type</B></TD><TD><B>Object</B></TD></TR><TR><TD>Conference</TD><TD>Conference instance</TD></TR><TR><TD>Paper</TD><TD>Paper instance</TD></TR><TR><TD>Person</TD><TD>Person instance</TD></TR><TR><TD>Assignment</TD><TD>Assignment instance</TD></TR><TR><TD COLSPAN="2" ALIGN="LEFT"><FONT POINT-SIZE="9">Each AdditionalAssignment instance is also an Assignment individual and maps to Object(type=Assignment). No separate AdditionalAssignment Object Type.</FONT></TD></TR><TR><TD COLSPAN="2" ALIGN="LEFT"><FONT POINT-SIZE="9">DecidedPaper is not a separate Object Type: it is a Paper state/subclass.</FONT></TD></TR></TABLE>>];
+  attrs [label=<<TABLE BORDER="1" CELLBORDER="1" CELLPADDING="5" COLOR="#b45309"><TR><TD COLSPAN="3" BGCOLOR="#fef3c7"><B>Type-level OAttributes and values</B></TD></TR><TR><TD><B>Object Type</B></TD><TD><B>OAttribute / key</B></TD><TD><B>OAttrValue from domain</B></TD></TR><TR><TD>Conference</TD><TD>name</TD><TD>cName</TD></TR><TR><TD>Paper</TD><TD>title</TD><TD>title</TD></TR><TR><TD>Paper</TD><TD>decision (dynamic)</TD><TD>deciding @ accTime<BR/>accept/reject @ declTime</TD></TR><TR><TD>Person</TD><TD>name</TD><TD>pName</TD></TR></TABLE>>];
+  dynamic [shape=note, style=filled, fillcolor="#fff7ed", color="#c2410c", label="Paper.decision timeline\n\nOAttrValue('deciding')\n  attrAtTime → Time(Paper.accTime)\n\nOAttrValue('accept' or 'reject')\n  attrAtTime → Time(DecidedPaper.declTime)\n\nTwo distinct OAttrValue individuals;\none OAttribute: decision."];
+  metapattern [label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" COLOR="#b45309"><TR><TD BGCOLOR="#fef3c7"><B>OCEL object-attribute wiring</B></TD></TR><TR><TD>Object.objectId; Type.typeString</TD></TR><TR><TD>Object has → Type</TD></TR><TR><TD>Type hasOAttribute → OAttribute (oKey)</TD></TR><TR><TD>Object hasOAttr → OAttrValue</TD></TR><TR><TD>OAttribute hasOValue → OAttrValue</TD></TR><TR><TD>OAttrValue.oValue → literal</TD></TR><TR><TD>OAttrValue.attrAtTime → Time (dynamic values)</TD></TR></TABLE>>];
+  typeobj -> attrs [style=invis]; attrs -> dynamic [style=invis]; dynamic -> metapattern [style=invis];
+ }
+ Conference -> typeobj [style=dashed, color="#15803d", label="Object + Type"];
+ Paper -> typeobj [style=dashed, color="#15803d", label="Object + Type"];
+ Person -> typeobj [style=dashed, color="#15803d", label="Object + Type"];
+ Assignment -> typeobj [style=dashed, color="#15803d", label="Object + Type"];
+ AdditionalAssignment -> typeobj [style=dashed, color="#15803d", label="same Assignment mapping"];
+ DecidedPaper -> typeobj [style=dashed, color="#15803d", label="no separate object"];
+ Conference -> attrs [style=dashed, color="#b45309", label="cName → name"];
+ Paper -> attrs [style=dashed, color="#b45309", label="title; decision"];
+ Person -> attrs [style=dashed, color="#b45309", label="pName → name"];
+ Paper -> dynamic [style=dashed, color="#c2410c", label="accTime"];
+ DecidedPaper -> dynamic [style=dashed, color="#c2410c", label="accepted + declTime"];
+}
