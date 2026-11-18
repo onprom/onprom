@@ -75,7 +75,8 @@ public class OCELOneLevelExtractionTest {
         OCELLogExtractor extractor = new OCELLogExtractor();
         // generate new mapping
 
-        SQLPPMapping newMapping = new OBDAMapper(domainOntology, extractor.getOntology(), obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
+        SQLPPMapping newMapping = new OBDAMapper(domainOntology,
+                OCELLogExtractor.getOntology(), obdaModel, dataSourceProperties, firstLevel).getOBDAModel();
 
         OntopUtility.saveModel(newMapping, generatedMappingsFile);
         // extract log
@@ -85,7 +86,7 @@ public class OCELOneLevelExtractionTest {
         objectMapper.writeValue(new File(outputFileName + ".ocel.json"), ocelLog);
 
         // serialize extracted log
-        new OcelXmlGZIPSerializer().serialize(ocelLog, new FileOutputStream(output));
+        OcelXmlGZIPSerializer.serialize(ocelLog, new FileOutputStream(output));
 
 //        System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) / 1000 + "s");
         System.out.println("TOTAL EXTRACTION TIME: " + (System.currentTimeMillis() - start) + "ms");
