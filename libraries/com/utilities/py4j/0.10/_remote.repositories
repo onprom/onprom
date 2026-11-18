@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Wed Nov 18 17:17:31 CET 2026
+py4j-0.10.jar>=
+py4j-0.10.pom>=
