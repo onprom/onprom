@@ -26,12 +26,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>it.unibz.inf.ontop</groupId>
-            <artifactId>ontop-test-utils</artifactId>
-            <version>5.4.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.utilities</groupId>
             <artifactId>py4j</artifactId>
             <version>0.10</version>

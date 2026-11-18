@@ -72,7 +72,7 @@
         <jaxb.version>2.3.1</jaxb.version>
         <maven.assembly.version>3.3.0</maven.assembly.version>
         <owlapi.version>5.5.1</owlapi.version>
-        <ontop.version>5.4.1</ontop.version>
+        <ontop.version>5.4.0</ontop.version>
         <slf4j.version>2.0.18</slf4j.version>
         <picocli.version>4.7.7</picocli.version>
         <lanterna.version>3.1.5</lanterna.version>
